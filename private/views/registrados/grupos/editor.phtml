@@ -1,0 +1,34 @@
+
+<?=Form::openMultipart('registrados/grupos/editor')?>
+	<section>
+		<?=Kubox::input(type: 'text', label: t('Nombre'),
+			placeholder: t('Aquí el nombre del grupo'),
+			name: 'nombre', value: _var::val($grupo, 'nombre'))?>
+		<br>
+		<?=Kubox::input(type: 'text', label: t('Eslogan'),
+			placeholder: t('Aquí el eslogan del grupo'),
+			name: 'eslogan', value: _var::val($grupo, 'eslogan'))?>
+		<br>
+		<?=Kubox::textarea(label: t('Descripción'),
+			placeholder: t('Aquí la descripción del grupo'),
+			name: 'info', value: _var::val($grupo, 'info'))?>
+		<br>
+		<div class="auto gap10">
+			<?=Kubox::dropimage(label: t('Cabecera:'), name: 'fondo_cabecera', dir: empty($grupo->fondo_cabecera) ? '' : "/img/usuarios/$grupo->usuarios_idu/m.", file: $grupo->fondo_cabecera)?>
+
+			<?=Kubox::dropimage(label: t('Fondo:'), name: 'fondo_general', dir: empty($grupo->fondo_general) ? '' : "/img/usuarios/$grupo->usuarios_idu/m.", file: $grupo->fondo_general)?>
+
+			<?=Kubox::dropimage(label: t('Mapa:'), name: 'mapa', dir: empty($grupo->mapa) ? '' : "/img/usuarios/$grupo->usuarios_idu/m.", file: $grupo->mapa)?>
+		</div>
+		<br>
+		<div class="auto">
+			<?php if (empty($grupo->idu)): ?>
+				<?=Kubox::buttonSubmitColor(label: t('Crear'))?>
+			<?php else: ?>
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'))?>
+			<?php endif; ?>
+		</div>
+		<?=Form::hidden(field: 'idu', value: _var::val($grupo, 'idu'))?>
+		<?=Form::hidden(field: 'nombre_anterior', value: _var::val($grupo, 'nombre'))?>
+	</section>
+<?=Form::close()?>

@@ -1,0 +1,25 @@
+
+<?php foreach ($grupos as $gru): ?>
+    <article>
+        <header>
+            <h2><?=h($gru->nombre)?></h2>
+            <small><i><?=h($gru->eslogan)?></i></small>
+        </header>
+        <section>
+            <br>
+            <?php if ($gru->fondo_cabecera): ?>
+                <?=Ku::img(t('Grupo: ') . $gru->nombre, "/img/usuarios/$gru->usuarios_idu/l.$gru->fondo_cabecera", 540)?>
+                <br>
+            <?php endif; ?>
+        </section>
+        <footer class="grid auto">
+            <?=Kubox::link(href: "/grupos/ver/$gru->hashtag", label: t('Ver'))?>
+
+            <?=Kubox::link(attrs: 'data-ajax=".ajax.show" data-style="body, overflow:hidden"', href: "/grupos/ver_miembros/$gru->idu", label: "$gru->miembros " . (((int)$gru->miembros === 1) ? t('miembro') : t('miembros')))?>
+            
+            <?php if (Session::get('idu') <> $gru->usuarios_idu && empty($u_g[$gru->idu]) ): ?>
+                <?=Kubox::link(href: "/registrados/grupos/unirse/$gru->idu", label: t('Unirse y entrar'))?>
+            <?php endif; ?>
+        </footer>
+    </article>
+<?php endforeach; ?>

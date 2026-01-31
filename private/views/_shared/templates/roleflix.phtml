@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html id="important" lang="es">
+    <head>
+        <?php $version = time(); ?>
+        <link href="/css/roleflix.min.css?v=<?=$version?>" rel="stylesheet">
+
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <title><?=empty($title)?ucwords("$controller_name > $action_name"):$title?></title>
+    </head>
+    <body class="w3-row">
+        <div class="fondo"><?php View::partial('logo', null, ['color'=>'#333', 'fondo'=>'#000']); ?></div>
+
+		<?php View::partial('toast'); ?>
+
+        <nav>
+            <div>
+                <a class="buscador logo" data-toggle=".filtros div">ROLEFLIX</a>
+                <div class="filtros">
+                    <div style="display:none">
+                        <a rel="nofollow" href="/registrados/roleflix"><?=t('Inicio')?></a>
+                        <?php foreach($etiquetas as $key=>$val): ?>
+                            <a rel="nofollow" href="/registrados/roleflix/<?=$key?>"><?=$val?></a>
+                        <?php endforeach; ?>
+                        <a rel="nofollow" href="/registrados/roleflix/mi_lista"><?=t('Mi lista')?></a>
+                    </div>
+                </div>
+
+                <div class="buscador grow"></div>
+
+                <a class="buscador icono" href="javascript:void(0)" data-toggle=".buscador" style="display:none"><img alt="<?=t('Ocultar buscador')?>" loading="lazy" src="/img/icons/arrow-left.svg" width="30" height="30"></a>
+
+                <form action="/registrados/roleflix/buscar" class="buscador" method="get" style="display:none">
+                    <input type="text" class="ph10 isearch" data-filter=".video" name="q" placeholder="<?=t('Filtrar o buscar pulsando enter…')?>" value="<?=Input::get('q')?>">
+
+                    <button type="submit" data-toggle=".buscador"><img alt="<?=t('Buscador')?>" loading="lazy" src="/img/icons/search.svg" width="30" height="30"></button>
+                </form>
+
+                <a class="buscador icono" href="javascript:void(0)" data-toggle=".buscador"><img alt="<?=t('Buscador')?>" loading="lazy" src="/img/icons/search.svg" width="30" height="30"></a>
+
+                <a class="buscador icono" data-ajax=".ventana" data-show=".velo, .ventana" rel="nofollow" href="/registrados/roleflix/configurar"><img alt="<?=t('Buscador')?>" loading="lazy" src="/img/icons/settings.svg" width="30" height="30"></a>
+
+                <a class="avatar" href="/usuarios/perfil/<?=urlencode($usuario->apodo)?>">
+                    <img class="left" alt="'Avatar de <?=$usuario->apodo?>" src="/img/usuarios/<?=$usuario->idu?>/xxs.<?=$usuario->avatar?>" width="48" height="48">
+                </a>
+            </div>
+        </nav>
+        <div style="height:52px"></div>
+
+        <main><?php View::content(); ?></main>
+
+        <div class="ventana" style="display:none"></div>
+        <div class="velo" data-hide=".velo, .ventana" style="display:none"></div>
+
+        <script src="/javascript/roleflix.min.js?v=<?=$version?>"></script>
+    </body>
+</html>

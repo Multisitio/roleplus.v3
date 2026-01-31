@@ -1,0 +1,18 @@
+
+<article>
+	<header>
+		<h1>1) <?=t('Tipo de jugador')?>: <?=($claves['jugador_rol']=='master')?t('máster'):t('jugador')?></h3>
+		<h2><?=t('El máster es el organizador de la partida.')?></h2>
+	</header>
+
+	<section>
+		<h3><?=t('Si no es correcto, toca cambiarlo ahora:')?></h3>
+		<div class="grid">
+			<a role="button" href="/ev/asistente/escoge_partida"><?=t('Soy jugador')?></a>
+			<a role="button" class="outline" href="/ev/asistente/fichas"><?=t('Soy el máster')?></a>
+		</div>
+	</section>
+
+	<footer>
+	</footer>
+</article>

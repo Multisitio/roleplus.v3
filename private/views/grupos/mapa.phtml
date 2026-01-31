@@ -1,0 +1,25 @@
+<?php
+/*$dir = preg_match('/localhost|roleplus\.vh/', $_SERVER['HTTP_HOST']) ? $_SERVER['DOCUMENT_ROOT'] . '/img' : '/hd2/img';*/
+$dir = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/img';
+$image_properties = getimagesize("$dir/usuarios/$grupo->usuarios_idu/$grupo->mapa");
+?>
+
+<div id='map'></div>
+
+<div class="control">
+    <label>
+        <input type="checkbox" checked class="toggleMarkers" role="switch">
+        <kbd><?=t('Ver marcadores')?></kbd>
+    </label>
+    <input type="text" class="seeker" placeholder="<?=t('Escribe para buscar...')?>">
+</div>
+
+<div class="popup" style="display:none">
+    <?php include APP_PATH . 'views/registrados/grupos/formulario.phtml'; ?>
+</div>
+
+<script>
+var image_selected = '/img/usuarios/<?=$grupo->usuarios_idu?>/<?=$grupo->mapa?>';
+var image_height = '<?=$image_properties[1]?>';
+var image_width = '<?=$image_properties[0]?>';
+</script>

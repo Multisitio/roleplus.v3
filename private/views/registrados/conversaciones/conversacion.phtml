@@ -1,0 +1,53 @@
+<div class="modal chat conversacion" data-autoscroll>
+	<header>
+		<div class="space-between">
+			<a class="color" data-ajax=".ajax.show" href="/registrados/conversaciones/listado" rel="nofollow"><?=Ku::icon(t('Ir a conversaciones'), 'arrow-left')?> <?=t('Listado de conversaciones')?></a>
+
+		    <button class="transparent" data-hide=".modal.chat, .chat.overlay"><?=Ku::icon(t('Cerrar ventana'), 'x')?></button>
+		</div>
+        
+		<div class="align-center gap10 pt10 shrink0">
+			<?php if (count($conversacion->usuarios) == 2):
+				foreach ($conversacion->usuarios as $usu):
+					if (Session::get('idu') == $usu->idu) continue;
+					$conversando_con = $usu;
+				endforeach;
+
+				echo Usuario::avatar($conversando_con); ?>
+				<div class="align-left">
+					<h3 class="primary"><?= $conversando_con->apodo ?></h3>
+					<small><b><?= t('Participantes:') ?></b> <?= $participantes ?></small>
+				</div>
+			<?php else: ?>
+				<a class="avatar" href="/grupos/<?=_str::hashtag($conversacion->nombre)?>">
+					<?php $img = (_file::exists($conversacion->imagen)) ? $conversacion->imagen : "/img/otras/question.svg"; ?>
+					<img alt="<?= t('Avatar de la conversación') ?>" src="<?= $img ?>" width="64px" height="64px">
+				</a>
+				<div class="align-left">
+					<h3 class="primary"><?= $conversacion->nombre ?></h3>
+					<small><b><?= t('Participantes:') ?></b> <?= $participantes ?></small>
+				</div>
+			<?php endif; ?>
+		</div>
+	</header>
+
+	<section class="mensajes" data-append="1" data-ch="rp_chat_<?=$conversacion->idu?>">
+		<?php include APP_PATH . 'views/registrados/conversaciones/mensajes.phtml'; ?>
+	</section>
+
+	<form action="/registrados/conversaciones/enviar" data-ajax=".ajax.hide" method="post">
+		<footer class="align-center">
+			<textarea name="contenido" placeholder="<?= t('Escribe aquí con respeto y amor...') ?>"></textarea>
+
+			<?php View::partial('botonera', null, ['add_to'=>'.chat textarea']); ?>
+
+			<div class="auto pv10">
+				<button type="reset"><?= t('Limpiar') ?></button>
+				<button type="submit"><?= t('Enviar') ?></button>
+			</div>
+		</footer>
+		<input type="hidden" name="conversaciones_idu" value="<?= $conversacion->idu ?>">
+		<input type="hidden" name="ultimo_fecha" value="<?= empty($men->creado)?'':$men->creado ?>">
+	</form>
+</div>
+<div class="chat overlay" data-hide=".modal.chat, .chat.overlay"></div>

@@ -1,0 +1,23 @@
+
+<?=Html::formOpen('')?>
+    <article>
+        <header>
+            <h1><?=t('Listado de socios')?></h1>
+        </header>
+        <section class="grid">
+        </section>
+        <footer>
+            <?php foreach($niveles as $nivel=>$socios): ?>
+                <b><?=$nivel?></b>
+                <blockquote>
+                    <?php foreach($socios as $soc): ?>
+                        &bull; <?=$soc->apodo?>
+                        -> cuota <?=$soc->cuota?>
+                        -> desde <?=_date::format($soc->socio, 'd-m-Y')?>
+                        <br>
+                    <?php endforeach; ?>
+                </blockquote>
+            <?php endforeach; ?>
+        </footer>
+    </article>
+<?=Html::closeTag('form')?>

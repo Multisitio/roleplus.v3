@@ -1,0 +1,21 @@
+
+<article>
+    <header>
+        <h1>Logs</h1>
+    </header>
+    <section>
+        <?php
+        $log = '/home/ubuntu/web/' . $_SERVER['HTTP_HOST'] . '/logs/error-' . $_SERVER['HTTP_HOST'] . '.log';
+        #_var::die($log);
+        $lastFetchedSize = 500000;
+        
+        $fsize = filesize($log);
+        $maxLength = 10000; #($fsize - $lastFetchedSize);
+
+        $fp = fopen($log, 'r');
+        fseek($fp, -$maxLength , SEEK_END);
+        $data = explode("\n", fread($fp, $maxLength));
+        _var::echo($data);
+        ?>
+    </section>
+</article>

@@ -1,0 +1,37 @@
+<?php
+$total = 0;
+foreach ($encuestas[$pub->idu] as $una):
+    $total += $una->votos;
+endforeach;
+?>
+<a data-ajax=".ajax.show" href="/publicaciones/ver_votantes/<?=$pub->idu?>" title="<?=t('Ver votantes.')?>"><?=t('Votos')?>: <?=$total?></a> 
+<?php
+foreach ($encuestas[$pub->idu] as $opciones_idu=>$una):
+
+    $per=empty($una->votos)?0:round($una->votos*100/$total);
+    $active = empty($encuestas_opciones[$pub->idu][$opciones_idu]) ? '' : ' class="active"';
+
+    if ($pub->encuesta == 2): ?>
+    
+        <span>
+            (<b class="right"><?=$per?>%</b>)
+            <?=$una->opcion?>
+            <progress max="100" value="<?=$per?>"></progress>
+        </span>
+
+    <?php elseif (empty($encuestas_opciones[$pub->idu]) && Session::get('idu') <> $pub->usuarios_idu): ?>
+
+        <a role="button" class="mb10" data-ajax="._<?=$pub->idu?>" rel="nofollow" href="/registrados/publicaciones/votar/<?=$pub->idu?>/<?=$opciones_idu?>"><?=$una->opcion?></a>
+
+    <?php else: ?>
+
+        <a <?=$active?> data-ajax="._<?=$pub->idu?>" rel="nofollow" href="/registrados/publicaciones/votar/<?=$pub->idu?>/<?=$opciones_idu?>">
+            <span>
+                (<b class="right"><?=$per?>%</b>)
+                <?=$una->opcion?>
+            </span>
+            <progress max="100" value="<?=$per?>"></progress>
+        </a>
+
+    <?php endif;
+endforeach; ?>

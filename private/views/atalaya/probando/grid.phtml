@@ -1,0 +1,37 @@
+
+<h1>Rejilla</h1>
+
+<p><b>Fuera de KumbiaCSS</b> proporcionamos la clase .grid para establecer una rejilla ligera que reparte a todas las columnas el ancho disponible a partes iguales:</p>
+
+<?php _code::open('figure'); ?>
+<div class="grid">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+<?php _code::close(); ?>
+
+<p>Ejemplo:</p>
+
+<div class="counter grid">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<template>
+    <span></span>
+</template>
+
+<p>
+    <button role="button" data-clone_content_append="template, .grid"><?=Ku::icon('plus-circle')?> Añadir columna</button>
+    <button role="button" data-remove=".grid :last"><?=Ku::icon('minus-circle')?> Quitar columna</button>
+</p>
+
+<p>Como KumbiaCSS se centra en elementos HTML nativos, mantuvimos este sistema de cuadrícula minimalista.</p>
+
+<p>Si necesita cómo crear rejillas personalizadas, puede aprender sobre CSS Grid en <a href="https://learncssgrid.com" target="_blank">learncssgrid.com</a>.</p>
+
+<p>Si prefiere usar flex, aquí tiene una rejilla completa hecha con flex: <a href="http://flexboxgrid.com" target="_blank">flexboxgrid.com</a>.</p>

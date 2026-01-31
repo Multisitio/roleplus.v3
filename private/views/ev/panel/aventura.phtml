@@ -1,0 +1,41 @@
+
+<?php foreach ($elementos as $ele): ?>
+	<article class="draggable post-it <?=$ele->tipo?>" data-url="/ev/elementos/posicion_aventura/<?=$ele->idu?>" style="left:<?=$ele->posicion_x?>px; top:<?=$ele->posicion_y?>px">
+		<div class="editar">
+			<a data-ajax=".ajax.show" href="/ev/elementos/editar_aventura/<?=$ele->idu?>"><img alt="<?=t('Editar elemento')?>" src="/img/icons/edit-2s.svg"></a>
+		</div>
+
+		<header>
+			<h5 class="truncate"><?=$ele->nombre?></h5>
+		</header>
+
+		<?php if ($ele->fotos): ?>
+			<a class="caja-img" href="/img/usuarios/<?=$ele->usuarios_idu?>/<?=$ele->fotos?>" target="_blank"><img alt="<?=t('Imagen del elemento:')?> <?=$ele->fotos?>" src="/img/usuarios/<?=$ele->usuarios_idu?>/l.<?=trim(explode(',', $ele->fotos)[0])?>"></a>
+		<?php endif; ?>
+
+		<section>
+			<?php if ($ele->texto): ?>
+				<div class="caja-texto"><?=nl2br($ele->texto, false)?></div>
+			<?php endif; ?>
+
+			<?php if ($ele->mp3): ?>
+				<?php /*<?=t('Bucle:')?> <input type="checkbox" class="loop">*/ ?>
+				<fieldset class="caja-audio">
+					<legend><?=$ele->mp3?></legend>
+					<audio class="mp3_<?=$ele->idu?>" controls>
+						<source type="audio/mpeg" src="/mp3/<?=$ele->mp3?>">
+						Your browser does not support the audio element.
+					</audio>
+				</fieldset>
+			<?php endif; ?>
+
+			<?php if ($ele->youtube): ?>
+				<div class="youtube-player" data-id="<?=$ele->youtube?>"></div>
+			<?php endif; ?>
+		</section>
+		<hr>
+		<footer>
+			<label><?=$ele->enviado ? t('Se muestra a jugadores') : t('No se muestra a jugadores')?></label>
+		</footer>
+	</article>
+<?php endforeach; ?>

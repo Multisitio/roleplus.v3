@@ -1,0 +1,9 @@
+
+<?php if (Session::has('console')): ?>
+	<script>
+		<?php foreach (Session::get('console') as $log): ?>
+			console.log('<?=$log?>');
+		<?php endforeach; ?>
+	</script>
+	<?php Session::delete('console'); ?>
+<?php endif; ?>

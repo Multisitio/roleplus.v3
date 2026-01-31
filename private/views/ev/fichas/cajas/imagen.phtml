@@ -1,0 +1,11 @@
+
+<div class="caja imagen s12 mt15">
+	<label class="dropimage">
+		<input type="file" name="imagenes[]">
+		<?php if ($caja->imagenes): ?>
+			<img alt="<?=t('Imagen')?>" src="/img/usuarios/<?=$caja->usuarios_idu?>/l.<?=$caja->imagenes?>">
+		<?php endif; ?>
+	</label>
+	<input type="text" name="imagenes_subidas" value="<?=$caja->imagenes?>">
+</div>
+<input type="hidden" name="tipo" value="imagen">

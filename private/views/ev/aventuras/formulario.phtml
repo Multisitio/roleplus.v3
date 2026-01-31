@@ -1,0 +1,59 @@
+
+<article>
+	<form enctype="multipart/form-data" method="post">
+		<header>
+			<h1><?=t('Aventura')?></h1>
+		</header>
+
+		<section>
+			<label><?=t('Título')?></label>
+			<input type="text" name="nombre" placeholder="<?=t('Título de la aventura...')?>" value="<?=$aventura->nombre?>">
+
+			<label><?=t('Introdución')?></label>
+			<textarea name="introduccion" placeholder="<?=t('Texto para atraer a los máster...')?>"><?=$aventura->introduccion?></textarea>
+
+			<label><?=t('Ficha')?></label>
+			<select name="fichas_idu">
+				<option><?=t('Escoge una...')?></option>
+				<?php foreach ($fichas as $fic):
+					$selected = ($aventura->fichas_idu == $fic->idu) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$fic->idu?>"><?=$fic->nombre?></option>
+				<?php endforeach; ?>
+			</select>
+
+			<label class="dropimage mh20 mt20">
+				<input type="file" name="imagenes[]">
+				<?php if ($aventura->fotos): ?>
+					<img alt="<?=t('Imagen de la aventura:')?> <?=$aventura->nombre?>" src="/img/usuarios/<?=$aventura->usuarios_idu?>/l.<?=$aventura->fotos?>">
+				<?php endif; ?>
+			</label>
+		</section>
+
+		<footer class="grid">
+			<button type="button" class="mas-acciones" data-toggle=".mas-acciones" style="display:none"><?=t('Menos opciones')?></button>
+
+			<?php if ($aventuras_idu): ?>
+				<button type="button" class="mas-acciones outline" data-toggle=".mas-acciones"><?=t('Más opciones')?></button>
+
+				<a role="button" class="mas-acciones outline" href="/ev/aventuras/eliminar/<?=$aventura->idu?>" style="display:none"><?=t('Eliminar')?></a>
+
+				<button type="submit" class="mas-acciones outline" name="action" value="crear" style="display:none"><?=t('Duplicar')?></button>
+
+				<input type="hidden" name="idu" value="<?=$aventura->idu?>">
+				<input type="hidden" name="fotos" value="<?=$aventura->fotos?>">
+			<?php endif; ?>
+
+			<a role="button" class="mas-acciones outline" href="/ev/aventuras"><?=t('Aventuras')?></a>
+
+			<a role="button" class="mas-acciones outline" href="/ev/partidas"><?=t('Partidas')?></a>
+
+			<?php if ($aventuras_idu): ?>
+				<button type="submit" class="mas-acciones" name="action" value="actualizar"><?=t('Actualizar')?></button>
+
+				<a role="button" class="mas-acciones outline" href="/ev/aventuras/formulario" style="display:none"><?=t('Nueva')?></a>
+			<?php else: ?>
+				<button type="submit" name="action" value="crear"><?=t('Crear')?></button>
+			<?php endif; ?>
+		</footer>
+	</form>
+</article>

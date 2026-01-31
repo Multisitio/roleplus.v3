@@ -1,0 +1,17 @@
+
+<?php foreach ($conectados as $con): ?>
+    <span class="sub">
+        <img alt="<?=t('Conectado')?>" src="/img/icons/circle-green.svg">
+        &nbsp;
+        <small><?=$con->apodo?><?php /*<br>id: <?=$con->usuarios_idu?>*/ ?></small>
+    </span>
+
+    <?php foreach ($personajes as $personajes_idu=>$per):
+        if ($con->usuarios_idu <> $personajes_usuarios[$personajes_idu]->usuarios_idu): 
+            continue;
+        endif; ?>
+        <a class="sub" href="/ev/personajes/montar/<?=$ficha->idu?>/<?=$personajes_idu?>" target="_blank"> &nbsp; <small><img src="/img/icons/s.corner-down-right.svg"></small> &nbsp;<?=$per['nombre_personaje']?></a>
+
+        <?php /*<span class="sub">id: <?=$personajes_idu?></span>*/ ?>
+    <?php endforeach; ?>
+<?php endforeach; ?>

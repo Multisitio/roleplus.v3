@@ -1,0 +1,116 @@
+<?php
+Css::add('rss.min');
+?>
+<div data-columns id="grid" class="entradas-rss">
+    <article>
+        <header>
+            <h1><?=t('Entradas de YouTube')?></h1>
+            <?=t('Desde aquí puedes ver lo que publican los canales que quieras seguir y convertir alguna de estas entradas en una de tus publicaciones a golpe de click.')?>
+        </header>
+        <section>
+            <br>
+            <div class="tabs inside youtube">
+                <button class="active" data-hide=".youtube.canales" data-active=".tabs.youtube button" data-show=".youtube.nuevo"><?=t('Añadir canal')?></button>
+
+                <button data-hide=".youtube.nuevo" data-active=".tabs.youtube button" data-show=".youtube.canales"><?=t('Ver canales')?></button>
+            </div>
+        </section>
+        <?=Form::open('registrados/youtube', 'post', 'class="youtube nuevo"')?>
+            <section>
+                <br>
+                <?=Kubox::input(type: 'text',
+                    label: t('El enlace del canal'),
+                    placeholder: t('Aquí el enlace del canal'),
+                    name: 'url')?>
+                <small><?=t('No vale un enlace de vídeo. Pon el enlace del canal.')?></small>
+            </section>
+            <footer>
+                <br>
+				<?=Kubox::buttonSubmitColor(label: t('Incluir'),
+					name: 'action', value: 'incluir')?>
+            </footer>
+        <?=Form::close()?>
+
+        <?=Form::open('registrados/youtube', 'post', 'class="youtube canales hide"')?>
+            <section>
+                <br>
+                <p><?=t('Marque los canales que NO le interesen entre')?> <?=count($sitios)?>:</p>
+                <small>
+                    <?=t('Hay nuevas entradas todos los días a las 8:00.')?>
+                </small>
+
+                <input type="text" class="mb10" data-filter=".sitio" placeholder="<?=t('Filtrar')?>…">
+                <?php foreach($sitios as $sit):
+                    $checked = empty($suscripciones[$sit->idu]) ? '' : 'checked' ?>
+                    <div class="sitio grid">
+                        <hr class="xs12">
+                        <span class="xs10">
+                            <blockquote>
+                                <label class="truncate">
+                                    <p><input type="checkbox" <?=$checked?> name="sitios[]" value="<?=$sit->idu?>"> <?=$sit->usuario?></p>
+                                </label>
+                            </blockquote>
+                        </span>
+                        <span class="xs2 align-right">
+                            <?php if (Session::get('rol') > 5 or Session::get('idu') == $sit->usuarios_idu): ?>
+                                <a role="button" href="/registrados/youtube/quitar/<?=$sit->idu?>" onclick="copiarAlPortapapeles('<?=$sit->hashtag?>')" rel="nofollow" title="<?=$sit->hashtag?>"><img alt="<?=t('Eliminar canal')?>" src="/img/icons/x.svg"></a>
+                            <?php endif; ?>
+                        </span>
+                    </div>
+                <?php endforeach; ?>
+            </section>
+            <footer>
+                <br>
+				<?=Kubox::buttonSubmitColor(label: t('Aplicar'),
+					name: 'action', value: 'no_ver')?>
+            </footer>
+        </form>
+    </article>
+
+    <?php foreach ($entradas as $ent): ?>
+        <article>
+            <header class="grid">
+                <h2 class="xs10">
+                    <a href="<?=$ent->enlace?>" rel="noopener noreferrer" target="_blank"><?=$ent->titulo?></a>
+                </h2>
+                <small class="xs2 align-right mt10">
+                    <?=_date::ago($ent->publicado)?>
+                </small>
+            </header>
+            <section>
+                <div>
+                    <span class="tag"><?=t('Canal')?></span>
+                    <span class="tag"><?=$ent->hashtag?></span>
+                </div>
+                <a href="<?=$ent->enlace?>" rel="noopener noreferrer" target="_blank"><?=$ent->enlace?></a>
+                <br>
+                
+                <?php if (_str::count_files($ent->descripcion) > 4): ?>
+                    <span class="leer-mas-<?=$ent->idu?>">
+                        <?=_str::truncate_files($ent->descripcion, 4)?>
+                        <button class="outline w100" data-toggle=".leer-mas-<?=$ent->idu?>">
+                            <?=t('Leer más')?>
+                        </button>
+                    </span>
+                    <span class="leer-mas-<?=$ent->idu?>" style="display:none">
+                        <?=$ent->descripcion?>
+                    </span>
+                <?php else: ?>
+                    <?=$ent->descripcion?>
+                <?php endif; ?>
+            </section>
+
+            <div class="youtube-player" data-id="<?=_var::getUrlVar($ent->enlace)?>"></div>
+
+            <footer class="grid auto">
+                <?php if ($ent->entrada_publicada): ?>
+                    <p><?=t('Esta entrada ya está publicada.')?></p>
+                <?php else: ?>
+                    <a role="button" data-ajax=".ajax.show" href="/registrados/youtube/publicar/<?=$ent->idu?>" rel="nofollow"><?=t('Publicar')?></a>
+
+                    <a role="button" data-ajax=".ajax.show" data-bg_color href="/registrados/publicaciones/desde_youtube/<?=$ent->idu?>" rel="nofollow"><?=t('Editando')?></a>
+                <?php endif; ?>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>

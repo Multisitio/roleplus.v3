@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            :root {
+                --background: #fff;
+                --primary: #900;
+            }
+
+            *,
+            *:before,
+            *:after {
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: #f4f4f4;
+                font-family: Arial, sans-serif;
+                line-height: 1.5;
+                margin: 0;
+                padding: 0;
+            }
+
+            main {
+                width: 80%;
+                margin: auto;
+                overflow: hidden;
+            }
+
+            h1 {
+                align-items: center;
+                color: #333;    
+                display: flex;
+                gap: 10px;
+            }
+
+            article {
+                padding: 30px;
+                background-color: #fff;
+                color: #333;
+                margin: 20px 0;
+                border-radius: 10px;
+            }
+
+            blockquote {
+                border-left: 4px solid #c00;
+                margin-left: 10px;
+                padding-left: 30px;
+            }
+
+            button {
+                background: #900;
+                border: none;
+                border-radius: 5px;
+                color: #fff;
+                cursor: pointer;
+                display: block;
+                font: 16px Verdana;
+                margin-block: 0;
+                margin-inline: auto;
+                padding-block: 10px;
+                padding-inline: 30px;
+                text-decoration: none;
+                width: fit-content;
+            }
+
+            .center {
+                text-align: center;
+            }
+
+            .logo {
+                display: inline-block;
+                width: 120px;
+            }
+
+            label b {
+                color: #900;
+                display: block;
+                font-size: small;
+                margin-block: 30px 0;
+            }
+
+            form {
+                display: block;
+                margin-inline: auto;
+                max-width: 480px;
+            }
+
+            input,
+            textarea {
+                border: none;
+                border-bottom: 2px solid #900;
+                min-height: 40px;
+                padding-inline: 10px;
+                padding-block: 10px;
+                width: 100%;
+            }
+
+            .red {
+                color: #c00;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <article>
+                <h1><a href="/" class="logo"><?php include 'img/logos/roleplus.svg'; ?></a> HOLA 👉 R+4<br>🎲🎲🎲🎲</h1>
+                <p>📢 <b>¿Quieres participar en el diseño de R+4</b> <i>(que lanzaremos el 10 de octubre de 2024)</i> <b>y decidir buena parte de los cambios que vamos a realizar?</b></p>
+
+                <p>💣 <b>Este año</b> el rol con todos los privilegios en R+ lo tenemos <b>por solo 40€ anuales</b> <i>(por menos de 4€ al mes)</i>, en 2025 serán 50€ y <b>no habrá acceso gratuito</b> para nadie (queremos mantener <b>R+ libre de toxicidad, solo para buena gente</b>).</p>
+
+                <p>🏅 Con este rol tendrás la opción de entrar <b>en el grupo que tenemos exclusivo</b> en Telegram donde <b>podrás influir con tus comentarios y</b> a través de <b>encuestas</b>.<br>
+                <small><i>Si más adelante no puedes hacerte cargo de la cuota, no te echamos, te dejamos con el rol base que tenías y podrás subirlo de la forma habitual con puntos de experiencia (PX)</i></small></p>
+                
+                <?php View::partial('suscribirse', false, ['id'=>'MD5EFLDNY667Y', 'texto'=>t('Hoy 30€ (todo un año), mañana no sé')]); ?>
+
+                <br>
+                <hr>
+                <blockquote><b>Si eres un/a autor/a, distribuidor/a, editorial o tienda,</b> también <b>tenemos</b> algo <b>para ti, para</b> que puedas dar a conocer <b>tus novedades</b> de juegos de mesa y rol en <b>tres planes</b> donde te damos total autonomía, te ayudamos o hacemos toda la promoción por ti <i>(creando banners personalizados con tus novedades y mostrándolos periódicamente en todas nuestras redes)</i>... toda la información <b>aquí: <a href="/suscripciones">tu plan</a>.</b></blockquote>
+                <hr>
+
+                <p class="center"><b class="red">Tenemos una oportunidad única para formar juntos una comunidad libre de toxicidad, de roleros para roleros.<br>¿Te sumas a R+4?</b></p>
+            </article>
+        </main>
+
+        <img alt="" src="<?=DOMAIN.'imagenes/pixel/'.base64_encode($referencia).'/oferta'?>" width="1" height="1">
+    </body>
+</html>

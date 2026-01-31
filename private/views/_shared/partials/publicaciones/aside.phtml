@@ -1,0 +1,158 @@
+<?php
+$usuario = View::getVar('usuario');
+$roles = View::getVar('roles');
+
+/*
+	Performance:
+	⮞ Antes: siempre hacía (new Grupos)->todosMisGrupos() incluso sin login.
+	⮞ Ahora: solo si hay sesión. Un bot / anónimo no dispara esas consultas.
+*/
+$mis_grupos = [];
+if (Session::get('idu')) {
+	$mis_grupos = (new Grupos)->todosMisGrupos();
+}
+?>
+<aside style="display: none">
+	<div class="logo">
+		<?php include 'img/logos/roleplus.svg'; ?>
+		<div>
+			<h3>ROLEplus.app</h3>
+			<span class="tag">3.5</span>
+		</div>
+	</div>
+
+	<?php if (!Session::get('idu')): ?>
+		<a href="/usuarios/formularios" title="<?=t('Entrar')?>"><img alt="<?=t('Entrar')?>" src="/img/icons/log-in.svg"> <?=t('Entrar')?></a>
+	<?php endif; ?>
+
+	<a href="/" title="<?=t('Publicaciones')?>"><img alt="<?=t('Publicaciones')?>" loading="lazy" src="/img/icons/home.svg" width="30" height="30"> <?=t('Publicaciones')?></a>
+
+	<a rel="nofollow" href="/registrados/tienda" title="<?=t('Gana/Usa tus PX')?>"><?=Ku::icon(t('Gana/Usa tus PX'), 'heart')?> <?=t('Gana/Usa tus PX')?></a>
+	<div class="sub">
+		<a rel="nofollow" href="/registrados/consejos" title="<?=t('Pon un banner')?>"><img alt="<?=t('Pon un banner')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Pon un banner')?></a>
+
+		<a rel="nofollow" href="/registrados/aventuras" title="<?=t('Aventuras')?>"><img alt="<?=t('Aventuras')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Aventuras')?></a>
+
+		<?php /*<a rel="nofollow" href="/registrados/sistemas" title="<?=t('Crea un sistema')?>"><img alt="<?=t('Crea un sistema')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Crea un sistema')?></a>
+
+		<a rel="nofollow" href="/registrados/personajes" title="<?=t('Crea un personaje')?>"><img alt="<?=t('Crea un personaje')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Crea un personaje')?></a>*/ ?>
+	</div>
+
+	<a class="hoplita roles" data-active=".roles" data-toggle=".hoplita" href="#hoplita" title="<?=t('Rol Hoplita')?>"><img alt="<?=t('Rol Hoplita')?>" src="/img/icons/plus.svg"> <?=t('Hoplita')?></a>
+	<a class="hoplita roles" data-active=".roles" data-toggle=".hoplita" href="#hoplita" title="<?=t('Rol Hoplita')?>" style="display: none"><img alt="<?=t('Rol Hoplita')?>" src="/img/icons/minus.svg"> <?=t('Hoplita')?></a>
+	<div class="hoplita sub" style="display: none">
+		<a rel="nofollow" href="/registrados/ajustes" title="<?=t('Escoge tu color')?>"><img alt="<?=t('Escoge tu color')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Escoge tu color')?></a>
+
+		<a rel="nofollow" href="/registrados/ia/respuestas" title="<?=t('Pregunta algo')?>"><img alt="<?=t('Pregunta algo')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Pregunta algo')?></a>
+
+		<a rel="nofollow" href="/registrados/ajustes" title="<?=t('Quitar mampostería')?>"><img alt="<?=t('Quitar mampostería')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Quitar mampostería')?></a>
+
+		<a href="<?=($usuario->rol > 0)?'https://t.me/joinchat/Kw24CgNrEMFlNjg8':'/usuarios/formularios'?>" rel="noopener noreferrer" target="_blank" title="<?=t('Telegram de R+')?>"><img alt="<?=t('Telegram de R+')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Telegram de R+')?></a>
+	</div>
+
+	<a class="trampero roles" data-active=".roles" data-toggle=".trampero" href="#trampero" title="<?=t('Rol Trampero')?>"><img alt="<?=t('Rol Trampero')?>" src="/img/icons/plus.svg"> <?=t('Trampero')?></a>
+	<a class="trampero roles" data-active=".roles" data-toggle=".trampero" href="#trampero" title="<?=t('Rol Trampero')?>" style="display: none"><img alt="<?=t('Rol Trampero')?>" src="/img/icons/minus.svg"> <?=t('Trampero')?></a>
+	<div class="trampero sub" style="display: none">
+		<a rel="nofollow" href="/registrados/enlaces" title="<?=t('Acorta una URL')?>"><img alt="<?=t('Acorta una URL')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Acorta una URL')?></a>
+
+		<a rel="nofollow" href="/registrados/cronologias/ver" title="<?=t('Cronologías')?>"><img alt="<?=t('Cronologías')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Crea una cronología')?></a>
+
+		<a rel="nofollow" href="/registrados/estadisticas" title="<?=t('Estadísticas de R+')?>"><img alt="<?=t('Estadísticas de R+')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Estadísticas de R+')?></a>
+
+		<a rel="nofollow" href="/registrados/ajustes" title="<?=t('No notificar +1')?>"><img alt="<?=t('No notificar +1')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('No notificar +1')?></a>
+	</div>
+
+	<a class="portaestandarte roles" data-active=".roles" data-toggle=".portaestandarte" href="#portaestandarte" title="<?=t('Rol Portaestandarte')?>"><img alt="<?=t('Rol Portaestandarte')?>" src="/img/icons/plus.svg"> <?=t('Portaestandarte')?></a>
+	<a class="portaestandarte roles" data-active=".roles" data-toggle=".portaestandarte" href="#portaestandarte" title="<?=t('Rol Portaestandarte')?>" style="display: none"><img alt="<?=t('Rol Portaestandarte')?>" src="/img/icons/minus.svg"> <?=t('Portaestandarte')?></a>
+	<div class="portaestandarte sub" style="display: none">
+		<a rel="nofollow" href="/registrados/rss" title="<?=t('Entradas de blogs')?>"><img alt="<?=t('Entradas de blogs')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Entradas de blogs')?></a>
+
+		<a rel="nofollow" href="/registrados/youtube" title="<?=t('Entradas YouTube')?>"><img alt="<?=t('Entradas YouTube')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Entradas YouTube')?></a>
+
+		<a rel="nofollow" href="/registrados/publicaciones/perfiles" title="<?=t('Ver solo lo que sigues')?>"><img alt="<?=t('Ver solo lo que sigues')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Ver solo lo que sigues')?></a>
+
+		<a rel="nofollow" href="/registrados/traducciones" title="<?=t('Traducciones')?>"><img alt="<?=t('Traducciones')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Traducciones')?></a>
+	</div>
+
+	<a class="azotamentes roles" data-active=".roles" data-toggle=".azotamentes" href="#azotamentes" title="<?=t('Rol Azotamentes')?>"><img alt="<?=t('Rol Azotamentes')?>" src="/img/icons/plus.svg"> <?=t('Azotamentes')?></a>
+	<a class="azotamentes roles" data-active=".roles" data-toggle=".azotamentes" href="#azotamentes" title="<?=t('Rol Azotamentes')?>" style="display: none"><img alt="<?=t('Rol Azotamentes')?>" src="/img/icons/minus.svg"> <?=t('Azotamentes')?></a>
+	<div class="azotamentes sub" style="display: none">
+		<a rel="nofollow" href="/registrados/comentarios/sueltos" title="<?=t('Comentarios sueltos')?>"><img alt="<?=t('Telegram privadoComentarios sueltos')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Comentarios sueltos')?></a>
+
+		<a rel="nofollow" href="/registrados/roleflix" title="ROLEFLIX"><img alt="ROLEFLIX" src="/img/icons/s.corner-down-right.svg"> ROLEFLIX</a>
+
+		<a rel="nofollow" href="/registrados/tareas" title="<?=t('Manda una tarea')?>"><img alt="<?=t('Manda una tarea')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Manda una tarea')?></a>
+
+		<a href="<?=($usuario->rol > 3)?'https://t.me/joinchat/VfbeMh_noPkHkAHn':'/usuarios/formularios'?>" rel="noopener noreferrer" target="_blank" title="<?=t('Telegram exclusivo')?>"><img alt="<?=t('Telegram exclusivo')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Telegram exclusivo')?></a>
+	</div>
+
+	<a class="chaman roles" data-active=".roles" data-toggle=".chaman" href="#chaman" title="<?=t('Rol Chamán')?>"><img alt="<?=t('Rol Chamán')?>" src="/img/icons/plus.svg"> <?=t('Chamán')?></a>
+	<a class="chaman roles" data-active=".roles" data-toggle=".chaman" href="#chaman" title="<?=t('Rol Chamán')?>" style="display: none"><img alt="<?=t('Rol Chamán')?>" src="/img/icons/minus.svg"> <?=t('Chamán')?></a>
+	<div class="chaman sub" style="display: none">
+		<a href="/ev" title="<?=t('Escritorio Virtual')?>"><img alt="<?=t('Escritorio Virtual')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Escritorio Virtual')?></a>
+
+		<a href="/ev/fichas" title="<?=t('Editor de fichas')?>"><img alt="<?=t('Editor de fichas')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Editor de fichas')?></a>
+
+		<a href="/ev/manuales" title="<?=t('Editor de manuales')?>"><img alt="<?=t('Editor de manuales')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Editor de manuales')?></a>
+		
+		<a rel="nofollow" href="/registrados/ajustes" title="<?=t('Quitar publicidad')?>"><img alt="<?=t('Quitar publicidad')?>" src="/img/icons/s.corner-down-right.svg"> <?=t('Quitar publicidad')?></a>
+	</div>
+
+	<?php if ($usuario->rol > 0 && $usuario->rol < 6): ?>
+		<script>
+		window.onload = function() {
+			document.querySelector('.<?=mb_strtolower($roles[$usuario->rol])?>').click();
+		};
+		</script>
+	<?php endif; ?>
+
+	<a href="/usuarios" title="<?=t('Usuarios')?>"><img alt="<?=t('Usuarios')?>" loading="lazy" src="/img/icons/users.svg" width="30" height="30"> <?=t('Usuarios')?></a>
+
+	<?=Html::linkOpen(t('Grupos'), '/grupos')?>
+		<?=Html::img(t('Grupos'), '/img/icons/circle.svg', 30, 30)?>
+		<?=t('Grupos')?>
+	<?=Html::closeTag('a')?>
+	<?php if (!empty($mis_grupos)): ?>
+		<div class="sub">
+			<?php foreach ($mis_grupos as $m_g): ?>
+				<?=Html::linkOpen($m_g->nombre, "/grupos/ver/$m_g->hashtag")?>
+					<?=Html::img($m_g->nombre, '/img/icons/s.corner-down-right.svg', 20, 20)?>
+					<?=$m_g->nombre?>
+				<?=Html::closeTag('a')?>
+			<?php endforeach; ?>
+		</div>
+	<?php endif; ?>
+
+	<a rel="nofollow" href="/registrados/ajustes" title="<?=t('Ajustes')?>"><img alt="<?=t('Ajustes')?>" src="/img/icons/settings.svg"> <?=t('Ajustes')?></a>
+
+	<?php if (Session::get('idu')): ?>
+		<a href="/usuarios/salir" title="<?=t('Salir')?>"><img alt="<?=t('Salir')?>" src="/img/icons/log-out.svg"> <?=t('Salir')?></a>
+	<?php endif; ?>
+	
+	<?=Html::linkAjax('.ajax.show', t('Créditos'), '/info/ventana/nosotros', '<img alt="'.t('Créditos').'" src="/img/icons/heart.svg"> ' . t('Créditos'), ['data-hide' => 'aside'])?>
+
+	<div class="pa10 ml10">
+		<small>© 2018 roleplus.app<br>
+		<strongb><?=t('Tu')?> IP:</strongb> <?=$_SERVER['REMOTE_ADDR']?><br>
+		<strongb><?=t('Tiempo de carga')?>:</strongb> <?=number_format(microtime(1)-$_SERVER['REQUEST_TIME_FLOAT'], 3, '.', '') . '"'?><br>
+		<strongb><?=t('Memoria usada')?>:</strongb> <?=number_format(memory_get_usage()/1048576, 2, '.', '') . ' MB'?></small>
+	</div>
+
+	<select name="idioma" data-redirect="/usuarios/cambiar_idioma/">
+		<?php
+		$idioma_del_usuario = empty($_COOKIE['usuario']['idioma'])
+			? (new Usuarios)->establecerIdioma()
+			: $_COOKIE['usuario']['idioma'];
+		$idiomas = Config::get('combos.idiomas');
+		unset($idiomas['Otro']);
+		foreach ($idiomas as $iso => $idioma):
+			$selected = ($idioma_del_usuario == $iso) ? 'selected' : '';
+			?>
+			<option <?=$selected?> value="<?=$iso?>"><?=$idioma?></option>
+			<?php
+		endforeach;
+		?>
+	</select><br>
+	<br>
+</aside>
+<div class="overlay aside hide" data-hide="aside, .overlay" data-style="body, overflow:auto"></div>

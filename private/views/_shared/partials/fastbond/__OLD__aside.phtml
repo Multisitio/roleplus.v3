@@ -1,0 +1,29 @@
+<?php
+$clean = View::getVar('clean');
+?>
+<aside>
+    <?php foreach ([
+        'app/config',
+        'app/controllers',
+        'app/extensions/helpers',
+        'app/libs',
+        'app/models',
+        'app/views/_shared/errors',
+        'app/views/_shared/partials',
+        'app/views/_shared/templates',
+        'app/views',
+        'public/css',
+        'public/img',
+        'public/javascript',
+    ] as $dir):
+
+        if ($clean):
+            Cache::driver()->clean("kumbia.$dir");
+        endif; ?>
+
+        <?php View::partial('fastbond/files', '+1', [
+            'dir'=>$dir
+        ], "kumbia.$dir"); ?>
+
+    <?php endforeach; ?>
+</aside>

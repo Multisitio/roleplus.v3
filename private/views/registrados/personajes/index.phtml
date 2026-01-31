@@ -1,0 +1,38 @@
+
+<div class="personajes" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Personajes')?></h1>
+            <p><?=t('Crea un personaje.')?></p>
+        </header>
+        <footer class="grid auto">
+            <a role="button" data-ajax=".ajax.show" data-bg_color rel="nofollow" data-style="body, overflow:hidden" href="/registrados/personajes/formulario"><?=t('Crear un personaje')?></a>
+        </footer>
+    </article>
+
+    <?php foreach ($personajes as $per): ?>
+        <article>
+            <header>
+                <h2><?=h($per->nombre)?></h2>
+            </header>
+
+            <section>
+                <p><?=$per->introduccion?></p>
+            </section>
+
+            <?php if ($per->fotos): ?>
+                <img alt="<?=t('Portada')?>: <?=$per->fotos?>" src="/img/usuarios/<?=$per->usuarios_idu?>/l.<?=$per->fotos?>">
+            <?php endif; ?>
+
+            <footer class="grid auto">
+                <?php if ($per->usuarios_idu == $usuario->idu): ?>
+                    <a role="button" data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/registrados/personajes/formulario/<?=$per->idu?>"><?=t('Editar')?></a>
+                <?php endif; ?>
+                
+                <?php if ($per->publicada): ?>
+                    <a role="button" data-bg_color href="/registrados/personajes/jugar/<?=$per->idu?>"><?=t('Jugar')?></a>
+                <?php endif; ?>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>

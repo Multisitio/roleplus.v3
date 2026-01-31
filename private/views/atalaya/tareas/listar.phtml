@@ -1,0 +1,69 @@
+
+<div class="s12 tareas" id="grid" data-columns>
+    <form method="post">
+        <article>
+            <header class="pa10">
+                <h1><?=t('Tareas')?></h1>
+            </header>
+            <footer class="grid">
+                <a role="button" <?=($estado=='aprobadas')?'':'class="outline"'?> href="/atalaya/tareas/listar/aprobadas"><?=t('Aprobadas')?></a>
+                <a role="button" <?=($estado=='rechazadas')?'':'class="outline"'?> href="/atalaya/tareas/listar/rechazadas"><?=t('Rechazadas')?></a>
+            </footer>
+            <footer class="grid">
+                <a role="button" <?=($estado=='pospuestas')?'':'class="outline"'?> href="/atalaya/tareas/listar/pospuestas"><?=t('Pospuestas')?></a>
+                <a role="button" <?=($estado=='terminadas')?'':'class="outline"'?> href="/atalaya/tareas/listar/terminadas"><?=t('Terminadas')?></a>
+            </footer>
+            <footer>
+                <a role="button" <?=($estado=='')?'':'class="outline"'?> href="/atalaya/tareas/listar"><?=t('Todas')?></a>
+            </footer>
+        </article>
+    </form>
+
+    <?php foreach($tareas as $tra): ?>
+        <form method="post">
+            <article>
+                <header class="pa10">
+                    <h2>
+                        <?php if ($tra->terminada):
+                            echo t('Propuesta terminada'); ?>
+                            <small><?=_date::format($tra->terminada, 'H:i d/m/y')?></small>
+                        <?php elseif ($tra->pospuesta):
+                            echo t('Propuesta pospuesta'); ?>
+                            <small><?=_date::format($tra->pospuesta, 'H:i d/m/y')?></small>
+                        <?php elseif ($tra->aprobada):
+                            echo t('Propuesta aprobada'); ?>
+                            <small><?=_date::format($tra->aprobada, 'H:i d/m/y')?></small>
+                        <?php elseif ($tra->rechazada):
+                            echo t('Propuesta rechazada'); ?>
+                            <small><?=_date::format($tra->rechazada, 'H:i d/m/y')?></small>
+                        <?php else:
+                            echo t('Propuesta');
+                        endif; ?>
+                    </h2>
+                </header>
+                <section>
+                    <label><?=t('Tarea')?>:</label>
+                    <?=$tra->propuesta?><br>
+                    <br>
+                    <label><?=t('Comentarios')?>:</label>
+                    <?=nl2br($tra->comentarios, false)?><br>
+                    <br>
+                    <label><?=t('Comentario')?>:</label>
+                    <textarea name="comentarios[<?=$tra->id?>]"></textarea>
+                </section>
+                <footer>
+                    <button type="submit" class="outline" name="action" value="enviar_comentario"><?=t('Comentar')?></button>
+                </footer>
+                <footer class="grid">
+                    <button type="submit" class="outline" name="action" value="aprobar"><?=t('Aprobar')?></button>
+                    <button type="submit" class="outline" name="action" value="rechazar"><?=t('Rechazar')?></button>
+                </footer>
+                <footer class="grid">
+                    <button type="submit" class="outline" name="action" value="posponer"><?=t('Posponer')?></button>
+                    <button type="submit" class="outline" name="action" value="terminar"><?=t('Terminar')?></button>
+                </footer>
+            </article>
+            <input type="hidden" name="id" value="<?=$tra->id?>">
+        </form>
+    <?php endforeach; ?>
+</div>

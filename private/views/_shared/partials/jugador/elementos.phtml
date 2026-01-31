@@ -1,0 +1,25 @@
+<?php
+$elementos = View::getVar('elementos');
+$partida = View::getVar('partida');
+?>
+<div class="modal elementos" style="display:none">
+	<header class="mb15">
+		<h3>
+            <?=t('Lista de elementos')?>
+		    <button class="transparent" data-hide=".modal.elementos, .elementos.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+        </h3>
+	</header>
+
+    <label>
+        <input type="text" data-filter=".lista .elemento" placeholder="<?=t('Filtrar')?>…">
+    </label>
+
+	<div class="lista">
+		<?php #include APP_PATH . 'views/ev/jugar/recibir.phtml'; ?>
+	</div>
+</div>
+<div class="elementos overlay" data-hide=".modal.elementos, .elementos.overlay" style="display:none"></div>
+
+<button class="elementos-boton" data-show=".modal.elementos, .elementos.overlay" title="<?=t('Abrir lista de elementos')?>">
+    <img alt="<?=t('Abrir lista de elementos')?>" loading="lazy" src="/img/icons/layers.svg" width="30" height="30">
+</button>

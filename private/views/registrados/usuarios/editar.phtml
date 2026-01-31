@@ -1,0 +1,84 @@
+<?php
+$confirmar_cierre = true;
+$titulo = t("Perfil");
+?>
+<form method="post" enctype="multipart/form-data">
+    <section>
+        <div class="grid">
+            <div class="xs12 m9">
+                <div class="grid">
+                    <label class="xs12 m8">
+                        <?=t('Tu idioma de preferencia')?>:
+                        <select name="idioma" required>
+                            <?php 
+                            $idiomas = Config::get('combos.idiomas');
+                            foreach ($idiomas as $iso=>$idioma):
+                                $selected = ($usuario->idioma == $iso) ? 'selected' : ''?>
+                                <option <?=$selected?> value="<?=$iso?>"><?=$idioma?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                    <label class="xs12">
+                        <?=t('Tu nombre o apodo')?>:
+                        <input type="text" name="apodo" placeholder="<?=t('Aquí tu nombre o apodo')?>..." value="<?=h($usuario->apodo)?>" required>
+                        <small><i><?=t('Todos los cambios de nombre o apodo son registrados en tu perfil para que otros usuarios puedan identificarte.')?></i></small>
+                        <input type="hidden" name="apodo_anterior" value="<?=$usuario->apodo?>">
+                    </label>
+                </div>
+            </div>
+            <label class="align-center xs6 m3">
+                <?=t('Tu avatar')?>:
+                <div class="dropimage<?=empty($usuario->avatar)?'':' dropnocontent'?> icon ma10">
+                    <button type="button"><?=Html::img(t('Quitar avatar'), '/img/icons/x-square.svg', 30, 30)?></button>
+                    <input type="file" name="avatar">
+                    <?php 
+					$avatar = empty($usuario->avatar)
+						? '/img/otras/question.svg'
+						: '/img/usuarios/' . Session::get('idu') . "/m.$usuario->avatar"; ?>
+					<img alt="<?=t('Avatar actual')?>" src="<?=$avatar?>">
+                    <input type="hidden" name="avatar_anterior" value="<?=$usuario->avatar?>">
+                </div>
+                <small><em>128x128px</em></small>
+            </label>
+        </div>
+        <label class="block mt10">
+            <?=t('Tu eslogan o grito')?>:
+            <input type="text" name="eslogan" placeholder="<?=t('Aquí tu eslogan')?>..." value="<?=h($usuario->eslogan)?>" required>
+        </label>
+        <br>
+        <label class="block">
+            <?=t('Información sobre ti')?>:
+            <textarea name="sobre_mi" placeholder="<?=t('Aquí un texto que hable de ti')?>..."><?=h($usuario->sobre_mi)?></textarea>
+        </label>
+        <br>
+        <div clasS="grid xs12 m6">
+            <label>
+                <?=t('Imagen de cabecera')?>:
+                <div class="dropimage<?=empty($usuario->fondo_cabecera)?'':' dropnocontent'?>">
+                    <button type="button"><?=Html::img(t("Quitar cabecera"), '/img/icons/x-square.svg', 30, 30)?></button>
+                    <input type="file" name="fondo_cabecera">
+                    <?php if ($usuario->fondo_cabecera): ?>
+                        <?=Html::img(t('Imagen de cabecera'), "/img/usuarios/$usuario->idu/l.$usuario->fondo_cabecera", 540)?>
+                    <?php endif; ?>
+                    <input type="hidden" name="cabecera_anterior" value="<?=$usuario->fondo_cabecera?>">
+                </div>
+                <small><em>540x540px</em></small>
+            </label>
+            <label>
+                <?=t('Imagen de fondo')?>:
+                <div class="dropimage<?=empty($usuario->fondo_general)?'':' dropnocontent'?>">
+                    <button type="button"><?=Html::img(t('Quitar fondo'), '/img/icons/x-square.svg', 30, 30)?></button>
+                    <input type="file" name="fondo_general">
+                    <?php if ($usuario->fondo_general): ?>
+                        <?=Html::img(t('Imagen de fondo'), "/img/usuarios/$usuario->idu/xxl.$usuario->fondo_general", 1920, 1080)?>
+                    <?php endif; ?>
+                    <input type="hidden" name="fondo_anterior" value="<?=$usuario->fondo_general?>">
+                </div>
+                <small><em>1920x1080px</em></small>
+            </label>
+        </div>
+    </section>
+    <footer class="grid auto pb10">
+        <button type="submit" data-bg_color name="action" value="guardar_perfil"><?=t('Salvar cambios')?></button>
+    </footer>
+</form>

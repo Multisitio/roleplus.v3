@@ -1,0 +1,38 @@
+
+<div id="grid" data-columns>
+	<article class="cabecera">
+		<header>
+			<h1><?=t('Fichas')?></h1>
+		</header>
+
+		<section class="grid">
+			<a role="button" class="outline" href="/ev/aventuras"><?=t('Aventuras')?></a>
+			
+			<a role="button" href="/ev/fichas/formulario"><?=t('Crear ficha')?></a>
+		</section>
+
+		<footer>
+			<input type="text" data-filter="article:not(.cabecera)" placeholder="<?=t('Filtra la lista...')?>">
+		</footer>
+	</article>
+
+	<?php foreach ($fichas as $fic): ?>
+		<article>
+			<header>
+				<h3><?=$fic->nombre?></h3>
+			</header>
+
+			<?php if ($fic->fondo_ficha): ?>
+				<img alt="<?=t('Imagen de la partida:')?> <?=$fic->nombre?>" src="/img/usuarios/<?=$fic->usuarios_idu?>/l.<?=$fic->fondo_ficha?>">
+			<?php endif; ?>
+
+			<footer class="grid">
+				<?php if (Session::get('idu') == $fic->usuarios_idu): ?>
+					<a role="button" class="outline" href="/ev/fichas/formulario/<?=$fic->idu?>"><?=t('Editar')?></a>
+				<?php endif; ?>
+
+				<a role="button" href="/ev/personajes/montados/<?=$fic->idu?>"><?=t('Personajes')?></a>
+			</footer>
+		</article>
+	<?php endforeach; ?>
+</div>

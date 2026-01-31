@@ -1,0 +1,42 @@
+
+<div class="aventura" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=h($escena->peso)?></h1>
+        </header>
+
+        <section>
+            <p><?=nl2br(h($escena->introduccion))?></p>
+        </section>
+
+        <?php if ($escena->fotos): ?>
+            <img alt="<?=t('Portada')?>: <?=$escena->fotos?>" src="/img/usuarios/<?=$escena->usuarios_idu?>/l.<?=$escena->fotos?>">
+        <?php endif; ?>
+
+        <footer>
+            <?php if ( ! empty($caminos)):
+                foreach ($caminos as $cam): ?>
+                    <a role="button" href="/registrados/escenas/aventura/<?=$aventura->idu?>/<?=$cam->escena?>"><?=$cam->texto?></a>                    
+                <?php endforeach;
+            endif; ?>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2><?=h($aventura->nombre)?></h2>
+        </header>
+
+        <section>
+            <p><?=$aventura->introduccion?></p>
+        </section>
+
+        <?php if ($aventura->fotos): ?>
+            <img alt="<?=t('Portada')?>: <?=$aventura->fotos?>" src="/img/usuarios/<?=$aventura->usuarios_idu?>/l.<?=$aventura->fotos?>">
+        <?php endif; ?>
+
+        <footer>
+            <a role="button" href="/"><?=t('Salir')?></a>
+        </footer>
+    </article>
+</div>

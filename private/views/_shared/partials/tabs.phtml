@@ -1,0 +1,14 @@
+<?php
+$scope = empty($scope) ? '' : "$scope ";
+$c=1;
+foreach($tabs as $tab_key=>$tab_val):
+    $active = ($c == 1) ? 'active' : '';
+    ?>
+    <button type="button" class="tab <?=$tab_key?> <?=$active?>" data-hash="<?=$tab_key?>"
+        data-active="<?=$scope?>.tab"  
+        data-hide="<?=$scope?>.container" 
+        data-show="<?=$scope?>.container.<?=$tab_key?>"
+    ><?=$tab_val?></button>
+    <?php
+    ++$c;
+endforeach;

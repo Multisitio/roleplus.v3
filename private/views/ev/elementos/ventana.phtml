@@ -1,0 +1,140 @@
+<?php
+/* Vista: ev/elementos/ventana.phtml */
+?>
+<div data-modal="editor">
+    <form
+        data-ajax=".ajax.show"
+        enctype="multipart/form-data"
+        method="post"
+        novalidate
+    >
+        <header>
+            <h3>
+                <?= t('Editor de elementos') ?>
+                <button type="button" data-close><?= t('Cerrar') ?></button>
+            </h3>
+        </header>
+
+        <section>
+            <select name="tipo" required>
+                <?php foreach ($elementos_tipos as $clave => $valor): ?>
+                    <option value="<?= h($clave) ?>" <?= (!empty($elemento) && $clave === $elemento->tipo) ? 'selected' : '' ?>>
+                        <?= h($valor) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <input
+                type="text"
+                name="nombre"
+                placeholder="<?= t('Nombre') ?>..."
+                value="<?= !empty($elemento) ? h($elemento->nombre) : '' ?>"
+                required
+            >
+
+            <textarea
+                name="texto"
+                placeholder="<?= t('Descripción...') ?>"
+                rows="4"
+            ><?= !empty($elemento) ? h($elemento->texto) : '' ?></textarea>
+
+            <label data-dropzone>
+                <input type="file" name="imagenes" accept="image/*">
+                <?php if (!empty($elemento) && !empty($elemento->fotos)): ?>
+                    <img
+                        src="/img/usuarios/<?= $img_uid ?>/xl.<?= h($elemento->fotos) ?>"
+                        alt="<?= t('Imagen de') ?> <?= h($elemento->nombre) ?>"
+                        loading="lazy"
+                    >
+                <?php endif; ?>
+            </label>
+
+            <?php if (!empty($elemento) && !empty($elemento->fotos)): ?>
+                <input type="text" name="fotos" value="<?= h($elemento->fotos) ?>" readonly>
+            <?php endif; ?>
+
+            <?php if ($usuario->rol > 4): ?>
+                <label>
+                    <?= t('MP3') ?>
+                    <?php if (!empty($elemento) && !empty($elemento->mp3)): ?>
+                        <input type="text" name="mp3" value="<?= h($elemento->mp3) ?>" readonly>
+                    <?php else: ?>
+                        <input type="file" name="mp3" accept="audio/mp3">
+                    <?php endif; ?>
+                </label>
+
+                <label>
+                    <?= t('MP4') ?>
+                    <?php if (!empty($elemento) && !empty($elemento->mp4)): ?>
+                        <input type="text" name="mp4" value="<?= h($elemento->mp4) ?>" readonly>
+                    <?php else: ?>
+                        <input type="file" name="mp4" accept="video/mp4">
+                    <?php endif; ?>
+                </label>
+            <?php endif; ?>
+
+            <label>
+                <?= t('YouTube ID') ?>
+                <input
+                    type="text"
+                    name="youtube"
+                    placeholder="dQw4w9WgXcQ"
+                    value="<?= (!empty($elemento) && !empty($elemento->youtube)) ? h($elemento->youtube) : '' ?>"
+                >
+            </label>
+
+            <?php if ($claves['jugador_rol'] !== 'jugador'): ?>
+                <hr>
+                <p><?= t('Aplicar cambios en:') ?></p>
+                <div data-grid="3">
+                    <label><input type="radio" name="aplicar_en" value="partida" checked> <?= t('Partida') ?></label>
+                    <label><input type="radio" name="aplicar_en" value="aventura"> <?= t('Aventura') ?></label>
+                    <label><input type="radio" name="aplicar_en" value="ambas"> <?= t('Ambas') ?></label>
+                </div>
+                <hr>
+                <label>
+                    <input
+                        type="checkbox"
+                        name="enviado"
+                        value="1"
+                        <?= (!empty($elemento) && !empty($elemento->enviado)) ? 'checked' : '' ?>
+                    >
+                    <?= t('Visible a jugadores') ?>
+                </label>
+            <?php else: ?>
+                <input type="hidden" name="aplicar_en" value="partida">
+                <input type="hidden" name="enviado" value="1">
+            <?php endif; ?>
+        </section>
+
+        <footer data-grid="4">
+            <?php if (!empty($idu_comun)): ?>
+                <button type="submit" name="action" value="eliminar" data-confirm="<?= t('¿Eliminar?') ?>">
+                    <?= t('Eliminar') ?>
+                </button>
+                <button type="submit" name="action" value="crear">
+                    <?= t('Duplicar') ?>
+                </button>
+                <a href="/ev/elementos/editar_partida/<?= $partida->idu ?>">
+                    <?= t('Nuevo') ?>
+                </a>
+                <button type="submit" name="action" value="actualizar">
+                    <?= t('Actualizar') ?>
+                </button>
+
+                <input type="hidden" name="posicion_x" value="<?= !empty($elemento) ? (int)$elemento->posicion_x : '115' ?>">
+                <input type="hidden" name="posicion_y" value="<?= !empty($elemento) ? (int)$elemento->posicion_y : '115' ?>">
+            <?php else: ?>
+                <button type="submit" name="action" value="crear">
+                    <?= t('Crear') ?>
+                </button>
+            <?php endif; ?>
+        </footer>
+
+        <input type="hidden" name="partidas_idu" value="<?= $partida->idu ?>">
+        <input type="hidden" name="aventuras_idu" value="<?= $partida->aventuras_idu ?>">
+        <input type="hidden" name="elementos_idu" value="<?= $idu_comun ?? '' ?>">
+    </form>
+</div>
+
+<div data-overlay data-close></div>

@@ -1,0 +1,94 @@
+<?php
+#die;
+$chat_id = '-1002089077414';
+
+# Mensaje directo a Telegram desde la URL
+if (!empty($_GET['text'])) {
+    $bot_token = Config::get("keys.telegram.{$_GET['bot']}_token");
+    $response = sendMessage($bot_token, $chat_id, $_GET['text']);
+    _var::die($response);
+}
+
+# Crea o borra un Webhook
+function setWebhook($bot_token, $bot, $action) {
+    $webhook_url = "https://roleplus.app/index/AAGVdHqiqF5gHTc2mL9hR3do0Cv7z01xcjY/$bot";
+    $url = "https://api.telegram.org/bot$bot_token/" . ($action === 'delete' ? 'deleteWebhook' : "setWebhook?url=$webhook_url");
+    return file_get_contents($url);
+}
+
+# Dispara crear o borrar un Webhook desde la URL
+if (!empty($_GET['webhook'])) {
+    $bot_token = Config::get("keys.telegram.{$_GET['bot']}_token");
+    $response = setWebhook($bot_token, $_GET['bot'], $_GET['webhook']);
+    _var::die($response);
+}
+
+# Se recoge un mensaje de usuario desde Telegram para ser procesado
+$update = json_decode(file_get_contents('php://input'), true);
+#_mail::toAdmin('Debug update', '<pre>' . print_r([$update], 1) . '</pre>');
+
+# Si no hay mensaje desde Telegram algo va mal y se para
+if (empty($update['message'])) {
+    $bot_token = Config::get("keys.telegram.{$_GET['bot']}_token");
+    $url = "https://api.telegram.org/bot$bot_token/getWebhookInfo";
+    $response = file_get_contents($url);
+    _mail::toAdmin('No update...', '<pre>' . print_r($response, 1) . '</pre>');
+    _var::die($response);
+}
+
+# Mensaje a Telegram
+function sendMessage($bot_token, $chat_id, $response_text, $message=[], $data=[]) {
+    $url = "https://api.telegram.org/bot$bot_token/sendMessage?chat_id=$chat_id&parse_mode=HTML&text=" . urlencode("<pre>$response_text</pre>");
+    $url .= empty($message['message_thread_id']) ? '' : '&message_thread_id=' . $message['message_thread_id'];
+    #$url .= empty($message['message_thread_id']['message_id']) ? '' : '&reply_to_message_id=' . $message['message_thread_id']['message_id'];
+    #$url .= empty($message['message_id']) ? '' : '&reply_to_message_id=' . $message['message_id'];
+    return file_get_contents($url);
+}
+
+# Se invocan respuestas recurrentes si unos preguntan a otros
+function handleBotResponse($message, $chat_id, $philosophers, $philosopher) {
+    $data = $philosophers[$philosopher];
+    $role_text = $data['role'];
+    $recursividad = (rand(1, 100) < $data['mention_probability']) ? 1 : 0;
+    if ($recursividad) {
+        $random_philosopher = array_rand(array_diff_key($philosophers, [$philosopher => $data]));
+        $role_text .= " Haz una pregunta al filósofo " . $philosophers[$random_philosopher]['name'] . " sobre este asunto, menciónale.";
+    }
+    $response_text = (new Respuestas)->preguntarAOpenAi($message['text'], $role_text, $data['name']);
+    _mail::toAdmin('sendMessage', [$data['token'], $chat_id, $response_text, $message]);
+    sendMessage($data['token'], $chat_id, $response_text, $message, $data);
+
+    if ($recursividad) {
+        $message['text'] .= "\n\n{$data['name']}: $response_text";
+        _mail::toAdmin('handleBotResponse', [$message, $chat_id, $philosophers, $random_philosopher]);
+        handleBotResponse($message, $chat_id, $philosophers, $random_philosopher);
+        sleep(3);
+    }
+}
+
+# Filósofos
+$philosophers = [
+    'diogenes' => [
+        'keywords' => '/.*(Diogenes|Diógenes|perro|cinico|cínico).*/mui',
+        'role' => 'Eres Diógenes de Sinope, responde a la cuestión o razonamiento del usuario o compañero como si fueras el filósofo griego, siempre en primera persona, como si estuvieras vivo en el presente y no te menciones.',
+        'name' => 'Diógenes de Sinope',
+        'token' => Config::get("keys.telegram.diogenes_token"),
+        'mention_probability' => 50
+    ],
+    'aristoteles' => [
+        'keywords' => '/.*(Aristoteles|Aristóteles).*/mui',
+        'role' => 'Eres Aristóteles de Estagira, responde a la cuestión o razonamiento del usuario o compañero como si fueras el filósofo griego, siempre en primera persona, como si estuvieras vivo en el presente y no te menciones.',
+        'name' => 'Aristóteles de Estagira',
+        'token' => Config::get("keys.telegram.aristoteles_token"),
+        'mention_probability' => 50
+    ]
+];
+
+# Inicialmente se genera una respuesta por cada mención a un filósofo
+$message = $update['message'];
+foreach ($philosophers as $philosopher => $data) {
+    if (preg_match($data['keywords'], $message['text'])) {
+        handleBotResponse($message, $chat_id, $philosophers, $philosopher);
+        sleep(3);
+    }
+}

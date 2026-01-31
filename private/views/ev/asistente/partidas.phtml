@@ -1,0 +1,32 @@
+
+<article>
+	<header>
+		<h1>5) <?=t('¿Está creada la partida?')?></h1>
+		<h2><?=t('Las partidas agrupan la aventura y los jugadores.')?></h2>
+	</header>
+
+	<section>
+		<h3><?=t('Si NO lo está toca crearla:')?></h3>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/partidas"><?=t('Ver partidas')?></a>
+			<a role="button" href="/ev/partidas/formulario"><?=t('Crear partida')?></a>
+		</div>
+	</section>
+	<br>
+	<footer>
+		<form action="/ev/asistente/panel" method="post">
+			<h3><?=t('Si está creada toca escoger una y darle a siguiente:')?></h3>
+			<select name="partidas_idu">
+				<option value=""><?=t('Escoger una...')?></option>
+				<?php foreach ($partidas as $par):
+					$selected = ($partidas_idu == $par->idu) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$par->idu?>"><?=$par->nombre?></option>
+				<?php endforeach; ?>
+			</select>
+			<div class="grid">
+				<a class="outline" role="button" href="/ev/asistente/aventuras"><?=t('Anterior')?></a>
+				<button type="submit"><?=t('Siguiente')?></button>
+			</div>
+		</form>
+	</footer>
+</article>

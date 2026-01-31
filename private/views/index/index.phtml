@@ -1,0 +1,19 @@
+
+<?php for ($i=0; $i<25; ++$i): ?>
+	<article>
+		<img alt="Imagen al azar" src="https://source.unsplash.com/collection/<?=rand(111111, 999999)?>">
+		<section>
+			<h4>My awesome Paper card!</h4>
+			<h5>Nice looking subtitle.</h5>
+			<p>Notice that the card width in this example have been set to 20rem, otherwise it will try to fill the current container/row where the card is.</p>
+		</section>
+		<div class="row">
+			<div class="s6">
+				<button>Read More</button>
+			</div>
+			<div class="s6">
+				<button><?=rand(1111, 9999)?> Comments</button>
+			</div>
+		</div>
+	</article>
+<?php endfor; ?>

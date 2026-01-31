@@ -1,0 +1,64 @@
+<?php
+$roles = Config::get('roles.plural'); 
+$socios = (new Usuarios)->socios();
+?>
+<h4 class="align-center"><?=t('Patrones')?></h4>
+<?php
+foreach($socios as $nivel=>$usuarios): ?>
+    <section>
+        <span>
+            <b><?=$roles[$nivel]?></b> 
+            <small>(<?=t('Nivel')?> <?=$nivel?>)</small>
+        </span>
+        <blockquote>
+            <?php foreach ($usuarios as $usu): ?>
+                <p>
+                    <strong><?=$usu->apodo?></strong>
+                    <?php if ($usu->eslogan): ?>
+                        <br><small><i><?=$usu->eslogan?></i></small>
+                    <?php endif; ?>
+                </p>
+            <?php endforeach; ?>
+        </blockquote>
+    </section>
+    <hr>
+<?php endforeach; ?>
+
+<h4 class="align-center"><?=t('Colaboradores')?></h4>
+<section>
+    <strong>Skart ilustra</strong>
+    <small>
+        <?=t('Nuestro diseñador gráfico y dibujante.')?><br>
+        <?=t('Puedes seguirle en')?>
+        <a href="https://www.instagram.com/skart_ilustra" target="_black">Instagram</a>,
+        <a href="https://www.youtube.com/channel/UCBJCiM7LIDvsU1o7oJbS7WQ" target="_black">YouTube</a>
+        <a href="https://tmofans.com/groups/4140/skart-ilustra" target="_black">Webmangas</a>
+    </small>
+</section>
+<hr>
+<section>
+    <strong>Flor Benitez Piceda (Pinceladas de Plata)</strong>
+    <small>
+        <?=t('La creadora de nuestro logo.')?><br>
+        <?=t('Puedes seguirla en')?>
+        <a href="https://www.youtube.com/channel/UC1keD53DbBT-J70U-S_sxVw" target="_black">YouTube</a>,
+        <a href="/pdf/Florfolio.pdf" target="_black">Florfolio</a>
+    </small>
+</section>
+<hr>
+<section>
+    <strong>“GamingDice”</strong>
+    <small>font © 2013 Joshua Dale Meadows and released under Creative Commons Attributions CC BY License.</small>
+    <div>
+        <i class="dice size-4">d</i>
+        <i class="dice size-6">F</i>
+        <i class="dice size-8">l</i>
+        <i class="dice size-10">0</i>
+        <i class="dice size-12">x</i>
+        <i class="dice size-20">Z</i>
+    </div>
+</section>
+<hr>
+<div class="align-center">
+    <img src="https://api.thegreenwebfoundation.org/greencheckimage/roleplus.app" alt="This website is hosted Green - checked by thegreenwebfoundation.org">
+</div>

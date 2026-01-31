@@ -1,0 +1,45 @@
+
+<form action="/info/contacto" class="ml10" method="post">
+    <div class="col s12 m6 l6">
+        <label><?=t('Nombre')?></label>
+        <input class="bb color-texto" name="nombre">
+    </div>
+    <div class="col s12 m6 l6">
+        <label><?=t('Correo')?></label>
+        <input class="bb color-texto" name="correo">
+    </div>
+    <div class="col s12 m6 l6 hide">
+        <label><?=t('Telefono')?></label>
+        <input class="bb" name="telefono">
+    </div>
+    <div class="col s12 m6 l6 hide">
+        <label><?=t('Direccion')?></label>
+        <input class="bb" name="direccion">
+    </div>
+    <div class="col s12">
+        <label><?=t('Motivo')?></label>
+        <textarea class="bb materialize-textarea" name="motivo"></textarea>
+    </div>
+    <div class="col s12 m6 l6">
+        <label class="acepto-sin-reserva">
+            <input type="checkbox" class="filled-in" data-toggle=".acepto-sin-reserva .fs14" name="terminos">
+            <i class="material-icons fs14">check_box_outline_blank</i>
+            <i class="material-icons fs14"style="display:none">check</i>
+            <i><?=t('Acepto sin reserva enviar esta información para que sea tratada exclusivamente entre dos partes, nosotros y usted y únicamente por y para el motivo expuesto.')?></i>
+        </label>
+    </div>
+    <div class="col s12 m6 l6 mt15">
+        <button class="all-width bold btn" name="contacto" value="1"><?=t('Enviar')?></button>
+    </div>
+    <a class="col s12 mt15" href="https://t.me/demonio69" rel="noopener noreferrer" target="_blank" title="Enlace para chatear por Telegram con Raúl M. R.">
+        <img alt="Icono de Telegram" height="24" src="/img/iconos/Telegram.svg" style="vertical-align:bottom" width="24">
+        &nbsp;
+        @Raúl M. R.
+    </a>
+    <a class="col s12 mt20" href="https://web.whatsapp.com/send?phone=34693809008" rel="noopener noreferrer" target="_blank" title="Enlace para chatear por WhatsApp al +34 693 80 90 08">
+        <img alt="Icono de WhatsApp" height="24" src="/img/iconos/WhatsApp.svg" style="vertical-align:bottom" width="24">
+        &nbsp;
+        +34 693 80 90 08
+    </a>
+    <div class="clearfix"></div>
+</form>

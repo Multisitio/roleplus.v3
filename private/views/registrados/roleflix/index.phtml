@@ -1,0 +1,18 @@
+
+<?php foreach ($videos as $vid): ?>
+    <div class="caja-<?=$vid->idu?> relative video w3-col s12 m6 l4 xl3">
+        <div class="youtube-player" data-id="<?=_var::getUrlVar($vid->enlace)?>"></div>
+        <div class="titulo-velo"></div>
+        <div class="titulo truncate"><?=$vid->titulo?></div>
+        <small class="canal truncate"><?=$vid->hashtag?></small>
+        <div class="otros-datos-velo"></div>
+        <div class="otros-datos">
+            <a class="etiquetas" data-ajax=".ventana" data-show=".velo, .ventana" rel="nofollow" href="/registrados/roleflix/etiquetar/<?=$vid->idu?>"><?=empty($etiquetas[$vid->etiquetas])?t('¿Etiquetar?'):$etiquetas[$vid->etiquetas]?></a>
+            <a class="w3-right alternar-<?=$vid->idu?>" data-ajax=".alternar-<?=$vid->idu?>" data-fade_out=".caja-<?=$vid->idu?>" rel="nofollow" href="/registrados/roleflix/alternar/<?=$vid->idu?>">
+                <?=empty($mi_lista[$vid->idu])?'[+]':'[-]'?>
+            </a>
+            <span class="w3-right"><?=date('d/m·Y', strtotime($vid->publicado))?>&nbsp;</span>
+        </div>
+        <div style="display:none"><?=$vid->descripcion?></div>
+    </div>
+<?php endforeach; ?>

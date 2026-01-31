@@ -1,0 +1,202 @@
+<?php
+$titulo = t('Publicación');
+$confirmar_cierre = true;
+?>
+<form action="/registrados/publicaciones/crear" enctype="multipart/form-data" method="post" onsubmit="removeHideElements(this)">
+	<section>
+		<?php
+		$idiomas = Config::get('combos.idiomas');
+		$idiomas['Otro'] = t('Otro');
+		$idioma_otro = (empty($idiomas[$publicacion->idioma]) && ! empty($publicacion->idu))
+			? 1 : 0;
+
+		/*$grupos['Otro'] = t('Otras etiquetas');
+		$grupo_otro = (empty($grupos[$publicacion->etiquetas]) && ! empty($publicacion->idu))
+			? 1 : 0;*/
+
+		$publicacion->etiquetas = empty($_GET['hashtag']) ? $publicacion->etiquetas : $_GET['hashtag'];
+
+		?>
+		<div class="grid">
+			<?=Kubox::select(box: 'class="xs3 publicacion-idioma Otro"'.($idioma_otro?' style="display:none"':''), label: t('Idioma'),
+			data: $idiomas, name: 'idioma', value: empty($publicacion->idioma)
+			? $usuario->idioma : $publicacion->idioma,
+			attrs: 'data-change_toggle=".publicacion-idioma"'); ?>
+
+			<?=Kubox::input(type: 'text', box: 'class="xs3 publicacion-idioma Otro"'.($idioma_otro?'':' style="display:none"'), label: t('Idioma'), placeholder: t('Código ISO'), name: 'idioma_otro', value: empty($idioma_otro)?'':h($publicacion->idioma))?>
+
+			<?php /*=Kubox::select(box: 'class="xs9 publicacion-grupo Otro"'.($grupo_otro?' style="display:none"':''), label: t('Grupo'), blank: t('Grupo de la publicación…'),
+			data: $grupos, name: 'etiquetas', value: h($publicacion->etiquetas),
+			attrs: 'data-change_toggle=".publicacion-grupo"');*/ ?>
+
+			<?=Kubox::input(type: 'text', box: 'class="xs9"', label: t('Categoría'), placeholder: t('Clasifica en una palabra'), name: 'etiquetas', value: h($publicacion->etiquetas))?>
+
+			<?php /*=Kubox::input(type: 'text', box: 'class="xs9"', label: t('Etiquetas'), placeholder: t('Separadas por un espacio'), name: 'etiquetas', value: h($publicacion->etiquetas))*/ ?>
+		</div>
+
+		<?php /*$tipos = Config::get('combos.publicaciones_tipos');
+		$tipo_otro = (empty($tipos[$publicacion->tipo]) && $publicacion->idu) ? 1 : 0;
+		?>
+		<div class="publicacion-tipo s4" <?=$tipo_otro?'style="display:none"':''?>>
+			<label><?=t('Tipo')?>:</label>
+			<select name="tipo" data-change_toggle=".publicacion-tipo">
+				<?php foreach ($tipos as $key=>$val):
+					$selected = ($publicacion->tipo == $val) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$key?>"><?=$val?></option>
+				<?php endforeach; unset($tipos, $key, $val); ?>
+			</select>
+		</div>
+		<div class="s4 publicacion-tipo Otro" <?=$tipo_otro?'':'style="display:none"'?>>
+			<label><?=t('Tipo')?>:</label>
+			<input type="text" name="tipo_otro" value="<?=empty($tipo_otro)?'':$publicacion->tipo?>">
+		</div>
+
+		<?php
+		$subtipos = Config::get('combos.publicaciones_subtipos');
+		$subtipo_otro = (empty($subtipos[$publicacion->subtipo]) && $publicacion->idu) ? 1 : 0;
+		$hay_evento = ($publicacion->subtipo=='Evento') ? 1 : 0;
+		?>
+		<div class="publicacion-subtipo s5" <?=($subtipo_otro || $hay_evento)?'style="display:none"':''?>>
+			<label><?=t('Subtipo')?>:</label>
+			<select name="subtipo" data-change_toggle=".publicacion-subtipo">
+				<?php foreach ($subtipos as $key=>$val):
+					$selected = ($publicacion->subtipo == $val) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$key?>"><?="$val"?></option>
+				<?php endforeach; unset($subtipos, $key, $val); ?>
+			</select>
+		</div>
+		<div class="s5 publicacion-subtipo Otro" <?=($subtipo_otro && ! $hay_evento)?'':'style="display:none"'?>>
+			<label><?=t('Subtipo')?>:</label>
+			<input type="text" name="subtipo_otro" value="<?=empty($subtipo_otro)?'':$publicacion->subtipo?>">
+		</div>
+		<div class="s3 publicacion-subtipo Evento" <?=$hay_evento?'':'style="display:none"'?>>
+			<label><?=t('Aforo mínino')?>:</label>
+			<input type="number" name="evento_aforo_minimo" value="<?=$publicacion->evento_aforo_minimo?>">
+		</div>
+		<div class="s2 publicacion-subtipo Evento" <?=$hay_evento?'':'style="display:none"'?>>
+			<label><?=t('Máximo')?>:</label>
+			<input type="number" name="evento_aforo" value="<?=$publicacion->evento_aforo?>">
+		</div>*/ ?>
+
+		<?php /*<div class="grid">
+			<div class="s6 publicacion-subtipo Evento" <?=$hay_evento?'':'style="display:none"'?>>
+				<label><?=t('Empieza')?>:</label>
+				<input type="datetime-local" name="evento_desde" value="<?=($publicacion->evento_desde=='0000-00-00 00:00:00')?'':str_replace(' ', 'T', date('Y-m-d H:i', strtotime($publicacion->evento_desde)))?>">
+			</div>
+			<div class="s6 publicacion-subtipo Evento" <?=$hay_evento?'':'style="display:none"'?>>
+				<label><?=t('Termina')?>:</label>
+				<input type="datetime-local" name="evento_hasta" value="<?=($publicacion->evento_hasta=='0000-00-00 00:00:00')?'':str_replace(' ', 'T', date('Y-m-d H:i', strtotime($publicacion->evento_hasta)))?>">
+			</div>
+		</div>*/ ?>
+
+		<?=Kubox::input(type: 'text', label: t('Título'), placeholder: t('Pon un título único'), name: 'titulo', value: h($publicacion->titulo), attrs: 'autofocus required tabindex="1"')?>
+
+		<?php
+		$contenido = empty($contenido_desde_fuera)
+			? $publicacion->contenido
+			: $contenido_desde_fuera;
+
+		#$contenido = empty($_GET['hashtag']) ? $contenido : "$contenido\n\n#" . $_GET['hashtag'];
+		?>
+		<?=Kubox::textarea(box: 'data-preview', label: t('Contenido'), placeholder: t('Escribe algo que mole mucho'), name: 'contenido', value: $contenido, attrs: 'class="ventana-publicacion-textarea" required tabindex="2"')?>
+
+		<section class="preview">
+			<?php if ( ! empty($contenido_desde_fuera)):
+				View::partial('admin/boxes/preview', null , ['url'=>$contenido_desde_fuera]);
+			else:
+				if ( ! empty($publicacion->idu) && ! empty($vistas_previas[$publicacion->idu])):
+					$v_p = $vistas_previas[$publicacion->idu][0];
+					View::partial('boxes/preview', null, ['v_p'=>$v_p]); ?>
+                    <a data-ajax=".ajax.hide" data-remove="form .preview>*" rel="nofollow" href="/registrados/vistas_previas/eliminar/<?=$v_p->idu?>" title="<?=t('Eliminar vista previa')?>"><?=t('Eliminar vista previa')?></a>
+				<?php elseif ($publicacion->enlace): ?>
+					<?=Article::link($publicacion)?>
+					<a data-ajax=".ajax.hide" data-remove="form .preview>*" rel="nofollow" href="/registrados/publicaciones/eliminar_enlace/<?=$publicacion->idu?>" title="<?=t('Eliminar enlace')?>"><?=t('Eliminar enlace')?></a>
+					<?=Form::hidden(field: 'enlace', value: $publicacion->enlace)?>
+				<?php endif;
+			endif; ?>
+		</section>
+
+		<div class="auto gap10">
+			<?php
+			$f = 0; 
+			if ( ! empty($publicacion->fotos)):
+				$fotos = is_array($publicacion->fotos) ? $publicacion->fotos : explode(', ', $publicacion->fotos);
+				foreach($fotos as $foto):
+					if ( ! $foto) {
+						continue;
+					}
+					echo Kubox::dropimage(box: 'class="multiple"', label: t('Imagen'), name: 'fotos[]',
+					dir: "/img/usuarios/$publicacion->usuarios_idu/l.", file: $foto);
+					++$f;
+				endforeach;		
+			endif; ?>
+
+			<?php if ($f < 4): ?>
+				<?=Kubox::dropimage(box: 'class="multiple"', label: t('Imagen'), name: 'fotos[]')?>
+			<?php endif; ?>
+		</div>
+
+		<?php if (empty($publicacion->idu)): ?>
+			<fieldset class="mt10 encuesta<?=empty($publicacion->encuesta)?' hide':''?>">
+				<legend><?=t('Encuesta')?></legend>
+				<div class="opciones">
+					<div class="flex mb10 opcion relative" style="display:none">
+						<input type="text" class="connect-to-right" name="opciones[]" placeholder="<?=t('Aquí una opción o respuesta')?>…">
+
+						<button type="button" class="connect-to-left" data-remove="parent"><img alt="<?=t('Quitar opción')?>" src="/img/icons/x-square.svg"></button>
+					</div>
+					<?php if ( ! empty($encuestas[$publicacion->idu])):
+						foreach ($encuestas[$publicacion->idu] as $opcion): ?>
+							<div class="flex mb10 opcion relative">
+								<input type="text" class="connect-to-right" name="opciones[]" placeholder="<?=t('Aquí una opción o respuesta')?>…" value="<?=$opcion->opcion?>">
+
+								<button type="button" class="connect-to-left" data-remove="parent"><img alt="<?=t('Quitar opción')?>" src="/img/icons/x-square.svg"></button>
+							</div>
+						<?php endforeach;
+					else: ?>
+						<div class="flex mb10 opcion relative">
+							<input type="text" class="connect-to-right" name="opciones[]" placeholder="<?=t('Aquí una opción o respuesta')?>…">
+
+							<button type="button" class="connect-to-left" data-remove="parent"><img alt="<?=t('Quitar opción')?>" src="/img/icons/x-square.svg"></button>
+						</div>
+					<?php endif; ?>
+				</div>
+				<button type="button" data-clone=".opcion:first" data-to="form fieldset .opciones"><img alt="<?=t('Añadir opción')?>" src="/img/icons/plus-square.svg"></button>
+			</fieldset>
+		<?php endif; ?>
+
+		<div class="mt10 space-around">
+			<?php if (empty($publicacion->idu)): ?>
+				<?=Kubox::switch(attrs: 'data-toggle=".encuesta"', label: t('¿Encuesta?'), name: 'encuesta', value: 1)?>
+			<?php elseif ($publicacion->encuesta <> 2): ?>
+				<?=Kubox::switch(label: t('¿Cerrar encuesta?'), name: 'encuesta', value: 2)?>
+			<?php endif; ?>
+
+			<?=Kubox::switch(checked: empty($publicacion->anclado)?false:true, label: t('¿Anclar 24h x 100PX?'), name: 'anclado', value: 1)?>
+		</div>
+	</section>
+
+	<footer>
+		<div class="auto mt10">
+			<?php if ( ! empty($publicacion->idu)): ?>
+				<?=Kubox::link(attrs: 'data-confirm="'.t('¿Seguro que quieres borrar esta publicación?').'" data-ajax=".ajax.hide" data-remove=".modal, .overlay, .pub-'.$publicacion->idu.'"', label: t('Borrar'), href: "/registrados/publicaciones/eliminar/$publicacion->idu")?>
+
+				<?=Kubox::buttonSubmit(label: t('Duplicar'),
+					name: 'action', value: 'crear')?>
+
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'),
+					name: 'action', value: 'editar')?>
+
+				<?=Form::hidden(field: 'idu', value: $publicacion->idu)?>
+			<?php else: ?>
+				<?=Kubox::buttonSubmitColor(label: t('Publicar'),
+					name: 'action', value: 'crear')?>
+			<?php endif; ?>
+		</div>
+	</footer>
+</form>
+
+<script>
+/*document.querySelector('[autofocus]').focus();
+textarea_auto_height();*/
+</script>

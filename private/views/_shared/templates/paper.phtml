@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><?="$module_name $controller_name $action_name"?></title>
+        <link href="/css/paper.min.css?v=<?=time()?>" rel="stylesheet">
+	</head>
+	<body>
+		<nav class="border fixed split-nav">
+			<div class="nav-brand">
+				<h3><a href="#">Get PaperCSS</a></h3>
+			</div>
+			<div class="collapsible">
+				<input id="collapsible1" type="checkbox" name="collapsible1">
+				<label for="collapsible1">
+				<div class="bar1"></div>
+				<div class="bar2"></div>
+				<div class="bar3"></div>
+				</label>
+				<div class="collapsible-body">
+				<ul class="inline">
+					<li><a href="#">Documentation</a></li>
+					<li><a href="#">About</a></li>
+					<li><a href="#">Github</a></li>
+				</ul>
+				</div>
+			</div>
+		</nav>
+
+		<main class="paper row">
+			<ul class="breadcrumb border sm-12 col">
+				<li><a href="#">Documentation</a></li>
+				<li><a href="#">Components</a></li>
+				<li>Breadcrumb</li>
+			</ul>
+
+			<div class="masonry">
+				<?php View::content(); ?>
+			</div>
+		</main>
+	</body>
+</html> 

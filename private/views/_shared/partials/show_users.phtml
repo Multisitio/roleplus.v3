@@ -1,0 +1,16 @@
+<?php
+$users = $users ?? [];
+?>
+<section>
+    <?php foreach ($users as $use): ?>
+        <div class="user gap10 mb10 pb10">
+            <?=Usuario::avatar($use)?>
+            <div class="grow">
+                <b><?=$use->apodo?></b><br>
+                <?php if ($use->eslogan): ?>
+                    <small><em><?=$use->eslogan?></em></small>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</section>

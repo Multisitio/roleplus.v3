@@ -1,0 +1,28 @@
+
+<div data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=_array::count($conversaciones)?> conversaciones</h1>
+        </header>
+        <section class="conversaciones">
+            <input type="text" data-filter=".conversaciones fieldset" placeholder="<?=t('Filtrar')?>…">
+            <hr>
+            <?php foreach ($conversaciones as $con): ?>
+                <fieldset>
+                    <legend>Conversación: <?=$con->idu?></legend>
+                    <blockquote>
+                        <h2><?=$con->nombre?:'Sin nombre'?></h2>
+                        <small>
+                            <p><b>Creado:</b> <?=$con->creado?></p>
+                            <p><b>Último mensaje:</b> <?=$con->ultimo_fecha?></p>
+                            <p><b>Miembros:</b> <?=$con->miembros?></p>
+                        </small>
+                        <p><b>Usuarios:</b> <?=_array::count($usuarios, $con->idu)?></p>
+                        <p><b>Mensajes:</b> <?=_array::count($mensajes, $con->idu)?></p>
+                    </blockquote>
+                    <a role="button" class="outline" data-ajax=".ajax.hide" data-confirm="¿Eliminar conversación <?=$con->idu?>?" data-remove="parent" href="/atalaya/conversaciones/eliminar/<?=$con->idu?>">¿Eliminar?</a>
+                </fieldset>
+            <?php endforeach; ?>
+        </section>
+    </article>
+</div>

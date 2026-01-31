@@ -1,0 +1,15 @@
+
+<section>
+    <div class="tabs inside notificaciones">
+        <button class="active" data-hide=".notificaciones.vistas" data-active=".tabs.notificaciones > *" data-show=".notificaciones.nuevas"><?=t('Nuevas')?></button>
+
+        <a role="button" data-ajax=".notificaciones.vistas" data-hide=".notificaciones.nuevas" data-active=".tabs.notificaciones > *" data-show=".notificaciones.vistas" rel="nofollow" href="/registrados/notificaciones/viejas"><?=t('Vistas')?></a>
+    </div>
+    <br>
+    <p><a role="button" class="mb10 w100" rel="nofollow" href="/registrados/notificaciones/limpiar"><?=t('Marcar todas como leídas')?></a></p>
+    <ul class="notificaciones nuevas" data-ch="notificaciones_lista_<?=Session::get('idu')?>">
+        <?php include APP_PATH . '/views/registrados/notificaciones/lista.phtml'; ?>
+    </ul>
+
+    <ul class="notificaciones vistas" style="display:none"></ul>
+</section>

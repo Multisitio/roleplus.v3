@@ -1,0 +1,33 @@
+<?php
+Css::add('boxes/v_timeline');
+
+if ( ! empty($max)): ?>
+    <article class="v_container max">
+        <header>
+            <h1><?=h($title)?></h1>
+        </header>
+<?php else: ?>
+    <div class="v_container">
+<?php endif; ?>
+        <section>
+            <?php foreach ($events as $eve): ?>
+                <div>
+                    <span></span>
+                    <section>
+                        <time><?=h($eve->$event_date)?></time>
+                        <h2><?=h($eve->$event_title)?></h2>
+                        <p><?=nl2br(h($eve->$event_description))?></p>
+                        <?php if ( ! empty($edit_url)): ?>
+                            <a role="button" data-ajax=".ajax.show" href="<?="$edit_url/{$eve->$event_id}"?>"><?=t('Editar')?></a>
+                        <?php endif; ?>
+                    </section>
+                </div>
+            <?php endforeach; ?>
+        </section>
+<?php if ( ! empty($max)): ?>
+    </article>
+    <br>
+    <br>
+<?php else: ?>
+    </div>
+<?php endif; ?>

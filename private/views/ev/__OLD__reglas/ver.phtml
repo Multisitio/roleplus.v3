@@ -1,0 +1,114 @@
+
+<form action="/ev/reglas/ver#rules" class="regla-<?=$regla->idu?>" data-ajax=".contenedor.dashboard" enctype="multipart/form-data" method="post">
+    <div class="w3-row-padding">
+        <div class="mt15 scroll-down-hide w3-col s12">
+            <div class="o9 pa15 w100 w3-card w3-white">
+                <?=t('Manual:')?> <?=$manual->nombre?>
+            </div>
+        </div>
+        <div class="ideal mt15 w3-col s12 m10 l8">
+            <div class="o9 pa15 w100 w3-card w3-white">
+                <div class="w3-col s12">
+                    <?=t('Aquí se escriben las reglas del manual, una a una. El campo de Página nueva se usa cuando se vaya a imprimir el documento para cuadrar el contenido en un página o en la siguiente. El campo Padre es para crear reglas dentro de otras en formato árbol. El campo Peso ordena las reglas de menor a mayor. Y el campo Valor es opcional y normalmente es un número. Lo habitual es usar los campos Nombre y Descripción.')?>
+                </div>
+                <div class="mt15 w3-col s12">
+                    <label><?=t('Página nueva')?></label>
+                    <select name="pagina_nueva">
+                        <?php foreach ([0=>t('No'), 1=>t('Sí')] as $k=>$v):
+                            $selected = ($k == $regla->pagina_nueva) ? 'selected ' : ''; ?>
+                            <option <?=$selected?>value="<?=$k?>"><?=$v?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mt15 w3-col s12">
+                    <label><?=t('Padre')?></label>
+                    <select name="manuales_reglas_idu">
+                        <option><?=t('Ninguno')?></option>
+                        <?php foreach ($reglas as $reg):
+                            $selected = ($reg->idu == $regla->manuales_reglas_idu) ? 'selected ' : ''; ?>
+                            <option <?=$selected?>value="<?=$reg->idu?>"><?=$reg->nombre?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="mt15 w3-col s2">
+                    <label><?=t('Peso')?></label>
+                    <input type="text" name="peso" value="<?=$regla->peso?>">
+                </div>
+                <div class="mt15 w3-col s10">
+                    <label><?=t('Nombre (aspecto, atributo, etiqueta, habilidad, movimiento)')?></label>
+                    <input type="text" name="nombre" value="<?=$regla->nombre?>">
+                </div>
+                <div class="mt15 w3-col s2">
+                    <label><?=t('Valor')?></label>
+                    <input type="text" name="valor" value="<?=$regla->valor?>">
+                </div>
+                <div class="mt15 w3-col s10">
+                    <label><?=t('Descripción')?></label>
+                    <textarea name="descripcion"><?=$regla->descripcion?></textarea>
+                </div>
+                <div class="mt15 w3-col s12">
+                    <label><?=t('Notas')?></label>
+                    <textarea name="notas"><?=$regla->notas?></textarea>
+                </div>
+                <div class="w3-clear"></div>
+            </div>
+        </div>
+        <div class="ideal mt15 w3-col s12 m5 l4">
+            <div class="o9 pa15 w100 w3-card w3-white">
+                <div class="w3-col s12 w3-center">
+                    <?php if ($regla->fotos):
+                        $foto = explode(', ', $regla->fotos)[0]; ?>
+                        <img alt="<?=t('Portada de ') . $regla->nombre?>" class="w3-image" src="/img/usuarios/<?=$regla->usuarios_idu?>/l.<?=$foto?>">
+                    <?php else: ?>
+                        <label><?=t('Foto')?> (.jpg o .png)</label>
+                    <?php endif; ?>
+                    <div class="file-field">
+                        <input type="file" name="imagenes[]" onchange="$('.file-path').attr('placeholder', basename(this.value))">
+                        <div class="file-path-wrapper">
+                            <?php $subir_foto = t('¿Subir foto?'); ?>
+                            <input type="text" class="file-path w3-center" placeholder="<?=empty($foto)?$subir_foto:"$foto ($subir_foto)"?>">
+                        </div>
+                    </div>
+                    <input type="hidden" name="fotos" value="<?=$regla->fotos?>">
+                    <input type="hidden" name="fotos_usuarios_idu" value="<?=$regla->fotos_usuarios_idu?>">
+                </div>
+                <div class="w3-clear"></div>
+            </div>
+        </div>
+    </div>
+    <div style="height:49px"></div>
+    <?php if (Session::get('idu') == $manual->usuarios_idu): ?>
+        <footer class="scroll-down-hide w3-black w3-bottom w3-sidebar">
+            <?php if ( ! empty($regla->id)) : ?>
+                <button class="w3-btn w3-text-orange w3-col s3" name="action" value="actualizar">
+                    <i class="material-icons">save</i>
+                    <span class="s0 m0"><?=t('Actualizar')?></span>
+                </button>
+                <input type="hidden" name="idu" value="<?=$regla->idu?>">
+            <?php endif; ?>
+            <button class="w3-btn w3-text-green w3-col s3" name="action" value="crear">
+                <i class="material-icons">save</i>
+                <span class="s0 m0"><?=t('Crear')?></span>
+            </button>
+            <?php if ( ! empty($regla->id)) : ?>
+                <a class="w3-btn w3-text-blue w3-col s3" data-ajax=".contenedor.dashboard" href="/ev/reglas/ver#rules">
+                    <i class="material-icons">fiber_new</i>
+                    <span class="s0 m0"><?=t('Limpiar')?></span>
+                </a>
+                <button class="w3-btn w3-text-red w3-col s3" data-confirm="<?=t('¿Seguro?')?>" name="action" value="eliminar">
+                    <i class="material-icons">delete_forever</i>
+                    <span class="s0 m0"><?=t('Eliminar')?></span>
+                </button>
+            <?php endif; ?>
+        </footer>
+    <?php endif; ?>
+</form>
+
+<script>
+var els = document.querySelectorAll('textarea');
+els.forEach(function(el) {
+    var height = el.scrollTop + el.scrollHeight;
+    height = (height < 55) ? 55 : height;
+    el.style.height = height+'px';
+});
+</script>

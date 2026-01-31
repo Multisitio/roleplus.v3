@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><?="$module_name $controller_name $action_name"?></title>
+        <link href="/css/fichas.min.css?v=<?=time()?>" rel="stylesheet">
+	</head>
+	<body class="row">
+		<main>
+			<?php View::content(); ?>
+			<?php View::partial('toast_paper'); ?>
+			<div class="ajax show"></div>
+		</main>
+		<script src="/javascript/fichas.min.js"></script>
+	</body>
+</html> 

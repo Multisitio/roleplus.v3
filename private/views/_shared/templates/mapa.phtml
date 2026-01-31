@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html data-color="<?=empty($claves['color'])?'red':$claves['color']?>" data-theme="<?=empty($claves['tema'])?'light':$claves['tema']?>" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<?php /*<meta name="viewport" content="width=device-width, user-scalable=yes">*/ ?>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title><?=t('Mapa del grupo: ').$grupo->nombre?></title>
+		<?php $version = time(); ?>
+		<link href="/css/mapa.min.css?v=<?=$version?>" rel="stylesheet">
+	</head>
+	<body>
+		<main>
+			<?php View::content(); ?>
+		</main>
+		<div class="ajax hide"></div>
+		<div class="ajax show"></div>
+		<script src="/javascript/mapa.min.js?v=<?=$version?>"></script>
+		
+		<?php include APP_PATH . 'views/registrados/grupos/elemento_de_mapa.phtml'; ?>
+	</body>
+</html> 

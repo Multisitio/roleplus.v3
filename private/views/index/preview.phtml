@@ -1,0 +1,32 @@
+<?php
+if (stristr($url, 'youtu')) {
+    echo Article::link((object)['enlace'=>$url]);
+    echo Form::hidden(field: 'enlace', value: $url);
+}
+else {
+    View::partial('admin/boxes/preview', null, ['url'=>$url]);
+}
+
+/*
+<h3>
+    <a href="<?=$tags['url']?>" rel="noopener noreferrer" target="_blank"><?=$tags['title']?></a>
+    <button type="button" data-remove=".preview"><img src="/img/icons/x-square.svg"></button>
+</h3>
+<small><?=$tags['description']?></small>
+<?php
+if ($tags['images']): ?>
+    <div class="images-to-load">
+        <?php $i=0; foreach ($tags['images'] as $image): ?>
+            <img alt="<?=$image?>" class="loop-images loop-images<?=$i?>" src="<?=$image?>"<?=($i>0)?' style="display:none"':''?>>
+        <?php ++$i; endforeach;
+        if ( ! empty($tags['images'][1]) ): ?>
+            <button type="button" data-loop=".loop-images" data-next="1" data-keep=".imagen<?=$tags['idu']?>"><img alt="<?=t('Cambiar imagen')?>" loading="lazy" src="/img/icons/refresh-cw.svg"></button>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
+
+<input type="hidden" name="vistas[<?=$tags['idu']?>][url]" value="<?=$tags['url']?>">
+<input type="hidden" name="vistas[<?=$tags['idu']?>][title]" value="<?=$tags['title']?>">
+<input type="hidden" name="vistas[<?=$tags['idu']?>][description]" value="<?=$tags['description']?>">
+<input type="hidden" class="imagen<?=$tags['idu']?>" name="vistas[<?=$tags['idu']?>][image]" value="<?=$tags['images'][0]?>">
+*/

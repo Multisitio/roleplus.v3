@@ -1,0 +1,53 @@
+<?php
+$titulo = t('Escena');
+$confirmar_cierre = true;
+?>
+<?=Form::openMultipart()?>
+	<section>
+		<?=Kubox::input(label: t('Referencia'),
+			placeholder: t('Aquí una referencia única para la escena'),
+			name: 'peso', value: $escena->peso)?>
+
+        <?=Kubox::textarea(label: t('Texto'),
+            placeholder: t('Aquí el texto de la escena'),
+            name: 'introduccion', value: $escena->introduccion)?>
+
+		<small><strong><?=t('Caminos')?>:</strong></small>
+		<div class="caminos rows">
+			<?php
+			foreach ($caminos as $cam):
+				include APP_PATH . 'views/registrados/escenas/camino.phtml';
+			endforeach;
+			
+			if (empty($caminos)):
+				include APP_PATH . 'views/registrados/escenas/camino.phtml';
+			endif;
+			?>
+		</div>
+		<div class="xs1">
+			<button type="button" data-clone_append=".camino:last, .caminos"><?=Ku::icon('plus')?></button>
+		</div>
+
+        <?=Kubox::dropimage(label: t('Imagen') . " (640px x 640px 72ppp)",
+			name: 'fotos[]',
+			dir: empty($escena->fotos) ? '' : "/img/usuarios/$escena->usuarios_idu/",
+			mini: 'l.',
+			file: empty($escena->fotos) ? '' : $escena->fotos)?>
+	</section>
+	<footer class="grid auto">
+		<?php if ($escena->idu): ?>
+			<?=Kubox::buttonSubmit(label: t('Eliminar'),
+				name: 'action', value: 'eliminar')?>
+
+			<?=Kubox::buttonSubmit(label: t('Actualizar'),
+				name: 'action', value: 'actualizar')?>
+				
+            <input type="hidden" name="idu" value="<?=$escena->idu?>">
+		<?php else: ?>
+			<?=Kubox::buttonSubmitColor(label: t('Crear'),
+				name: 'action', value: 'crear')?>
+		<?php endif; ?>
+	</footer>
+	<input type="hidden" name="aventuras_idu" value="<?=$aventura->idu?>">
+	<input type="hidden" name="escenas_idu" value="<?=$escena->idu?>">
+<?=Form::close()?>

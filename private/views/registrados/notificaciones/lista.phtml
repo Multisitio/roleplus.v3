@@ -1,0 +1,20 @@
+<?php
+foreach ($notificaciones as $not): ?>
+    <li class="_<?=$not->idu?>">
+        <div>
+            <?=Usuario::avatar($not, 'xxs')?>
+
+            <?php if ( ! $not->borrado): ?>
+                <a role="button" data-ajax="nav .notificaciones span" data-hide="._<?=$not->idu?>" rel="nofollow" href="/registrados/notificaciones/borrar/<?=$not->idu?>"><img alt="<?=t('Marcar notificación como leída')?>" src="/img/icons/x.svg"></a>
+            <?php endif; ?>
+        </div>
+
+        <a href="/registrados/notificaciones/<?=$not->donde?>/<?=$not->idu?>/<?=$not->donde_idu?>" rel="nofollow">
+            <div>
+                <b><?=$not->apodo?></b>
+                <time><?=_date::ago($not->cuando)?></time>
+            </div>
+            <i><?=$not->fragmento?></i>
+        </a>
+    </li>
+<?php endforeach;

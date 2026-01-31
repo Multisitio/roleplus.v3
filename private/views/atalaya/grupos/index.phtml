@@ -1,0 +1,5 @@
+<?php foreach ($grupos as $gru): ?>
+    <?=$gru->nombre?>
+    (<?=count($gru->publicaciones_con_hashtag)?> / <?=count($gru->publicaciones)?>)
+    <br>
+<?php endforeach; ?>

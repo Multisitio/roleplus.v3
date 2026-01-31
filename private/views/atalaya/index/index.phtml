@@ -1,0 +1,18 @@
+<fieldset>
+    <legend>Espacio disponible</legend>
+    <section>
+        <?php
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            // Comando para Windows usando PowerShell
+            $cmd = 'powershell -command "Get-WmiObject Win32_LogicalDisk | Select-Object DeviceID, @{Name=\'Size(GB)\';Expression={[math]::round($_.Size / 1GB, 2)}}, @{Name=\'FreeSpace(GB)\';Expression={[math]::round($_.FreeSpace / 1GB, 2)}}"';
+        } 
+        else {
+            $cmd = "df -h | grep -Ew 'Filesystem|sda1|data'";
+            #$cmd .= ' > /dev/null &'; # 2o plano 
+        }
+        exec($cmd, $output);
+        ?>
+        <pre><?= implode(PHP_EOL, $output) ?></pre>
+        <br>
+    </section>
+</fieldset>

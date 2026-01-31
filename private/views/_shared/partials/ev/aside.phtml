@@ -1,0 +1,60 @@
+<?php
+$action_name = View::getVar('action_name');
+$aventura = View::getVar('aventura');
+$claves = View::getVar('claves');
+$controller_name = View::getVar('controller_name');
+$ficha = View::getVar('ficha');
+$partida = View::getVar('partida');
+$usuario = View::getVar('usuario');
+?>
+<aside style="display:none">
+	<h6>® <?=t('Escritorio Virtual')?> <sup>2.5</sup></h6>
+
+	<?php /*<a href="/ev/asistente/jugadores"><img alt="<?=t('Asistente')?>" loading="lazy" src="/img/icons/help-circle.svg"> <?=t('Asistente')?></a>*/ ?>
+
+	<a href="/ev/partidas"><img alt="<?=t('Partidas')?>" loading="lazy" src="/img/icons/play.svg"> <?=t('Partidas')?></a>
+
+	<?php if ( ! empty($partida->idu)): ?>
+		<?php if ($claves['jugador_rol'] == 'master'): ?>
+			<a class="sub" href="/ev/panel/partida/<?=$partida->idu?>"><small><?=$partida->nombre?></small></a>
+		<?php else: ?>
+			<small class="sub"><?=$partida->nombre?></small>
+		<?php endif; ?>
+	<?php endif; ?>
+
+	<?php /*<a href="#"><img alt="<?=t('Jugadores')?>" loading="lazy" src="/img/icons/users.svg"> <?=t('Jugadores')?></a>*/ ?>
+
+	<?php if ($claves['jugador_rol'] == 'master'): ?>
+		<a href="/ev/aventuras/"><img alt="<?=t('Aventuras')?>" loading="lazy" src="/img/icons/clipboard.svg"> <?=t('Aventuras')?></a>
+	<?php endif; ?>
+
+	<?php /*<a href="/ev/escenas/aventura/<?=$partida->aventuras_idu?>"><img alt="<?=t('Escenas')?>" loading="lazy" src="/img/icons/layers.svg"> <?=t('Escenas')?></a>>*/ ?>
+
+	<a href="/ev/fichas"><img alt="<?=t('Fichas')?>" loading="lazy" src="/img/icons/layout.svg"> <?=t('Fichas')?></a>
+
+	<?php if ( ! empty($ficha->idu)): ?>
+		<?php if ($claves['jugador_rol'] == 'master'): ?>
+			<a class="sub" href="/ev/fichas/cajas/<?=$ficha->idu?>"><small><?=$ficha->nombre?></small></a>
+		<?php endif; ?>
+	<?php endif; ?>
+
+	<a href="/ev/manuales"><img alt="<?=t('Manuales')?>" loading="lazy" src="/img/icons/book-open.svg"> <?=t('Manuales')?></a>
+
+	<?php if ($controller_name == 'manuales'): ?>
+		<?php foreach ((new Manuales)->propios() as $man): ?>
+			<a class="sub" href="/ev/manuales/formulario/<?=$man->idu?>">
+				<img alt="<?=$man->nombre?>" src="/img/icons/s.corner-down-right.svg">
+				<small><?=$man->nombre?></small>
+			</a>
+		<?php endforeach; ?>		
+	<?php endif; ?>
+
+	<?php /*<a href="#"><img alt="<?=t('Personajes')?>" loading="lazy" src="/img/icons/user-plus.svg"> <?=t('Personajes')?></a>>*/ ?>
+
+	<?php /*<a href="#"><img alt="<?=t('Manual')?>" loading="lazy" src="/img/icons/database.svg"> <?=t('Manual')?></a>*/ ?>
+
+	<a href="/ev/ajustes"><img alt="<?=t('Ajustes')?>" loading="lazy" src="/img/icons/settings.svg"> <?=t('Ajustes')?></a>
+
+	<a href="/"><img alt="<?=t('Volver a R+')?>" loading="lazy" src="/img/icons/log-out.svg"> <?=t('Volver a R+')?></a>
+</aside>
+<div class="overlay aside" data-hide="aside, .overlay" style="display:none"></div>

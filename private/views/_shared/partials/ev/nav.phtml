@@ -1,0 +1,6 @@
+<?php
+$usuario = View::getVar('usuario');
+?>
+<span class="menu scroll-down-hide"><button class=" transparent" data-show="aside, .overlay.aside"><?php include 'img/logos/roleplus.svg'; ?></button></span>
+
+<span class="perfil scroll-down-hide"><?=Usuario::token($usuario)?></span>

@@ -1,0 +1,19 @@
+
+<div class="caja casilla_y_texto">
+	<?php include APP_PATH . "views/ev/fichas/cajas/elementos/margen_sangria.phtml"; ?>
+
+	<div class="s12">
+		<label><?=t('Texto')?></label>
+		<textarea name="texto"><?=$caja->texto?></textarea>
+	</div>
+	<div class="s6">
+		<label><?=t('Nombre de la variable')?></label>
+		<input type="text" name="variable_nombre" value="<?=$caja->variable_nombre?>">
+	</div>
+	<div class="s6">
+		<label><?=t('Valor por defecto')?> <sup><?=t('Opcional')?></sup></label>
+		<input type="text" name="variable_valor" value="<?=$caja->variable_valor?>">
+	</div>
+	<small class="s12"><?=t('El nombre de la variable tiene que ser único y estar compuesto solo por letras sin espacios. Se permite la barra baja para separar palabras. En vez de ñ use "ny".')?></small>
+</div>
+<input type="hidden" name="tipo" value="casilla_y_texto">

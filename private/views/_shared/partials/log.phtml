@@ -1,0 +1,9 @@
+
+<?php if (Session::has('log')): ?>
+	<?php foreach (Session::get('log') as $log): ?>
+		<article>
+			<?=_var::return($log)?>
+		</article>
+	<?php endforeach;
+	Session::delete('log'); ?>
+<?php endif; ?>

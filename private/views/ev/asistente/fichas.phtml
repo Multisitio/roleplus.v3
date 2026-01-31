@@ -1,0 +1,32 @@
+
+<article>
+	<header>
+		<h1>2) <?=t('¿La ficha del juego está diseñada?')?></h1>
+		<h2><?=t('Las aventuras necesitan víncular una ficha.')?></h2>
+	</header>
+
+	<section>
+		<h3><?=t('Si NO está creada toca crearla:')?></h3>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/fichas"><?=t('Ver fichas')?></a>
+			<a role="button" href="/ev/fichas/formulario"><?=t('Crear ficha')?></a>
+		</div>
+	</section>
+	<br>
+	<footer>
+		<form action="/ev/asistente/personajes" method="post">
+			<h3><?=t('Si está creada toca escoger una y darle a siguiente:')?></h3>
+			<select name="fichas_idu">
+				<option value=""><?=t('Escoger una...')?></option>
+				<?php foreach ($fichas as $fic):
+					$selected = ($fichas_idu == $fic->idu) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$fic->idu?>"><?=$fic->nombre?></option>
+				<?php endforeach; ?>
+			</select>
+			<div class="grid">
+				<a class="outline" role="button" href="/ev/asistente/jugadores"><?=t('Anterior')?></a>
+				<button type="submit"><?=t('Siguiente')?></button>
+			</div>
+		</form>
+	</footer>
+</article>

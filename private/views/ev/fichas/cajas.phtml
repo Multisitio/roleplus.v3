@@ -1,0 +1,114 @@
+<?php
+$apilador = function ($ficha, $cajas, $padre_idu='') use (&$apilador) {
+	foreach ($cajas as $i=>$caj):
+		$tam_s = empty($caj->tam_s) ? '' : "s$caj->tam_s";
+		$tam_m = empty($caj->tam_m) ? '' : " m$caj->tam_m";
+		$tam_l = empty($caj->tam_l) ? '' : " l$caj->tam_l";
+		$tam_xl = empty($caj->tam_xl) ? '' : " xl$caj->tam_xl";
+		$tamanyos = "$tam_s$tam_m$tam_l$tam_xl";
+		$linea_nueva = empty($caj->linea_nueva) ? '' : "clear:left;";
+		$alto = empty($caj->alto) ? '' : " height: $caj->alto; overflow-y: auto";
+		$margen = is_null($caj->margen) ? '' : " margin: $caj->margen !important;";
+		$sangria = is_null($caj->sangria) ? '' : " padding: $caj->sangria !important;";
+		$alineado = empty($caj->alineado) ? '' : " text-align: $caj->alineado;";
+
+		if ($caj->padre_idu==$padre_idu or ( ! $padre_idu and ! $caj->padre_idu)):
+			if ($caj->tipo == 'area_de_texto'): ?>
+				<div class="<?=$tamanyos?>" style="<?=$linea_nueva?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->nombre?> <sup><?=$caj->peso?></sup></a>
+					</label>
+					<textarea name="<?=$caj->variable_nombre?>" style="<?=$alto?>"><?=$caj->variable_valor?></textarea>
+				</div>
+			<?php elseif ($caj->tipo == 'campo'): ?>
+				<div class="<?=$tamanyos?>" style="<?="$linea_nueva$alto"?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><sup><?=$caj->peso?></sup></a>
+					</label>
+					<input type="text" <?=empty($caj->borde)?'class="simple"':''?> name="<?=$caj->variable_nombre?>" value="<?=$caj->variable_valor?>">
+				</div>
+			<?php elseif ($caj->tipo == 'campo_de_texto'): ?>
+				<div class="<?=$tamanyos?>" style="<?="$linea_nueva$alto$margen$sangria"?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->nombre?> <sup><?=$caj->peso?></sup></a>
+					</label>
+					<input type="text" <?=empty($caj->borde)?'class="simple"':''?> name="<?=$caj->variable_nombre?>" placeholder="<?=$caj->variable_marcador?>" value="<?=$caj->variable_valor?>">
+					<small><?=$caj->notas?></small>
+				</div>
+			<?php elseif ($caj->tipo == 'casilla_y_texto'): ?>
+				<div class="<?=$tamanyos?>" style="<?="$linea_nueva$alto"?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><sup><?=$caj->peso?></sup></a>
+					</label>
+					<label>
+						<div class="display-cell">
+							<input type="checkbox" name="<?=$caj->variable_nombre?>" value="<?=$caj->variable_valor?>"><span></span>
+						</div>
+						<div class="display-cell">
+							<?=nl2br($caj->texto, false)?>
+						</div>
+					</label>
+				</div>
+			<?php elseif ($caj->tipo == 'division'): ?>
+				<div class="<?=$tamanyos?>" style="<?=empty($caj->imagenes)?'':'background:url(/img/usuarios/'.$caj->usuarios_idu.'/'.$caj->imagenes.') center no-repeat; background-size:cover;'?><?=$margen?> <?=$alto?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->tipo?> <sup><?=$caj->peso?></sup></a>
+					</label>
+					<div <?=empty($caj->borde)?'':'class="border border-'.rand(0,6).'"'?> style="<?=$sangria?>">
+						<?php
+						$idu = $caj->idu;
+						unset($cajas[$i]);
+						$apilador($ficha, $cajas, $idu);
+						?>
+						<div class="clear"></div>
+					</div>
+				</div>
+			<?php elseif ($caj->tipo == 'imagen'): ?>
+				<div class="<?=$tamanyos?>" style="<?="$linea_nueva$alto"?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->tipo?> <sup><?=$caj->peso?></sup></a>
+					</label>
+					<img alt="<?=t('Imagen')?>" src="/img/usuarios/<?=$caj->usuarios_idu?>/<?=$caj->imagenes?>">
+				</div>
+			<?php elseif ($caj->tipo == 'linea_horizontal'): ?>
+				<div class="<?=$tamanyos?>" style="<?="$linea_nueva$alto"?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->tipo?> <sup><?=$caj->peso?></sup></a>
+					</label>
+					<hr>
+				</div>
+			<?php elseif ($caj->tipo == 'retrato'): ?>
+				<div class="retrato <?=$tamanyos?>" style="<?=$linea_nueva?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->nombre?> <sup><?=$caj->peso?></sup></a>
+					</label>
+					<div class="<?=empty($caj->borde)?'':'border border-'.rand(0,6)?>" style="<?=$alto?>"></div>
+				</div>
+			<?php elseif ($caj->tipo == 'texto'): ?>
+				<div class="<?=$tamanyos?>" style="<?="$linea_nueva$alto"?>">
+					<br>
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->nombre?> <sup><?=$caj->peso?></sup></a>
+					</label>
+				</div>
+			<?php elseif ($caj->tipo == 'titulo'): ?>
+				<div class="<?=$tamanyos?>" style="<?="$linea_nueva$alto"?>">
+					<label>
+						<a data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>/<?=$caj->idu?>"><?=$caj->tipo?> <sup><?=$caj->peso?></sup></a>
+					</label>
+					<h<?=$caj->subtipo?> style="<?=$alineado?>"><?=$caj->nombre?></h<?=$caj->subtipo?>>
+				</div>
+			<?php endif;
+		endif;
+	endforeach;
+};
+$apilador($ficha, $cajas);
+?>
+
+<div class="fixed-bottom-right scroll-down-hide">
+	<a class="paper-btn btn-outline" href="/ev/fichas">< <?=t('Fichas')?></a>
+
+	<a class="paper-btn btn-success-outline mr15" href="/ev/personajes/montar/<?=$ficha->idu?>">+ <?=t('Crear personaje')?></a>
+
+	<a class="paper-btn btn-secondary-outline mr15" data-ajax=".ajax.show" href="/ev/fichas/caja_nueva/<?=$ficha->idu?>">+ <?=t('Caja nueva')?></a>
+</div>

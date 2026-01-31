@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>📘 Plan de acción – Editor de Manuales R+</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #90caf9;
+    }
+    ul {
+      margin-bottom: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.4rem;
+    }
+    code {
+      background-color: #2a2a2a;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📘 Plan de acción – Editor de Manuales R+</h1>
+  <p><strong>🎯 Objetivo:</strong> Facilitar el uso del editor a los suscriptores mediante plantillas predefinidas (D&amp;D y Dragonbane), eliminar la necesidad de editar HTML, garantizar seguridad y preparar escalabilidad.</p>
+
+  <h2>1️⃣ Sustitución de la edición HTML</h2>
+  <ul>
+    <li>🧩 Implementar editor visual (TipTap, CKEditor, TinyMCE).</li>
+    <li>🚦 Restringir opciones del editor según cada plantilla.</li>
+    <li>👁️ Integrar previsualización en vivo del resultado final.</li>
+  </ul>
+
+  <h2>2️⃣ Validación estricta del contenido</h2>
+  <ul>
+    <li>🧼 Sanitizar entradas con whitelist de etiquetas válidas.</li>
+    <li>🛡️ Evitar atributos peligrosos (<code>script</code>, <code>style</code>, <code>on*</code>, etc.).</li>
+    <li>📋 Validar campos requeridos por cada plantilla.</li>
+    <li>🔔 Mostrar mensajes claros ante errores.</li>
+  </ul>
+
+  <h2>3️⃣ Subida de imágenes</h2>
+  <ul>
+    <li>🗂️ Interfaz para gestionar imágenes por usuario.</li>
+    <li>📦 Compresión automática y renombrado seguro.</li>
+    <li>📏 Validar tamaño, formato y dimensiones máximas.</li>
+    <li>🖼️ Insertar desde el editor mediante botón específico.</li>
+  </ul>
+
+  <h2>4️⃣ Documentación integrada</h2>
+  <ul>
+    <li>📖 Guía accesible desde el editor (ayuda contextual).</li>
+    <li>🎓 Mini tutoriales: creación de secciones, imágenes, etc.</li>
+    <li>🎬 Opcional: videos cortos de uso por plantilla.</li>
+  </ul>
+
+  <h2>5️⃣ Mejora de experiencia de usuario</h2>
+  <ul>
+    <li>🧠 UI simplificada, iconografía clara, flujo visual continuo.</li>
+    <li>💾 Guardar borrador automáticamente.</li>
+    <li>🔌 Evitar pérdida de contenido por desconexión.</li>
+  </ul>
+
+  <h2>6️⃣ Seguridad y control</h2>
+  <ul>
+    <li>🔐 Solo suscriptores con sesión activa acceden al editor.</li>
+    <li>📈 Limitar tamaño del documento, imágenes por manual, etc.</li>
+    <li>🧪 Testear inyecciones HTML y vulnerabilidades de carga.</li>
+  </ul>
+
+</body>
+</html>

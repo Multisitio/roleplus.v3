@@ -1,0 +1,38 @@
+<?php
+$titulo = t('Evento');
+$confirmar_cierre = true;
+?>
+<?=Form::openMultipart()?>
+	<section>
+		<div class="grid">
+			<?=Kubox::input(type: 'text', label: t('Fecha'),
+				placeholder: t('aaaa-mm-dd'),
+				name: 'fecha', value: $evento->fecha?:date('Y-m-d'), box: 'class="xs3"')?>
+			<?=Kubox::input(type: 'text', label: t('Título'),
+				placeholder: t('Aquí el título del evento'),
+				name: 'titulo', value: $evento->titulo, box: 'class="xs9"')?>
+		</div>
+		<?=Kubox::textarea(label: t('Relato'),
+			placeholder: t('Aquí lo acontecido'),
+			name: 'relato', value: $evento->relato)?>
+	</section>
+	<footer>
+		<?php if ($evento->idu): ?>
+			<div class="auto">
+				<?=Kubox::buttonSubmit(label: t('Eliminar'),
+					name: 'action', value: 'eliminar_evento')?>
+
+				<?=Kubox::buttonSubmit(label: t('Duplicar'),
+					name: 'action', value: 'crear_evento')?>
+
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'),
+					name: 'action', value: 'actualizar_evento')?>
+			</div>
+            <input type="hidden" name="idu" value="<?=$evento->idu?>">
+		<?php else: ?>
+			<?=Kubox::buttonSubmitColor(label: t('Publicar'),
+				name: 'action', value: 'crear_evento')?>
+		<?php endif; ?>
+	</footer>
+	<input type="hidden" name="cronologias_idu" value="<?=$cronologias_idu?>">
+<?=Form::close()?>

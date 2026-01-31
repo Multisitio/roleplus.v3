@@ -1,0 +1,17 @@
+
+<div class="caja area_de_texto">
+	<div class="s12">
+		<label><?=t('Nombre')?></label>
+		<input type="text" name="nombre" value="<?=$caja->nombre?>">
+	</div>
+	<div class="s6">
+		<label><?=t('Nombre de la variable')?></label>
+		<input type="text" name="variable_nombre" value="<?=$caja->variable_nombre?>">
+	</div>
+	<div class="s6">
+		<label><?=t('Valor por defecto')?> <sup><?=t('Opcional')?></sup></label>
+		<input type="text" name="variable_valor" value="<?=$caja->variable_valor?>">
+	</div>
+	<small class="s12"><?=t('El nombre de la variable tiene que ser único y estar compuesto solo por letras sin espacios. Se permite la barra baja para separar palabras. En vez de ñ use "ny".')?></small>
+</div>
+<input type="hidden" name="tipo" value="area_de_texto">

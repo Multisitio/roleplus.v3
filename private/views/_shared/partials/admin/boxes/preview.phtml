@@ -1,0 +1,70 @@
+<?php
+$content = _preview::url($url);
+#_var::die($content);
+?>
+<label><small><b><?=t('Vista previa:')?></b></small></label>
+<div class="titles">
+    <?php if (count($content['titles'])>1): ?>
+        <button type="button" data-loop2=".titles input"><?=Ku::icon(t('Cambiar título'), 'refresh-cw')?></button>
+    <?php endif; ?>
+
+    <?php
+    $disabled = $hide = '';
+    $i = 0;
+    foreach ($content['titles'] as $title): ?>
+        <input type="text" name="preview[title]" value="<?=str_replace(['"', '<'], ["'", '&lt;'], $title)?>"<?="$disabled$hide"?>>
+        <?php
+        if ( ! $hide):
+            $disabled = ' disabled';
+            $hide = ' style="display:none"';
+        endif;
+        ++$i;
+    endforeach;
+    ?>
+</div>
+
+<div class="descriptions">
+    <?php if (count($content['descriptions'])>1): ?>
+        <button type="button" data-loop2=".descriptions textarea"><?=Ku::icon(t('Cambiar descripción'), 'refresh-cw')?></button>
+    <?php endif; ?>
+
+    <?php
+    $disabled = $hide = '';
+    $i = 0;
+    foreach ($content['descriptions'] as $description): ?>
+        <textarea name="preview[description]"<?="$disabled$hide"?>><?=_str::truncate(str_replace(['"', '<'], ["'", '&lt;'], _html::hd($description)))?></textarea>
+        <?php
+        if ( ! $hide):
+            $disabled = ' disabled';
+            $hide = ' style="display:none"';
+        endif;
+        ++$i;
+    endforeach; 
+    ?>
+</div>
+
+<div class="images">
+    <?php if (count($content['images'])>1): ?>
+        <button type="button" data-loop2=".images picture"><?=Ku::icon(t('Cambiar imagen'), 'refresh-cw')?></button>
+    <?php endif; ?>
+
+    <?php
+    $disabled = $hide = '';
+    $i = 0;
+    foreach ($content['images'] as $image): ?>
+        <picture<?=$hide?>>
+            <input type="hidden" name="preview[image]" value="<?=$image?>"<?=$disabled?>>
+            <img onerror="this.onerror=null;this.parentNode.remove()" src="<?=$image?>">
+        </picture>
+        <?php
+        if ( ! $hide):
+            $disabled = ' disabled';
+            $hide = ' style="display:none"';
+        endif;
+        ++$i;
+    endforeach;
+    ?>
+    <button type="button" data-remove="parent"><?=Ku::icon(t('Quitar imagen'), 'x')?></button>
+</div>
+<input type="hidden" name="preview[url]" value="<?=$url?>">
+<button type="button" data-remove="parent"><?=t('Quitar vista previa')?></button>

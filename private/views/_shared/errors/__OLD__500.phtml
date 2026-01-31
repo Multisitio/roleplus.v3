@@ -1,0 +1,23 @@
+<?php
+include APP_PATH . 'views/_shared/errors/firewall.phtml';
+?><!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex">
+        <meta name="generator" content="R+">
+        <title><?=t('Estamos de mantenimiento')?></title>
+        <style>
+            a { color:white; }
+        </style>
+    </head>
+    <body style="background:url('/img/otras/minotauro.png') #00A no-repeat center top">
+        <h1><?=t('Estamos de mantenimiento')?></h1>
+        <h2><?=t('Disculpen las molestias')?></h2>
+        <p>
+            <?=t('Puede contactarnos en el correo electrónico:')?>
+            <span class="email-anti-spam">dj at roleplus dot app</span>
+        </p>
+        <script src="/javascript/404.min.js"></script>
+    </body>
+</html>

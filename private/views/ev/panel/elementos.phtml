@@ -1,0 +1,27 @@
+<?php
+/* Vista: ev/panel/elementos.phtml
+ * - $elementos: array de objetos
+ * - $partida: objeto con ->idu
+ * Reglas: solo data-*, sin class, sin id.
+ */
+
+$listado = [];
+if (!empty($elementos)) {
+	$listado = array_values($elementos);
+	usort($listado, function ($a, $b) {
+		$na = isset($a->nombre) ? (string)$a->nombre : '';
+		$nb = isset($b->nombre) ? (string)$b->nombre : '';
+		return strcasecmp($na, $nb);
+	});
+}
+?>
+
+<div data-autoscroll>
+	<?php if (!empty($listado)): ?>
+		<?php foreach ($listado as $ele): ?>
+			<?php include APP_PATH . 'views/ev/panel/elemento.phtml'; ?>
+		<?php endforeach; ?>
+	<?php else: ?>
+		<p><?= t('No hay elementos todavía.') ?></p>
+	<?php endif; ?>
+</div>

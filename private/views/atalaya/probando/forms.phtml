@@ -1,0 +1,193 @@
+
+<h1>Forms</h1>
+
+<p>Todos los elementos del formulario son responsivos solo con HTML, lo que permite que los formularios escalen con elegancia entre dispositivos y ventanas gráficas.</p>
+<p>Estos elementos ocupan todo el ancho disponible por defecto. Recuerde que puede usar .grid para alinear estos elementos horizontalmente.</p>
+<p>Todos los elementos de formulario son personalizables cambiando los valores por defecto de las variables de KumbiaCSS. Adicionalmente, iremos adjuntando un archivo, o en varios, lo que llamaremos pieles, con variables que tengan los valores de un conjunto variado de diseños entre reconocibles y modernos.</p>
+<form>
+    <div class="grid">
+        <label>
+            Nombre de pila
+            <input type="text" name="firstname" placeholder="First name" required>
+        </label>
+        <label>
+            Apellido
+            <input type="text" name="lastname" placeholder="Last name" required>
+        </label>
+    </div>
+    <label for="email">Dirección de correo electrónico</label>
+    <input type="email" id="email" name="email" placeholder="Email address" required>
+    <small>Nunca compartiremos su correo electrónico con nadie más.</small>
+    <button type="submit">Entregar</button>
+</form>
+<?php _code::open('login-form'); ?>
+<form>
+    <div class="grid">
+        <label>
+            Nombre de pila
+            <input type="text" name="firstname" placeholder="First name" required>
+        </label>
+        <label>
+            Apellido
+            <input type="text" name="lastname" placeholder="Last name" required>
+        </label>
+    </div>
+    <label for="email">Email address</label>
+    <input type="email" id="email" name="email" placeholder="Email address" required>
+    <small>Nunca compartiremos su correo electrónico con nadie más.</small>
+    <button type="submit">Entregar</button>
+</form>
+<?php _code::close(); ?>
+
+<p>Desplegable:</p>
+<label>
+    Fruta
+    <select required>
+        <option value="" selected>Seleccione una fruta…</option>
+        <option>Fresa</option>
+        <option>Manzana</option>
+        <option>Melón</option>
+        <option>Naranja</option>
+        <option>Pera</option>
+        <option>Sandía</option>
+    </select>
+</label>
+<?php _code::open('select'); ?>
+<label>
+    Fruta
+    <select required>
+        <option value="" selected>Seleccione una fruta…</option>
+        <option>Fresa</option>
+        <option>Manzana</option>
+        <option>Melón</option>
+        <option>Naranja</option>
+        <option>Pera</option>
+        <option>Sandía</option>
+    </select>
+</label>
+<?php _code::close(); ?>
+
+<p>Selector de opción única:</p>
+<fieldset>
+    <legend>Tamaño</legend>
+    <label>
+        <input type="radio" name="size" value="small" checked>
+        Pequeño
+    </label>
+    <label>
+        <input type="radio" name="size" value="medium">
+        Medio
+    </label>
+    <label>
+        <input type="radio" name="size" value="large">
+        Grande
+    </label>
+    <label>
+        <input type="radio" name="size" value="extralarge" disabled>
+        Extra grande
+    </label>
+</fieldset>
+<?php _code::open('radio'); ?>
+<fieldset>
+    <legend>Tamaño</legend>
+    <label>
+        <input type="radio" name="size" value="small" checked>
+        Pequeño
+    </label>
+    <label>
+        <input type="radio" name="size" value="medium">
+        Medio
+    </label>
+    <label>
+        <input type="radio" name="size" value="large">
+        Grande
+    </label>
+    <label>
+        <input type="radio" name="size" value="extralarge" disabled>
+        Extra grande
+    </label>
+</fieldset>
+<?php _code::close(); ?> 
+
+
+
+
+
+
+
+
+
+Estoy de acuerdo con los términos y condiciones
+Acepto compartir mi información con socios
+
+Publicar en mi perfil
+El usuario debe cambiar la contraseña en el próximo inicio de sesión
+
+<!-- Radios -->
+
+<!-- Checkboxes -->
+<fieldset>
+  <label for="terms">
+    <input type="checkbox" id="terms" name="terms">
+    I agree to the Terms and Conditions
+  </label>
+  <label for="terms_sharing">
+    <input type="checkbox" id="terms_sharing" name="terms_sharing" disabled checked>
+    I agree to share my information with partners
+  </label>
+</fieldset>
+
+<!-- Switches -->
+<fieldset>
+  <label for="switch">
+    <input type="checkbox" id="switch" name="switch" role="switch">
+    Publish on my profile
+  </label>
+  <label for="switch_disabled">
+    <input type="checkbox" id="switch_disabled" name="switch_disabled" role="switch_disabled" disabled checked>
+    User must change password at next logon
+  </label>
+</fieldset>
+Puede cambiar una casilla de verificación a un estado indeterminado estableciendo la propiedad indeterminate en true
+
+Seleccionar todo
+<script>
+  document.getElementById('indeterminate-checkbox').indeterminate = true;
+</script>
+Otros tipos de entrada:
+
+Buscar
+Explorador de archivosNinguno archivo selec.
+Control deslizante de rango
+Fecha
+dd/mm/aaaa
+Tiempo
+--:--
+Color
+<!-- Search -->
+<input type="search" id="search" name="search" placeholder="Search">
+
+<!-- File browser -->
+<label for="file">File browser
+  <input type="file" id="file" name="file">
+</label>
+
+<!-- Range slider -->
+<label for="range">Range slider
+  <input type="range" min="0" max="100" value="50" id="range" name="range">
+</label>
+
+<!-- Date -->
+<label for="date">Date
+  <input type="date" id="date" name="date">
+</label>
+
+<!-- Time -->
+<label for="time">Time
+  <input type="time" id="time" name="time">
+</label>
+
+<!-- Color -->
+<label for="color">Color
+  <input type="color" id="color" name="color" value="#0eaaaa">
+</label>

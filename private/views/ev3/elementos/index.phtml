@@ -1,0 +1,45 @@
+
+<div>
+	<aside>
+		<ul>
+			<?php foreach ($elementos as $ele): ?>
+				<li>
+					<a href="/ev3/elementos"><?=$ele->nombre?></a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</aside>
+
+	<form action="/ev3/elementos/salvar_elemento" method="post">
+		<header>
+			<h1>Elemento</h1>
+		</header>
+
+		<section>
+			<label>
+				<span>Tipo</span>
+				<select name="tipo">
+					<?php foreach ([
+						'personaje'=>'Personaje',
+						'objeto'=>'Objeto',
+						'lugar'=>'Lugar',
+						'frente'=>'Frente',
+						'faccion'=>'Facción',
+						'evento'=>'Evento',
+					] as $key=>$val): ?>
+						<option value="<?=$key?>"><?=$val?></option>
+					<?php endforeach; ?>
+				</select>
+			</label>
+
+			<label>
+				<span>Nombre</span>
+				<input type="text" name="nombre" placeholder>
+			</label>
+		</section>
+
+		<footer>
+			<button type="submit">Crear</button>
+		</footer>
+	</form>
+</div>

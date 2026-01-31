@@ -1,0 +1,13 @@
+<?php
+Js::add('color_picker.min');
+
+$colors = ['gray', 'stone', 'red', 'pink', 'purple', 'violet', 'indigo', 'blue', 'cyan', 'teal', 'green', 'lime', 'yellow', 'orange', 'choco', 'brown', 'sand', 'camo', 'jungle'];
+?>
+<fieldset class="color-picker">
+    <legend><?=t('Caja de selección de color')?></legend>
+    <section>
+        <?php foreach ($colors as $color): ?>
+            <button role="button" data-primary_color="<?=$color?>"></button>
+        <?php endforeach; ?>
+    </section>
+</fieldset>

@@ -1,0 +1,58 @@
+
+<div data-columns id="grid">
+    <article>
+        <header>
+            <h1>Usuarios</h1>
+        </header>
+        <section class="usuarios">
+            <h2>Estadísticas</h2>
+            <p><b>Total:</b> <?=count($usuarios)?></p>
+
+            <input type="text" data-filter=".usuarios fieldset" placeholder="<?=t('Filtrar')?>…">
+            <hr>
+            <?php foreach ($usuarios as $usu): ?>
+                <fieldset class="_<?=$usu->idu?>">
+                    <legend>Usuario: <?=$usu->idu?></legend>
+                    <blockquote>
+                        <h2><?=$usu->apodo?:'Sin apodo'?></h2>
+                        <i><?=$usu->eslogan?></i>
+                        <hr>
+                        <small>
+                            <p>
+                                <b>Confirmado:</b> <?=$usu->confirmado?><br>
+                                <b>Rol:</b> <?=$usu->rol?><br>
+                                <b>Rol base:</b> <?=$usu->rol_base?><br>
+                                <b>PX:</b> <?=$usu->experiencia?><br>
+                                <b>PV:</b> <?=$usu->vida?><br>
+                                <b>Socio:</b> <?=$usu->socio?><br>
+                                <b>Cuota:</b> <?=$usu->cuota?><br>
+                                <b>Al corriente:</b> <?=$usu->al_corriente?><br>
+                                <b>Último pago:</b> <?=$usu->ultimo_pago?><br>
+                                <b>eMail PayPal:</b> <?=$usu->email_paypal?><br>
+                                <b>eMail:</b> <?=$usu->email?><br>
+                                <b>Último post:</b> <?=_date::ago($usu->ultima_pub)?><br>
+                                <b>Última actividad:</b> <?=_date::ago($usu->tocado)?><br>
+                            </p>
+                        </small>
+                        <small class="configuraciones">
+                            <?php if ( ! empty($configuraciones[$usu->idu])): ?>
+                                <p>
+                                    <?php foreach ($configuraciones[$usu->idu] as $con): ?>
+                                        <b><?=$con->clave?>:</b> <?=$con->valor?><br>
+                                    <?php endforeach; ?>
+                                </p>
+                            <?php endif; ?>
+                        </small>
+                    </blockquote>
+                    <div class="grid">
+                        <a role="button" class="outline" data-ajax=".ajax.hide" data-confirm="¿Eliminar usuario <?=$usu->apodo?>?" data-remove="parent" href="/atalaya/usuarios/eliminar/<?=$usu->idu?>">¿Eliminar?</a>
+
+                        <a role="button" class="outline" data-ajax="._<?=$usu->idu?> .configuraciones" data-confirm="¿Baja del boletín a <?=$usu->apodo?>?" href="/atalaya/usuarios/baja_del_boletin/<?=$usu->idu?>">¿Baja del boletín?</a>
+                    </div>
+                </fieldset>
+            <?php endforeach; ?>
+        </section>
+        <footer>
+        </footer>
+    </article>
+</div>

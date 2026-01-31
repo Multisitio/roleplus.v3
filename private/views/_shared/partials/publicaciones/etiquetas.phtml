@@ -1,0 +1,10 @@
+<?php
+if ( ! empty($usuario->idu)):
+	$etiquetas = (new Publicaciones)->etiquetas($usuario->idu);
+	foreach ($etiquetas as $eti=>$veces):
+		if ($veces<2) {
+			continue;
+		} ?>
+		<a href="/usuarios/perfil/<?=urlencode($usuario->apodo)?>/etiqueta/<?=$eti?>">#<?=$eti?> (<?=$veces?>)</a>
+	<?php endforeach;
+endif;

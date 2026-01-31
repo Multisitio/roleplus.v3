@@ -1,0 +1,126 @@
+
+<form class="manual-<?=$manual->idu?>" data-ajax=".contenedor.dashboard" enctype="multipart/form-data" method="post">
+    <article class="a4 portrait w3-row-padding">
+        <header class="mt15 no-print">
+            <div class="o9 pa15 w100 w3-card w3-white">
+                <?=t('Manual activo:')?> <?=$manual->nombre?>
+            </div>
+        </header>
+        <section class="ideal mt15 no-print m10">
+            <div class="o9 pa15 w100 w3-card w3-white">
+                <div>
+                    <?=t('Crea o escoge un manual donde poder consultar sus mecánicas y poder usarlas.')?>
+                </div>
+                <div class="mt15">
+                    <label><?=t('Nombre')?></label>
+                    <input type="text" name="nombre" value="<?=$manual->nombre?>">
+                </div>
+                <div class="mt15">
+                    <label><?=t('Introduccion (sistema, ambientación y otros detalles)')?></label>
+                    <textarea name="introduccion"><?=$manual->introduccion?></textarea>
+                </div>
+                <div class="mt15">
+                    <label><?=t('Notas')?></label>
+                    <textarea name="notas"><?=$manual->notas?></textarea>
+                </div>
+                <div class="mt15">
+                    <label><?=t('Ocultar')?></label>
+                    <select name="ocultar">
+                        <?php foreach ([0=>t('No'), 1=>t('Sí')] as $k=>$v):
+                            $selected = ($k == $manual->ocultar) ? 'selected ' : ''; ?>
+                            <option <?=$selected?>value="<?=$k?>"><?=$v?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="w3-clear"></div>
+            </div>
+        </section>
+        <section class="ideal mt15 no-space m5 l4">
+            <div class="no-space o9 pa15 w100 w3-card w3-white">
+                <div class="no-space w3-center">
+                    <?php if ($manual->fotos):
+                        $foto = explode(', ', $manual->fotos)[0]; ?>
+                        <img alt="<?=t('Portada de ') . $manual->nombre?>" class="no-print w3-image" src="/img/usuarios/<?=$manual->usuarios_idu?>/l.<?=$foto?>">
+                        <img alt="<?=t('Portada de ') . $manual->nombre?>" class="a4 portrait only-print" src="/img/usuarios/<?=$manual->usuarios_idu?>/<?=$foto?>">
+                    <?php else: ?>
+                        <label><?=t('Foto')?> (.jpg o .png)</label>
+                    <?php endif; ?>
+                    <div class="file-field no-print">
+                        <input type="file" name="imagenes[]" onchange="$('.file-path').attr('placeholder', basename(this.value))">
+                        <div class="file-path-wrapper">
+                            <?php $subir_foto = t('¿Subir foto?'); ?>
+                            <input type="text" class="file-path w3-center" placeholder="<?=empty($foto)?$subir_foto:"$foto ($subir_foto)"?>">
+                        </div>
+                    </div>
+                    <input type="hidden" name="fotos" value="<?=$manual->fotos?>">
+                </div>
+                <div class="w3-clear"></div>
+            </div>
+        </section>
+        <section class="mt15">
+            <div class="o9 pa15 w100 w3-card w3-white">
+                <ul class="manual">
+                    <?php
+                    function arbol_1912201247($reglas, $manuales_reglas_idu='Ninguno') {
+                        $i=1;
+                        foreach ($reglas as $reg)
+                        {
+                            if ($reg->manuales_reglas_idu <> $manuales_reglas_idu) {
+                                continue;
+                            } ?>
+                            <li>
+                                <?php if ($reg->pagina_nueva): ?>
+                                    <div class="end-page"></div>
+                                <?php endif; ?>
+                                <h4>
+                                    <a name="<?=$reg->nombre?>"><?=$reg->nombre?></a>
+                                    <?php if ( ! empty($reg->valor)): ?>
+                                        <small>(<?=$reg->valor?>)</small>
+                                    <?php endif; ?>
+                                </h4>
+                                <hr>
+                                <article><?=$reg->descripcion_md?></article>
+                                <?php if ( ! empty($reglas[$reg->idu])): ?>
+                                    <ul><?php arbol_1912201247($reglas, $reg->idu); ?></ul>
+                                <?php endif; ?>
+                            </li>
+                            <?php
+                        }
+                    }
+                    arbol_1912201247((new Manuales_reglas)->todas());
+                    ?>
+                </ul>
+            </div>
+        </section>
+        <?php if ( ! $manual->idu or Session::get('idu') == $manual->usuarios_idu): ?>
+            <footer class="grid">
+                <?php if ( ! empty($manual->id)): ?>
+                    <button name="action" value="actualizar">
+                        <span class="s0 m0"><?=t('Actualizar')?></span>
+                    </button>
+                    <input type="hidden" name="idu" value="<?=$manual->idu?>">
+                <?php endif; ?>
+                <button name="action" value="crear">
+                    <span class="s0 m0"><?=t('Crear')?></span>
+                </button>
+                <?php if ( ! empty($manual->id)): ?>
+                    <a data-ajax=".contenedor.dashboard" href="/ev/manuales/ver#manuals">
+                        <span class="s0 m0"><?=t('Limpiar')?></span>
+                    </a>
+                    <button data-confirm="<?=t('¿Seguro?')?>" name="action" value="eliminar">
+                        <span class="s0 m0"><?=t('Eliminar')?></span>
+                    </button>
+                <?php endif; ?>
+            </footer>
+        <?php endif; ?>
+    </article>
+</form>
+
+<script>
+var els = document.querySelectorAll('textarea');
+els.forEach(function(el) {
+    var height = el.scrollTop + el.scrollHeight;
+    height = (height < 55) ? 55 : height;
+    el.style.height = height+'px';
+});
+</script>

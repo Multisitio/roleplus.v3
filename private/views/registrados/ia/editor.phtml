@@ -1,0 +1,32 @@
+<?php
+$titulo = t('Edita con responsabilidad');
+?>
+<form method="post">
+	<section>
+        <?=Kubox::textarea(label: t('Pregunta'),
+            placeholder: t('Aquí la pregunta'),
+            name: 'pregunta', value: h($respuesta->pregunta))?>
+
+		<?=Kubox::textarea(label: t('Respuesta'),
+			placeholder: t('Aquí la respuesta'),
+			name: 'respuesta', value: h($respuesta->respuesta))?>
+	</section>
+	<footer>
+		<?php if ($respuesta->idu): ?>
+			<div class="auto">
+				<?=Kubox::buttonSubmit(label: t('Eliminar'),
+					name: 'action', value: 'eliminar')?>
+
+				<?=Kubox::buttonSubmit(label: t('Duplicar'),
+					name: 'action', value: 'crear')?>
+
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'),
+					name: 'action', value: 'actualizar')?>
+			</div>
+            <input type="hidden" name="idu" value="<?=$respuesta->idu?>">
+		<?php else: ?>
+			<?=Kubox::buttonSubmit(label: t('Crear'),
+				name: 'action', value: 'crear')?>
+		<?php endif; ?>
+	</footer>
+</form>

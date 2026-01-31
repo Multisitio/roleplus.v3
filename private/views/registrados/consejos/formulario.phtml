@@ -1,0 +1,56 @@
+<?php
+$confirmar_cierre = true;
+$titulo = t('Consejo publicitario');
+?>
+<?=Form::openMultipart()?>
+	<section>
+		<?=Kubox::input(type: 'text', label: t('El nombre del anuncio'),
+			placeholder: t('Aquí un nombre sin importancia'),
+			name: 'nombre', value: $consejo->nombre)?>
+		<?=Kubox::input(type: 'text', label: t('La URL del anuncio'),
+			placeholder: t('Aquí la URL a su sitio WEB'),
+			name: 'url', value: $consejo->url)?>
+		<?=Kubox::dropimage(label: t('Imagen') . " (640px x 640px 96ppp)",
+			name: 'imagenes[]',
+			dir: empty($consejo->imagen) ? '' : "/img/usuarios/$consejo->usuarios_idu/",
+			file: empty($consejo->imagen) ? '' : (stristr($consejo->imagen, '.svg')?$consejo->imagen:"l.$consejo->imagen"))?>
+		<?php if ($consejo->imagen): ?>
+			<?=Kubox::checkbox(label: $consejo->imagen, checked: 'checked',
+				name: 'imagen', value: $consejo->imagen)?>
+		<?php else: ?>
+            <?=Form::hidden(field: 'imagen', value: $consejo->imagen)?>
+		<?php endif; ?>
+		<br>
+		<?php if ( ! $consejo->idu || $consejo->autorenovar): ?>
+			<?=Kubox::checkbox(label: t('Autorenovar.'), checked: 'checked', name: 'autorenovar', value: 1)?>
+		<?php else: ?>
+			<?=Kubox::checkbox(label: t('Autorenovar.'), name: 'autorenovar', value: 1)?>
+		<?php endif; ?>
+		<br>
+	</section>
+	<section>
+		<?php if ($consejo->idu): ?>
+			<div class="auto">
+				<?=Kubox::buttonSubmit(label: t('Eliminar'),
+					name: 'action', value: 'eliminar')?>
+
+				<?=Kubox::buttonSubmit(label: t('Duplicar'),
+					name: 'action', value: 'crear')?>
+
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'),
+					name: 'action', value: 'actualizar')?>
+			</div>
+            <input type="hidden" name="idu" value="<?=$consejo->idu?>">
+		<?php else: ?>
+			<?=Kubox::buttonSubmitColor(label: t('Publicar'),
+				name: 'action', value: 'crear')?>
+		<?php endif; ?>
+	</section>
+	<footer>
+		<small>
+			<i><?=t('Recuerda que cada banner nuevo tiene un coste en PX y una fecha de caducidad que dependerá de la oferta en curso.')?></i>
+			<hr>
+			<em><?=t('Ahora por solo 500 PX tu banner se verá durante 30 días al azar por cada acceso a la portada entre todos los banners publicados y activos. Se verá mucho y tendrá impacto.')?></em>
+		</i></small>
+	</footer>
+<?=Form::close()?>

@@ -1,0 +1,54 @@
+
+<div class="consejos s12" data-columns id="grid">
+	<article>
+		<header>
+			<h1><?=t('Tus consejos publicitarios')?></h1>
+			<p><?=t('Desde esta sección puedes subir un banner con un producto o servicio que se mostrará en portada, incluso a los usuarios que aún no se han registrado en R+, pero que entran a leer las publicaciones.')?></p>
+			<hr>
+			<small>
+				<b><?=t('Te quedan')?>:</b> <?=$usuario->experiencia?> <?=t('PX')?>
+			</small>
+		</header>
+		<footer class="grid auto">
+			<a role="button" rel="nofollow" href="/registrados/tienda"><?=t('Obtener PX')?></a>
+
+			<a role="button" data-ajax=".ajax.show" data-bg_color rel="nofollow" data-style="body, overflow:hidden" href="/registrados/consejos/formulario"><?=t('Subir un banner')?></a>
+		</footer>
+	</article>
+
+	<?php foreach ($consejos as $con): ?>
+		<article>
+			<header>
+				<h2><?=$con->nombre?></h2>
+				<?=_html::links($con->url)?>
+			</header>
+
+			<section>
+				<br>
+				<small class="grid auto">
+					<p><b><?=t('Mostrado:')?></b> <?=$con->mostrada?></p>
+					<p><b><?=t('Visitado:')?></b> <?=$con->visitada?></p>
+				</small>
+				<small class="grid auto">
+					<p><b><?=t('Creado:')?></b> <?=_date::format($con->creada, 'H:i d/m/y')?></p>
+					<p><b><?=t('Caduca:')?></b> <?=_date::format($con->caducada, 'H:i d/m/y')?></p>
+				</small>
+				<small><em><?=empty($con->autorenovar)?t('No se autorenueva.'):t('Se autorenueva.')?></em></small>
+			</section>
+
+			<?php if ($con->imagen): ?>
+				<img alt="Banner: <?=$con->nombre?>" src="/img/usuarios/<?=$con->usuarios_idu?>/<?=preg_match('/\.(gif|svg)$/i', $con->imagen)?$con->imagen:"l.$con->imagen"?>">
+			<?php endif; ?>
+
+			<footer class="grid auto">
+				<a role="button" data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/registrados/consejos/formulario/<?=$con->idu?>"><?=t('Editar')?></a>
+
+				<?php if ($con->caducada < _date::format()): ?>
+					<a role="button" data-bg_color href="/registrados/consejos/reactivar/<?=$con->idu?>"><?=t('Reactivar')?></a>
+				<?php else: ?>
+					<a role="button" data-bg_color href="/registrados/consejos/desactivar/<?=$con->idu?>"><?=t('Desactivar')?></a>
+				<?php endif; ?>
+			</footer>
+		</article>
+	<?php endforeach; ?>
+</div>

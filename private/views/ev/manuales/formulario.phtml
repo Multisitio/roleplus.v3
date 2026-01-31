@@ -1,0 +1,77 @@
+<?php
+$_SESSION['palabras'] = str_word_count($manual->nombre);
+?>
+<article>
+	<header>
+		<h1>
+			<?=empty($manual->nombre)?t('Manual'):$manual->nombre?>
+							
+			<a data-ajax=".ajax.show" href="/ev/manuales/formulario_manual/<?=$manual->idu?>" title="<?=t('Editar manual')?>"><sup><img src="/img/icons/edit-2s.svg"></sup></a>
+		</h1>
+		<h2><?=t('Reglas')?></h2>
+	</header>
+    <section>
+        <ul class="manual">
+            <?php
+            function arbol_1912201247($reglas, $manuales_reglas_idu='Ninguno') {
+                $i=1;
+                foreach ($reglas as $reg)
+                {
+                    if ($reg->manuales_reglas_idu <> $manuales_reglas_idu) {
+                        continue;
+                    } ?>
+                    <li>
+                        <?php if ($reg->pagina_nueva): ?>
+                            <div class="end-page"></div>
+                            <small class="no-print"><?=t('Nueva página')?></small>
+                        <?php endif; ?>
+
+                        <h4>
+							<button type="button" class="regla_<?=$reg->idu?> transparent" data-toggle=".regla_<?=$reg->idu?>"><img src="/img/icons/plus.svg"> <?=$reg->nombre?></button>
+							
+							<button type="button" class="regla_<?=$reg->idu?> transparent" data-toggle=".regla_<?=$reg->idu?>" style="display:none"><img src="/img/icons/minus.svg"> <?=$reg->nombre?></button>
+							
+							<a data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$reg->manuales_idu?>/<?=$reg->idu?>" title="<?=t('Editar regla')?>"><sup><img src="/img/icons/edit-2s.svg"></sup></a>
+
+							<small><?=$reg->peso?></small> 
+                        </h4>
+
+                        <hr>
+
+                        <article class="regla_<?=$reg->idu?>" style="display:none">
+                            <?php if ($reg->fotos): ?>
+                                <img alt="<?=t('Imagen de la regla:')?> <?=$reg->nombre?>" src="/img/usuarios/<?=$reg->fotos_usuarios_idu?>/l.<?=$reg->fotos?>">
+                                <br>
+                            <?php endif; ?>
+                            
+                            <?=$reg->descripcion_md?>
+                        </article>
+
+                        <?php if ( ! empty($reglas[$reg->idu])): ?>
+                            <ul><?php arbol_1912201247($reglas, $reg->idu); ?></ul>
+                        <?php endif; ?>
+                    </li>
+                    <?php
+                    $_SESSION['palabras'] += str_word_count($reg->nombre);
+                    $_SESSION['palabras'] += str_word_count($reg->descripcion);
+                }
+            }
+            arbol_1912201247($reglas);
+            ?>
+        </ul>
+        <?=t('Palabras')?>: <?=$_SESSION['palabras']?>
+    </section>
+	<footer class="grid">
+		<?php if ( ! empty($manual->idu)): ?>
+			<a role="button" class="outline" href="/ev/manuales/ver/<?=$manual->idu?>" target="_blank" title="<?=t('Ver reglas')?>"><?=t('Imprimir')?></a>
+
+			<a role="button" class="outline" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manual->idu?>" title="<?=t('Abrir el editor de reglas')?>"><?=t('Regla nueva')?></a>
+
+			<a role="button" href="/ev/manuales/editor/es/<?=$manual->idu?>" title="<?=t('Editor')?>"><?=t('Editor')?></a>
+        <?php endif; ?>
+	</footer>
+</article>
+
+<a role="button" class="flotante abajo derecha ma20 scroll-down-hide" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manual->idu?>" title="<?=t('Abrir el editor de reglas')?>">
+	<img alt="<?=t('Abrir el editor de reglas')?>" loading="lazy" src="/img/icons/plus.svg" width="30" height="30">
+</a>

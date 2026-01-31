@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html data-color="<?=empty($claves['color'])?'red':$claves['color']?>" data-theme="<?=empty($claves['tema'])?'light':$claves['tema']?>" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=yes">
+		<meta content="public" http-equiv="Cache-control">
+
+        <meta content="<?=empty($description)?t('Publicaciones, eventos, productos y noticias sobre juegos de guerra, juegos de mesa, juegos de rol, videojuegos, librojuegos y todo lo relacionado con el mundo friki.'):_html::stripTags($description)?>" name="description">
+		<meta content="#ed8340" name="theme-color">
+		<?php $image = empty($image) ? '/img/logos/LogoROLEplus512.svg' : $image; ?>
+		<meta content="https://<?=$_SERVER['HTTP_HOST']?><?=$image?>" itemprop="image" property="og:image">
+		<meta content="website" property="og:type">
+		<link href="/img/logos/apple-touch-icon.png" rel="apple-touch-icon">
+        <link href="/img/logos/icon-192x192.png" rel="apple-touch-icon">
+
+		<title><?=empty($title)?t('Red social de juegos de mesa y rol'):$title?></title>
+
+        <link href="/manifest.json?v=<?=$version?>" rel="manifest">
+        <link href="/css/default.min.css?v=<?=$version?>" rel="stylesheet">
+		<?php if (empty($claves['quitar_masonry'])): ?>
+			<link href="/css/masonry.min.css?v=<?=$version?>" rel="stylesheet">
+		<?php endif; ?>
+		<?=Css::inc()?>
+
+		<?php if ( ! preg_match('/localhost|roleplus\.vh/', $_SERVER['HTTP_HOST'])): ?> 
+			<script src="/javascript/worker.js?v=<?=$version?>"></script>
+		<?php endif; ?>
+	</head>
+	<body>
+		<?php View::partial('fondo'); ?>
+
+		<?php View::partial('publicaciones/nav'); # Cacheable ?>
+
+		<?php View::partial('publicaciones/aside'); ?>
+
+		<?php if (Session::get('idu')): ?>
+			<a class="abrir-chat floating scroll-down-hide" data-ajax=".ajax.show" rel="nofollow" href="/registrados/conversaciones/listado">
+				<?=Ku::icon(t('Abrir ventana para conversar'), 'message-circle')?>
+				<span class="sin-leer"><?php include APP_PATH . 'views/registrados/conversaciones/sin_leer.phtml'; ?></span>
+			</a>
+		<?php endif; ?>
+
+		<main class="grid">
+			<?php View::content(); ?>
+		</main>
+
+		<?php View::partial('toast'); ?>
+
+        <?php
+        $hashtag = ($controller_name == 'grupos' && ! empty($grupo))
+			? _str::hashtag($grupo->hashtag)
+            : '';
+		?>
+		<a class="abrir-editor floating scroll-down-hide" data-ajax=".ajax.show" rel="nofollow" href="/registrados/publicaciones/formulario?hashtag=<?=$hashtag?>"><?=Ku::icon(t('Abrir ventana para publicar'), 'edit-2')?></a>
+
+		<div class="ajax hide"></div>
+		<div class="ajax show"></div>
+
+		<script src="/javascript/default.min.js?v=<?=$version?>" data-idu="<?=Session::get('idu')?>"></script>
+
+		<?php if (empty($claves['quitar_masonry'])): ?>
+			<script src="/javascript/masonry.min.js?v=<?=$version?>"></script>
+		<?php endif; ?>
+
+		<?php if ( ! empty($_GET['conversaciones'])): ?>
+			<script>
+				$('.ajax.show').load("/registrados/conversaciones/conversacion/<?=$_GET['conversaciones']?>");
+			</script>
+		<?php endif; ?>
+
+		<?php if ( ! empty($compartir_desde_fuera)): ?>
+			<script>
+				$('.ajax.show').load('/registrados/publicaciones/formulario', {'contenido':`<?=$compartir_desde_fuera?>`});
+			</script>
+		<?php endif; ?>
+
+		<?=Js::inc()?>
+	</body>
+</html> 

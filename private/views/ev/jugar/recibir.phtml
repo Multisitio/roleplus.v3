@@ -1,0 +1,48 @@
+
+<?php foreach ($elementos as $ele): ?>
+	<article class="ele-<?=$ele->idu?>" data-elemento="<?=$ele->idu?>" style="background:transparent">
+		<header>
+			<h3><?=$ele->nombre?></h3>
+		</header>
+
+		<section>
+			<?php if ($ele->fotos): ?>
+				<a href="/img/usuarios/<?=$ele->usuarios_idu?>/<?=$ele->fotos?>" target="_blank"><img alt="<?=t('Imagen del elemento:')?> <?=$ele->nombre?>" src="/img/usuarios/<?=$ele->usuarios_idu?>/l.<?=$ele->fotos?>"></a>
+			<?php endif; ?>
+
+			<?php if ($ele->mp3): ?>
+				<h4><?=$ele->mp3?></h4>
+				<label><<?=t('Bucle:')?> <input type="checkbox" class="loop"></label>
+				<audio class="mp3_<?=$ele->idu?>" controls>
+					<source type="audio/mpeg" src="/mp3/<?=$ele->mp3?>">
+					Your browser does not support the audio element.
+				</audio>
+				<script> 
+				var el = document.querySelector('.mp3_<?=$ele->idu?>');
+				el.volume = 0.1;
+				el.autoplay = true;
+				el.load();
+				</script> 
+			<?php endif; ?>
+
+			<?php if ($ele->texto): ?>
+				<?=nl2br($ele->texto, false)?>
+			<?php endif; ?>
+
+			<?php if ($ele->youtube): ?>
+				<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" src="https://www.youtube.com/embed/<?=$ele->youtube?>?autoplay=1&loop=1"></iframe>
+			<?php endif; ?>
+		</section>
+
+		<footer>
+		</footer>
+	</article>
+<?php endforeach; ?>
+
+<script>
+// RECIBIR ELEMENTOS
+document.querySelector('.modal.chat').style.display = 'none';
+document.querySelector('.chat.overlay').style.display = 'none';
+
+document.querySelector('.elementos-boton').click();
+</script>

@@ -1,0 +1,17 @@
+
+<div class="caja texto">
+	<div class="s12 mv15">
+		<span class="paper-switch-2-label"><?=t('Borde solo abajo')?></span>
+		<label class="paper-switch-2">
+			<input <?=empty($caja->borde)?'':'checked'?> type="checkbox" name="borde">
+			<span class="paper-switch-slider round"></span>
+		</label>
+		<span class="paper-switch-2-label"><?=t('A cada lado')?></span>
+	</div>
+
+	<div class="s12">
+		<label><?=t('Texto')?></label>
+		<input type="text" name="nombre" value="<?=$caja->nombre?>">
+	</div>
+</div>
+<input type="hidden" name="tipo" value="texto">

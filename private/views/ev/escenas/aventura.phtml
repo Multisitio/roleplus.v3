@@ -1,0 +1,35 @@
+
+<article class="cabecera">
+	<header>
+		<h1><?=t('Escenas')?></h3>
+	</header>
+
+	<section class="grid">
+		<a role="button" href="/ev/escenas/formulario/<?=$aventuras_idu?>"><?=t('Crear escena')?></a>
+		<a role="button" class="outline" href="/ev/aventuras"><?=t('Aventuras')?></a>
+	</section>
+
+	<footer>
+		<input type="text" data-filter="article:not(.cabecera)" placeholder="<?=t('Filtra la lista...')?>">
+	</footer>
+</article>
+
+<?php foreach ($escenas as $esc): ?>
+	<article>
+		<header>
+			<h3><?=$esc->nombre?></h3>
+		</header>
+
+		<?php if ($esc->fotos): ?>
+			<img alt="<?=t('Imagen de la escena:')?> <?=$esc->nombre?>" class="mt10" src="/img/usuarios/<?=$esc->usuarios_idu?>/l.<?=$esc->fotos?>">
+		<?php endif; ?>
+
+		<section>
+			<?=nl2br($esc->introduccion, false)?>
+		</section>
+
+		<footer>
+			<a role="button" href="/ev/escenas/formulario/<?=$esc->aventuras_idu?>/<?=$esc->idu?>"><?=t('Editar')?></a>
+		</footer>
+	</article>
+<?php endforeach; ?>

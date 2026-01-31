@@ -1,0 +1,118 @@
+
+<div class="traducciones" data-columns id="grid">
+    <form method="post">
+        <article>
+            <header>
+                <h1><?=t('Traducciones')?></h1>
+            </header>
+            <section class="grid">
+                <?=Kubox::input(type: 'text',
+                    box: 'class="xs8"',
+                    label: t('Buscador de traducciones'),
+                    placeholder: t('Escribe aquí los criterios de búsqueda'),
+                    name: 'busqueda', value: _var::post('busqueda'))?>
+                    
+                <?php
+                $idiomas_sin_es = $idiomas;
+                unset($idiomas_sin_es['ES']);
+                ?>
+                <?=Kubox::select(blank: t('Todos'),
+                    box: 'class="xs4"',
+                    data: $idiomas_sin_es,
+                    label: t('Idioma'),
+                    name: 'idioma', value: _var::post('idioma'))?>
+            </section>
+            <section>
+				<?=Kubox::buttonSubmitColor(label: t('Buscar'))?>
+                <small><?=t('Busca al menos 3 caracteres de una parte de la traducción.')?><br>
+                <?=t('Se mostrarán hasta 10 resultados.')?><br>
+                <?=t('Se obtienen 25 PX por una palabra, 50 por una frase, 75 por un párrafo y 100 por un texto corregido.')?></small>
+            </section>
+            <footer>
+                <div class="grid auto">
+                    <a role="button" <?=($estado=='aprobadas')?'data-bg_color':''?> href="/registrados/traducciones/listar/aprobadas"><?=t('Aprobadas')?></a>
+                    <a role="button" <?=($estado=='rechazadas')?'data-bg_color':''?> href="/registrados/traducciones/listar/rechazadas"><?=t('Rechazadas')?></a>
+                </div>
+                <div class="grid auto">
+                    <a role="button" <?=($estado=='pendientes')?'data-bg_color':''?> href="/registrados/traducciones/listar/pendientes"><?=t('Pendientes')?></a>
+                    <a role="button" <?=($estado=='todas')?'data-bg_color':''?> href="/registrados/traducciones/listar/todas"><?=t('Todas')?></a>
+                </div>
+            </footer>
+        </article>
+    </form>
+
+    <?php foreach($traducciones as $tra): ?>
+        <form method="post">
+            <article>
+                <header>
+                    <h2><?=t('Traducción')?></h2>
+                    <div>
+                        <span class="tag"><?=$idiomas[$tra->idioma]?></span>
+                    </div>
+                    <br>
+                </header>
+                <section>
+                    <small><b><?=t('Fuente original (ES)')?>:</b></small>
+                    <blockquote><?=$tra->traducir?></blockquote>
+                    <br>
+                    <small><b><?=t('Traducción actual')?>:</b></small>
+                    <blockquote><?=$tra->traduccion?></blockquote>
+                    <br>
+                    <small><b><?=t('Propuesta de traducción')?>:</b></small>
+                    <textarea name="propuesta[<?=$tra->id?>]" placeholder="<?=t('Aquí la propuesta de traducción')?>…"><?=empty($_POST['propuesta'][$tra->id])?'':$_POST['propuesta'][$tra->id]?></textarea>
+                    <br>
+                    <small><b><?=t('Comentario para el supervisor')?>:</b></small>
+                    <textarea name="comentario_traductor[<?=$tra->id?>]" placeholder="<?=t('Aquí el comentario con la objeción')?>…"><?=empty($_POST['comentario_traductor'][$tra->id])?'':$_POST['comentario_traductor'][$tra->id]?></textarea>
+                </section>
+                <footer>
+                    <button type="submit" name="action" value="enviar_propuesta"><?=t('Enviar propuesta')?></button>
+                </footer>
+            </article>
+            <input type="hidden" name="id" value="<?=$tra->id?>">
+            <input type="hidden" name="busqueda" value="<?=_var::post('busqueda')?>">
+        </form>
+    <?php endforeach; ?>
+    
+    <?php foreach($propuestas as $pro): ?>
+        <article>
+            <header>
+                <h2>
+                    <?php if ($pro->aprobada): ?>
+                        <?=t('Propuesta aprobada')?>
+                    <?php elseif ($pro->rechazada): ?>
+                        <?=t('Propuesta rechazada')?>
+                    <?php else: ?>
+                        <?=t('Propuesta pendiente')?>
+                    <?php endif; ?>
+                </h2>
+                <div>
+                    <span class="tag"><?=$idiomas[$pro->idioma]?></span>
+                </div>
+                <br>
+            </header>
+            <section>
+                <small><b><?=t('Fuente original (ES)')?>:</b></small>
+                <blockquote><?=$pro->traducir?></blockquote>
+                <br>
+                <small><b><?=t('Traducción actual')?>:</b></small>
+                <blockquote><?=$pro->traduccion?></blockquote>
+                <br>
+                <small><b><?=t('Propuesta de traducción')?>:</b></small>
+                <blockquote><?=$pro->propuesta?></blockquote>
+                <br>
+                <small><b><?=t('Comentario del traductor')?>:</b></small>
+                <blockquote><?=$pro->comentario_traductor?></blockquote>
+                <br>
+                <small><b><?=t('Comentario del supervisor')?>:</b></small>
+                <blockquote><?=$pro->comentario_supervisor?></blockquote>
+                <br>
+                <div>
+                    <?=t('Experencia otorgada')?>:
+                    <?=$pro->experiencia?>
+                </div>
+            </section>
+            <footer>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>

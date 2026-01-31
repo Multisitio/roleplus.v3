@@ -1,0 +1,86 @@
+<?php
+Css::add('publicaciones.min');
+?>
+<div data-columns id="grid">
+    <article class="cabecera">
+        <header>
+            <h1><?=$usuario->apodo?></h1>
+        </header>
+        <section class="flex middle pv5">
+            <a role="button" class="flex center w100" data-ajax=".ajax.show" data-bg_color rel="nofollow" href="/registrados/publicaciones/formulario"><?=t('Publica algo interesante')?>...</a>
+        </section>
+        <section class="grid auto pa5">
+            <button class="align-left flex middle gap5 transparent" data-toggle=".filtro-etiquetas">
+                <img alt="<?=t('Abrir el filtro de etiquetas')?>" class="filtro-etiquetas" src="/img/icons/lock.svg" width="30px" height="30px">
+                <img alt="<?=t('Cerrar el filtro de etiquetas')?>" class="filtro-etiquetas hide" src="/img/icons/unlock.svg" width="30px" height="30px">
+                <small><?=t('Y filtra lo que')?> <span class="nowrap"><?=t('no te mole')?></span></small>
+            </button>
+            <div class="flex right">
+                <a class="gap5 w100" href="/usuarios/ver_conectados" data-ajax=".ajax.show">
+                    <img alt="<?=t('Usuarios conectados')?>" src="/img/icons/users.svg" width="30" height="30">
+                    <small>
+                        <span class="conectados" data-ch="rp_conectados">
+                            <?php include APP_PATH . 'views/usuarios/conectados.phtml'; ?>
+                        </span>
+                        <?=t('conectados')?>
+                    </small>
+                </a>
+            </div>
+        </section>
+        <section class="filtro-etiquetas hide">
+            <br>
+            <p><?=t('Las publicaciones...')?></p>
+            <fieldset>
+                <legend><?=t('...deben pertenecer a estas...')?></legend>
+                <div class="etiquetas-debe_contener">
+                    <?php
+                    $donde = 'debe_contener';
+                    include APP_PATH . 'views/registrados/etiquetas/caja.phtml';
+                    ?>
+                </div>
+                <a data-ajax=".ajax.show" rel="nofollow" href="/registrados/etiquetas/incluir/debe_contener"><img alt="<?=t('Añadir etiquetas obligatorias')?>" src="/img/icons/plus.svg" width="30px" height="30px"> <?=t('...etiquetas')?></a>
+            </fieldset>
+            <fieldset>
+                <legend><?=t('...o contener alguna de estas...')?></legend>
+                <div class="etiquetas-puede_contener">
+                    <?php
+                    $donde = 'puede_contener';
+                    include APP_PATH . 'views/registrados/etiquetas/caja.phtml';
+                    ?>
+                </div>
+                <a data-ajax=".ajax.show" rel="nofollow" href="/registrados/etiquetas/incluir/puede_contener"><img alt="<?=t('Añadir etiquetas que me gustaría ver')?>" src="/img/icons/plus.svg" width="30px" height="30px"> <?=t('...etiquetas')?></a>
+            </fieldset>
+            <fieldset>
+                <legend><?=t('...y ninguna de estas...')?></legend>
+                <div class="etiquetas-no_listar">
+                    <?php
+                    $donde = 'no_listar';
+                    include APP_PATH . 'views/registrados/etiquetas/caja.phtml';
+                    ?>
+                </div>
+                <a data-ajax=".ajax.show" rel="nofollow" href="/registrados/etiquetas/incluir/no_listar"><img alt="<?=t('Añadir etiquetas que no quiero ver')?>" src="/img/icons/plus.svg" width="30px" height="30px"> <?=t('...etiquetas')?></a>
+            </fieldset>
+        </section>
+        <footer class="filtro-etiquetas hide"> 
+            <a role="button" data-bg_color href="/publicaciones"><?=t('Filtrar estas etiquetas ahora')?></a>
+        </footer>
+        <?php if ( ! empty($consejo) && empty($claves['quitar_publicidad'])):
+            $dir = empty($consejo->usuarios_idu) ? 'consejos' : "usuarios/$consejo->usuarios_idu";
+            $img = "img/$dir/$consejo->imagen";
+            $mini = "/img/$dir/";
+            $mini .= preg_match('/\.(gif|svg)$/i', $consejo->imagen)
+                ? $consejo->imagen : "l.$consejo->imagen";
+            if (_file::exists($img)): ?>
+                <a class="filtro-etiquetas pa0 shadow0" href="/consejos/contabilizar/<?=$consejo->idu?>" <?=strstr($consejo->url, 'http')?'rel="noopener noreferrer" target="_blank"':''?> title="<?=t('Consejo de')?> <?=$consejo->nombre?>"><img alt="<?=$consejo->imagen?>" src="<?=$mini?>" width="100%"></a>
+            <?php endif;
+        endif; ?>
+    </article>
+
+    <?php
+    #ob_start();
+    foreach($publicaciones as $pub):
+        include APP_PATH . 'views/publicaciones/una.phtml';
+    endforeach; 
+    #$publicaciones = ob_get_clean();
+    #echo ($action_name == 'buscar') ? str_ireplace($frase, '»—›'.$frase.'‹—«', $publicaciones) : $publicaciones; ?>
+</div>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html data-primary_color="red" data-theme="day" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><?="$module_name $controller_name $action_name"?></title>
+        <link href="/css/atalaya.min.css?v=<?=time()?>" rel="stylesheet">
+		<?=Css::inc()?>
+	</head>
+	<body class="line-numbers">
+		<nav>
+			<a href="/atalaya/probando/kumbia_css"><img src="/img/kumbiacss.svg"></a>
+		</nav>
+
+		<div class="boxes">
+			<aside>
+				<?php foreach ($aside_links as $title=>$links): ?>
+					<details>
+						<summary><?=$title?></summary>
+						<ul>
+							<?php foreach ($links as $url=>$link): ?>
+								<li><a href="/<?=$url_base?>/<?=$url?>"><?=$link?></a></li>
+							<?php endforeach; ?>
+						</ul>
+					</details>
+				<?php endforeach; ?>
+			</aside>
+
+			<main>
+				<?php View::content(); ?>
+				<hr>
+				KumbiaCSS es de uso gratuito. No es necesaria ninguna licencia.
+			</main>
+		</div>
+		<br>
+		<br>
+		
+		<div class="ajax hide"></div>
+		<div class="ajax show"></div>
+		
+        <script src="/javascript/atalaya.min.js?v=<?=time()?>"></script>
+		<?=Js::inc()?>
+	</body>
+</html>

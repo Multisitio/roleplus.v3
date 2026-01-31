@@ -1,0 +1,19 @@
+<?php
+require_once CORE_PATH . 'kumbia/controller.php';
+/**
+ */
+abstract class FastbondController extends Controller
+{
+    final protected function initialize()
+    {
+        $this->clean = empty($_GET['clean']) ? false : true;
+        $this->start_time = microtime(1);
+		$this->version = '22';
+
+        Input::isAjax() ? View::template('ajax') : View::template('fastbond');
+    }
+
+    final protected function finalize()
+    {
+    }
+}

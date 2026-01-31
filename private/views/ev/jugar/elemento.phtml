@@ -1,0 +1,56 @@
+<?php
+$idu = !empty($ele->elementos_idu) ? (string)$ele->elementos_idu : '';
+$tipo = isset($ele->tipo) ? h($ele->tipo) : 'texto';
+$nombre = isset($ele->nombre) ? h($ele->nombre) : '';
+$texto = isset($ele->texto) ? nl2br(h($ele->texto), false) : '';
+$usuarios_idu = isset($ele->usuarios_idu) ? (string)$ele->usuarios_idu : '';
+$fotos = isset($ele->fotos) ? (string)$ele->fotos : '';
+$mp3 = isset($ele->mp3) ? (string)$ele->mp3 : '';
+$youtube = isset($ele->youtube) ? (string)$ele->youtube : '';
+$posx = isset($ele->posicion_x) ? (int)$ele->posicion_x : 0;
+$posy = isset($ele->posicion_y) ? (int)$ele->posicion_y : 0;
+
+$foto_primaria = $fotos !== '' ? trim(preg_replace('/,.*/', '', $fotos)) : '';
+$href_img_full = $fotos !== '' ? '/img/usuarios/' . $usuarios_idu . '/' . $fotos : '';
+$src_img_prev = $foto_primaria !== '' ? '/img/usuarios/' . $usuarios_idu . '/l.' . $foto_primaria : '';
+
+$pos_url = '/ev/elementos/posicion_partida/' . $idu;
+?>
+
+<article
+	data-id="<?= $idu ?>"
+	data-url="<?= $pos_url ?>"
+	data-pos-x="<?= $posx ?>"
+	data-pos-y="<?= $posy ?>"
+	data-tipo="<?= $tipo ?>"
+>
+	<header>
+		<h5><?= $nombre ?></h5>
+	</header>
+
+	<?php if ($src_img_prev !== ''): ?>
+		<a href="<?= $href_img_full ?>" target="_blank" rel="noopener">
+			<img alt="<?= t('Imagen de') ?> <?= $nombre ?>" src="<?= $src_img_prev ?>" loading="lazy">
+		</a>
+	<?php endif; ?>
+
+	<section>
+		<?php if ($texto !== ''): ?>
+			<div><?= $texto ?></div>
+		<?php endif; ?>
+
+		<?php if ($mp3 !== ''): ?>
+			<fieldset>
+				<legend><?= h($mp3) ?></legend>
+				<audio controls preload="none">
+					<source type="audio/mpeg" src="/mp3/<?= h($mp3) ?>">
+					<?= t('Audio no soportado.') ?>
+				</audio>
+			</fieldset>
+		<?php endif; ?>
+
+		<?php if ($youtube !== ''): ?>
+			<div data-youtube="<?= h($youtube) ?>"></div>
+		<?php endif; ?>
+	</section>
+</article>

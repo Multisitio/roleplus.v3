@@ -1,0 +1,8 @@
+
+<?php if ( ! empty($configuraciones[$idu])): ?>
+    <p>
+        <?php foreach ($configuraciones[$idu] as $con): ?>
+            <b><?=$con->clave?>:</b> <?=$con->valor?><br>
+        <?php endforeach; ?>
+    </p>
+<?php endif; ?>

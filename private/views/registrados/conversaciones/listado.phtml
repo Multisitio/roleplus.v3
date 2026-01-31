@@ -1,0 +1,70 @@
+
+<div class="modal chat conversaciones">
+	<header>
+		<diV class="space-between">
+            <h3><?=t('Listado de conversaciones')?></h3>
+
+		    <button data-hide=".modal.chat, .chat.overlay"><?=Ku::icon(t('Cerrar ventana'), 'x')?></button>
+		</div>
+	</header>
+
+	<section>
+        <input type="text" data-filter=".conversacion" placeholder="<?=t('Filtrar')?>…">
+    </section>
+
+	<section>
+		<?php foreach($conversaciones as $con): ?>
+			<div class="conversacion pv10">
+				<div class="align-center shrink0">
+					<!-- Avatar del receptor -->
+					<?php if (count($con->usuarios) == 2):
+						foreach ($con->usuarios as $usu):
+							if (Session::get('idu') == $usu->idu):
+								continue;
+							endif;
+							$conversando_con = $usu;
+						endforeach;
+
+						echo Usuario::avatar($conversando_con); ?>
+
+					<!-- Avatar del grupo -->
+					<?php else: ?>
+						<a class="avatar" href="/grupos/<?=_str::hashtag($con->nombre)?>">
+							<?php $img = (_file::exists($con->imagen))
+								? $con->imagen : "/img/otras/question.svg"; ?>
+							<img alt="<?=t('Avatar de la conversación')?>" src="<?=$img?>" width="64px" height="64px">
+						</a>
+					<?php endif; ?>
+					<br>
+					<small>
+						<!-- Fecha del ultimo comentario -->
+						<span><?=_date::ago($con->ultimo_fecha)?></span>
+						
+						<!-- Comentarios sin leer -->
+						<?php if ($sin_leer=(new Conversaciones_mensajes)->sinLeer($con->idu)): ?>
+							<kbd><?=$sin_leer??0?></kbd>
+						<?php endif; ?>
+					</small>	
+				</div>
+
+				<a class="color start grow vertical" data-ajax=".ajax.show" rel="nofollow" href="/registrados/conversaciones/conversacion/<?=$con->idu?>">
+					<!-- Apodo del receptor o nombre del grupo -->
+					<strong><?=empty($con->nombre)?$conversando_con->apodo:$con->nombre?></strong>
+
+					<!-- Ultimo mensaje -->
+					<?php if ( ! empty($con->usuarios[$con->ultimo_usuario]->apodo)): ?>
+						<p class="truncate"><small><b><?=$con->usuarios[$con->ultimo_usuario]->apodo?>:</b> <?=$con->ultimo_mensaje?></small></p>
+					<?php endif; ?>
+				</a>
+			</div>
+			<?php /*<script>
+			if (typeof <?="chat_$con->idu"?> !== 'undefined') {
+				window.document.removeEventListener("message", <?="chat_$con->idu"?>);
+			}
+			</script>*/ ?>
+		<?php endforeach; ?>
+	</section>
+	<footer>
+	</footer>
+</div>
+<div class="chat overlay" data-hide=".modal.chat, .chat.overlay"></div>

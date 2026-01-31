@@ -1,0 +1,39 @@
+
+<div id="grid" data-columns>
+	<article class="cabecera">
+		<header>
+			<h1><?=t('Aventuras')?></h1>
+		</header>
+
+		<section class="grid">
+			<a role="button" href="/ev/aventuras/formulario"><?=t('Crear aventura')?></a>
+			<a role="button" class="outline" href="/ev/partidas"><?=t('Partidas')?></a>
+		</section>
+
+		<footer>
+			<input type="text" data-filter="article:not(.cabecera)" placeholder="<?=t('Filtra la lista...')?>">
+		</footer>
+	</article>
+
+	<?php foreach ($aventuras as $ave): ?>
+		<article>
+			<header>
+				<h3><?=$ave->nombre?></h3>
+			</header>
+
+			<?php if ($ave->fotos): ?>
+				<img alt="<?=t('Imagen de la aventura:')?> <?=$ave->nombre?>" class="mb10" src="/img/usuarios/<?=$ave->usuarios_idu?>/l.<?=$ave->fotos?>">
+			<?php endif; ?>
+
+			<section>
+				<?=$ave->introduccion?>
+			</section>
+
+			<footer class="grid">
+				<?php if (Session::get('idu') == $ave->usuarios_idu): ?>
+					<a role="button" href="/ev/aventuras/formulario/<?=$ave->idu?>"><?=t('Editar')?></a>
+				<?php endif; ?>
+			</footer>
+		</article>
+	<?php endforeach; ?>
+</div>

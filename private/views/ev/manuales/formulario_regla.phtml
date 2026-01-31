@@ -1,0 +1,99 @@
+
+<div class="modal editor">
+	<form enctype="multipart/form-data" method="post">
+		<header>
+			<h3>
+				<?=t('Regla')?>
+				<button type="button" class="transparent" data-confirm="<?=t('¿Estás seguro?')?>" data-hide=".modal.editor, .editor.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+			</h3>
+		</header>
+		<section>
+			<br>
+			<?php /*<div class="grid">
+				<label class="s10">
+					<small><b><?=t('Dentro de...')?></b></small>
+					<select name="manuales_reglas_idu">
+						<option value="Ninguno"><?=t('...ninguna otra.')?></option>
+						<?php foreach ($reglas as $reg):
+							$selected = ($reg->idu == $regla->manuales_reglas_idu) ? 'selected ' : ''; ?>
+							<option <?=$selected?>value="<?=$reg->idu?>"><?=$reg->peso?"$reg->peso)":''?> <?=$reg->nombre?></option>
+						<?php endforeach; ?>
+					</select>
+				</label>
+				<label class="s4">
+					<small><b><?=t('¿Página nueva?')?></b></small>
+					<select name="pagina_nueva">
+						<?php foreach ([0=>t('No'), 1=>t('Sí')] as $k=>$v):
+							$selected = ($k == $regla->pagina_nueva) ? 'selected ' : ''; ?>
+							<option <?=$selected?>value="<?=$k?>"><?=$v?></option>
+						<?php endforeach; ?>
+					</select>
+				</label>
+			</div>*/ ?>
+
+			<div class="grid">
+				<label class="s2">
+					<small><b><?=t('Idioma')?> (ISO):</b></small>
+					<input type="text" name="idioma" placeholder="<?=t('Idioma')?>..." value="<?=$regla->idioma?:'ES'?>">
+				</label>
+
+				<label class="s2">
+					<small><b><?=t('Peso')?>:</b></small>
+					<input type="text" name="peso" placeholder="<?=t('Peso')?>..." value="<?=$regla->peso?>">
+				</label>
+
+				<label class="s8">
+					<small><b><?=t('Nombre')?></b></small>
+					<input type="text" name="nombre" placeholder="<?=t('Nombre')?>..." value="<?=$regla->nombre?>">
+				</label>
+			</div>
+
+			<label>
+				<small><b><?=t('Contenido')?>:</b></small>
+				<textarea name="descripcion" placeholder="<?=t('Descripción...')?>"><?=$regla->descripcion?></textarea>
+			</label>
+
+			<?php /*<?=Kubox::dropimage(label: t('Imagen'), dir: '/img/usuarios/' . "$regla->fotos_usuarios_idu/", file: $regla->fotos, mini: 'l.', name: 'fotos[]')?>*/ ?>
+
+			<input type="hidden" name="fotos_usuarios_idu" value="<?=$regla->fotos_usuarios_idu?>">
+		</section>
+
+		<?php /*<label>
+			<small><b><?=t('Traducir desde ISO a ISO')?>:</b></small>
+		</label>
+		<footer class="grid">
+			<?php if ( ! empty($regla->idu)): ?>
+				<input type="text" name="traducir_desde" placeholder="<?=t('Traducir desde')?>..." value="<?=$regla->idioma?>">
+				<input type="text" name="traducir_al" placeholder="<?=t('Traducir al')?>...">
+				<?=Kubox::buttonSubmit(label: t('Traducir'), name: 'action', 
+					value: 'regla_traducir', attrs: 'class="outline"')?>
+			<?php endif; ?>
+		</footer>*/ ?>
+
+		<label>
+			<small><b><?=t('Acciones principales')?>:</b></small>
+		</label>
+		<footer class="grid">
+			<?php if ( ! empty($regla->idu)): ?>
+				<a role="button" class="outline" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manual->idu?>"><?=t('Nueva')?></a>
+				<?=Kubox::buttonSubmit(label: t('Eliminar'), name: 'action',
+					value: 'regla_eliminar', attrs: 'class="outline" data-confirm="Sure?"')?>
+				<?=Kubox::buttonSubmit(label: t('Duplicar'), name: 'action', 
+					value: 'regla_crear', attrs: 'class="outline"')?>
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'),
+					name: 'action', value: 'regla_actualizar')?>
+			<?php else: ?>
+				<?=Kubox::buttonSubmitColor(label: t('Crear'),
+					name: 'action', value: 'regla_crear')?>
+			<?php endif; ?>
+			<input type="hidden" name="manuales_idu" value="<?=$manual->idu?>">
+			<input type="hidden" name="idu" value="<?=$regla->idu?>">
+		</footer>
+	</form>
+	<br>
+</div>
+<div class="editor overlay" data-confirm="<?=t('¿Estás seguro?')?>" data-hide=".modal.editor, .editor.overlay"></div>
+
+<script>
+textarea_auto_height();
+</script>

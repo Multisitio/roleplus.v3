@@ -1,0 +1,27 @@
+
+<h1><?=$file?></h1>
+
+<?=Form::open()?>
+    <section class="warp">
+        <?php $config = function ($content, $i) use (&$config) {
+            foreach ($content as $section=>$vars):
+                if (is_array($vars)): ?>
+                    <fieldset>
+                        <legend>
+                            <?=Form::input('text', "sections[$i]", null, $section)?>
+                        </legend>
+                        <?php $config($vars, ++$i) ?>
+                    </fieldset>
+                <?php else: ?>
+                    <div>
+                        <?php foreach ($content as $key=>$val): ?>
+                            <?=Form::input('text', "keys[$i][]", null, $key)?> =>
+                            <?=Form::input('text', "vals[$i][]", null, $val)?><br>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif;
+            endforeach;
+        };
+        $config($content, 0); ?>
+    </section>
+<?=Form::close()?>

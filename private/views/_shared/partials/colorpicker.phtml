@@ -1,0 +1,16 @@
+<?php
+$claves = View::getVar('claves');
+$claves['tema'] = empty($claves['tema']) ? 'light' : $claves['tema'];
+$colores = ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'blue', 'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'orange', 'deep-orange', 'grey', 'blue-grey'];
+?>
+<figure class="flex gap5 wrap center theme_switcher">
+	<?php foreach ($colores as $color): ?>
+		<a role="button" data-color="<?=$color?>" href="/registrados/ajustes/guardar/color/<?=$color?>" title="Color: <?=$color?>"></a>
+	<?php endforeach; ?>
+</figure>
+<hr>
+<div class="center">
+	<a role="button" href="/registrados/ajustes/guardar/tema/dark" class="theme_switcher" data-theme="dark" data-toggle="a.theme_switcher"<?=($claves['tema']<>'dark')?'':' style="display:none"'?> rel="nofollow"><?=Ku::icon(t('Interruptor de noche'), 'moon-big', 40, 40)?></a>
+
+	<a role="button" href="/registrados/ajustes/guardar/tema/light" class="theme_switcher" data-theme="light" data-toggle="a.theme_switcher"<?=($claves['tema']<>'light')?'':' style="display:none"'?> rel="nofollow"><?=Ku::icon(t('Interruptor de día'), 'sun-big', 40, 40)?></a>
+</div>

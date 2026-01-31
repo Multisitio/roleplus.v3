@@ -1,0 +1,15 @@
+
+<p><label><small><b><?=t('Respuesta:')?></b></small></label></p>
+<code><?=$respuesta?></code>
+
+<?php /*foreach ($reply->choices as $cho): ?>
+    <code><?=nl2br(trim($cho->text))??t('Me he quedado sin palabras... :(')?></code>
+<?php endforeach;*/ ?>
+
+<hr>
+<p><?=t('Las respuestas elaboradas tienen un coste que pagamos a OpenAi, considera hacer una donación para mantener este servicio.')?></p>
+<?php View::partial('suscribirse', false, [
+    'atributos'=>'data-bg_color',
+    'id'=>'58HFSRCHHRWDN',
+    'texto'=>t('Donar € ahora'),
+]); ?>

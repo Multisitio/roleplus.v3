@@ -1,0 +1,206 @@
+
+<?php foreach ($comentarios as $com): ?>
+    <hr>
+    <div class="comentario com-<?=$com->idu?>">
+        <div>
+            <?=Usuario::avatar($com, 'xxs')?>
+            <?php if (Session::get('idu') <> $com->usuarios_idu): ?>
+                <button class="inserta-apodo transparent" data-publicacion="<?=$com->publicaciones_idu?>" data-apodo="<?=$com->hashtag?>"><img alt="<?=t('Citar a ')?> <?=$com->apodo?>" src="/img/icons/message-square.svg" width="30px" height="30px"></button>
+                
+                <?php if (empty($experiencia['comentarios'][$com->idu])):
+                    $mas_uno = '';
+                    $menos_uno = 'style="display:none"';
+                else:
+                    $mas_uno = 'style="display:none"';
+                    $menos_uno = '';
+                endif; ?>
+                <a class="cmu_<?=$com->idu?>" data-ajax=".cet_<?=$com->idu?>" data-toggle=".cmu_<?=$com->idu?>" rel="nofollow" href="/registrados/comentarios/experiencia/<?=$com->idu?>" <?=$mas_uno?>>+1</a>
+
+                <a class="cmu_<?=$com->idu?>" data-ajax=".cet_<?=$com->idu?>" data-toggle=".cmu_<?=$com->idu?>" rel="nofollow" href="/registrados/comentarios/experiencia/<?=$com->idu?>" <?=$menos_uno?>>-1</a>
+            <?php else: ?>
+                <a data-ajax=".com-<?=$com->idu?> .contenido" data-hide=".comentar" href="/registrados/comentarios/editar/<?=$com->idu?>" rel="nofollow"><img alt="<?=t('Editar comentario')?>" src="/img/icons/edit-2.svg" width="30px" height="30px"></a>
+
+                <?php if ($com->experiencia): ?>
+                    <a data-ajax=".ajax.show" rel="nofollow" href="/registrados/comentarios/ver_experiencia/<?=$com->idu?>"><img alt="<?=t('Editar comentario')?>" src="/img/icons/eye.svg" width="30px" height="30px"></a>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="grow">
+            <div class="apodo-tiempo">
+                <div>
+                    <b><?=$com->apodo?></b>
+
+                    <small class="cet_<?=$com->idu?>"><?=($com->experiencia)?"+$com->experiencia":''?></small>
+                </div>
+
+                <time><?=_date::ago($com->publicado)?></time>
+            </div>
+                
+            <div class="contenido">
+                <?=$com->comentario_formateado?>
+
+                <?php if ( ! empty($vistas_previas[$com->idu])):
+                    $v_p = $vistas_previas[$com->idu][0]; ?>
+                    <section class="preview">
+                        <?php View::partial('boxes/preview', null, ['v_p'=>$v_p]); ?>
+                    </section>
+                <?php elseif ($com->enlace): ?>
+                    <?=Article::link($com)?>
+                <?php endif; ?>
+                
+                <?=Article::images($com)?>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
+
+<div class="comentar">
+    <form action="/registrados/comentarios/todos/<?=$publicaciones_idu?>" enctype="multipart/form-data" class="w100" data-ajax=".pub-<?=$publicaciones_idu?> .fragmentos" method="post">
+
+        <textarea data-preview name="comentario" placeholder="<?=t('Comente con respeto')?>..."></textarea>
+
+		<section class="preview"></section>
+
+        <div class="fotos"></div>
+
+        <label class="dropimage">
+            <input type="file" name="imagenes[]">
+            <button type="button" data-remove="parent"><img alt="<?=t('Quitar foto')?>" src="/img/icons/x-square.svg"></button>
+        </label>
+
+        <div class="grid auto">
+            <button type="button" data-hide=".pub-<?=$publicaciones_idu?> .fragmentos"><?=t('Cancelar')?></button>
+
+            <button type="submit" data-bg_color data-toggle=".pub-<?=$publicaciones_idu?> .comentar" name="action" value="crear"><?=t('Publicar')?></button>
+        </div>
+        <input type="hidden" name="publicaciones_idu" value="<?=$publicaciones_idu?>">
+    </form>
+</div>
+
+<?php /*
+    <div class="com_<?=$com->idu?> flex start pb15 w3-block">
+        <?=Article::avatar($com)?>
+        <div class="comentario_<?=$com->idu?> grow ml10">         
+            <small class="w3-right tiempo"><small><?=_date::ago($com->publicado)?></small></small>
+            <?php if (Session::get('idu') == $com->usuarios_idu): ?>
+                <a class="mr10 w3-right" rel="nofollow" href="/registrados/comentarios/editar/<?=$com->idu?>" data-ajax=".com_<?=$com->idu?> .contenido"><i class="material-icons tiny">edit</i></a>
+            <?php endif; ?>
+            <a href="/usuarios/perfil/<?=urlencode($com->apodo)?>">
+                <b class="apodo"><?=$com->apodo?></b>
+            </a>
+            <?php if (Session::get('idu') == $com->usuarios_idu): ?>
+                <a data-ajax=".ajax.show" rel="nofollow" href="/registrados/comentarios/ver_experiencia/<?=$com->idu?>">
+                    <small class="cet_<?=$com->idu?> ml5"><?=($com->experiencia)?"+$com->experiencia":''?></small>
+                </a>
+            <?php else: ?>
+                <small class="color-texto cet_<?=$com->idu?> ml5"><?=($com->experiencia)?"+$com->experiencia":''?></small>
+            <?php endif; ?>
+            <br>
+
+            <div class="contenido">
+                <?php
+                echo $com->comentario_formateado;
+
+                if (Session::get('idu') <> $com->usuarios_idu): ?>
+                    <small class="w3-clear flex-middle mt10">
+                        <a class="inserta-apodo" data-publicacion="<?=$com->publicaciones_idu?>" data-comentario="<?=$com->idu?>" href="javascript:void(0);">RESPONDER</a>
+                        <?php if (empty($experiencia['comentarios'][$com->idu])): ?>
+                            <a class="cmu_<?=$com->idu?> ml25" data-ajax=".cet_<?=$com->idu?>" data-toggle=".cmu_<?=$com->idu?>" rel="nofollow" href="/registrados/comentarios/experiencia/<?=$com->idu?>">+1</a>
+                            <a class="cmu_<?=$com->idu?> btn-floating btn-small ml25" data-ajax=".cet_<?=$com->idu?>" data-toggle=".cmu_<?=$com->idu?>" rel="nofollow" href="/registrados/comentarios/experiencia/<?=$com->idu?>" style="display:none; padding:3px 1px 0 0">-1</a>
+                        <?php else: ?>
+                            <a class="cmu_<?=$com->idu?> ml25" data-ajax=".cet_<?=$com->idu?>" data-toggle=".cmu_<?=$com->idu?>" rel="nofollow" href="/registrados/comentarios/experiencia/<?=$com->idu?>" style="display:none">+1</a>
+                            <a class="cmu_<?=$com->idu?> btn-floating btn-small ml25" data-ajax=".cet_<?=$com->idu?>" data-toggle=".cmu_<?=$com->idu?>" rel="nofollow" href="/registrados/comentarios/experiencia/<?=$com->idu?>" style="padding:3px 1px 0 0">-1</a>
+                        <?php endif; ?>
+                    </small>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <div>
+        <?php if ( ! empty($vistas_previas2[$com->idu]) ): ?>
+            <div class="vistas_previas">
+                <?php foreach ($vistas_previas2[$com->idu] as $v_p) : ?>
+                    <div class="mb25">
+                        <a class="resaltado" href="<?=$v_p->url?>" rel="noopener noreferrer" target="_blank">
+                            <h5 class="title"><i class="material-icons">link</i> <?=$v_p->title?></h5>
+                            <small class="break-word description"><?=$v_p->description?></small>
+                            <?php if ($v_p->image): ?>
+                                <img class="w3-image" src="/img/vistas_previas/<?=$v_p->idu?>/l.<?=$v_p->image?>">
+                            <?php endif; ?>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif;
+
+        if ($com->enlace):
+            if (strstr($com->enlace, 'www.ivoox.com')):
+                preg_match('/([\d_]+)\.html$/', $com->enlace, $ivoox); ?>
+                <iframe allowfullscreen="" class="block m0a" frameborder="0" height="105" src="https://www.ivoox.com/player_ej<?=$ivoox[0]?>" scrolling="no"></iframe>
+            <?php else: ?>
+                <div class="s12 pl0 pt15">
+                    <iframe width="100%" height="285" src="https://www.youtube.com/embed/<?=_var::getUrlVar($com->enlace)?>" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
+                </div>
+            <?php endif;
+        endif; ?>
+        <?php if ($com->fotos):
+            $fotos = explode(', ', $com->fotos);
+            foreach($fotos as $foto):
+                if (preg_match('/\.gif$/i', $foto) and realpath(rtrim($_SERVER['DOCUMENT_ROOT'], '/') . "/img/usuarios/$com->usuarios_idu/" . str_replace('.gif', '.mp4', $foto))): ?>
+                    <video autoplay loop muted playsinline style="width:100%">
+                        <source src="/img/usuarios/<?=$com->usuarios_idu?>/<?=str_replace('.gif', '.webm', $foto)?>" type="video/webm">
+                        <source src="/img/usuarios/<?=$com->usuarios_idu?>/<?=str_replace('.gif', '.mp4', $foto)?>" type="video/mp4">
+
+                        Your browser does not support HTML5 video.
+                        <a href="/img/usuarios/<?=$com->usuarios_idu?>/<?=$foto?>">Pincha aquí para ver el GIF original</a>
+                    </video>
+                <?php elseif (preg_match('/\.svg$/i', $foto) ): ?>
+                    <div class="s12 ph0 pb15">
+                        <a href="/img/usuarios/<?=$com->usuarios_idu?>/<?=$foto?>" rel="noopener noreferrer" target="_blank"><img alt="<?=$foto?>" class="w3-image" src="/img/usuarios/<?=$com->usuarios_idu?>/<?=$foto?>"></a>
+                    </div>
+                <?php else: ?>
+                    <div class="s12 ph0 pb15">
+                        <a href="/img/usuarios/<?=$com->usuarios_idu?>/<?=$foto?>" rel="noopener noreferrer" target="_blank"><img alt="<?="m.$foto"?>" class="w3-image" src="/img/usuarios/<?=$com->usuarios_idu?>/<?="m.$foto"?>"></a>
+                    </div>
+                <?php endif;
+            endforeach;
+        endif; ?>
+    </div>
+<?php endforeach; ?>
+<hr>
+<div class="comentar">
+    <form action="/registrados/comentarios/todos/<?=$publicaciones_idu?>" data-ajax=".post_<?=$publicaciones_idu?> .fragmentos" method="post">
+
+        <textarea class="bb browser-default mb0 comentario_<?=$publicaciones_idu?>" name="comentario" placeholder="<?=t('Comente con respeto')?>..."></textarea>
+
+        <div class="w3-clear"></div>
+
+        <div class="fotos-comentario-<?=$publicaciones_idu?>"></div>
+
+        <div class="flex middle">
+            <label class="w3-file mt10" data-upload_file_to=".fotos-comentario-<?=$publicaciones_idu?>">
+                <i class="material-icons w3-jumbo">local_see</i>
+                <input type="file" name="imagenes[]" multiple>
+            </label>
+
+            <a class="btn btn-flat right" data-toggle=".post_<?=$publicaciones_idu?> .comentar" href="javascript:void(0);"><?=t('Cancelar')?></a>
+
+            <button type="submit" class="btn right" data-toggle=".post_<?=$publicaciones_idu?> .comentar" name="action" value="crear"><?=t('Publicar')?></button>
+        </div>
+
+        <input type="hidden" name="publicaciones_idu" value="<?=$publicaciones_idu?>">
+    </form>
+    <div class="w3-clear"></div>
+</div>
+
+<hr>
+
+<script>
+$(function()
+{
+    $('.silenciar-<?=$publicaciones_idu?>').load('/registrados/publicaciones/notificar/<?=$publicaciones_idu?>/0');
+});
+</script>
+
+<?php */
+/*scrollTo('html, body', '.com_<?=$com->idu?>', '-60');*/

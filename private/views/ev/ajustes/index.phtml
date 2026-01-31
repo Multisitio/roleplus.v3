@@ -1,0 +1,14 @@
+
+<article>
+	<header>
+		<h1><?=t('Escritorio Virtual II')?></h1>
+		<h2><?=t('Rol del jugador')?></h2>
+	</header>
+
+	<footer>
+		<div class="grid">
+			<a <?=($claves['jugador_rol']=='jugador')?'disabled':''?> role="button" href="/ev/ajustes/guardar/jugador_rol/jugador"><?=t('Soy un jugador')?></a>
+			<a <?=($claves['jugador_rol']=='master')?'disabled':''?> role="button" href="/ev/ajustes/guardar/jugador_rol/master"><?=t('Soy el máster')?></a>
+		</div>
+	</footer>
+</article>

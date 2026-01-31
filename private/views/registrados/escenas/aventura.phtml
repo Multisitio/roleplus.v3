@@ -1,0 +1,54 @@
+
+<div class="escenas" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Escenas')?></h1>
+            <p><?=t('Crea las escenas de la aventura.')?></p>
+        </header>
+        <section>
+            <a role="button" data-ajax=".ajax.show" data-bg_color rel="nofollow" data-style="body, overflow:hidden" href="/registrados/escenas/formulario/<?=$aventura->idu?>"><?=t('Crear una escena')?></a>
+        </section>
+        <footer>
+            <ul>
+                <?php foreach ($escenas as $esc): ?>
+                    <li>
+                        <a href="/registrados/escenas/aventura/<?=$aventura->idu?>/<?=$esc->peso?>"><?=$esc->peso?></a>
+                        <ul>
+                            <?php foreach ($caminos[$esc->idu] as $cam): ?>
+                                <li><blockquote>—<a href="/registrados/escenas/aventura/<?=$aventura->idu?>/<?=$cam->escena?>"><?=$cam->escena?></a></blockquote></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <div class="space-between">
+                <h2><?=h($escena->peso)?></h2>
+
+                <?php if ($escena->usuarios_idu == $usuario->idu): ?>
+                    <a role="button" data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/registrados/escenas/formulario/<?=$aventura->idu?>/<?=$escena->idu?>"><?=Ku::icon('edit')?></a>
+                <?php endif; ?>
+            </div>
+        </header>
+
+        <section>
+            <p><?=nl2br(h($escena->introduccion))?></p>
+        </section>
+
+        <?php if ($escena->fotos): ?>
+            <img alt="<?=t('Portada')?>: <?=$escena->fotos?>" src="/img/usuarios/<?=$escena->usuarios_idu?>/l.<?=$escena->fotos?>">
+        <?php endif; ?>
+
+        <footer>
+            <?php if ( ! empty($caminos[$escena->idu])):
+                foreach ($caminos[$escena->idu] as $cam): ?>
+                <a role="button" href="/registrados/escenas/aventura/<?=$aventura->idu?>/<?=$cam->escena?>"><?=$cam->texto?></a>                    
+                <?php endforeach;
+            endif; ?>
+        </footer>
+    </article>
+</div>

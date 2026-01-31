@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            :root {
+                --background: #fff;
+                --primary: #900;
+            }
+
+            *,
+            *:before,
+            *:after {
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: #f4f4f4;
+                font-family: Arial, sans-serif;
+                line-height: 1.5;
+                margin: 0;
+                padding: 0;
+            }
+
+            main {
+                width: 80%;
+                margin: auto;
+                overflow: hidden;
+            }
+
+            h1 {
+                align-items: center;
+                color: #333;    
+                display: flex;
+                gap: 10px;
+            }
+
+            article {
+                padding: 30px;
+                background-color: #fff;
+                color: #333;
+                margin: 20px 0;
+                border-radius: 10px;
+            }
+
+            button {
+                background: #900;
+                border: none;
+                border-radius: 5px;
+                color: #fff;
+                cursor: pointer;
+                display: block;
+                font: 16px Verdana;
+                margin-block: 0;
+                margin-inline: auto;
+                padding-block: 10px;
+                padding-inline: 30px;
+                text-decoration: none;
+                width: fit-content;
+            }
+
+            .logo {
+                display: inline-block;
+                width: 120px;
+            }
+
+            label b {
+                color: #900;
+                display: block;
+                font-size: small;
+                margin-block: 30px 0;
+            }
+
+            form {
+                display: block;
+                margin-inline: auto;
+                max-width: 480px;
+            }
+
+            input,
+            textarea {
+                border: none;
+                border-bottom: 2px solid #900;
+                min-height: 40px;
+                padding-inline: 10px;
+                padding-block: 10px;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <article>
+                <h1><a href="/" class="logo"><?php include 'img/logos/roleplus.svg'; ?></a> HOLA</h1>
+                <p>Estamos emocionados de embarcarnos <b>en esta nueva etapa de R+</b> y creemos que tienes las habilidades y la pasión para contribuir de manera significativa. <b>Nuestra misión es hacer crecer la comunidad rolera</b> y enfrentamos desafíos como el relevo generacional, espacios seguros y de incentivos para crear y compartir. <b>Si estás interesado en conocer más</b> y unirte a nosotros en este emocionante viaje, <b>presiona:</b></p>
+
+                <form action="/rolelocal/mas_fuerza/<?=$referencia?>" method="post">
+                    <label>
+                        <b>¿Por qué vía prefieres que te contactemos?</b>
+                        <input list="formas" name="forma">
+                    </label>
+                    <datalist id="formas">
+                        <option value="eMail">
+                        <option value="Teléfono">
+                        <option value="Skype">
+                        <option value="StreamYard">
+                        <option value="Otro">
+                    </datalist>
+
+                    <label>
+                        <b>Danos más detalles (eMail, teléfono, usuario para la videoconferencia)</b>
+                        <textarea name="detalles"></textarea>
+                    </label>
+
+                    <p><button>Quiero saber más</button></p>
+                </form>
+
+                <p>Esperamos tener noticias tuyas pronto.</p>
+            </article>
+        </main>
+
+        <img alt="" src="<?=DOMAIN.'imagenes/pixel/'.base64_encode($referencia).'/fuerza24'?>" width="1" height="1">
+    </body>
+</html>

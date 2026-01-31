@@ -1,0 +1,240 @@
+<?php
+/**
+ * Explorador de archivos (partial KumbiaPHP)
+ *
+ * Uso básico en una vista/partial:
+ *   <?php echo View::partial('explorador-archivos'); ?>
+ *
+ * Parámetros opcionales (defínelos antes de incluir el partial):
+ *   $root   string Ruta base desde donde navegar (por defecto DOCUMENT_ROOT)
+ *   $title  string Título a mostrar (por defecto "Archivos del servidor")
+ *   $allow_hidden bool Mostrar archivos ocultos por defecto (false)
+ *   $domain string Dominio base para enlaces absolutos (p. ej. "http://roleplus.vh") opcional
+ *
+ * Requisitos: KumbiaCSS (sin clases/ids), JS vanilla.
+ * Seguridad: bloquea fuga fuera de $root.
+ */
+
+// --- KYSS: helpers compactos y reutilizables ---
+$H = new class {
+    function str_starts_with($h, $n){return strncmp($h, $n, strlen($n))===0;}
+    function e($v){return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');}
+    function human($bytes){
+        $u=['B','KB','MB','GB','TB']; $i=0; $b=max(0,(float)$bytes);
+        while($b>=1024 && $i<count($u)-1){$b/=1024; $i++;}
+        return ($b>0?number_format($b,($i?2:0)):'0')." ".$u[$i];
+    }
+    function webUrl(string $abs, string $base, ?string $domain=null){
+        // Normaliza separadores y recorta base
+        $abs  = str_replace('\\', '/', $abs);
+        $base = rtrim(str_replace('\\', '/', $base), '/');
+        $rel = '';
+        if (strpos($abs, $base) === 0) {
+            $rel = ltrim(substr($abs, strlen($base)), '/');
+        } else {
+            // Fallback: intenta localizar a partir de /public o /web
+            $m = [];
+            if (preg_match('#/(public|web)/(.*)$#i', $abs, $m)) {
+                $rel = $m[2];
+            } else {
+                $rel = ltrim(basename($abs), '/');
+            }
+        }
+        // Prefijo de dominio configurable o deducido del servidor
+        if ($domain) {
+            $prefix = rtrim($domain, '/');
+        } else {
+            $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $host = $_SERVER['HTTP_HOST'] ?? '';
+            $prefix = $host ? ($scheme.'://'.$host) : '';
+        }
+        return ($prefix ? $prefix : '').'/'.ltrim($rel,'/');
+    }
+};
+
+// --- Parámetros y entorno ---
+$base = realpath(isset($root) && $root ? $root : ($_SERVER['DOCUMENT_ROOT'] ?? getcwd()));
+if(!$base){ $base = getcwd(); }
+$title = isset($title) && $title ? $title : 'Archivos del servidor';
+$show_hidden_default = isset($allow_hidden) ? (bool)$allow_hidden : false;
+
+// Parámetros GET limpios (nombre cortos para HTML ligero)
+$q  = isset($_GET['q']) ? trim((string)$_GET['q']) : '';
+$sp = isset($_GET['p']) ? trim((string)$_GET['p']) : '';
+$sh = isset($_GET['h']) ? (bool)$_GET['h'] : $show_hidden_default; // hidden
+$s  = isset($_GET['s']) ? $_GET['s'] : 'name'; // sort key: name|size|time|type
+$o  = isset($_GET['o']) && $_GET['o']==='desc' ? 'desc' : 'asc';
+
+// Resuelve ruta solicitada dentro de base con antitraversal
+$path = realpath($base.'/'.ltrim($sp,'/')) ?: $base;
+if(!$H->str_starts_with($path, $base)) { $path = $base; $sp=''; }
+
+// Lee entradas de directorio
+$entries = [];
+try {
+    $dir = new DirectoryIterator($path);
+    foreach ($dir as $f) {
+        if($f->isDot()) continue;
+        $name = $f->getFilename();
+        if(!$sh && substr($name,0,1)==='.') continue; // oculta dotfiles
+        if($q!=='' && stripos($name, $q)===false) continue; // filtro por texto
+        $entries[] = [
+            'name'=>$name,
+            'is_dir'=>$f->isDir(),
+            'size'=>$f->isDir()?0:$f->getSize(),
+            'mtime'=>$f->getMTime(),
+            'abs'=>$f->getPathname(),
+        ];
+    }
+} catch (Throwable $e) {
+    $entries = [];
+}
+
+// Ordenación
+$sorters = [
+    'name'=>function($a,$b){return strcasecmp($a['name'],$b['name']);},
+    'size'=>function($a,$b){return ($a['size'] <=> $b['size']);},
+    'time'=>function($a,$b){return ($a['mtime'] <=> $b['mtime']);},
+    'type'=>function($a,$b){
+        $ea = $a['is_dir'] ? '' : strtolower(pathinfo($a['name'], PATHINFO_EXTENSION));
+        $eb = $b['is_dir'] ? '' : strtolower(pathinfo($b['name'], PATHINFO_EXTENSION));
+        return strcmp($ea,$eb);
+    },
+];
+$sort = isset($sorters[$s]) ? $s : 'name';
+usort($entries, $sorters[$sort]);
+if($o==='desc') $entries = array_reverse($entries);
+
+// Breadcrumbs
+$crumbs = [];
+$rel = trim(str_replace($base, '', $path), DIRECTORY_SEPARATOR);
+$parts = $rel === '' ? [] : explode(DIRECTORY_SEPARATOR, $rel);
+$accum = '';
+foreach ($parts as $part) {
+    $accum .= '/'.$part;
+    $crumbs[] = ['name'=>$part, 'p'=>ltrim($accum,'/')];
+}
+
+// Utilidad para construir URLs conservando parámetros
+function u($params){
+    $curr = $_GET; foreach($params as $k=>$v){ if($v===null){unset($curr[$k]);} else {$curr[$k]=$v;} } 
+    return '?'.http_build_query($curr);
+}
+?>
+
+<section>
+  <header>
+    <h2><?= $H->e($title) ?></h2>
+    <small><?= $H->e($path) ?></small>
+  </header>
+
+  <nav>
+    <strong>Ruta:</strong>
+    <a href="<?= u(['p'=>null]) ?>">/</a>
+    <?php foreach($crumbs as $i=>$c): ?>
+      &rsaquo; <a href="<?= u(['p'=>$c['p']]) ?>"><?= $H->e($c['name']) ?></a>
+    <?php endforeach; ?>
+  </nav>
+
+  <form method="get">
+    <input type="hidden" name="p" value="<?= $H->e($sp) ?>">
+    <input type="search" name="q" placeholder="Buscar" value="<?= $H->e($q) ?>">
+    <label>
+      <input type="checkbox" name="h" value="1" <?= $sh? 'checked':'' ?>> mostrar ocultos
+    </label>
+    <details>
+      <summary>ordenar</summary>
+      <label><input type="radio" name="s" value="name" <?= $sort==='name'?'checked':''; ?>> nombre</label>
+      <label><input type="radio" name="s" value="type" <?= $sort==='type'?'checked':''; ?>> tipo</label>
+      <label><input type="radio" name="s" value="size" <?= $sort==='size'?'checked':''; ?>> tamaño</label>
+      <label><input type="radio" name="s" value="time" <?= $sort==='time'?'checked':''; ?>> fecha</label>
+      <label>
+        <input type="checkbox" name="o" value="desc" <?= $o==='desc'?'checked':''; ?>> descendente
+      </label>
+    </details>
+    <button type="submit">Aplicar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>nombre</th>
+        <th>tipo</th>
+        <th>tamaño</th>
+        <th>modificado</th>
+        <th>acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php // enlace para subir si no estamos en base
+      if($path !== $base){
+          $parent = ltrim(trim(str_replace($base,'', dirname($path)), DIRECTORY_SEPARATOR),'/');
+          ?>
+          <tr>
+            <td>&uarr; <a href="<?= u(['p'=>$parent]) ?>">..</a></td>
+            <td>dir</td><td>-</td><td>-</td><td>-</td>
+          </tr>
+      <?php } ?>
+
+      <?php foreach($entries as $e):
+        $is_dir = $e['is_dir'];
+        $name = $e['name'];
+        $abs  = $e['abs'];
+        $relp = ltrim(trim(str_replace($base,'', $abs), DIRECTORY_SEPARATOR),'/');
+        $url  = $H->webUrl($abs, $base, isset($domain)?$domain:null);
+        $ext  = $is_dir ? 'dir' : strtolower(pathinfo($name, PATHINFO_EXTENSION) ?: '—');
+      ?>
+        <tr>
+          <td>
+            <?php if($is_dir): ?>
+              📁 <a href="<?= u(['p'=>$relp, 'q'=>null]) ?>"><?= $H->e($name) ?></a>
+            <?php else: ?>
+              📄 <?= $H->e($name) ?>
+            <?php endif; ?>
+          </td>
+          <td><?= $H->e($ext) ?></td>
+          <td><?= $is_dir? '—' : $H->e($H->human($e['size'])) ?></td>
+          <td><?= date('Y-m-d H:i', $e['mtime']) ?></td>
+          <td>
+            <?php if(!$is_dir): ?>
+              <a href="<?= $H->e($url) ?>" target="_blank" rel="noopener">ver</a>
+            <?php else: ?>
+              —
+            <?php endif; ?>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+
+      <?php if(empty($entries)): ?>
+        <tr><td colspan="5"><em>Vacío</em></td></tr>
+      <?php endif; ?>
+    </tbody>
+  </table>
+
+  <footer>
+    <small>Base: <?= $H->e($base) ?></small>
+  </footer>
+</section>
+
+<script>
+// JS Vanilla: filtro instantáneo en cliente (sin clases/ids, usando atributos/estructura)
+(function(){
+  const form = document.currentScript.previousElementSibling.previousElementSibling; // <form>
+  const search = form.querySelector('input[type="search"]');
+  const table = form.nextElementSibling; // <table>
+  const body = table.querySelector('tbody');
+
+  function liveFilter(){
+    const q = (search.value || '').toLowerCase();
+    for(const tr of body.querySelectorAll('tr')){
+      // ignora fila de subir (tiene enlace "..")
+      const firstCell = tr.cells && tr.cells[0];
+      if(!firstCell) continue;
+      const text = firstCell.textContent.toLowerCase();
+      tr.style.display = text.indexOf(q) !== -1 || firstCell.querySelector('a[href*=".."]') ? '' : 'none';
+    }
+  }
+
+  search.addEventListener('input', liveFilter);
+})();
+</script>

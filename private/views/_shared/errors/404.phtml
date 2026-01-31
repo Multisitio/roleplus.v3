@@ -1,0 +1,41 @@
+<?php
+include APP_PATH . 'views/_shared/errors/firewall.phtml';
+?><!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex">
+        <meta name="generator" content="R+">
+        <title>ERROR 404</title>
+        <style>
+            a { color:white; }
+        </style>
+    </head>
+    <body style="background:url('/img/otras/minotauro.png') #00A no-repeat center top">
+        <h1 style="color:white; text-shadow:1px 1px 2px #00A, 0 0 25px #00A, 0 0 5px #00A; font:72px Georgia; margin:0; text-align:center">404</h1>
+        <h2 style="color:white; text-shadow:1px 1px 2px #00A, 0 0 25px #00A, 0 0 5px #00A; font:36px monospace; text-align:center"><?=t('Puerta equivocada')?></h2>
+        <p style="color:white; font:15px monospace; max-width:600px; margin:0 auto 25px; text-align:justify">
+            <?=t('Al abrir la puerta un golpe de viento ha apagado tu antorcha.')?><br>
+            <?=t('Te agachas apoyando la mochila en el suelo.')?><br>
+            <?=t('Te apresuras a buscar la yesca y el pedernal a la vez que maldices esta situación.')?><br>
+            <?=t('El tiempo se para, pues te invade una sensación de peligro inminente.')?><br>
+            <br>
+            <?=t('Mantienes la calma, momentos en los que logras encender de nuevo la antorcha.')?><br>
+            <?=t('Acto seguido agudizas tus sentidos:')?><br>
+            <?=t('1) Al haber hincado la rodilla en el suelo, el pantalón se ha humedecido.')?><br>
+            <?=t('2) No se escucha nada salvo un incesante goteo perturbador.')?><br>
+            <?=t('3) Respiras profundamente y resulta desagradable, pues ahora huele a azufre.')?><br>
+            <?=t('4) Alzas la antorcha para ver más allá de la puerta que acabas de abrir y ves una figura musculada de piel roja, ojos saltones, barbilla protuberante y unos cuernos rectos y grandes, que te hace pensar que estás ante el mismísimo guardián de la mazmorra.')?><br>
+            <?=t('5) Cuando tratas de decir algo no ves venir el golpe. Te desmayas con el sabor de la sangre en la boca.')?><br>
+            <?=t('6) Ahora bien, estás en la habitación del sueño... Cuéntame que ha pasado, de donde venías y a donde ibas a <span class="email-anti-spam">dj at roleplus dot app</span>')?><br>
+            <br>
+            <?=t('Con un poco de suerte, esto simplemente habrá sido un mal sueño y podrás continuar donde lo has dejado.')?><br>
+            <br>
+            <?=t('Por si sirve de algo, tu IP es:')?> <?=$_SERVER['REMOTE_ADDR']?>
+        </p>
+        <div class="center-align col s12 mt15">
+            <?php View::partial('audio', false, ['contenido'=>'/audio/troy_gob.mp3', 'autoplay'=>1, 'hidden'=>1]); ?>
+        </div>
+        <script src="/javascript/404.min.js"></script>
+    </body>
+</html>

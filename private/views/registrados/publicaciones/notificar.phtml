@@ -1,0 +1,4 @@
+<?php
+$campana = empty($notificar[$idu]) ? '-off' : '';
+?>
+<a rel="nofollow" href="/registrados/publicaciones/notificar/<?=$idu?>" data-ajax=".silenciar-<?=$idu?>" title="<?=t('Notificar comentarios.')?>"><img alt="<?=empty($campana)?'Desa':'A'?><?=t('activar notificaciones')?>" height="30" loading="lazy" src="/img/icons/bell<?=$campana?>.svg" width="30"></a>

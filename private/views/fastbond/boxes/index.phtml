@@ -1,0 +1,23 @@
+
+<?=Form::open()?>
+    <fieldset>
+        <legend>Box</legend>
+        <?=Form::label('Name:', "box_name")?><br>
+        <?=Form::input('text', "box_name")?><br>
+
+        <ul class="tabs">
+            <li data-active=".tabs li" data-hide=".css, .js" data-show=".html" class="active">HTML</li>
+            <li data-active=".tabs li" data-hide=".html, .js" data-show=".css">CSS</li>
+            <li data-active=".tabs li" data-hide=".css, .html" data-show=".js">JS</li>
+        </ul>
+        <div class="html">
+            <?=Form::textarea('text', "html")?>
+        </div>
+        <div class="css hide">
+            <?=Form::textarea('text', "css")?>
+        </div>
+        <div class="js hide">
+            <?=Form::textarea('text', "js")?>
+        </div>
+    </fieldset>
+<?=Form::close()?>

@@ -1,0 +1,21 @@
+
+<div data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Crea tu propio grupo')?></h1>
+            <small><i><?=t('Solo hay que tener en cuenta que si el grupo hace referencia a un producto con derechos de autor, sus propietarios podrían solicitar el control del mismo.')?></i></small>
+        </header>
+        <section>
+        </section>
+        <footer>
+            <br>
+			<?=Kubox::linkColor(attrs: 'data-ajax=".ajax.show" data-style="body, overflow:hidden"', href: 'registrados/grupos/editor', label: t('Crear grupo'))?>
+        </footer>
+    </article>
+    <?php include APP_PATH . 'views/grupos/listado.phtml'; ?>
+</div>
+<?php /*<div class="w3-clear"></div>
+<a class="btn col s6 offset-s3 h33 mt25 mostras-mas"
+    data-load_append_to="#grid"
+    data-pagina="<?=$pagina?>"
+    href="/grupos/index/">Mostrar más</a>*/

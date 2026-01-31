@@ -1,0 +1,56 @@
+
+<div class="s12 traducciones" id="grid" data-columns>
+    <form method="post">
+        <article>
+            <header>
+                <h1><?=t('Traducciones')?></h1>
+            </header>
+            <section>
+            </section>
+            <footer>
+                <a role="button" href="/atalaya/traducciones/obtener"><?=t('Obtener traducciones')?></a><br>
+                <br>
+                <a role="button" class="outline" href="/atalaya/traducciones/aplicar"><?=t('Generar archivo')?></a>
+            </footer>
+        </article>
+    </form>
+
+    <?php foreach($propuestas as $pro): ?>
+        <form method="post">
+            <article>
+                <header>
+                    <h2>
+                        <?=Usuario::avatar($pro)?>
+                        <?=$pro->apodo?><br>
+                        <?=t('Traducción en')?> <?=$idiomas[$pro->idioma]?>
+                    </h2>
+                </header>
+                <section>
+                    <label><?=t('Fuente original (ES)')?>:</label>
+                    <?=$pro->traducir?><br>
+                    <br>
+                    <label><?=t('Traducción actual')?>:</label>
+                    <?=$pro->traduccion?><br>
+                    <br>
+                    <label><?=t('Propuesta de traducción')?>:</label>
+                    <?=$pro->propuesta?><br>
+                    <br>
+                    <label><?=t('Comentario para el supervisor')?>:</label>
+                    <?=$pro->comentario_traductor?><br>
+                    <br>
+                    <label><?=t('Comentario para el traductor')?>:</label>
+                    <textarea name="comentario_supervisor[<?=$pro->id?>]"><?=empty($_POST['comentario_supervisor'][$pro->id])?'':$_POST['comentario_supervisor'][$pro->id]?></textarea>
+
+                    <input type="text" name="experiencia[<?=$pro->id?>]" placeholder="PX..." value="<?=empty($_POST['experiencia'][$pro->id])?'':$_POST['experiencia'][$pro->id]?>">
+                </section>
+                <footer class="grid">
+                    <button type="submit" name="action" value="aceptar_propuesta"><?=t('Aceptar')?></button>
+                    <button type="submit" class="outline" name="action" value="rechazar_propuesta"><?=t('Rechazar')?></button>
+                </footer>
+            </article>
+            <input type="hidden" name="id" value="<?=$pro->id?>">
+            <input type="hidden" name="idioma" value="<?=$pro->idioma?>">
+            <input type="hidden" name="usuarios_idu" value="<?=$pro->usuarios_idu?>">
+        </form>
+    <?php endforeach; ?>
+</div>

@@ -1,0 +1,247 @@
+<?php
+require VENDOR_PATH . 'phpmailer/phpmailer/src/PHPMailer.php';
+use PHPMailer\PHPMailer\PHPMailer;
+
+/**
+ * Función que reemplaza en el HTML todos los enlaces rotos por "[Enlace roto]".
+ *
+ * @param string $html Contenido HTML a analizar.
+ * @return string HTML modificado con los enlaces rotos reemplazados.
+ */
+function replaceBrokenLinks($html) {
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    // Cargamos el HTML sin forzar etiquetas html/body adicionales.
+    $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    $links = $dom->getElementsByTagName('a');
+
+    // Almacenamos los nodos a reemplazar en un array, ya que la lista es "en vivo".
+    $linksToReplace = [];
+    foreach ($links as $link) {
+        $href = $link->getAttribute('href');
+        if (!empty($href)) {
+            $ch = curl_init($href);
+            curl_setopt($ch, CURLOPT_NOBODY, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($httpCode >= 400 || $httpCode == 0) {
+                $linksToReplace[] = $link;
+            }
+        }
+    }
+    // Reemplazamos cada enlace roto por un nodo de texto "[Enlace roto]".
+    foreach ($linksToReplace as $link) {
+        $textNode = $dom->createTextNode("[Enlace roto]");
+        $link->parentNode->replaceChild($textNode, $link);
+    }
+    return $dom->saveHTML();
+}
+
+/**
+ * Obtiene la URL de la imagen y el enlace asociado de la publicación.
+ */
+function getFoto($pub, $vistas_previas) {
+    $foto = '';
+    $enlace = '';
+    if (!empty($pub->fotos)) {
+        $foto = DOMAIN . "img/usuarios/$pub->usu_idu" .
+            (preg_match('/(jpeg|jpg|png)$/', $pub->fotos) ? '/m.' : '/') .
+            (strpos($pub->fotos, ',') !== false ? explode(',', $pub->fotos, 2)[0] : $pub->fotos);
+    } elseif (!empty($vistas_previas[$pub->idu][0]->image)) {
+        $enlace = $vistas_previas[$pub->idu][0]->url;
+        $foto = DOMAIN . 'img/vistas_previas/' . $vistas_previas[$pub->idu][0]->idu .
+            (preg_match('/(jpeg|jpg|png)$/', $vistas_previas[$pub->idu][0]->image) ? '/m.' : '/') .
+            $vistas_previas[$pub->idu][0]->image;
+    } elseif ($pub->enlace) {
+        $enlace = $pub->enlace;
+        $foto = 'https://i.ytimg.com/vi/' . _var::getUrlVar($pub->enlace) . '/hqdefault.jpg';
+    }
+    return [$foto, $enlace];
+}
+
+/**
+ * Reemplaza los marcadores de baja y pixel en el contenido HTML.
+ */
+function replacePlaceholders($contenido, $unsubscribeUrl, $usuarioEmail, $boletin) {
+    $contenido = str_replace(
+        '<span class="baja_del_boletin"></span>',
+        '<a href="'.$unsubscribeUrl.'">QUIERO DARME DE BAJA DEL BOLETÍN Y SUCESIVAS COMUNICACIONES PASIVAS</a>',
+        $contenido
+    );
+    $contenido = str_replace(
+        '<span class="pixel"></span>',
+        '<img alt="" src="'.DOMAIN.'imagenes/pixel/'.base64_encode($usuarioEmail).'/'.$boletin.'" width="1" height="1">',
+        $contenido
+    );
+    return $contenido;
+}
+
+// Comenzamos a capturar el HTML del boletín.
+ob_start();
+$titulo = t('Boletín de R+').' | '.t('Semana').' '.date("W", strtotime("-1 week")).' ('.date('Y').')';
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=yes">
+    <title><?= $titulo ?></title>
+    <style>
+        a { color: #900; text-decoration: none; }
+        a.tag:before { content: "#"; }
+        body { background: #FFE; font-family: monospace; max-width: 640px; }
+        header [src*="/logo"] { float: right; }
+    </style>
+</head>
+<body>
+    <header id="indice">
+        <h1><?= $titulo ?></h1>
+        <a href="<?= DOMAIN ?>">
+            <img alt="<?= t('Logo de R+') ?>" src="<?= DOMAIN ?>img/logos/LogoROLEplus512.png" width="96">
+        </a>
+        <p>
+            Hola, <b>a continuación, encontrarás</b> un resumen de las 
+            <b><?= count($publicaciones) ?> publicaciones</b> de la semana pasada. Una dosis sustancial de información de calidad diseñada 
+            <b>para mantenerte actualizado</b> rápidamente sobre nuestro fascinante universo.
+        </p>
+        <p>
+            No olvides que <b>contamos con</b> un canal en Telegram donde 
+            <b>una inteligencia artificial</b> replica todo lo publicado en R+. ¡Échale un vistazo aquí: 
+            <a href="https://t.me/+Kw24CgNrEMFlNjg8" target="_blank">https://t.me/+Kw24CgNrEMFlNjg8</a>
+        </p>
+        <p>
+            Sin más preámbulos, <b>¡disfruta de la lectura!</b>
+        </p>
+        <hr>
+    </header>
+    <main>
+        <?php foreach ($publicaciones as $pub): 
+            $url = DOMAIN . "publicaciones/$pub->slug";
+            // Aseguramos que los enlaces relativos se conviertan en absolutos.
+            $pub->contenido_formateado = str_replace('"/grupos/ver', '"'.DOMAIN.'grupos/ver', $pub->contenido_formateado); ?>
+            <article id="<?= $pub->idu ?>">
+                <header>
+                    <a href="<?= $url ?>"><h2><?= $pub->titulo ?></h2></a>
+                </header>
+                <blockquote>
+                    <section>
+                        <?php if (_str::count_files($pub->contenido_formateado) > 4): ?>
+                            <?= _str::truncate_files($pub->contenido_formateado, 4) ?><br>
+                            <a href="<?= $url ?>">[<?= t('Más, dame más') ?>]</a>
+                        <?php else: 
+                            echo $pub->contenido_formateado;
+                        endif; ?>
+
+                        <?php if (!empty($encuestas[$pub->idu])):
+                            $total = 0;
+                            foreach ($encuestas[$pub->idu] as $una) {
+                                $total += $una->votos;
+                            }
+                            foreach ($encuestas[$pub->idu] as $una):
+                                $per = empty($una->votos) ? 0 : round($una->votos * 100 / $total); ?>
+                                <div>(<b class="right"><?= $per ?>%</b>) <?= $una->opcion ?></div>
+                                <progress max="100" value="<?= $per ?>"></progress>
+                            <?php endforeach; ?>
+                            <br>
+                            <b><?= t('Votos') ?>:</b> <?= $total ?>
+                        <?php endif; ?>
+                    </section>
+                    <br>
+                    <?php list($foto, $enlace) = getFoto($pub, $vistas_previas); ?>
+                    <?php if ($foto): ?>
+                        <picture>
+                            <img alt="<?= $foto ?>" src="<?= $foto ?>" width="384">
+                            <?php if ($enlace): ?>
+                                <br>
+                                <figcaption>
+                                    <small><a href="<?= $enlace ?>"><?= $enlace ?></a></small>
+                                </figcaption>
+                            <?php endif; ?>
+                        </picture>
+                    <?php endif;
+                    if ($pub->comentarios): ?>
+                        <br>
+                        <a href="<?= $url ?>"><b><?= t('Comentarios') ?>:</b> <?= $pub->comentarios ?></a>
+                    <?php endif; ?>
+                </blockquote>
+                <footer>
+                    <b><?= $pub->apodo ?></b><br>
+                    <small><time><?=_date::format($pub->publicado, 'd-m-Y H:i')?></time></small><br>
+                </footer>
+            </article>
+            <br>
+            <hr>
+        <?php endforeach; ?>
+    </main>
+    <footer>
+        <p>
+            <small>
+                Este correo electrónico y sus posibles archivos adjuntos son confidenciales y están dirigidos únicamente a la persona o entidad a la que van dirigidos. Si no es usted el destinatario, se le informa que la utilización, divulgación o copia sin autorización está prohibida. En cumplimiento con la normativa de protección de datos, sus datos serán tratados para mantenerle informado sobre novedades y mejorar su experiencia. Puede ejercer sus derechos o darse de baja pulsando en <span class="baja_del_boletin"></span>.
+            </small>
+        </p>
+        <p>
+            Para cualquier otra consulta, puede escribir a <a href="mailto:dj@roleplus.app">dj@roleplus.app</a>.
+        </p>
+        <p>
+            <a href="<?= DOMAIN ?>"><img alt="<?= t('Logo de R+') ?>" src="<?= DOMAIN ?>img/logos/LogoROLEplus512.png" width="96"></a>
+        </p>
+    </footer>
+    <span class="pixel"></span>
+</body>
+</html>
+<?php
+$contenido = ob_get_contents();
+ob_end_clean();
+
+// Reemplazamos los enlaces rotos por "[Enlace roto]" en el contenido global
+$contenido = replaceBrokenLinks($contenido);
+
+if ($accion == 'enviar'):
+    $year = date('y');
+    $week = date("W", strtotime("-1 week"));
+    $boletin = "boletin-$year-$week";
+
+    // Definimos un array de usuarios, por ejemplo:
+    /*unset($usuarios);
+    $usuarios[0] = new stdClass();
+    $usuarios[0]->email = 'test-sxs98uif8@srv1.mail-tester.com';
+    $usuarios[0]->token = 'token';*/
+
+    foreach ($usuarios as $usuario):
+        $unsubscribeUrl = DOMAIN . 'usuarios/baja_del_boletin/' . $usuario->token;
+        $contenido_modificado = replacePlaceholders($contenido, $unsubscribeUrl, $usuario->email, $boletin);
+        
+        // Si el email es de dominio interno, se usa otro método de envío.
+        if (strpos($usuario->email, '@roleplus.app') !== false) {
+            _mail::send($usuario->email, $titulo, $contenido_modificado);
+            continue;
+        }
+        
+        $mail = new PHPMailer();
+        $mail->CharSet = 'UTF-8';
+        $mail->Body = $contenido_modificado;
+        $mail->setFrom("ia@roleplus.app", '');
+        $mail->Subject = $titulo;
+        $mail->AddAddress($usuario->email);
+        $mail->IsHTML(true);
+        
+        // Configuración DKIM
+        $mail->DKIM_domain = 'roleplus.app';
+        $mail->DKIM_selector = 'default';
+        $mail->DKIM_private = '/etc/opendkim/keys/roleplus.app/default.private';
+        $mail->DKIM_passphrase = '';
+        $mail->DKIM_identity = $mail->From;
+        
+        // Encabezado List-Unsubscribe
+        $mail->addCustomHeader('List-Unsubscribe', '<' . $unsubscribeUrl . '>');
+        
+        $mail->Send();
+        unset($mail);
+        sleep(36);
+    endforeach;
+endif;
+
+echo $contenido;

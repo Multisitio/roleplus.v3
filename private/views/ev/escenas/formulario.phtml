@@ -1,0 +1,179 @@
+
+<article>
+	<form enctype="multipart/form-data" method="post">
+		<header>
+			<h1><?=$aventura->nombre?></h1>
+			<h2><?=t('Escena')?></h2>
+		</header>
+
+		<section class="grid">
+			<div class="s3">
+				<label><?=t('Peso')?></label>
+				<input type="text" name="peso" placeholder="<?=t('Número...')?>" value="<?=$escena->peso?>">
+			</div>
+			<div class="s9">
+				<label><?=t('Título')?></label>
+				<input type="text" name="nombre" placeholder="<?=t('Título de la escena...')?>" value="<?=$escena->nombre?>">
+			</div>
+		</section>
+
+		<section>
+			<label><?=t('Introdución')?></label>
+			<textarea name="introduccion" placeholder="<?=t('Texto para atraer a los máster...')?>"><?=$escena->introduccion?></textarea>
+
+			<label class="dropimage mh20 mt20">
+				<input type="file" name="imagenes[]">
+				<?php if ($escena->fotos): ?>
+					<img alt="<?=t('Imagen de la partida:')?> <?=$escena->nombre?>" src="/img/usuarios/<?=$escena->usuarios_idu?>/l.<?=$escena->fotos?>">
+				<?php endif; ?>
+			</label>
+		</section>
+
+		<footer class="grid">
+			<?php if ($escena->idu): ?>
+				<button type="submit" class="mas-acciones" name="action" value="actualizar"><?=t('Actualizar')?></button>
+				<a role="button" class="mas-acciones outline" href="/ev/escenas/formulario/<?=$aventura->idu?>" style="display:none"><?=t('Nueva')?></a>
+			<?php else: ?>
+				<button type="submit" name="action" value="crear"><?=t('Crear')?></button>
+			<?php endif; ?>
+
+			<?php if ($escena->idu): ?>
+				<button type="button" class="mas-acciones outline" data-toggle=".mas-acciones"><?=t('Más opciones')?></button>
+				<button type="submit" class="mas-acciones outline" name="action" value="crear" style="display:none"><?=t('Duplicar')?></button>
+				<a role="button" class="mas-acciones outline" href="/ev/escenas/eliminar/<?=$aventura->idu?>/<?=$escena->idu?>" style="display:none"><?=t('Eliminar')?></a>
+				<input type="hidden" name="idu" value="<?=$escena->idu?>">
+				<input type="hidden" name="fotos" value="<?=$escena->fotos?>">
+			<?php endif; ?>
+
+			<a role="button" class="mas-acciones outline" href="/ev/escenas/aventura/<?=$aventura->idu?>"><?=t('Escenas')?></a>
+
+			<?php if ( ! $escena->idu): ?>
+				<a role="button" class="mas-acciones outline" href="/ev/aventuras"><?=t('Aventuras')?></a>
+			<?php endif; ?>
+
+			<button type="button" class="mas-acciones outline" data-toggle=".mas-acciones" style="display:none"><?=t('Menos opciones')?></button>
+		</footer>
+		<input type="hidden" name="aventuras_idu" value="<?=$aventura->idu?>">
+	</form>
+</article>
+
+<?php foreach ($elementos as $ele): ?>
+	<article>
+		<header>
+			<h3><small><?=$ele->peso?>.</small> <?=$ele->nombre?></h3>	
+			<h4><?=$tipos[$ele->tipo]?></h4>
+		</header>
+
+		<section>
+			<?php if ($ele->fotos): ?>
+				<img alt="<?=t('Imagen del elemento:')?> <?=$ele->nombre?>" src="/img/usuarios/<?=$ele->usuarios_idu?>/l.<?=$ele->fotos?>">
+			<?php endif; ?>
+
+			<?php if ($ele->mp3): ?>
+				<h4><?=t('Archivo de audio:')?> <?=$ele->mp3?></h4>
+				<label><<?=t('Bucle:')?> <input type="checkbox" class="loop"></label>
+				<audio class="mp3_<?=$ele->idu?>" controls>
+					<source type="audio/mpeg" src="/mp3/<?=$ele->mp3?>">
+					Your browser does not support the audio element.
+				</audio>
+			<?php endif; ?>
+
+			<?php if ($ele->mp4): ?>
+				<img alt="<?=t('Archivo de vídeo:')?> <?=$ele->nombre?>" src="/img/mp4/<?=$ele->mp4?>">
+			<?php endif; ?>
+
+			<?php if ($ele->texto): ?>
+				<?=nl2br($ele->texto, false)?>
+			<?php endif; ?>
+
+			<?php if ($ele->youtube): ?>
+				<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" src="https://www.youtube.com/embed/<?=$ele->youtube?>"></iframe>
+			<?php endif; ?>
+		</section>
+
+		<footer class="grid">
+			<a role="button" href="/ev/escenas/formulario/<?=$aventura->idu?>/<?=$ele->escenas_idu?>/<?=$ele->idu?>"><?=t('Editar')?></a>
+			<a role="button" class="outline" href="/ev/escenas/elemento_eliminar/<?=$aventura->idu?>/<?=$ele->escenas_idu?>/<?=$ele->idu?>"><?=t('Eliminar')?></a>
+		</footer>
+	</article>
+<?php endforeach; ?>
+
+<?php if ($escena->idu): ?>
+	<article>
+		<form enctype="multipart/form-data" id="elemento" method="post">
+			<header>
+				<h3><?=t('Elemento')?></h3>
+			</header>
+
+			<section>
+				<label><?=t('Tipo')?></label>
+				<select name="tipo" data-change=".caja">
+					<?php foreach ($tipos as $key => $val):
+						$selected = ($elemento->tipo == $key) ? 'selected' : ''; ?>
+						<option <?=$selected?> value="<?=$key?>"><?=$val?></option>
+					<?php endforeach; ?>
+				</select>		
+			</section>	
+
+			<section class="grid">
+				<div class="s3">
+					<label><?=t('Peso')?></label>
+					<input type="text" name="peso" placeholder="<?=t('Número...')?>" value="<?=$elemento->peso?>">
+				</div>
+				<div class="s9">
+					<label><?=t('Nombre')?></label>
+					<input type="text" name="nombre" placeholder="<?=t('Nombre')?>..." value="<?=$elemento->nombre?>">
+				</div>
+			</section>
+
+			<?php $hide = 'style="display:none"'; ?>
+			<section>
+				<div class="caja texto" <?=(empty($elemento->tipo) or ($elemento->tipo=='texto'))?'':$hide?>>
+					<label><?=t('Texto')?></label>
+				</div>
+
+				<div class="caja fotos mt15" <?=($elemento->tipo=='fotos')?'':$hide?>>
+					<label class="dropimage mt15">
+						<input type="file" name="imagenes[]">
+						<?php if ($elemento->fotos): ?>
+							<img alt="<?=t('Imagen del elemento:')?> <?=$elemento->nombre?>" src="/img/usuarios/<?=$elemento->usuarios_idu?>/l.<?=$elemento->fotos?>">
+							<input type="hidden" name="fotos" value="<?=$elemento->fotos?>">
+						<?php endif; ?>
+					</label>
+					<label class="mt15"><?=t('Texto al pie de la imagen')?></label>
+				</div>
+
+				<div class="caja fotos texto" <?=(empty($elemento->tipo) || $elemento->tipo=='fotos' || $elemento->tipo=='texto')?'':$hide?>>
+					<textarea name="texto"><?=$elemento->texto?></textarea>
+				</div>
+
+				<div class="caja mp3" <?=($elemento->tipo=='mp3')?'':$hide?>>
+					<label><?=t('Un archivo MP3:')?> <?=$elemento->mp3?></label>
+					<input type="file" name="mp3[]">
+				</div>
+
+				<div class="caja mp4" <?=($elemento->tipo=='mp4')?'':$hide?>>
+					<label><?=t('Un archivo MP4:')?> <?=$elemento->mp4?></label>
+					<input type="file" name="mp4[]">
+				</div>
+
+				<div class="caja youtube" <?=($elemento->tipo=='youtube')?'':$hide?>>
+					<label><?=t('Enlace')?></label>
+					<input type="text" name="youtube" value="https://youtu.be/<?=$elemento->youtube?>">
+				</div>
+			</section>
+
+			<footer class="grid">
+				<?php if ($elemento->idu): ?>
+					<button type="submit" name="action" value="elemento_actualizar"><?=t('Actualizar')?></button>
+					<a role="button" class="outline" href="/ev/escenas/formulario/<?=$aventura->idu?>/<?=$escena->idu?>"><?=t('Nueva')?></a>
+					<input type="hidden" name="elementos_idu" value="<?=$elemento->idu?>">
+				<?php else: ?>
+					<button type="submit" name="action" value="elemento_crear"><?=t('Crear')?></button>
+				<?php endif; ?>
+			</footer>
+			<input type="hidden" name="aventuras_idu" value="<?=$aventura->idu?>">
+			<input type="hidden" name="escenas_idu" value="<?=$escena->idu?>">
+		</form>
+	</article>
+<?php endif; ?>

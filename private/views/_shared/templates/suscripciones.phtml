@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <title><?=empty($title)?ucwords("$controller_name > $action_name"):$title?></title>
+
+        <link href="/css/suscripciones.min.css?v=<?=$version?>" rel="stylesheet">
+    </head>
+    <body class="w3-row padding">
+        <div class="fondo"></div>
+
+        <main><?php View::content(); ?></main>
+
+        <script src="https://www.paypal.com/sdk/js?client-id=AejtOUPCuVfmQzL50ydXaJbqDpWAQ6_A3LHkxC6pKzB9abJG2WmlfTbs9dLZF7wg_HvyRfKkQmTvdPtk&vault=true" data-sdk-integration-source="button-factory"></script>
+        
+        <script src="/javascript/suscripciones.min.js?v=<?=$version?>"></script>
+    </body>
+</html>

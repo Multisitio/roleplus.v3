@@ -1,0 +1,266 @@
+
+<div class="tienda" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Aquí puedes adquirir PX rápidamente')?></h1>
+            <br>
+            <small>
+                <?php if ( ! empty($usuario->rol_base)): ?>
+                    <p><b><?=t('Tu rol sin suscripción es')?>:</b> <?=$roles[$usuario->rol_base]?>.<br>
+                <?php endif; ?>
+                <?php if ($usuario->socio): ?>
+                    <b><?=t('Con suscripción')?>:</b> <?=$roles[$usuario->rol]?>.<br>
+                <?php endif; ?>
+            </small>
+            <b><?=t('Tus puntos de experiencia (PX)')?>:</b> <?=$usuario->experiencia?></p>
+            <br>
+        </header>
+        <section>
+            <div class="auto mb10">
+                <?php View::partial('suscribirse', false, ['id'=>'77X96XU5VGSMC', 'texto'=>t('Adquirir 100PX x 1€')]); ?>
+                <?php View::partial('suscribirse', false, ['id'=>'WX2ZD4C5VN5NJ', 'texto'=>t('Adquirir 500PX x 5€')]); ?>
+            </div>
+            <div class="auto">
+                <?php View::partial('suscribirse', false, ['id'=>'PZWWH35E4M26Y', 'texto'=>t('Adquirir 1000PX x 10€')]); ?>
+                <?php View::partial('suscribirse', false, ['atributos'=>'class="w100" data-bg_color', 'id'=>'3LZP4QWQ8LEXJ', 'texto'=>t('Adquirir 5000PX x 50€')]); ?>
+            </div>
+            <br>
+        </section>
+        <footer>
+            <small><?=t('Es <b>importante volver a R+ desde PayPal</b> después de la compra para que se apliquen los cambios automáticamente. De lo contrario será un administrador quien tenga que completar el proceso en un tiempo mayor.')?></small>
+        </footer>
+    </article>
+
+    <?=Form::open('registrados/tienda/canjear_codigo')?>
+        <article>
+            <header>
+                <h2><?=t('Recompensas por códigos')?></h2>
+                <br>
+                <p><?=t('Si tienes un código de regalo, aquí lo puedes canjear.')?>
+            </header>
+            <section>
+                <br>
+                <div class="auto bottom">
+                    <?=Kubox::input(type: 'text',
+                        label: t('El código por canjear'),
+                        placeholder: t('Aquí el código'),
+                        name: 'codigo')?>
+                    <?=Kubox::buttonSubmitColor(label: t('Canjear'))?>
+                </div>
+                <br>
+            </section>
+            <footer></footer>
+        </article>
+    <?=Form::close()?>
+
+    <article>
+        <header>
+            <h2><?=t('Págate un café, ¿no? No me seas agarrado... :--)')?></h2>
+            <br>
+            <p><?=t('El programador de esta plataforma necesita de vez en cuando una buena dosis de cafeína para ejercer su labor con energía y entusiasmo, un cafe puntual o periódicamente por la cantidad deseada vía PayPal pulsando alguno de estos botones:')?></p>
+        </header>
+        <footer>
+            <br>
+            <div class="auto">
+                <?=Html::externalLinkButtonOutline(t('Con Kofi'), 'https://ko-fi.com/roleplus')?>
+                <?php View::partial('suscribirse', false, ['atributos'=>'class="w100" data-bg_color', 'id'=>'58HFSRCHHRWDN', 'texto'=>t('Con PayPal')]); ?>
+            </div>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2><?=t('Camisetas y otros regalos')?></h2>
+            <br>
+            <p><?=t('Entra en a nuestra tienda de regalos de La tostadora y apóyanos comprando tanto como estime su generosidad o pasión por lo que hacemos aquí en R+.')?></p>
+            <br>
+        </header>
+        <img src="/img/tienda/l.Camiseta.png">
+        <section>
+            <br>
+            <p><?=t('Personaliza tu camiseta o cualquier otra prenda eligiendo color, talla y usando los diseños de R+ con el texto que desee, así como lienzos, cuadros o fundas para móviles, pulsando aquí:')?></p>
+            <br>
+        </section>
+        <footer>  
+            <a role="button" data-bg_color href="https://www.latostadora.com/roleplus/" rel="noopener noreferrer" target="_blank"><?=t('Ir a la tienda de R+ en La Tostadora')?></a>
+        </footer>  
+    </article>
+
+    <article>
+        <header>
+            <h2><?=t('Nivel 1: Hoplita')?></h2>
+            <br>
+            <p><?=t('Eres el Hoplita y formas el grueso del ejercito. Eres vanguardia, eres legión, no le temes a nada y siempre eres el primero en generar impacto')?>.</p>
+            <br>
+            <p><?=t('Tú atributo es la FUErza')?>.</p>
+            <br>
+        </header>
+        <section>
+            <p><?=t('Cuando el goblin llega a esta ciudad que llamamos R+ y se registra como ciudadano, se convierte en Hoplita ganando')?>:<br>
+            <br>
+            + 300 <?=t('PX')?>.<br>
+            + <?=t('Acceso a la tienda de R+')?>.<br>
+            + <?=t('Acceso al Telegram público de R+')?>.<br>
+            + <?=t('Acceso como jugador al Escritorio Virtual')?>.<br>
+            + <?=t('Acceso para publicar banners publicitarios')?>.<br>
+            <b>+ <?=t('Modo oscuro y un color principal entre 18')?>.</b><br>
+            + <?=t('Poder activar el modo de solo una columna')?>.<br>
+            + <?=t('Poder crear hojas de personaje editables')?>.<br>
+            + <?=t('Poder escribir comandados en el chat para arrojar dados')?>:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<small><i>/r 2d6 <?=t('o')?> /r 3dred10 <?=t('si se quiere especificar un color')?>.</i></small></p>
+            <br>
+            <img src="/img/usuarios/l.Hoplita_<?=($usuario->rol==1)?'C':'BN'?>.png">
+        </section>
+        <footer>
+            <br>
+            <p><b><?=t('Ventajas conseguidas')?>.</b></p>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h4><?=t('Nivel 2: Trampero')?></h4>
+            <br>
+            <p><?=t('Eres el Trampero y una pieza importante de la exploración; llevas por camino seguro al grueso del ejercito y a los enemigos hacia tus trampas')?>.</p>
+            <br>
+            <p><?=t('Tú atributo es la DEStreza')?>.</p>
+            <br>
+        </header>
+        <section>
+            <p><?=t('Cuando el goblin Hoplita consigue 2000 PX puede invertirlos para convertirse en Trampero y ganar')?>:<br>
+            <br>
+            + <?=t('Acceso a las estadísticas de R+')?>.<br>
+            + <?=t('Acceso al acortador de URL de R+')?>.<br>
+            <b>+ <?=t('Botonera para lanzar dados en el chat')?>.</b><br>
+            + <?=t('Poder crear cronologías.')?>.<br>
+            + <?=t('Poder silenciar las notificaciones +1')?>.<br>
+            + <?=t('Todo lo incluido en roles inferiores')?>.</p>
+            <br>
+            <img src="/img/usuarios/l.Trampero_<?=($usuario->rol==2)?'C':'BN'?>.png">
+        </section>
+        <footer>
+            <br>
+            <?php if ($usuario->rol == 1): ?>
+                <a role="button" rel="nofollow" href="/registrados/tienda/comprar_rol/2"><?=t('Comprar por')?> 2000 PX</a>
+            <?php elseif ($usuario->rol > 1): ?>
+                <p><b><?=t('Ventajas conseguidas')?>.</b></p>
+            <?php endif; ?>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h4><?=t('Nivel 3: Portaestandarte')?></h4>
+            <br>
+            <p><?=t('Eres el Portaestandarte y marcas el terreno conquistado tras la batalla. Tocas el cuerno que llena de alegría nuestros corazones y de terror el de los enemigos')?>.</p>
+            <br>
+            <p><?=t('Tú atributo es la CONstitución')?>.</p>
+            <br>
+        </header>
+        <section>
+            <p><?=t('Cuando el goblin Trampero consigue 3000 PX puede invertirlos para convertirse en Portaestandarte y ganar')?>:<br>
+            <br>
+            + <?=t('Acceso al lector RSS de blogs')?>.<br>
+            <b>+ <?=t('Acceso al lector RSS de YouTube')?>.</b><br>
+            + <?=t('Sección para ver solo lo que sigues')?>.<br>
+            + <?=t('Sección para ganar PX corrigiendo traducciones')?>.<br>
+            + <?=t('Todo lo incluido en roles inferiores')?>.</p>
+            <br>
+            <img src="/img/usuarios/l.Portaestandarte_<?=($usuario->rol==3)?'C':'BN'?>.png">
+        </section>
+        <footer>
+            <br>
+            <?php if ($usuario->rol == 2): ?>
+                <a role="button" rel="nofollow" href="/registrados/tienda/comprar_rol/3"><?=t('Comprar por')?> 3000 PX</a>
+            <?php elseif ($usuario->rol > 2): ?>
+                <p><b><?=t('Ventajas conseguidas')?>.</b></p>
+            <?php endif; ?>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h4><?=t('Nivel 4: Azotamentes')?></h4>
+            <br>
+            <p><?=t('Eres el Azotamentes y te encargas de obtener información de los enemigos caídos que aún siguen con vida. Eres despiadado, sin escrúpulos, pero efectivo en la tortura')?>.</p>
+            <br>
+            <p><?=t('Tú atributo es la INTeligencia')?>.</p>
+            <br>
+        </header>
+        <section>
+            <p><?=t('Cuando el goblin Portaestandarte consigue 4000 PX puede invertirlos para convertirse en Azotamentes y ganar')?>:<br>
+            <br>
+            + <?=t('Acceso al Telegram privado de R+')?>.<br>
+            + <?=t('ROLEFLIX, para ver mejor los vídeos de YouTube')?>.<br>
+            <b>+ <?=t('Poder publicar propuestas para mejorar R+')?>.</b><br>
+            + <?=t('Poder ver solo lo que se comenta')?>.<br>
+            + <?=t('Todo lo incluido en roles inferiores')?>.</p>
+            <br>
+            <img src="/img/usuarios/l.Azotamentes_<?=($usuario->rol==4)?'C':'BN'?>.png">
+        </section>
+        <footer>
+            <br>
+            <?php if ($usuario->rol == 3): ?>
+                <a role="button" rel="nofollow" href="/registrados/tienda/comprar_rol/4"><?=t('Comprar por')?> 4000 PX</a>
+            <?php elseif ($usuario->rol > 3): ?>
+                <p><b><?=t('Ventajas conseguidas')?>.</b></p>
+            <?php endif; ?>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h4><?=t('Nivel 5: Chamán')?></h4>
+            <br>
+            <p><?=t('Eres el Chamán y desde la retaguardia levantas a los nuestros curando sus heridas. Tienes poder, conocimientos mágicos y tu sola presencia inspira valor al resto')?>.</p>
+            <br>
+            <p><?=t('Tú atributo es la SABiduría')?>.</p>
+            <br>
+        </header>
+        <section>
+            <p><?=t('Cuando un goblin Azotamentes quiere convertirse en Chamán, puede hacerlo suscribiéndose por 40€ anuales (menos de 4€ al mes) y ganar')?>:<br>
+            <br>
+            + <?=t('Acceso al editor de hojas de personaje')?>.<br>
+            <b>+ <?=t('Acceso al editor de manuales')?>.</b><br>
+            + <?=t('Poder desactivar la Publicidad')?>.<br>
+            + <?=t('Poder subir archivos mp3 y mp4 al Escritorio Virtual')?>.<br>
+            + <?=t('Todo lo incluido en roles inferiores')?>.</p>
+            <br>
+            <img id="chaman" src="/img/usuarios/l.Chaman_<?=($usuario->rol==5)?'C':'BN'?>.png">
+        </section>
+        <footer>
+            <br>
+            <?php if ($usuario->rol == 4): ?>
+            <?php #if ($usuario->rol < 5): # Esta oferta es cada marzo. ?>
+                <?php /*View::partial('suscribirse', false, ['id'=>'HRTKMEQMN4B6L', 'texto'=>t('De Azotamentes a Chamán 3€ / mes')]); 30€ al año -> MD5EFLDNY667Y*/ ?>
+                <?php View::partial('suscribirse', false, ['atributos'=>'data-bg_color class="w100"', 'id'=>'3MPJSK7XWBKHU', 'texto'=>t('<b>De Azotamentes a Chamán 30€ / año</b>')]); ?>
+            <?php elseif ($usuario->rol > 4): ?>
+                <p><b><?=t('Ventajas conseguidas.')?></b></p>
+            <?php endif; ?>
+            <?php if ($usuario->rol < 5): ?>
+                <p><?=t('Es <b>importante volver a R+ desde PayPal</b> después de la compra para que se apliquen los cambios automáticamente. De lo contrario será un administrador quien tenga que completar el proceso en un tiempo mayor.')?></p>
+            <?php endif; ?>
+        </footer>  
+    </article>
+
+    <article>
+        <header>
+            <h4><?=t('Nivel 6: Trotamundos')?></h4>
+            <br>
+            <p><?=t('Eres el Trotamundos y te encargas de animar a las tropas tras la batalla con chanzas y jolgorio. Tu flauta resuena en los caminos sumando nuevos goblins a la fiesta')?>.</p>
+            <br>
+            <p><?=t('Tú atributo es la CARisma.')?></p>
+        </header>
+        <section>
+            <br>
+            <p><?=t('Solo el rey con el permiso de la matrona goblin puede asignar este rol a un goblin')?>:<br>
+            <br>
+            <b>+ <?=t('Poder crear nuevas salas al son de la música')?>.</b><br>
+            + <?=t('Todo lo incluido en roles inferiores')?>.</p>
+            <br>
+            <img src="/img/usuarios/l.Bardo_<?=($usuario->rol==6)?'C':'BN'?>.png">
+        </section>
+        <footer>  
+        </footer>  
+    </article>
+</div>

@@ -1,0 +1,23 @@
+
+<div data-columns id="grid">
+    <article>
+        <header>
+            <h1>Acciones</h1>
+        </header>
+        <section>
+            <h2>Registros huérfanos</h2>
+            <ul>
+                <?php foreach ($huerfanos as $k=>$v): ?>
+                    <li>
+                        <?=$k?>: <?=$v?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </section>
+        <footer>
+            <a role="button" href="/atalaya/acciones/borrar_huerfanos">Borrar registros huérfanos de usuarios</a>
+            <hr>
+            <a role="button" href="#/atalaya/acciones/rescatar">Enviar correo de rescate a usuarios inactivos</a>
+        </footer>
+    </article>
+</div>

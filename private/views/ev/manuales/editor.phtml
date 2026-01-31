@@ -1,0 +1,11 @@
+<?php
+$format_page = $manual->formato . ' portrait';
+?>
+<?php $page='cover'; foreach($reglas as $reg): ?>
+    <div class="<?=$page?>">
+        <?=$reg->descripcion?>
+        <a class="scroll-down-hide" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manuales_idu?>/<?=$reg->idu?>">
+            <?=Ku::icon('edit')?>
+        </a>
+    </div>
+<?php $page='page'; endforeach; ?>

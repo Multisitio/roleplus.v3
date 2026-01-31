@@ -1,0 +1,12 @@
+<?php
+$partida = View::getVar('partida');
+?>
+<script>
+	/* Mantener conectados */
+	$.get('/ev/partidas/mantener_conexion/<?=$partida->idu?>');
+	console.log('Conectado.');
+	setInterval(function() {
+		$.get('/ev/partidas/mantener_conexion/<?=$partida->idu?>');
+		console.log('Conectado.');
+	}, 540000);
+</script>

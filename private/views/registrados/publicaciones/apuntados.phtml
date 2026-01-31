@@ -1,0 +1,44 @@
+
+<div class="grid">
+	<div class="s6">
+		<label><?=t('Aforo:')?></label>
+		<span>
+			<?php
+			$participantes = empty($apuntados[$pub->idu]) ? 0 : count($apuntados[$pub->idu]);
+			if ($participantes):
+				; ?>
+				<a data-ajax=".ajax.show" rel="nofollow" href="/registrados/eventos/ver_apuntados/<?=$pub->idu?>">
+					<?=$participantes?>
+				</a>
+				/
+			<?php endif; ?>
+			<?=$pub->evento_aforo?>
+			<?php if ($participantes < $pub->evento_aforo): ?>
+				<span class="tag"><?=t('PlazasLibres')?></span>
+			<?php endif; ?>
+		</span>
+	</div>
+	<div class="s6">
+		<label><?=t('Reserva:')?></label>
+		<span>
+			<?php if ( ! empty($reservas[$pub->idu])): ?>
+				<a data-ajax=".ajax.show" rel="nofollow" href="/registrados/eventos/ver_reservas/<?=$pub->idu?>">
+					<?=count($reservas[$pub->idu])?>
+				</a>
+			<?php endif; ?>
+		</span>
+	</div>
+</div>
+<div class="s12">
+	<?php if (date('Y-m-d H:i:s') <= $pub->evento_desde): ?>
+		<br>
+		<?php if (empty($apuntados[$pub->idu][Session::get('idu')]) and
+			empty($reservas[$pub->idu][Session::get('idu')])): ?>
+			<a role="button" data-ajax=".apuntados-<?=$pub->idu?>" rel="nofollow" href="/registrados/publicaciones/apuntarse/<?=$pub->idu?>"><?=t('Apuntarse')?></a>
+		<?php else: ?>
+			<a role="button" data-ajax=".apuntados-<?=$pub->idu?>" rel="nofollow" href="/registrados/publicaciones/desapuntarse/<?=$pub->idu?>"><?=t('Desapuntarse')?></a>
+		<?php endif; ?>
+	<?php else: ?>
+		<p><?=t('Inscripciones cerradas.')?></p>
+	<?php endif; ?>
+</div>

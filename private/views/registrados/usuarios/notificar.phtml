@@ -1,0 +1,7 @@
+
+<a role="button" <?=empty($notificando[$usu->idu]) ? '' : 'class="outline"'?> data-ajax=".usuario._<?=$usu->idu?> footer"
+    rel="nofollow" href="/registrados/usuarios/notificar/<?=$usu->idu?>">
+    <?=empty($notificando[$usu->idu]) ? t('Seguir') : t('No seguir')?>
+</a>
+
+<a role="button" class="outline" data-ajax=".ajax.show" rel="nofollow" href="/registrados/conversaciones/crear/<?=$usu->idu?>"><?=t('Conversar')?></a>

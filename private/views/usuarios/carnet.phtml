@@ -1,0 +1,18 @@
+<?php
+$usu_avatar = preg_match('/\.gif$/i', $usu->avatar) ? $usu->avatar : "xs.$usu->avatar";
+$avatar = "/img/usuarios/$usu->idu/$usu_avatar";
+?>
+<div class="carnet">
+    <img class="avatar" src="<?=$avatar?>">
+    <div>
+        <h5><?=$usu->apodo?></h5>
+        <?=$roles[$usu->rol]?> Goblin<br>
+        <?=t('Socio')?>: <?=_date::format($usu->socio, 'd/m/Y')?><br>
+        <?=t('Cuota')?>: <?=$usu->cuota?>
+    </div>
+</div>
+<div class="align-right">
+    <?php for ($i=0; $i<$usu->rol; ++$i): ?>
+        <img alt="<?=t('Grado')?>" src="/img/icons/star.svg">
+    <?php endfor; ?>
+</div>

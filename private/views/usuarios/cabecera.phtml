@@ -1,0 +1,127 @@
+<?php
+$fondo_cabecera = empty($usuario->fondo_cabecera) ? '' : '/img/usuarios/' . Session::get('idu') . '/s.' . $usuario->fondo_cabecera;
+$fondo_general = empty($usuario->fondo_general) ? '' : '/img/usuarios/' . Session::get('idu') . '/s.' . $usuario->fondo_general;
+?>
+<article class="cabecera">
+	<?php if ($usu->socio): ?>
+		<?php include APP_PATH . 'views/usuarios/carnet.phtml'; ?>
+	<?php else: ?>
+		<header>
+			<h4 class="pa10"><?=$usu->apodo?></h4>
+		</header>
+	<?php endif; ?>
+	<?php if ($usu->fondo_cabecera): ?>
+		<img alt="<?=t('Foto de cabecera')?>" src="/img/usuarios/<?=$usu->idu?>/<?=stristr($usu->fondo_cabecera, '.gif')?'':'m.'?><?=$usu->fondo_cabecera?>">
+	<?php endif; ?>
+	<section>
+		<div class="ajustes mt10">
+			<div>
+				<?php if (Session::get('idu') == $usu->idu):
+					$avatar = empty($usu->avatar)
+						? '/img/otras/avatar_cambiar.png'
+						: '/img/usuarios/' . Session::get('idu') . "/xs.$usu->avatar";
+					?>
+					<form action="/registrados/usuarios/avatar" enctype="multipart/form-data" method="post">
+						<label class="dropimage non-height mt5 <?=empty($usu->avatar)?'':'dropnocontent'?>">
+							<img alt="<?=t('Avatar actual')?>" src="<?=$avatar?>">
+							<input type="file" name="imagenes[]" onchange="submit()">
+						</label>
+					</form>
+				<?php else: ?>
+					<div>
+						<?=Usuario::avatar($usu)?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<div>
+				<?=$roles[$usu->rol]?>: <?=$usu->experiencia?> PX
+				<?php if ($usu->tocado): ?>
+					<br>
+					<?=t('Entró por última vez hace:')?> <?=_date::ago($usu->tocado)?>
+				<?php endif; ?>
+				<br>
+				<?php if (Session::get('idu') == $usu->idu): ?>
+					<button class="locked transparent" data-toggle=".locked"><img alt="<?=t('Candado cerrado')?>" src="/img/icons/lock.svg"></button>
+					<button class="locked transparent" data-toggle=".locked" style="display:none"><img alt="<?=t('Candado abierto')?>" src="/img/icons/unlock.svg"></button>
+				<?php endif; ?>
+			</div>
+		</div>
+		<div>
+			<?php
+			$eslogan = h($usu->eslogan);
+			if (Session::get('idu') == $usu->idu): ?>
+				<small class="eslogan locked">
+					<i><?=empty($eslogan)?'¿Eslogan?':$eslogan?></i>
+				</small>
+				<form action="/registrados/usuarios/actualizar/eslogan" class="locked" method="post" style="display:none">
+					<input type="text" name="valor" placeholder="<?=t('Aquí toca poner un eslogan...')?>" value="<?=h($usu->eslogan)?>">
+					<button type="submit"><?=t('Guardar eslogan')?></button>
+				</form>
+			<?php else: ?>
+				<?=($eslogan)?"<small><i> — $eslogan</i></small>":''?>
+			<?php endif; ?>
+		</div>
+		<blockquote>
+			<?php
+			$sobre_mi = h($usu->sobre_mi);
+			if (Session::get('idu') == $usu->idu): ?>
+				<p class="locked sobre-mi">
+					<?=empty($sobre_mi)?t('Pon aquí algo sobre ti (importante para que los interesados en tus habilidades puedan encontrarte)'):nl2br(_html::links($sobre_mi), false)?>
+				</p>
+				<form action="/registrados/usuarios/actualizar/sobre_mi" class="locked" method="post" style="display:none">
+					<textarea name="valor" placeholder="<?=t('Aquí va el texto sobre mi...')?>" style="min-width:250px"><?=h($usu->sobre_mi)?></textarea>
+					<button type="submit"><?=t('Guardar sobre mi')?></button>
+				</form>
+			<?php else: ?>
+				<?=($sobre_mi)?$sobre_mi:''?>
+			<?php endif; ?>
+		</blockquote>
+		<?php if (Session::get('idu') == $usu->idu): ?>
+			<div class="fondos">
+				<div class="locked" style="display:none">
+					<?=t('Tapiz:')?>
+					<form action="/registrados/usuarios/actualizar/fondo_general" enctype="multipart/form-data" method="post">
+						<label class="dropimage <?=empty($fondo_general)?'':'dropnocontent'?>" <?=empty($fondo_general)?'':'style="background:url('.$fondo_general.') center no-repeat; background-size:cover"'?>>
+							<input type="file" name="imagenes[]" onchange="submit()">
+                			<a class="quitar" rel="nofollow" href="/registrados/usuarios/actualizar/fondo_general"><img alt="<?=t('Quitar el tapiz de perfil')?>" src="/img/icons/x-square.svg"></a>
+						</label>
+					</form>
+					<label class="mt5">
+						<?=t('Recomendado')?> 1920x1080px
+					</label>
+				</div>
+				<div class="locked" style="display:none">
+					<?=t('Cabecera:')?>
+					<form action="/registrados/usuarios/actualizar/fondo_cabecera" enctype="multipart/form-data" method="post">
+						<label class="dropimage <?=empty($fondo_cabecera)?'':'dropnocontent'?>" <?=empty($fondo_cabecera)?'':'style="background:url('.$fondo_cabecera.') center no-repeat; background-size:cover"'?>>
+							<input type="file" name="imagenes[]" onchange="submit()">
+                			<a class="quitar" rel="nofollow" href="/registrados/usuarios/actualizar/fondo_cabecera"><img alt="<?=t('Quitar imagen de cabecera')?>" src="/img/icons/x-square.svg"></a>
+						</label>
+					</form>
+					<label class="mt5">
+						<?=t('Recomendado')?> 692×346px
+					</label>
+				</div>
+			</div>
+		<?php endif; ?>
+	</section>
+	<footer>
+		<div><?=t('Seguidores')?>: <?=$usu->atentos?></div>
+		<?php if (Session::get('idu') <> $usu->idu): ?>
+			<div class="grid">
+				<?=Html::buttonOutlineToggle(t('Opciones'), '.opciones', 'opciones')?>
+				<div class="grid opciones" style="display:none">
+					<?=Html::buttonOutlineToggle(t('Volver'), '.opciones')?>
+					<a role="button" <?=empty($notificando[$usu->idu]) ? '' : 'class="outline"'?> 
+						rel="nofollow" href="/registrados/usuarios/notificar/<?=$usu->idu?>">
+						<?=empty($notificando[$usu->idu]) ? t('Seguir') : t('No seguir')?>
+					</a>
+					<a role="button" class="outline" rel="nofollow" href="/registrados/usuarios/bloquear/<?=$usu->idu?>">
+						<?=empty($bloqueados[$usu->idu]) ? t('Bloquear') : t('Desbloquear')?>
+					</a>
+				</div>
+				<a role="button" class="opciones outline" data-ajax=".ajax.show" rel="nofollow" href="/registrados/conversaciones/crear/<?=$usu->idu?>"><?=t('Conversar')?></a>
+			</div>
+		<?php endif; ?>
+	</footer>
+</article>

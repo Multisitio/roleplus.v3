@@ -1,0 +1,47 @@
+
+<div class="flex-middle-between pa10">
+    <?=t('Configuración')?>
+    <a href="javascript:void(0)" data-hide=".velo, .ventana"><img alt="<?=t('Cerrar ventana')?>" loading="lazy" src="/img/icons/x.svg" width="30" height="30"></a>
+</div>
+<hr class="mv0">
+<div class="pa10">
+    <form method="post">
+        <div class="pb10">
+        <img alt="<?=t('Información')?>" loading="lazy" src="/img/icons/alert-circle.svg" width="30" height="30">
+            <?=t('Agrege canales de YouTube para ver en ROLEFLIX:')?>
+        </div>
+        <input type="text" name="url" placeholder="<?=t('Aquí la URL* de un canal nuevo…')?>">
+        <small class="mt10 ph0 pv5 w3-block"><?=t('* La URL debe ser similar a esta:<br>https://www.youtube.com/channel/UCAq6SDHdrtrqDDfdXhXjgyA')?></small>
+        <button type="submit" class="mt10 w3-btn w3-dark-grey" name="action" value="incluir"><?=t('Incluir')?></button>
+    </form>
+</div>
+
+<hr class="mv0">
+<div class="pa10">
+    <form method="post">
+        <div>
+            <img alt="<?=t('Información')?>" loading="lazy" src="/img/icons/alert-circle.svg" width="30" height="30">
+            <?=t('Marque los canales que NO desea ver de los')?>
+            <?=count($sitios)?>:
+        </div>
+        <div class="mb15 mt10">
+            <label><?=t('Filtro caliente')?></label>
+            <input type="text" class="bb" data-filter=".sitio">
+        </div>
+        <?php foreach($sitios as $sit):
+            $checked = empty($suscripciones[$sit->idu]) ? '' : 'checked ' ?>
+            <div class="sitio">
+                <label class="left">
+                    <input type="checkbox" class="w3-left" <?=$checked?>name="sitios[]" value="<?=$sit->idu?>">
+                    <span class="runcate w3-left"><?=$sit->hashtag?></span>
+                </label>
+                <?php if (Session::get('rol') > 5 or Session::get('idu') == $sit->usuarios_idu): ?>
+                    <a class="w3-right" onclick="copiarAlPortapapeles('<?=$sit->hashtag?>')" rel="nofollow" href="/registrados/roleflix/quitar/<?=$sit->idu?>" title="<?=$sit->hashtag?>"><img alt="<?=t('Quitar canal')?>" loading="lazy" src="/img/icons/x.svg" width="30" height="30"></a>
+                <?php endif; ?>
+                <div class="clearfix"></div>
+                <hr>
+            </div>
+        <?php endforeach; ?>
+        <button type="submit" class="mt10 w3-btn w3-dark-grey" name="action" value="suscribirse"><?=t('Aplicar')?></button>
+    </form>
+</div>

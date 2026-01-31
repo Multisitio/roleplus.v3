@@ -1,0 +1,19 @@
+
+<section class="col s12 m10 offset-m1 l8 mt25 ph0" style="max-width:550px">
+    <div class="fondo mh10 pa10 pb0">
+        <a href="/grupos/carpetas"><?=t('Carpetas')?></a>
+        <?php if ($carpeta): ?>
+            >
+            <a href="/grupos/carpetas/<?=urlencode($grupo_nombre)?>/<?=$carpeta->idu?>"><?=$carpeta->nombre?></a>
+        <?php endif; ?>
+    </div>
+    <?php if ($carpeta): ?>
+        <div class="fondo mh10 ph10 pv5"></div>
+        <?php foreach ($publicaciones as $pub): ?>
+            <div class="mb25">
+                <?php include APP_PATH . 'views/publicaciones/una.phtml'; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <div class="clearfix"></div>
+</section>

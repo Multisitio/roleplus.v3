@@ -1,0 +1,29 @@
+<?php
+$titulo = t('Cronología');
+?>
+<?=Form::openMultipart()?>
+	<section>
+        <?=Kubox::input(type: 'text', label: t('Título'),
+            placeholder: t('Aquí el título de la cronología'),
+            name: 'titulo', value: $cronologia->titulo)?>
+	</section>
+	<footer>
+		<?php if ($cronologia->idu): ?>
+			<div class="auto">
+				<?=Kubox::buttonSubmit(label: t('Eliminar'),
+					name: 'action', value: 'eliminar')?>
+
+				<?=Kubox::buttonSubmit(label: t('Duplicar'),
+					name: 'action', value: 'crear')?>
+
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'),
+					name: 'action', value: 'actualizar',
+					attrs: 'data-bg-color')?>
+			</div>
+            <input type="hidden" name="idu" value="<?=$cronologia->idu?>">
+		<?php else: ?>
+			<?=Kubox::buttonSubmitColor(label: t('Crear'),
+				name: 'action', value: 'crear')?>
+		<?php endif; ?>
+	</footer>
+<?=Form::close()?>

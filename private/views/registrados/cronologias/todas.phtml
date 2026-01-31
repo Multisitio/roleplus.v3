@@ -1,0 +1,48 @@
+
+<div class="cronologias s12" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Cronologías')?></h1>
+            <p><?=t('Crea tantas cronologías como necesites. Estas líneas temporales muestran la evolución de un producto o servicio en el tiempo, una faceta de tu vida, un progreso profesional o de un hobby, lo que sea que consideres interesante.')?></p>
+            <hr>
+            <p><?=t('Estas cronologías solo las verás tú hasta que decidas publicarlas. Progresivamente se irán desbloqueando más formas de compartirlas / exportarlas.')?></p>
+        </header>
+        <section>
+        </section>
+        <footer class="grid auto">
+            <a role="button" data-ajax=".ajax.show" data-bg_color rel="nofollow" data-style="body, overflow:hidden" href="/registrados/cronologias/cronologia"><?=t('Crear cronología')?></a>
+        </footer>
+    </article>
+
+    <?php foreach ($cronologias as $cro): ?>
+        <article class="_<?=$cro->idu?>">
+            <header>
+                <h2><?=$cro->titulo?></h2>
+            </header>
+            <?php if ( ! empty($cronologias_eventos[$cro->idu])): ?>
+                <?php
+                View::partial('boxes/v_timeline', null, [
+                    'events'=>$cronologias_eventos[$cro->idu],
+                    'event_id'=>'idu',
+                    'event_date'=>'fecha',
+                    'event_title'=>'titulo',
+                    'event_description'=>'relato',
+                    'edit_url'=>"/registrados/cronologias/evento/$cro->idu",
+                ]);
+                ?>
+            <?php endif; ?>
+            <footer class="grid auto">
+                <?php /* Sirve de plantilla
+                <button type="button" class="opciones" data-toggle="._<?=$cro->idu?> .opciones"><?=t('Opciones')?></button>
+
+                <button type="button" class="hide opciones" data-bg_color data-toggle="._<?=$cro->idu?> .opciones"><?=t('Volver')?></button>*/ ?>
+
+                <a role="button" data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/registrados/cronologias/cronologia/<?=$cro->idu?>"><?=t('Editar')?></a>
+
+                <a role="button" href="/registrados/cronologias/maximizar/<?=$cro->idu?>"><?=t('Maximizar')?></a>
+
+                <a role="button" data-ajax=".ajax.show" data-bg_color data-style="body, overflow:hidden" href="/registrados/cronologias/evento/<?=$cro->idu?>"><?=t('Añadir evento')?></a>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>

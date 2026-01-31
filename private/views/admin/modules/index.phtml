@@ -1,0 +1,56 @@
+<?php
+Js::add('componentes/5-filter');
+?>
+<div class="s12" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Lista de módulos')?></h1>
+            
+            <input type="text" data-filter="article li" placeholder="<?=t('Filtra la lista...')?>">
+            <br>
+            <ul>
+                <?php foreach($modules as $module) :
+                    $filename = str_replace('.zip', '', basename($module) ); ?>
+                    <li>
+                        <a href="/admin/modules/index/<?=$filename?>"><?=$filename?></a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </header>
+
+        <?php if ($module_selected) : ?>
+            <section>
+                <h2><?=$module_selected?> module</h2>
+
+                <?php if ($module_readme): ?>
+                    <div><?=$module_readme?></div>
+                <?php endif; ?>
+
+                <?php if ( ! $module_installed): ?>
+                    <a role="button" href="/admin/modules/install/<?=$module_selected?>"><?=t('Instalar')?></a>
+                <?php else: ?>
+                    <a role="button" href="/admin/modules/uninstall/<?=$module_selected?>"><?=t('Desinstalar')?></a>
+                <?php endif; ?>
+            </section>
+        <?php endif; ?>
+        
+        <footer>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h1><?=t('Subir un módulo')?></h1>
+        </header>
+
+        <section>
+            <form action="/admin/modules/upload" enctype="multipart/form-data" method="post">
+                <input type="file" name="module">
+                <button type="submit" name="action" value="upload"><?=t('Subir')?></button>
+            </form>
+        </section>
+
+        <footer>
+        </footer>
+    </article>
+</div>

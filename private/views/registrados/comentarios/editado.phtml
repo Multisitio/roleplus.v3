@@ -1,0 +1,10 @@
+<?=$comentario->comentario_formateado?>
+
+<?php if ( ! empty($vistas_previas[$comentario->idu])):
+    $v_p = $vistas_previas[$comentario->idu][0]; ?>
+    <section class="preview">
+        <?php View::partial('boxes/preview', null, ['v_p'=>$v_p]); ?>
+    </section>
+<?php endif; ?>
+
+<?=Article::images($comentario)?>

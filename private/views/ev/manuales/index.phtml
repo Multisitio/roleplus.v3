@@ -1,0 +1,41 @@
+
+<div id="grid" data-columns>
+	<article class="cabecera">
+		<header>
+			<h1><?=t('Manuales')?></h1>
+		</header>
+
+		<section class="grid">
+			<a role="button" class="outline" href="/ev/fichas"><?=t('Fichas')?></a>
+			
+			<a role="button" href="/ev/manuales/formulario"><?=t('Crear manual')?></a>
+		</section>
+
+		<footer>
+			<input type="text" data-filter="article:not(.cabecera)" placeholder="<?=t('Filtra la lista...')?>">
+		</footer>
+	</article>
+
+	<?php foreach ($manuales as $man): ?>
+		<article>
+			<header>
+				<h3><?=$man->nombre?></h3>
+			</header>
+
+			<?php if ($man->fotos): ?>
+				<img alt="<?=t('Imagen del manual:')?> <?=$man->nombre?>" class="mb10" src="/img/usuarios/<?=$man->usuarios_idu?>/l.<?=$man->fotos?>">
+			<?php endif; ?>
+
+			<section>
+				<?=$man->introduccion?>
+			</section>
+
+			<footer class="grid">
+				<a role="button" class="outline" href="/ev/manuales/ver/<?=$man->idu?>"><?=t('Ver')?></a>
+				<?php if (Session::get('idu') == $man->usuarios_idu): ?>
+					<a role="button" href="/ev/manuales/formulario/<?=$man->idu?>"><?=t('Editar')?></a>
+				<?php endif; ?>
+			</footer>
+		</article>
+	<?php endforeach; ?>
+</div>

@@ -1,0 +1,131 @@
+<?php
+Css::add('rss.min');
+?>
+<div data-columns id="grid" class="entradas-rss">
+    <article>
+        <header>
+            <h1><?=t('Entradas de blogs')?></h1>
+            <?=t('Desde aquí puedes ver lo que publican los blogs que quieras seguir y convertir alguna de estas entradas en una de tus publicaciones a golpe de click.')?>
+        </header>
+        <section>
+            <br>
+            <div class="tabs inside rss">
+                <button class="active" data-hide=".rss.blogs" data-active=".tabs.rss button" data-show=".rss.nuevo"><?=t('Añadir blog')?></button>
+
+                <button data-hide=".rss.nuevo" data-active=".tabs.rss button" data-show=".rss.blogs"><?=t('Ver blogs')?></button>
+            </div>
+        </section>
+        <?=Form::open('registrados/rss', 'post', 'class="rss nuevo"')?>
+            <section class="grid">
+                <input type="text" class="xs9" name="url" placeholder="<?=t('Aquí el enlace RSS del blog…')?>">
+
+                <select class="xs3" name="idioma">
+                    <?php
+                    $idioma_por_defecto = empty($_POST['idioma'])
+                        ? $usuario->idioma
+                        : $_POST['idioma'];
+                    foreach ($idiomas as $key=>$val):
+                        $selected = ($idioma_por_defecto == $key) ? 'selected' : '';
+                        ?>
+                        <option <?=$selected?> value="<?=$key?>"><?=$key?></option>
+                        <?php
+                    endforeach;
+                    ?>
+                </select>
+            </section>
+            <section>
+                <small class="mt10">
+                    <p><b><?=t('Las URL de WordPress tienen este formato:')?></b><br>
+                    https://sub.dominio.algo/feed/</p>
+                    <p><b><?=t('Las URL de Blogger estos dos formatos:')?></b><br>
+                    https://subdominio.blogspot.com/feeds/posts/default<br>
+                    https://feeds.feedburner.com/dominio</p>
+                </small>
+            </section>
+            <footer>
+                <br>
+				<?=Kubox::buttonSubmitColor(label: t('Incluir'),
+					name: 'action', value: 'incluir')?>
+            </footer>
+        <?=Form::close()?>
+
+        <?=Form::open('registrados/rss', 'post', 'class="rss blogs hide"')?>
+            <section>
+                <br>
+                <p><?=t('Marca los blogs que NO te interesen ver aquí entre los')?> <?=count($sitios)?>:</p>
+                <small>
+                    <i><?=t('Hay nuevas entradas todos los días a las 8:00.')?></i>
+                </small>
+
+                <input type="text" class="mb10" data-filter=".sitio" placeholder="<?=t('Filtrar')?>…">
+                <?php foreach($sitios as $sit):
+                    $checked = empty($suscripciones[$sit->idu]) ? '' : 'checked' ?>
+                    <div class="sitio grid">
+                        <hr class="xs12">
+                        <span class="xs10">
+                            <?php if ($sit->nombre): ?>
+                                <a class="truncate" href="<?=$sit->url?>"><small><?=$sit->url?></small></a>
+                            <?php endif; ?>
+                            <blockquote>
+                                <label class="truncate">
+                                    <p><input type="checkbox" <?=$checked?> name="sitios[]" value="<?=$sit->idu?>"> (<?=$sit->idioma?>) <?=empty($sit->nombre)?h($sit->url):$sit->nombre?></p>
+
+                                    <small><i class="truncate"><?=nl2br(strip_tags($sit->descripcion), false)?></i></small>
+                                </label>
+                            </blockquote>
+                        </span>
+                        <span class="xs2 align-right">
+                            <?php if (Session::get('rol') > 5 or Session::get('idu') == $sit->usuarios_idu): ?>
+                                <a role="button" href="/registrados/rss/quitar/<?=$sit->idu?>" onclick="copiarAlPortapapeles('<?=$sit->url?>')" rel="nofollow" title="<?=$sit->url?>"><img alt="<?=t('Eliminar sitio')?>" src="/img/icons/x.svg"></a>
+                            <?php endif; ?>
+                        </span>
+                    </div>
+                <?php endforeach; ?>
+                <hr>
+            </section>
+            <footer>
+                <br>
+				<?=Kubox::buttonSubmitColor(label: t('Aplicar'),
+					name: 'action', value: 'no_ver')?>
+            </footer>
+        <?=Form::close()?>
+    </article>
+
+    <?php foreach ($entradas as $ent): ?>
+        <article>
+            <header class="grid">
+                <h2 class="xs10">
+                    <a href="<?=$ent->url?>" rel="noopener noreferrer" target="_blank"><?=$ent->titulo?></a>
+                </h2>
+                <small class="xs2 align-right mt10">
+                    <span class="tag"><?=$ent->idioma?></span><br>
+                    <?=_date::ago($ent->publicado)?>
+                </small>
+            </header>
+            <section>
+                <a href="<?=$ent->url?>" rel="noopener noreferrer" target="_blank"><?=$ent->url?></a>
+                <br>
+                <?=$ent->contenido?>
+            </section>
+
+            <?php
+            $dir = "img/rss/$ent->rss_sitios_idu";
+            $file = $ent->fotos;
+            #echo PUB_PATH . $img;
+            #if ($r = stream_resolve_include_path(PUB_PATH . "$dir/$file")): ?>
+            <?php if ($file && file_exists("$dir/$file")): ?>
+                <img src="<?="/$dir/l.$file"?>">
+            <?php endif; #_var::echo(["$dir/$file", $r]); ?>
+
+            <footer class="grid auto">
+                <?php if ($ent->entrada_publicada): ?>
+                    <p><?=t('Esta entrada ya está publicada.')?></p>
+                <?php else: ?>
+                    <a role="button" data-ajax=".ajax.show" href="/registrados/rss/publicar/<?=$ent->idu?>" rel="nofollow"><?=t('Publicar')?></a>
+
+                    <a role="button" data-ajax=".ajax.show" data-bg_color href="/registrados/publicaciones/desde_rss/<?=$ent->idu?>" rel="nofollow"><?=t('Editando')?></a>
+                <?php endif; ?>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>

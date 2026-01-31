@@ -1,0 +1,26 @@
+
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+    <?php foreach ($charts as $title=>$chart): ?>
+        var data = google.visualization.arrayToDataTable([
+            ['<?=t('Mes')?>', '<?=$title?>'],
+            <?php foreach ($chart as $date=>$num): ?>
+                ['<?=$date?>',  <?=$num?>],
+            <?php endforeach; ?>
+        ]);
+
+        var options = {
+            title: '<?=$title?>',
+            hAxis: {title: '<?=t('Meses')?>', showTextEvery: 6},
+            vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('<?=$title?>'));
+        chart.draw(data, options);
+    <?php endforeach; ?>
+}
+</script>

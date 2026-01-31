@@ -1,0 +1,89 @@
+
+<div class="tareas" id="grid" data-columns>
+    <article>
+        <header>
+            <h1><?=t('Tareas')?></h1>
+        </header>
+        <section class="grid auto">
+            <a role="button" <?=($estado=='aprobadas')?'data-bg_color':''?> href="/registrados/tareas/listar/aprobadas"><?=t('Aprobadas')?></a>
+            <a role="button" <?=($estado=='rechazadas')?'data-bg_color':''?> href="/registrados/tareas/listar/rechazadas"><?=t('Rechazadas')?></a>
+        </section>
+        <section class="grid auto">
+            <a role="button" <?=($estado=='pospuestas')?'data-bg_color':''?> href="/registrados/tareas/listar/pospuestas"><?=t('Pospuestas')?></a>
+            <a role="button" <?=($estado=='terminadas')?'data-bg_color':''?> href="/registrados/tareas/listar/terminadas"><?=t('Terminadas')?></a>
+        </section>
+        <footer>
+            <a role="button" <?=($estado=='')?'data-bg_color':''?> href="/registrados/tareas/listar"><?=t('Todas')?></a>
+        </footer>
+    </article>
+
+    <?=Form::open()?>
+        <article>
+            <header>
+                <h2><?=t('Proponer')?></h2>
+            </header>
+            <section>
+                <br>
+                <?=Kubox::textarea(label: t('Tarea'),
+                    placeholder: t('Aquí tu propuesta'),
+                    name: 'propuesta')?>
+                <br>
+                <?=Kubox::textarea(label: t('Comentario'),
+                    placeholder: t('Aquí un comentario sobre la tarea'),
+                    name: 'comentarios')?>
+            </section>
+            <footer>
+				<?=Kubox::buttonSubmitColor(label: t('Enviar'),
+					name: 'action', value: 'enviar_propuesta')?>
+            </footer>
+        </article>
+    <?=Form::close()?>
+
+    <?php foreach($tareas as $tra): ?>
+        <?=Form::open()?>
+            <article>
+                <header>
+                    <div>
+                        <?=Usuario::avatar($tra)?>
+                        <a class="grow" href="/registrados/tareas/listar/una/<?=$tra->idu?>">
+                            <h2>
+                                <?php if ($tra->terminada):
+                                    echo t('Propuesta terminada'); ?>:
+                                    <small><?=_date::format($tra->terminada, 'H:i d/m/y')?></small>
+                                <?php elseif ($tra->pospuesta):
+                                    echo t('Propuesta pospuesta'); ?>:
+                                    <small><?=_date::format($tra->pospuesta, 'H:i d/m/y')?></small>
+                                <?php elseif ($tra->aprobada):
+                                    echo t('Propuesta aprobada'); ?>:
+                                    <small><?=_date::format($tra->aprobada, 'H:i d/m/y')?></small>
+                                <?php elseif ($tra->rechazada):
+                                    echo t('Propuesta rechazada'); ?>:
+                                    <small><?=_date::format($tra->rechazada, 'H:i d/m/y')?></small>
+                                <?php else:
+                                    echo t('Propuesta');
+                                endif; ?>
+                            </h2>
+                        </a>
+                    </div>
+                </header>
+                <section>
+                    <br>
+                    <small><b><?=t('Tarea')?>:</b></small>
+                    <blockquote><?=$tra->propuesta?></blockquote>
+                    <br>
+                    <small><b><?=t('Comentarios')?>:</b></small>
+                    <blockquote><?=nl2br($tra->comentarios, false)?></blockquote>
+                    <br>
+                    <?=Kubox::textarea(label: t('Comentario'),
+                        placeholder: t('Aquí un comentario sobre la tarea'),
+                        name: "comentarios[$tra->id]")?>
+                </section>
+                <footer>
+                    <?=Kubox::buttonSubmitColor(label: t('Comentar'),
+                        name: 'action', value: 'enviar_comentario')?>
+                </footer>
+            </article>
+            <?=Form::hidden(field: 'id', value: $tra->id)?>
+        <?=Form::close()?>
+    <?php endforeach; ?>
+</div>

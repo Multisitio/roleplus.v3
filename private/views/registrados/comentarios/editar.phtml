@@ -1,0 +1,41 @@
+
+<form action="/registrados/comentarios/editado/<?=$comentario->idu?>" data-ajax=".com-<?=$comentario->idu?> .contenido" enctype="multipart/form-data" method="post">
+    <textarea class="mt10" data-preview name="comentario"><?=$comentario->comentario?></textarea>
+
+    <div class="flex gap10 mt10 right space-around">
+        <a role="button" rel="nofollow" href="/registrados/comentarios/editado/<?=$comentario->idu?>" data-ajax=".com-<?=$comentario->idu?> .contenido"><img alt="<?=t('Cancelar')?>" src="/img/icons/x.svg" width="30px" height="30px"></a>
+
+        <a role="button" data-ajax=".ajax.hide" data-hide=".com-<?=$comentario->idu?>" rel="nofollow" href="/registrados/comentarios/eliminar/<?=$comentario->idu?>"><img alt="<?=t('Eliminar')?>" src="/img/icons/trash-2.svg" width="30px" height="30px"></a>
+
+        <button type="submit" data-bg_color><img alt="<?=t('Guardar')?>" src="/img/icons/save.svg" width="30px" height="30px"></button>
+    </div>
+
+    <section class="preview">
+        <?php if ( ! empty($vistas_previas[$comentario->idu])):
+            $v_p = $vistas_previas[$comentario->idu][0];
+            View::partial('boxes/preview', null, ['v_p'=>$v_p]); ?>
+            <a data-ajax=".ajax.hide" data-remove="form .preview>*" rel="nofollow" href="/registrados/vistas_previas/eliminar/<?=$v_p->idu?>" title="<?=t('Eliminar vista previa')?>"><?=t('Eliminar vista previa')?></a>
+        <?php elseif ($comentario->enlace): ?>
+            <?=Article::link($comentario)?>
+            <a data-ajax=".ajax.hide" data-remove="form .preview>*" rel="nofollow" href="/registrados/comentarios/eliminar_enlace/<?=$comentario->idu?>" title="<?=t('Eliminar enlace')?>"><?=t('Eliminar enlace')?></a>
+			<?=Form::hidden(field: 'enlace', value: $comentario->enlace)?>
+        <?php endif; ?>
+    </section>
+
+    <?php if ( ! empty($comentario->fotos)):
+        $fotos = is_array($comentario->fotos) ? $comentario->fotos : explode(', ', $comentario->fotos);
+        foreach($fotos as $foto):
+            if ( ! $foto) {
+                continue;
+            }
+            echo Kubox::dropimage(label: t('Imagen'), name: 'imagenes[]',
+            dir: "/img/usuarios/$comentario->usuarios_idu/l.", file: $foto);
+        endforeach;		
+    else:
+        echo Kubox::dropimage(label: t('Imagen'), name: 'imagenes[]');
+    endif; ?>
+
+    <input type="hidden" name="idu" value="<?=$comentario->idu?>">
+    <input type="hidden" name="eventos_idu" value="<?=$comentario->eventos_idu?>">
+    <input type="hidden" name="publicaciones_idu" value="<?=$comentario->publicaciones_idu?>">
+</form>

@@ -1,0 +1,20 @@
+
+<article>
+	<header>
+		<h1>6) <?=t('Ahora toca ir al panel del máster')?></h1>
+		<h2><?=t('Y crear elementos con el botón + abajo a la derecha.')?></h2>
+	</header>
+
+	<section>
+		<h3><?=t('Este es el enlace para los jugadores:')?></h3>
+		<a role="button" class="outline share" data-toast="<?=t('Enlace copiado al portapapeles.')?>" href="http<?=($_SERVER['HTTP_HOST']=='localhost')?'':'s'?>://<?=$_SERVER['HTTP_HOST']?>/ev/jugar/partida/<?=$partidas_idu?>">http<?=($_SERVER['HTTP_HOST']=='localhost')?'':'s'?>://<?=$_SERVER['HTTP_HOST']?>/ev/jugar/partida/<?=$partidas_idu?></a>
+	</section>
+	<br>
+	<footer>
+		<h3><?=t('¿Ir al panel del máster?')?></h3>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/asistente/partidas"><?=t('Anterior')?></a>
+			<a role="button" href="/ev/panel/partida/<?=$partidas_idu?>"><?=t('Entrar')?></a>
+		</div>
+	</footer>
+</article>

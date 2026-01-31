@@ -1,0 +1,21 @@
+
+<?php if (Session::has('toast')): ?>
+	<div class="toast-container">
+		<?php
+		$mensaje_tiempo = 8; 
+		foreach (Session::get('toast') as $toast): ?>
+			<div class="toast-<?=$toast_idu=_str::uid()?>">
+				<button type="button" class="transparent" data-remove="parent"><img alt="<?=t('Cerrar caja de información')?>" src="/img/icons/x.svg"></button>
+				<h3>INFO</h3>
+				<hr>
+				<p><?=$toast?></p>
+			</div>
+			<script>
+			setTimeout("$('.toast-<?=$toast_idu?>').fadeOut('slow', function(){ $(this).remove() })", <?=$mensaje_tiempo*1000?>);
+			</script>
+			<?php
+			++$mensaje_tiempo;
+		endforeach;
+		Session::delete('toast'); ?>
+	</div>
+<?php endif; ?>

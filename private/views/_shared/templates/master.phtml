@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html data-color="<?=empty($claves['color'])?'red':$claves['color']?>" data-theme="<?=empty($claves['tema'])?'light':$claves['tema']?>" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta content="public" http-equiv="Cache-control">
+        <meta content="<?=t('Donde se publican las cosas.')?>" name="description">
+		<meta content="#ed8340" name="theme-color">
+		<meta content="width=device-width, initial-scale=1" name="viewport">
+		<title><?="$module_name $controller_name $action_name"?></title>
+		<?php $version = time(); ?>
+        <link href="/manifest.json?v=<?=$version?>" rel="manifest">
+        <link href="/css/ev.min.css?v=<?=$version?>" rel="stylesheet">
+		<?=Css::inc()?>
+		<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/sw.js');
+		}
+		</script>
+	</head>
+	<body>
+        <?php View::partial('jugador/fondo'); ?>
+
+		<?php View::partial('ev/nav'); ?>
+
+		<?php View::partial('master/aside'); ?>
+
+		<div class="apartados scroll-down-hide">
+			<a href="#tapiz" data-active=".apartados a"><?=t('Tapiz')?></a>
+			<a class="active" data-active=".apartados a" href="#notas"><?=t('Notas')?></a>
+			<a href="#jitsi" data-active=".apartados a">Jitsi</a>
+		</div>
+
+		<div class="jitsi" style="display:none">
+			<?php #View::partial('jitsi', false, ['room'=>$partida->idu]); ?>
+		</div>
+
+		<main data-append data-ch="<?="dj_elementos_$partida->idu"?>">
+			<?php View::content(); ?>
+		</main>
+
+		<?php View::partial('toast'); ?>
+
+		<?php View::partial('ev/chat'); ?>
+
+		<a role="button" class="flotante abajo derecha ma20 scroll-down-hide" data-ajax=".ajax.show" href="/ev/elementos/editar_<?=$panel?>/<?=$partida->idu?>" title="<?=t('Abrir el editor de elementos')?>">
+			<img alt="<?=t('Abrir el editor de elementos')?>" loading="lazy" src="/img/icons/plus.svg" width="30" height="30">
+		</a>
+
+		<div class="ajax hide"></div>
+		<div class="ajax show"></div>
+
+		<script src="/javascript/ev.min.js?v=<?=$version?>" data-partidas_idu="<?=$partida->idu?>"></script>
+		<?=Js::inc()?>
+		<div class="clear"></div>
+	</body>
+</html> 

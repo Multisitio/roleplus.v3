@@ -1,0 +1,41 @@
+<?php
+$titulo = t('Aventura');
+$confirmar_cierre = true;
+?>
+<?=Form::openMultipart()?>
+	<section>
+		<?=Kubox::input(label: t('Título'),
+			placeholder: t('Aquí el título de la aventura'),
+			name: 'nombre', value: $aventura->nombre)?>
+
+        <?=Kubox::textarea(label: t('Sinopsis'),
+            placeholder: t('Aquí la sinopsis de la aventura'),
+            name: 'introduccion', value: $aventura->introduccion)?>
+
+        <?=Kubox::dropimage(label: t('Portada') . " (640px x 640px 72ppp)",
+			name: 'fotos[]',
+			dir: empty($aventura->fotos) ? '' : "/img/usuarios/$aventura->usuarios_idu/",
+			mini: 'l.',
+			file: empty($aventura->fotos) ? '' : $aventura->fotos)?>
+
+		<?=Kubox::switch(label: t('Publicar'),
+			name: 'publicada', value: 1, checked: $aventura->publicada)?>
+	</section>
+	<footer class="grid auto">
+		<?php if ($aventura->idu): ?>
+			<?=Kubox::link(label: t('Eliminar'),
+				href: "/registrados/aventuras/eliminar/$aventura->idu")?>
+
+			<?=Kubox::buttonSubmit(label: t('Actualizar'),
+				name: 'action', value: 'actualizar')?>
+
+			<?=Kubox::linkColor(label: t('Escenas'),
+				href: "/registrados/escenas/aventura/$aventura->idu")?>
+				
+            <input type="hidden" name="idu" value="<?=$aventura->idu?>">
+		<?php else: ?>
+			<?=Kubox::buttonSubmitColor(label: t('Crear'),
+				name: 'action', value: 'crear')?>
+		<?php endif; ?>
+	</footer>
+<?=Form::close()?>

@@ -1,0 +1,21 @@
+
+<div class="comentarios-sueltos" data-columns id="grid">
+    <?php foreach ($comentarios as $com): ?>
+        <article>
+            <header></header>
+            <section>
+                <div>
+                    <div class="shrink0 align-center">
+                        <?=Usuario::avatar($com)?><br>
+                        <small><?=_date::ago($com->publicado)?></small>
+                    </div>
+                    <div class="grow">
+                        <a href="/usuarios/perfil/<?=urlencode($com->apodo)?>/publicacion/<?=$com->publicaciones_idu?>" title="<?=$com->titulo?>"><h2><?=$com->titulo?></h2></a><br>
+                        <?=$com->comentario?>
+                    </div>
+                </div>
+            </section>
+            <footer></footer>
+        </article>
+    <?php endforeach; ?>
+</div>

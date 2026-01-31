@@ -1,0 +1,16 @@
+
+<?php if ( ! empty($v_p->title)): ?>
+    <a href="<?=$v_p->url?>" rel="noopener noreferrer" target="_blank">
+        <h3><?=$v_p->title?></h3>
+    </a>
+    
+    <?=empty($v_p->description)?'':"<p><small>$v_p->description</small></p>"?>
+
+    <?php
+    $file = "img/vistas_previas/$v_p->idu/$v_p->image";
+    $mini = "/img/vistas_previas/$v_p->idu/l.$v_p->image";
+
+    if (file_exists($file)): ?>
+        <a data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/imagenes/vistas_previas/<?=$v_p->idu?>/<?=$v_p->image?>"><img alt="<?=$v_p->image?>" loading="lazy" src="<?=stristr($v_p->image, '.svg')?"/$file":$mini?>"></a>
+    <?php endif; ?>
+<?php endif; ?>

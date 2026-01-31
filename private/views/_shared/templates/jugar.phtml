@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html data-color="<?=empty($claves['color'])?'red':$claves['color']?>" data-theme="<?=empty($claves['tema'])?'light':$claves['tema']?>" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title><?="$escena->peso | $aventura->nombre"?></title>
+
+        <link href="/manifest.json?v=<?=$version?>" rel="manifest">
+        <link href="/css/principal.min.css?v=<?=$version?>" rel="stylesheet">
+		<?=Css::inc($version)?>
+	</head>
+	<body>
+		<main data-append data-ch="<?="elementos_$partida->idu"?>">
+			<?php View::content(); # Por defecto se carga ev/jugar/elementos.phtml ?>
+		</main>
+
+		<?php View::partial('toast'); ?>
+
+		<div class="ajax hide"></div>
+		<div class="ajax show"></div>
+
+		<script src="/javascript/principal.min.js?v=<?=$version?>" data-idu="<?=Session::get('idu')?>"></script>
+
+		<script src="/javascript/worker.js?v=<?=$version?>"></script>
+
+		<?php if (empty($claves['quitar_masonry'])): ?>
+			<script src="/javascript/masonry.min.js?v=<?=$version?>"></script>
+		<?php endif; ?>
+
+		<?=Js::inc($version)?>
+	</body>
+</html>

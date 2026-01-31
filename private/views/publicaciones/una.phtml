@@ -1,0 +1,104 @@
+<?php
+if ($pub->socio) {
+    $apple = 'red';
+}
+elseif ($pub->ultima_pub > date('Y-m-d H:i:s', strtotime('-1 month'))) {
+    $apple = 'yellow';
+}
+else {
+    $apple = 'green';
+}
+?>
+<article class="pub-<?=$pub->idu?>">
+    <section class="caja-usuario">
+        <div>
+            <?=Usuario::avatar($pub)?>
+            <span class="grow">
+                <span><?=Ku::icon(icon: 'apple-whole', width: 17, height: 17, args: ['data-color'=>$apple])?> <b><?=$pub->apodo?></b></span>
+                <?php for ($i=1; $i<=$pub->rol; ++$i): ?>
+                    <img alt="<?=t('Una estrella por cada nivel de usuario')?>" src="/img/icons/star.svg" width="20px" height="20px">
+                <?php endfor; ?>
+                <br>
+                <a class="tag" href="/publicaciones/buscar/<?=$pub->idioma?>"><?=$pub->idioma?></a>
+                <?=empty($pub->etiquetas_formateadas)?'':$pub->etiquetas_formateadas?>
+                <?php if ($pub->anclado > date('Y-m-d H:i:s', strtotime('-24 hours'))): ?>
+                    <a class="tag" href="/publicaciones/buscar/anclada"><?=t('Anclada')?></a>
+                <?php endif; ?>
+            </span>
+            <time><?=_date::ago($pub->publicado)?></time>
+        </div>
+    </section>
+
+    <header>
+        <?php if ($controller_name=='publicaciones' && $action_name=='ver'): ?>
+            <h1><?=h($pub->titulo)?></h1>
+        <?php else: ?>
+            <h2><?=Article::title($pub)?></h2>
+        <?php endif; ?>
+    </header>
+
+    <section class="contenido">
+        <span>
+            <?=Article::content($pub)?>
+        </span>
+    </section>
+
+    <?=Article::poll($pub, $encuestas, $encuestas_opciones)?>
+
+    <?php #=Article::previews($pub, $vistas_previas)?>
+
+    <?php if ( ! empty($vistas_previas[$pub->idu])):
+        $v_p = $vistas_previas[$pub->idu][0]; 
+        if ($v_p->image): ?>
+            <section class="preview">
+                <?php View::partial('boxes/preview', null, ['v_p'=>$v_p]); ?>
+            </section>
+        <?php endif;
+    elseif ($pub->enlace): ?>
+        <?=Article::link($pub)?>
+    <?php endif; ?>
+
+    <?=Article::images($pub)?>
+
+    <?=Article::event($pub)?>
+
+    <section class="fragmentos">
+        <?=empty($pub->fragmentos)?'':"<br>$pub->fragmentos<br>"?>
+    </section>
+
+    <section class="experiencia">
+        <div>
+            <?php if (Session::get('idu') <> $pub->usuarios_idu):
+                $px = empty($experiencia['publicaciones'][$pub->idu]) ? 0 : $experiencia['publicaciones'][$pub->idu]; ?>
+                <?php include APP_PATH . 'views/registrados/publicaciones/experiencia.phtml'; ?>
+            <?php else: ?>
+                <a data-ajax=".ajax.show" href="/publicaciones/ver_experiencia/<?=$pub->idu?>"><small><?=t('Ver')?> <?=$pub->experiencia?> PX</small></a>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <footer>
+        <div>
+            <?php if (Session::get('idu') == $pub->usuarios_idu): ?>
+                <a role="button" data-style="body, overflow:hidden" href="/registrados/publicaciones/formulario/<?=$pub->idu?>" data-ajax=".ajax.show" rel="nofollow" title="<?=t('Editar publicación.')?>"><img alt="<?=t('Editar publicación.')?>" loading="lazy" src="/img/icons/edit-2.svg" width="30" height="30"></a>
+            <?php else: ?>
+                <span class="silenciar-<?=$idu=$pub->idu?>">
+                    <?php include APP_PATH . 'views/registrados/publicaciones/notificar.phtml'; ?>
+                </span>
+            <?php endif; ?>
+
+            <a class="grow" href="/registrados/comentarios/todos/<?=$pub->idu?>" data-ajax=".pub-<?=$pub->idu?> .fragmentos" data-show=".pub-<?=$pub->idu?> .fragmentos" rel="nofollow">
+                <small>
+                    <?=$pub->comentarios?> <?=t('comentarios')?><br>
+                    <?=t('¿Comentar?')?>
+                </small>
+            </a>
+
+            <?php if ( ! $pub->titulo): ?>
+                <a href="/usuarios/perfil/<?=urlencode($pub->apodo)?>/publicacion/<?=$pub->idu?>" title="<?=t('Ver publicación a solas.')?>"><img alt="<?=t('Ver publicación a solas.')?>" height="30" loading="lazy" src="/img/icons/external-link.svg" width="30"></a>
+            <?php endif; ?>
+        
+            <a class="share" data-toast="Enlace copiado al portapapeles." href="https://roleplus.app/publicaciones/<?=$pub->slug?>" title="<?=t('Enlace para compartir.')?>"><img alt="<?=t('Enlace para compartir.')?>" height="30" loading="lazy" src="/img/icons/share-2.svg" width="30"></a>
+        </div>
+    </footer>
+</article>

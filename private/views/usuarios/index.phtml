@@ -1,0 +1,24 @@
+<?php
+Css::add('usuarios.min');
+?>
+<div class="usuarios" data-columns id="grid">
+    <?php include APP_PATH . 'views/usuarios/listado.phtml'; ?>
+</div>
+
+<?php
+/*
+<div class="grid s12">
+    <div class="s3">
+        <a role="button" href="/usuarios/index/1">«</a>
+    </div>
+    <div class="s3">
+        <a role="button" href="/usuarios/index/<?=($pagina>1)?$pagina-1:1?>">‹</a>
+    </div>
+    <div class="s3">
+        <a role="button" href="/usuarios/index/<?=($pagina<$ultima_pagina)?$pagina+1:$ultima_pagina?>">›</a>
+    </div>
+    <div class="s3">
+        <a role="button" href="/usuarios/index/<?=$ultima_pagina?>">»</a>
+    </div>
+</div>
+*/

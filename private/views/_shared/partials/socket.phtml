@@ -1,0 +1,53 @@
+
+<script>
+if(typeof(EventSource) !== "undefined" && ! window.source)
+{
+    var source = new EventSource('<?=$url?>', {withCredentials:true});
+
+    source.onopen = function(e) {
+        console.log(e);
+        console.log("The connection to your server has been opened");
+    }
+
+    source.onmessage = function(e)
+    {
+        console.log(e);
+        console.log("A message!");
+
+        var data = e.data;
+        console.log(data);
+        var a = JSON.parse(data);
+        console.log(a);
+
+        for (var i=0; i<a.length; i++)
+        {
+            if ( ! $(a[i].to)[0]) {
+                continue;
+            }
+
+            if (a[i].append>0) {
+                to = a[i].to;
+                $.get(a[i].from, function(data) {
+                    $(to).append(data);
+                });
+            }
+            else {
+                $(a[i].to).load(a[i].from);
+            }
+
+            console.log(a[i].from);
+            console.log(a[i].to);
+        }
+    };
+
+    source.onerror = function(e) {
+        console.log(e);
+        console.log("The server connection has been closed due to some errors");
+    }
+
+    source.onclose = function(e) {
+        console.log(e);
+        console.log("The connection to your server has been closed");
+    };
+}
+</script>

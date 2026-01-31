@@ -1,0 +1,55 @@
+<?php
+Css::add('publicaciones.min');
+?>
+<div data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=h($grupo->nombre)?></h1>
+            <i><?=h($grupo->eslogan)?></i>
+            <br>
+        </header>
+
+        <?php if ($grupo->fondo_cabecera): ?>
+		    <?=Html::img(t('Grupo: ') . $grupo->nombre, "/img/usuarios/$grupo->usuarios_idu/l.$grupo->fondo_cabecera")?>
+        <?php endif; ?>
+
+        <section>
+            <br>
+            <p><?=_html::links(nl2br($grupo->info))?></p>
+            <div class="auto">
+                <?=Kubox::link(attrs: 'class="opciones" data-ajax=".ajax.show" data-style="body, overflow:hidden"', href: "/grupos/ver_miembros/$grupo->idu", label: "$grupo->miembros " . (((int)$grupo->miembros === 1) ? t('miembro') : t('miembros')))?>
+
+                <?=Form::button(text: t('Opciones'), attrs: 'class="opciones" data-toggle=".opciones"')?>
+
+                <?=Form::button(text: t('Volver'), attrs: 'class="hide opciones" data-toggle=".opciones"')?>
+
+                <?php if (Session::get('idu') == $grupo->usuarios_idu): ?>
+                    <?=Kubox::link(attrs: 'class="hide opciones" data-ajax=".ajax.show" data-style="body, overflow:hidden"', href: "/registrados/grupos/editor/$grupo->idu", label: t('Editar'))?>
+                <?php else: ?>
+                    <?php if (empty($quienes[Session::get('idu')])): ?>
+                        <?=Kubox::link(attrs: 'class="hide opciones"', href: "/registrados/grupos/unirse/$grupo->idu", label: t('Unirse al grupo'))?>
+                    <?php else: ?>
+                        <?=Kubox::link(attrs: 'class="hide opciones"', href: "/registrados/grupos/dejar/$grupo->idu", label: t('Dejar grupo'))?>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                <?php if ($grupo->mapa): ?>
+                    <?=Kubox::link(attrs: 'class="hide opciones"', href: "/grupos/mapa/$grupo->hashtag", label: t('Ver mapa'))?>
+                <?php endif; ?>
+            </div>
+        </section>
+
+        <footer>
+            <br>
+            <small><?=count($publicaciones)?> <?=t('publicaciones con la etiqueta')?>: #<?=$grupo->hashtag?></small>
+        </footer>
+    </article>
+
+    <?php if ($elemento == 'publicacion'):
+        include APP_PATH . 'views/publicaciones/una.phtml';
+    else:
+        foreach ($publicaciones as $pub):
+            include APP_PATH . 'views/publicaciones/una.phtml';
+        endforeach;
+    endif; ?>
+</div>

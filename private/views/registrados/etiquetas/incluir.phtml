@@ -1,0 +1,16 @@
+
+<form action="/registrados/etiquetas/guardar" class="etiquetas ma10" data-ajax=".etiquetas-<?=$donde?>" method="post">
+	<button type="submit" class="w100" data-hide=".modal, .overlay"><?=t('Guardar')?></button>
+	<?php $tipo=''; foreach($etiquetas as $eti):
+		if ($eti->tipo <> $tipo): ?>
+			<hr>
+			<h5><?=ucwords(str_replace('_', ' ', $eti->tipo))?></h5>
+			<?php $tipo = $eti->tipo;
+		endif; ?>
+		<label class="etiqueta-<?=$eti->id?>">
+			<input type="checkbox" name="<?=$eti->tipo?>[]" value="<?=$eti->hashtag?>">
+			<span class="tag"><?=$eti->hashtag?></span> (<?=$eti->veces?>)
+		</label>
+	<?php endforeach; ?>
+	<input type="hidden" name="donde" value="<?=$donde?>">
+</form>

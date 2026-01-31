@@ -1,0 +1,101 @@
+<?php
+$controller_name = View::getVar('controller_name');
+$frase = View::getVar('frase');
+$notificaciones_nuevas = (new Notificaciones)->nuevas();
+$usuario = View::getVar('usuario');
+
+/* ===== defensivo: id/apodo sin avisos =====
+ * Preferimos Session::get('idu') como fuente primaria del canal,
+ * y caemos a $usuario->idu si existe. Igual para apodo.
+ */
+$idu = (string)(Session::get('idu') ?: ((is_object($usuario) && isset($usuario->idu)) ? $usuario->idu : ''));
+$apodo = (string)(((is_object($usuario) && !empty($usuario->apodo)) ? $usuario->apodo : ''));
+?>
+<nav>
+	<button class="buscar menu transparent" data-style="body, overflow:hidden" data-show="aside, .overlay.aside"><img alt="<?=t('Menú')?>" loading="lazy" src="/img/icons/menu.svg" width="30" height="30"></button>
+
+	<a class="buscar publicaciones xs0" href="/" title="<?=t('Publicaciones')?>">
+		<img alt="<?=t('Publicaciones')?>" loading="lazy" src="/img/icons/home.svg" width="30" height="30">
+		<span data-ch="publicaciones_nuevas"><?php include APP_PATH . 'views/registrados/publicaciones/nuevas.phtml'; ?></span>
+	</a>
+
+	<button class="buscar hide transparent" data-toggle=".buscar, nav a:last-child"><img alt="<?=t('No buscar')?>" loading="lazy" src="/img/icons/arrow-left.svg" width="30" height="30"></button>
+
+	<?php
+	$actions = [
+		'grupos'=>'/grupos/buscar',
+		'publicaciones'=>'/publicaciones/buscar',
+		'usuarios'=>'/usuarios/buscar',
+	];
+	?>
+	<form action="<?=empty($actions[$controller_name])?'/publicaciones/buscar':$actions[$controller_name]?>" class="buscar flex grow xs0 s0" method="post">
+		<input type="search" class="connect-to-right grow" data-filter="article" name="frase" name="frase" placeholder="<?=t('Escribe para filtrar, o buscar si pulsas el enter...')?>" value="<?=empty($frase)?'':urldecode($frase)?>">
+		<?php
+		$options = [
+			'/publicaciones/buscar'=>t('Publicaciones'),
+			'/usuarios/buscar'=>t('Usuarios'),
+			'/grupos/buscar'=>t('Grupos'),
+		];
+		?>
+		<select class="connect-to-left" data-action>
+			<?php foreach ($options as $val=>$tex):
+				$selected = (strstr($val, $controller_name)) ? 'selected' : ''; ?>
+				<option <?=$selected?> value="<?=$val?>"><?=$tex?></option>
+			<?php endforeach; ?>
+		</select>
+		<button type="submit" class="hide"></button>
+	</form>
+
+	<?php /*<form action="/<?=preg_match('/grupos|usuarios/', $controller_name)?$controller_name:'publicaciones'?>/buscar" class="buscar flex grow xs0 s0" method="post">
+		<input type="search" class="connect-to-right grow" data-filter="article" name="frase" placeholder="<?=t('Escribe para filtrar el contenido o pulsa enter para buscarlo en')?>…" value="<?=empty($frase)?'':urldecode($frase)?>">
+		
+		<select class="connect-to-left" data-action>
+			<option <?=($controller_name=='grupos')?'selected ':''?>value="/grupos/buscar"><?=t('Grupos')?></option>
+
+			<option <?=preg_match('/grupos|usuarios/', $controller_name)?'':'selected '?>value="/publicaciones/buscar"><?=t('Publicaciones')?></option>
+
+			<option <?=($controller_name=='usuarios')?'selected ':''?>value="/usuarios/buscar"><?=t('Usuarios')?></option>
+		</select>
+	</form>*/ ?>
+
+	<button class="buscar transparent m0 l0 xl0 xxl0" data-toggle_display=".buscar"><img alt="<?=t('Buscador')?>" loading="lazy" src="/img/icons/search.svg" width="30" height="30"></button>
+
+	<!-- notificaciones: canal estable con idu de sesión (fallback: '0') -->
+	<a class="buscar notificaciones" data-ajax=".ajax.show" data-style="body, overflow:hidden" rel="nofollow" href="/registrados/notificaciones" title="<?=t('Notificaciones')?>">
+		<img alt="<?=t('Notificaciones')?>" loading="lazy" src="/img/icons/bell.svg" width="30" height="30">
+		<span data-ch="notificaciones_<?=($idu !== '') ? $idu : '0'?>"><?php include APP_PATH . 'views/registrados/notificaciones/contar.phtml'; ?></span>
+	</a>
+
+	<!-- perfil: si no hay apodo, cae a /usuarios para evitar 404 -->
+	<a class="buscar xs0 s0" href="<?=($apodo !== '') ? '/usuarios/perfil/'.urlencode($apodo) : '/usuarios'?>" title="<?=t('Perfil de usuario')?>"><img alt="<?=t('Perfil de usuario')?>" loading="lazy" src="/img/icons/user.svg" width="30" height="30"></a>
+</nav>
+<div class="nav-air"></div>
+
+<?php
+if (Session::get('idu')): ?>
+
+	<?php /*
+	<div class="persiana" style="text-align:center">
+		¿Sabías que tenemos un clon de R+ solo para Magic en <a href="https://mtgsearch.it">mtgsearch.it</a>? Creímos conveniente separar ambas aficiones y estamos orgullosos de ambas redes sociales.
+
+		Gracias a nuestros mecenas ✨ R+ mola más: 🐺 Adrián Gastón, 🌀 Anigel, 🎲 ceci_ro, 🐉 Crowker, 🔥 EbaN, 🌿 faifolk, 🛡️ Goikorol, 🧠 greatkithain, 🧭 Inoku, 📜 Jose Joaquin, 💾 Max, 🍻 Meroka, 🌙 Natanael y 📚 Pablets De Avendanus.<br>Hazte Chamán 🧙‍♂️ y desbloquea todo en <a href="https://roleplus.app/registrados/tienda">la tienda</a>
+	</div>
+
+	<div class="progress-box">
+		<div class="flex space-between bottom">
+			<mark>0%</mark>
+			<div>
+				<?php View::partial('suscribirse', false, [
+					'atributos'=>'data-bg_color',
+					'id'=>'58HFSRCHHRWDN',
+					'texto'=>t('Puedo donar €'),
+				]); ?>
+			</div>
+			<mark>100%</mark>
+		</div>
+		<progress value="23" max="300"></progress>
+		<div class="flex center"><a data-ajax=".ajax.show" href="/info/ventana/reacciones"><?=t('Y reaccionar a las publicaciones')?></a></div>
+		<br>
+	</div>*/ ?>
+	<?php
+endif;

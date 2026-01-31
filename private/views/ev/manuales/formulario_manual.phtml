@@ -1,0 +1,81 @@
+
+<div class="modal editor">
+	<form enctype="multipart/form-data" method="post">
+		<header>
+			<h3>
+				<?=t('Manual')?>
+				<button type="button" class="transparent" data-confirm="<?=t('¿Estás seguro?')?>" data-hide=".modal.editor, .editor.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+			</h3>
+		</header>
+
+		<section>
+			<label><?=t('Formato')?></label>
+			<select name="formato">
+				<?php foreach (['a4'=>'A4', 'letter'=>'Letter'] as $key=>$val):
+					$selected = ($manual->formato == $key) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$key?>"><?=$val?></option>
+				<?php endforeach; ?>
+			</select>
+
+			<label><?=t('Plantilla')?></label>
+			<select name="plantilla">
+				<?php foreach (['dragonbane'=>'Dragonbane', 'for_the_quest'=>'For the Quest', 'srd20'=>'SRD20'] as $key=>$val):
+					$selected = ($manual->plantilla == $key) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$key?>"><?=$val?></option>
+				<?php endforeach; ?>
+			</select>
+
+			<label><?=t('Título')?></label>
+			<input type="text" name="nombre" placeholder="<?=t('Título del manual...')?>" value="<?=$manual->nombre?>">
+
+			<label><?=t('Introdución')?></label>
+			<textarea name="introduccion" placeholder="<?=t('Texto para atraer a los máster...')?>"><?=$manual->introduccion?></textarea>
+
+			<label><?=t('Notas')?></label>
+			<textarea name="notas" placeholder="<?=t('Notas solo para usted...')?>"><?=$manual->notas?></textarea>
+
+			<label><?=t('Ficha')?></label>
+			<select name="fichas_idu">
+				<option><?=t('Escoge una si está creada...')?></option>
+				<?php foreach ($fichas as $fic):
+					$selected = ($manual->fichas_idu == $fic->idu) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$fic->idu?>"><?=$fic->nombre?></option>
+				<?php endforeach; ?>
+			</select>
+
+			<label class="dropimage mh20 mt20">
+				<input type="file" name="imagenes[]">
+				<?php if ($manual->fotos): ?>
+					<img alt="<?=t('Imagen del manual:')?> <?=$manual->nombre?>" src="/img/usuarios/<?=$manual->usuarios_idu?>/l.<?=$manual->fotos?>">
+				<?php endif; ?>
+			</label>
+
+			<?php if ($manual->fotos): ?>
+				<input type="checkbox" checked name="fotos" value="<?=$manual->fotos?>"> <?=$manual->fotos?>
+			<?php else: ?>
+				<input type="hidden" name="fotos" value="<?=$manual->fotos?>">
+			<?php endif; ?>
+
+			<input type="hidden" name="fotos_usuarios_idu" value="<?=$manual->fotos_usuarios_idu?>">
+		</section>
+
+		<footer class="grid">
+			<?php if ($manual->idu): ?>
+				<a role="button" class="outline" data-ajax=".ajax.show" href="/ev/manuales/formulario_manual"><?=t('Nuevo')?></a>
+
+				<button type="submit" class="outline" name="action" value="eliminar"><?=t('Eliminar')?></button>
+
+				<button type="submit" class="outline" name="action" value="crear"><?=t('Duplicar')?></button>
+
+				<button type="submit" name="action" value="actualizar"><?=t('Actualizar')?></button>
+
+				<input type="hidden" name="idu" value="<?=$manual->idu?>">
+			<?php else: ?>
+				<a role="button" class="outline" href="/ev/manuales"><?=t('Manuales')?></a>
+
+				<button type="submit" name="action" value="crear"><?=t('Crear')?></button>
+			<?php endif; ?>
+		</footer>
+	</form>
+</div>
+<div class="editor overlay" data-confirm="<?=t('¿Estás seguro?')?>" data-hide=".modal.editor, .editor.overlay"></div>

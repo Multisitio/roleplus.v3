@@ -1,0 +1,23 @@
+<?php
+_var::echo($_POST);
+
+$jwtToken = $_POST['credential'];
+
+// Separar las tres partes del JWT: Encabezado, Cuerpo, Firma
+list($headerEncoded, $payloadEncoded, $signature) = explode('.', $jwtToken);
+
+// Decodificar las partes base64
+$header = base64_decode($headerEncoded);
+$payload = base64_decode($payloadEncoded);
+
+// Convertir el contenido JSON a un array asociativo
+$headerData = json_decode($header, true);
+$payloadData = json_decode($payload, true);
+
+// Mostrar los datos decodificados
+echo "Encabezado decodificado:\n";
+_var::echo($headerData);
+
+echo "Cuerpo decodificado:\n";
+_var::die($payloadData);
+

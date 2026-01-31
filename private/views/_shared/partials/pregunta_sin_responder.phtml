@@ -1,0 +1,19 @@
+
+<div class="modal">
+	<header>
+        <h3>Pregunta importante</h3>
+	</header>
+    <form method="post">
+        <section>
+            <?=nl2br($pregunta->pregunta)?>
+            <hr>
+            <small><b>Tu respuesta:</b></small>
+            <textarea name="respuesta_a_pregunta_importante"></textarea>
+        </section>
+        <footer>
+            <button type="submit">Enviar</button>
+        </footer>
+        <input type="hidden" name="preguntas_idu" value="<?=$pregunta->idu?>"></textarea>
+    </form>
+</div>
+<div class="overlay"></div>

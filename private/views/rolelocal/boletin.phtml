@@ -1,0 +1,290 @@
+<?php
+require VENDOR_PATH . 'phpmailer/phpmailer/src/PHPMailer.php';
+use PHPMailer\PHPMailer\PHPMailer;
+
+/********************************************************************
+ * UTILIDADES
+ ********************************************************************/
+
+/**
+ * Sustituye en un bloque HTML todos los enlaces rotos por “[Enlace roto]”.
+ *
+ * @param string $html HTML de entrada.
+ * @return string HTML con enlaces rotos reemplazados.
+ */
+function replaceBrokenLinks(string $html): string
+{
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+    $links   = $dom->getElementsByTagName('a');
+    $broken  = [];
+
+    foreach ($links as $a) {
+        $href = $a->getAttribute('href');
+        if (!$href) continue;
+
+        $ch = curl_init($href);
+        curl_setopt_array($ch, [
+            CURLOPT_NOBODY         => true,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_FOLLOWLOCATION => true,
+        ]);
+        curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($code >= 400 || $code === 0) {
+            $broken[] = $a;
+        }
+    }
+
+    foreach ($broken as $a) {
+        $a->parentNode->replaceChild($dom->createTextNode('[Enlace roto]'), $a);
+    }
+
+    libxml_clear_errors();
+    return $dom->saveHTML();
+}
+
+/**
+ * Devuelve la URL de la imagen representativa ($foto)
+ * y, si procede, un enlace “clicable” relacionado ($enlace).
+ *
+ * - Prioridad:
+ *   1) Fotos subidas por el usuario
+ *   2) Vista previa local generada por scraper
+ *   3) Miniatura de YouTube
+ *
+ * - Extensiones admitidas: jpeg|jpg|png|webp|svg|mp4
+ * - Las miniaturas (prefijo m.) se generan solo para jpeg|jpg|png|webp
+ *
+ * @return array{string $foto, string $enlace}
+ */
+function getFoto($pub, array $vistas_previas): array
+{
+    $foto   = '';
+    $enlace = '';
+
+    $allowed = ['jpeg', 'jpg', 'png', 'webp', 'svg', 'mp4'];
+    $thumb   = ['jpeg', 'jpg', 'png', 'webp'];
+
+    /*--------------------------------------------------------------*/
+    /* 1) Fotos propias                                             */
+    /*--------------------------------------------------------------*/
+    if (!empty($pub->fotos)) {
+        $f   = strpos($pub->fotos, ',') !== false
+             ? explode(',', $pub->fotos, 2)[0]
+             : $pub->fotos;
+        $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+
+        if (in_array($ext, $allowed, true)) {
+            $pref = in_array($ext, $thumb, true) ? 'm.' : '';
+            $foto = DOMAIN . "img/usuarios/{$pub->usu_idu}/{$pref}{$f}";
+        }
+    }
+    /*--------------------------------------------------------------*/
+    /* 2) Vista previa local                                        */
+    /*--------------------------------------------------------------*/
+    elseif (!empty($vistas_previas[$pub->idu][0]->image)) {
+        $vp  = $vistas_previas[$pub->idu][0];
+        $f   = $vp->image;
+        $ext = strtolower(pathinfo($f, PATHINFO_EXTENSION));
+
+        if (in_array($ext, $allowed, true)) {
+            $pref  = in_array($ext, $thumb, true) ? 'm.' : '';
+            $foto  = DOMAIN . "img/vistas_previas/{$vp->idu}/{$pref}{$f}";
+            $enlace = $vp->url;
+        }
+    }
+    /*--------------------------------------------------------------*/
+    /* 3) Miniatura de YouTube                                      */
+    /*--------------------------------------------------------------*/
+    elseif (!empty($pub->enlace)) {
+        $enlace  = $pub->enlace;                       // se mostrará debajo
+        $videoId = _var::getUrlVar($enlace);           // ya devuelve solo el ID
+        if ($videoId) {
+            $foto = "https://img.youtube.com/vi/{$videoId}/hqdefault.jpg";
+        }
+    }
+
+    return [$foto, $enlace];
+}
+
+/**
+ * Inserta el enlace de baja y el píxel de seguimiento personalizados.
+ */
+function replacePlaceholders(string $html, string $unsubscribe, string $email, string $boletin): string
+{
+    $html = str_replace(
+        '<span class="baja_del_boletin"></span>',
+        '<a href="' . $unsubscribe . '">QUIERO DARME DE BAJA DEL BOLETÍN Y SUCESIVAS COMUNICACIONES PASIVAS</a>',
+        $html
+    );
+
+    return str_replace(
+        '<span class="pixel"></span>',
+        '<img alt="" src="' . DOMAIN . 'imagenes/pixel/' . base64_encode($email) . '/' . $boletin . '" width="1" height="1">',
+        $html
+    );
+}
+
+/********************************************************************
+ * GENERACIÓN DEL BOLETÍN HTML
+ ********************************************************************/
+
+ob_start();
+$titulo = t('Boletín de R+') . ' | ' . t('Semana') . ' ' . date('W', strtotime('-1 week')) . ' (' . date('Y') . ')';
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=yes">
+    <title><?= $titulo ?></title>
+    <style>
+        a            { color:#900; text-decoration:none; }
+        a.tag:before { content:"#"; }
+        body         { background:#FFE; font-family:monospace; max-width:640px; margin:0 auto; }
+        header img[src*="/logo"] { float:right; }
+    </style>
+</head>
+<body>
+<header id="indice">
+    <h1><?= $titulo ?></h1>
+    <a href="<?= DOMAIN ?>">
+        <img alt="<?= t('Logo de R+') ?>" src="<?= DOMAIN ?>img/logos/LogoROLEplus512.png" width="96">
+    </a>
+    <p>
+        Hola, <b>a continuación, encontrarás</b> un resumen de las
+        <b><?= count($publicaciones) ?> publicaciones</b> de la semana pasada. Una dosis de información para mantenerte al día.
+    </p>
+    <p>
+        Tenemos un canal en Telegram donde una IA replica todo lo publicado:
+        <a href="https://t.me/+Kw24CgNrEMFlNjg8" target="_blank">https://t.me/+Kw24CgNrEMFlNjg8</a>
+    </p>
+    <p><b>¡Disfruta de la lectura!</b></p>
+    <hr>
+</header>
+
+<main>
+<?php foreach ($publicaciones as $pub):
+    $url = DOMAIN . "publicaciones/{$pub->slug}";
+    $pub->contenido_formateado = str_replace('"/grupos/ver', '"' . DOMAIN . 'grupos/ver', $pub->contenido_formateado);
+?>
+<article id="<?= $pub->idu ?>">
+    <header><a href="<?= $url ?>"><h2><?= $pub->titulo ?></h2></a></header>
+    <blockquote>
+        <section>
+            <?php if (_str::count_files($pub->contenido_formateado) > 4): ?>
+                <?= _str::truncate_files($pub->contenido_formateado, 4) ?><br>
+                <a href="<?= $url ?>">[<?= t('Más, dame más') ?>]</a>
+            <?php else: echo $pub->contenido_formateado; endif; ?>
+
+            <?php if (!empty($encuestas[$pub->idu])):
+                $total = array_sum(array_column($encuestas[$pub->idu], 'votos'));
+                foreach ($encuestas[$pub->idu] as $opc):
+                    $per = $total ? round($opc->votos * 100 / $total) : 0; ?>
+                    <div>(<b class="right"><?= $per ?>%</b>) <?= $opc->opcion ?></div>
+                    <progress max="100" value="<?= $per ?>"></progress>
+                <?php endforeach; ?>
+                <br><b><?= t('Votos') ?>:</b> <?= $total ?>
+            <?php endif; ?>
+        </section>
+        <br>
+        <?php list($foto, $enlace) = getFoto($pub, $vistas_previas); ?>
+        <?php if ($foto): ?>
+            <picture>
+                <?php if (str_ends_with($foto, '.mp4')): ?>
+                    <video width="384" controls preload="metadata"><source src="<?= $foto ?>" type="video/mp4"></video>
+                <?php else: ?>
+                    <img alt="<?= htmlspecialchars($foto, ENT_QUOTES) ?>" src="<?= $foto ?>" width="384">
+                <?php endif; ?>
+                <?php if ($enlace): ?><br><figcaption><small><a href="<?= $enlace ?>"><?= $enlace ?></a></small></figcaption><?php endif; ?>
+            </picture>
+        <?php endif; ?>
+        <?php if ($pub->comentarios): ?><br><a href="<?= $url ?>"><b><?= t('Comentarios') ?>:</b> <?= $pub->comentarios ?></a><?php endif; ?>
+    </blockquote>
+    <footer>
+        <b><?= $pub->apodo ?></b><br>
+        <small><time><?= _date::format($pub->publicado, 'd-m-Y H:i') ?></time></small>
+    </footer>
+</article>
+<br><hr>
+<?php endforeach; ?>
+</main>
+
+<footer>
+    <p><small>Este correo electrónico y sus posibles archivos adjuntos son confidenciales y están dirigidos únicamente a la persona o entidad a la que van dirigidos. Si no es usted el destinatario, se le informa que la utilización, divulgación o copia sin autorización está prohibida. Puede ejercer sus derechos o darse de baja pulsando en <span class="baja_del_boletin"></span>.</small></p>
+    <p>Para cualquier otra consulta, escriba a <a href="mailto:dj@roleplus.app">dj@roleplus.app</a>.</p>
+    <p><a href="<?= DOMAIN ?>"><img alt="<?= t('Logo de R+') ?>" src="<?= DOMAIN ?>img/logos/LogoROLEplus512.png" width="96"></a></p>
+</footer>
+
+<span class="pixel"></span>
+</body>
+</html>
+<?php
+$html = ob_get_clean();
+$html = replaceBrokenLinks($html);
+
+/********************************************************************
+ * ENVÍO DEL BOLETÍN
+ ********************************************************************/
+if ($accion === 'enviar') {
+    $year    = date('y');
+    $week    = date('W', strtotime('-1 week'));
+    $boletin = "boletin-{$year}-{$week}";
+
+    // -----------------------------------------------------------
+    // ARRAY DE USUARIOS DE PRUEBA (descomentar para test)
+    // -----------------------------------------------------------
+    
+    /*unset($usuarios);
+    $usuarios[0]        = new stdClass();
+    $usuarios[0]->email = 'distrotuz@gmail.com';
+    $usuarios[0]->token = 'token';*/
+
+    foreach ($usuarios as $u) {
+        if (!filter_var($u->email, FILTER_VALIDATE_EMAIL)) {
+            continue; // o registrar error
+        }
+
+        $uns  = DOMAIN . 'usuarios/baja_del_boletin/' . $u->token;
+        $body = replacePlaceholders($html, $uns, $u->email, $boletin);
+
+        // Dominio interno → usa wrapper _mail
+        if (str_ends_with($u->email, '@roleplus.app')) {
+            _mail::send($u->email, $titulo, $body);
+            continue;
+        }
+
+        $mail = new PHPMailer(true);
+        try {
+            $mail->CharSet = 'UTF-8';
+            $mail->setFrom('ia@roleplus.app');
+            $mail->addAddress($u->email);
+            $mail->Subject = $titulo;
+            $mail->Body    = $body;
+            $mail->isHTML(true);
+
+            // DKIM
+            $mail->DKIM_domain   = 'roleplus.app';
+            $mail->DKIM_selector = 'default';
+            $mail->DKIM_private  = '/etc/opendkim/keys/roleplus.app/default.private';
+            $mail->DKIM_identity = $mail->From;
+
+            // List-Unsubscribe
+            $mail->addCustomHeader('List-Unsubscribe', "<{$uns}>");
+
+            $mail->send();
+        } catch (Throwable $e) {
+            error_log('Fallo envío a ' . $u->email . ': ' . $e->getMessage());
+        }
+
+        usleep(36 * 1000 * 1000); // 36 s de throttle
+    }
+}
+
+echo $html;

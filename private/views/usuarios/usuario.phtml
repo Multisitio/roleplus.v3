@@ -1,0 +1,69 @@
+<?php
+$apple = 'green';
+if (empty($usu)) {
+    $usu = (new Usuarios)->uno();
+}
+elseif ( ! empty($usu->socio)) {
+    $apple = 'red';
+}
+elseif ($usu->ultima_pub > date('Y-m-d H:i:s', strtotime('-6 month'))) {
+    $apple = 'yellow';
+}
+?>
+<article class="usuario _<?=$usu->idu?>">
+    <header>
+        <div class="gap10">
+            <div class="grow">
+                <?php if ($controller_name=='usuarios' && $action_name=='perfil'): ?>
+                    <h1><?=Ku::icon(icon: 'apple-whole', width: 20, height: 20, args: ['data-color'=>$apple])?> <?=h($usu->apodo)?></h1>
+                <?php else: ?>
+                    <h2><?=Ku::icon(icon: 'apple-whole', width: 20, height: 20, args: ['data-color'=>$apple])?> <?=h($usu->apodo)?></h2>
+                <?php endif; ?>
+                <small>
+                    <i><?=h($usu->eslogan)?></i>
+                </small>
+                <?php if ($usu->sobre_mi): ?>
+                    <blockquote><?=nl2br(_html::links(h($usu->sobre_mi)), false)?></blockquote>
+                <?php endif; ?>
+            </div>
+            <?=Usuario::avatar($usu, 's')?>
+        </div>
+    </header>
+    <section>
+        <small>
+            <b><?=$roles[$usu->rol]??''?>:</b> <?=$usu->experiencia?> PX<br>
+
+            <?php if ($usu->socio): ?>
+                <b><?=t('Suscrito desde')?>:</b> <?=date('d-m-Y', strtotime($usu->socio))?><br>
+            <?php endif;
+            $incremento = $usu->cuota === 'anual' ? '+1 year' : ($usu->cuota === 'mensual' ? '+1 month' : null);
+            if ($incremento !== null):
+                $fin = date('d-m-Y', strtotime($incremento, strtotime($usu->ultimo_pago))); ?>
+                <b><?=t('Suscrito hasta')?>:</b> <?=$fin?><br>
+            <?php endif; ?>
+
+            <b><?=t('Entró hace')?>:</b> <?=_date::ago($usu->tocado)?><br>
+            <b><?=t('Publicó hace')?>:</b> <?=_date::ago($usu->ultima_pub)?><br>
+            <b><?=t('Seguidores')?>:</b> <?=$usu->atentos?>
+        </small>
+        <br>
+    </section>
+    <?php if ( ! empty($usu->fondo_cabecera)): ?>
+        <img src="/img/usuarios/<?=$usu->idu?>/l.<?=$usu->fondo_cabecera?>">
+    <?php endif; ?>
+    <footer class="horizontal auto gap5">
+        <?php if (Session::get('idu') && Session::get('idu') <> $usu->idu): ?>
+            <?php include APP_PATH . 'views/registrados/usuarios/notificar.phtml'; ?>
+        <?php elseif (Session::get('idu') == $usu->idu): ?>
+            <button type="button" class="opciones" data-toggle_class="hide, .opciones"><?=t('Más opciones')?></button>
+
+            <button type="button" class="hide opciones" data-bg_color data-toggle_class="hide, .opciones"><?=t('Menos opciones')?></button>
+
+            <a role="button" class="opciones" href="/usuarios/salir"><?=t('Cerrar sesión')?></a>
+
+            <a role="button" class="hide opciones" data-confirm="<?=t('¿Estás seguro que quieres eliminar tu cuenta?')?>" href="/registrados/usuarios/borrarse"><?=t('Eliminar mi cuenta')?></a>
+            
+            <a role="button" class="opciones" data-ajax=".ajax.show" data-bg_color href="/registrados/usuarios/editar"><?=t('Editar perfil')?></a>
+        <?php endif; ?>
+    </footer>
+</article>

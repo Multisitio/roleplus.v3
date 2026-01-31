@@ -1,0 +1,30 @@
+
+<article class="mha w600 formularios tabs">
+	<header>
+		<a href="/usuarios/identificarse" class="tab"><?=t("Identifícate")?></a>
+		<a href="/usuarios/registrarse" class="tab"><?=t("Regístrate")?></a>
+		<a href="/usuarios/recordar_clave" class="tab active"><?=t("Recuérdame")?></a>
+	</header>
+
+	<?=Form::open(null, 'post', 'class="container recordar"')?> 
+		<section>
+			<br>
+			<?=Kubox::input(type: 'text',
+				attrs: 'required tabindex="1"',
+				label: t('Con tu eMail'),
+				placeholder: t('Aquí tu correo electrónico'),
+				name: 'email', value: _var::post('email'))?>
+			<br>
+		</section>
+		<footer>
+			<?=Kubox::buttonSubmitColor(attrs: 'tabindex="2"',
+				label: t('Envíame un enlace para poder entrar con una clave nueva'),
+				name: 'recordar_clave', value: 1)?>
+			<br>
+		</footer>
+	</form>
+	<br>
+	<br>
+	<br>
+	<br>
+</article>

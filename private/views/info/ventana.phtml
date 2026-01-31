@@ -1,0 +1,23 @@
+<?php
+$confirmar_cierre = empty($confirmar_cierre) ? '' : 'data-confirm="' . t('¿Estás seguro?') . '"';
+?>
+
+<div class="modal">
+	<header>
+        <div class="space-between">
+		    <h3><?=$titulo?></h3>
+            <button class="transparent" <?=$confirmar_cierre?> data-hide=".modal, .overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+        </div>
+	</header>
+
+    <?php if ( ! empty($filtro_filas)): ?>
+        <section>
+            <input type="text" class="w100" data-filter="<?=$filtro_filas?>" placeholder="<?=t('Filtrar')?>…">
+        </section>
+    <?php endif; ?>
+
+    <?php include APP_PATH . "views/info/$archivo.phtml"; ?>
+    <br>
+    <br>
+</div>
+<div class="overlay" <?=$confirmar_cierre?> data-hide=".modal, .overlay"></div>

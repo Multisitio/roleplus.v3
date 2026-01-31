@@ -1,0 +1,33 @@
+<?php
+$grupo = View::getVar('grupo');
+$usu = View::getVar('usu');
+$usuario = View::getVar('usuario');
+
+if ( ! empty($grupo->fondo_general)) {
+    $fondo = "usuarios/$grupo->usuarios_idu/xxl.$grupo->fondo_general";
+    $fondo_tamanyo = "cover";
+}
+elseif ( ! empty($usu->fondo_general)) {
+    $fondo = "usuarios/$usu->idu/xxl.$usu->fondo_general";
+    $fondo_tamanyo = "cover";
+}
+elseif ( ! empty($usuario->fondo_general)) {
+    $fondo = "usuarios/$usuario->idu/xxl.$usuario->fondo_general";
+    $fondo_tamanyo = "cover";
+}
+else {
+    $fondo = "logos/LogoROLEplus512.svg";
+    $fondo_tamanyo = "50vh";
+}
+
+?>
+<div class="fondo"></div>
+
+<style>
+.fondo {
+    background: url('/img/<?=$fondo?>') center no-repeat;
+    background-size: <?=$fondo_tamanyo?>;
+    height:100vh; width:100%;
+    position:fixed; z-index:-1;
+}
+</style>

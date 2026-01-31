@@ -1,0 +1,82 @@
+<?php
+View::partial('google_charts', null, ['charts'=>[
+    'Publicaciones'=>$publicaciones['meses'],
+    'Comentarios'=>$comentarios['meses'],
+]]);
+?>
+
+<div class="estadisticas s12" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Publicaciones')?></h1>
+            <?=t('Propias/Total')?>: <?=$publicaciones['propios']?>/<?=$publicaciones['totales']?> (<?=round($publicaciones['propios']*100/$publicaciones['totales'], 2)?>%)
+        </header>
+        <section>
+            <br>
+            <h6>Top 10</h6>
+            <?php
+            $c = 1;
+            foreach($publicaciones['usuarios'] as $apodo=>$num):
+                echo "$apodo: $num<br>";
+                if ($c==10) {
+                    break;
+                }
+                ++$c;
+            endforeach; ?>
+            <hr>
+        </section>
+        <section>
+            <h6><?=t('Por meses')?></h6>
+            <div class="grafico" id="Publicaciones"></div>
+            <?php
+            /*$anyo_actual = date('Y');
+            foreach($publicaciones['meses'] as $fecha=>$num):
+                $anyo = date('Y', strtotime($fecha));
+                if ($anyo <> $anyo_actual):
+                    echo '<hr>'; 
+                    $anyo_actual = $anyo;
+                endif;
+                echo "$fecha: $num<br>";
+            endforeach;*/ ?>
+        </section>
+        <footer>
+        </footer>
+    </article>
+    
+    <article>
+        <header>
+            <h2><?=t('Comentarios')?></h2>
+            <?=t('Propios/Total')?>: <?=$comentarios['propios']?>/<?=$comentarios['totales']?> (<?=round($comentarios['propios']*100/$comentarios['totales'], 2)?>%)
+        </header>
+        <section>
+            <br>
+            <h6>Top 10</h6>
+            <?php
+            $c = 1;
+            foreach($comentarios['usuarios'] as $apodo=>$num):
+                echo "$apodo: $num<br>";
+                if ($c==10) {
+                    break;
+                }
+                ++$c;
+            endforeach; ?>
+            <hr>
+        </section>
+        <section>
+            <h6><?=t('Por meses')?></h6>
+            <div class="grafico" id="Comentarios"></div>
+            <?php
+            /*$anyo_actual = date('Y');
+            foreach($comentarios['meses'] as $fecha=>$num):
+                $anyo = date('Y', strtotime($fecha));
+                if ($anyo <> $anyo_actual):
+                    echo '<hr>'; 
+                    $anyo_actual = $anyo;
+                endif;
+                echo "$fecha: $num<br>";
+            endforeach;*/ ?>
+        </section>
+        <footer>
+        </footer>
+    </article>
+</div>

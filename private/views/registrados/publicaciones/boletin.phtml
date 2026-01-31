@@ -1,0 +1,86 @@
+<?php
+if ($accion == 'enviar') {
+    ob_start();
+}
+?><!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=yes">
+        <title><?=$titulo=t('Boletín de R+ | Semana') . ' ' . date("W", strtotime("-1 week"))?></title>
+    </head>
+    <body>
+        <header>
+            <h1><?=$titulo?></h1>
+        </header>
+        <main>
+            <?php foreach($publicaciones as $pub): ?>
+                <article>
+                    <header>
+                        <h2><?=$pub->titulo?></h2>
+                    </header>
+                    <blockquote>
+                        <section>
+                            <?php if (_str::count_files($pub->contenido_formateado) > 4): ?>
+                                <?=_str::truncate_files($pub->contenido_formateado, 4)?><br>
+                                <a href="<?=DOMAIN?>publicaciones/<?=$pub->slug?>">
+                                    [<?=t('Más, dame más')?>]
+                                </a>
+                            <?php else:
+                                echo $pub->contenido_formateado;
+                            endif; ?>
+                        </section>
+                        <br>
+                        <?php
+                        $enlace = '';
+                        $foto = '';
+                        $folder_img = '';
+                        if ( ! empty($pub->fotos)):
+                            $foto = DOMAIN . "img/usuarios/$pub->usu_idu";
+                            $foto .= preg_match('/(jpeg|jpg|png)$/', $pub->fotos) ? '/m.' : '/';
+                            if (strstr($pub->fotos, ',')):
+                                $foto .= explode(',', $pub->fotos, 2)[0];
+                            else:
+                                $foto .= $pub->fotos;
+                            endif;
+                        elseif ( ! empty($vistas_previas[$pub->idu][0]->image)):
+                            $enlace = $vistas_previas[$pub->idu][0]->url;
+                            $foto = DOMAIN . 'img/vistas_previas/' . $vistas_previas[$pub->idu][0]->idu;
+                            $foto .= preg_match('/(jpeg|jpg|png)$/', $vistas_previas[$pub->idu][0]->image) ? '/m.' : '/';
+                            $foto .= $vistas_previas[$pub->idu][0]->image;
+                        elseif ($pub->enlace):
+                            $enlace = $pub->enlace;
+                            $foto = 'https://i.ytimg.com/vi/' . _var::getUrlVar($pub->enlace) . '/hqdefault.jpg';
+                        endif;
+                        if ($foto): ?>
+                            <picture>
+                                <img alt="<?=$foto?>" src="<?=$foto?>" width="384">
+                                <?php if ($enlace): ?>
+                                    <br><figcaption><small><a href="<?=$enlace?>"><?=$enlace?></a></small></figcaption>
+                                <?php endif; ?>
+                            </picture>
+                        <?php endif; ?>
+                    </blockquote>
+                    <footer>
+                        <b><?=$pub->apodo?></b><br>
+                        <small><time><?=_date::format($pub->publicado, 'd-m-Y H:i')?></time></small><br>
+                        <a href="<?=DOMAIN?>publicaciones/<?=$pub->slug?>"><?=DOMAIN?>publicaciones/<?=$pub->slug?></a>
+                    </footer>
+                </article>
+                <br>
+                <hr>
+            <?php endforeach; ?>
+        </main>
+        <footer>
+            <p>🔒 <a href="<?=DOMAIN?>registrados/ajustes"><?=t('"Quiero regular el envío de mensajes por correo en R+"')?></a></p>
+            <p>Este correo electrónico y sus posibles archivos adjuntos son confidenciales y están dirigidos únicamente a la persona o entidad a la que van dirigidos. Si no es usted el destinatario, se le informa que la utilización, divulgación o copia sin autorización está prohibida en virtud de la legislación vigente. Si ha recibido este correo electrónico por error, le rogamos que nos lo comunique inmediatamente y proceda a su eliminación. En cumplimiento con lo establecido en la normativa española de protección de datos, le informamos que sus datos han sido incluidos en un fichero automatizado y que serán tratados con la finalidad de llevar a cabo la gestión de la relación comercial que mantenemos con usted. Puede ejercer sus derechos de acceso, rectificación, cancelación y oposición dirigiéndose a nuestra dirección de correo electrónico o postal. Si no desea seguir recibiendo nuestras comunicaciones, puede darse de baja enviando un correo electrónico a <a href="mailto:dj@roleplus.app?subject=Dame de baja del boletín de R+&body=Por favor, dame de baja del boletín de R+, gracias.">dj@roleplus.app</a>.</p>
+            <img alt="<?=t('Logo de R+')?>" src="<?=DOMAIN?>img/logos/LogoROLEplus512.svg" width="96">
+        </footer>
+    </body>
+</html><?php
+if ($accion == 'enviar') {
+    $contenido = ob_get_contents();
+    ob_end_clean();
+    _mail::sendNewsletter($usuarios, $titulo, $contenido);
+    echo str_replace('</h1>', ' (Enviado)</h1>', $contenido);
+}

@@ -1,0 +1,22 @@
+
+<div class="flex-middle-between pa10">
+    <?=t('Etiquetar')?>
+    <a href="javascript:void(0)" data-hide=".velo, .ventana"><img alt="<?=t('Cerrar ventana')?>" loading="lazy" src="/img/icons/x.svg" width="30" height="30"></a>
+</div>
+<hr class="mv0">
+<div class="etiquetas pa10">
+    <form action="/registrados/roleflix/etiquetado" data-ajax=".caja-<?=$video->idu?> .etiquetas" method="post">
+        <div class="pb10">
+            <img alt="<?=t('Información')?>" loading="lazy" src="/img/icons/alert-circle.svg" width="30" height="30">
+            <?=t('Ponga la etiqueta correcta a este vídeo:')?>
+        </div>
+        <?php foreach($etiquetas as $key=>$val): ?>
+            <label class="pa5">
+                <input type="radio" <?=($key==$video->etiquetas)?'checked ':''?>name="etiquetas" value="<?=$key?>">
+                <span><?=$val?></span>
+            </label>
+        <?php endforeach; ?>
+        <button type="submit" class="mt10 w3-btn w3-dark-grey" data-hide=".ventana, .velo" name="action" value="etiquetar"><?=t('Aplicar')?></button>
+        <input type="hidden" name="idu" value="<?=$video->idu?>">
+    </form>
+</div>

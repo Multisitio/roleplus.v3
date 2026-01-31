@@ -1,0 +1,151 @@
+
+<article class="mha w600 formularios tabs">
+	<header>
+		<?php View::partial('tabs', null, [
+			'scope' => ".formularios",
+			'tabs' => [
+				'identificarse' => t("Identifícate"),
+				'registrarse' => t("Regístrarte"),
+				'recordar' => t("Recuérdame"),
+			],
+		]); ?>
+	</header>
+
+	<?=Form::open(null, 'post', 'class="container identificarse"')?> 
+		<section>
+			<br>
+			<?=Kubox::input(type: 'text',
+				attrs: 'required tabindex="1"',
+				label: t('Con tu eMail'),
+				placeholder: t('Aquí tu correo electrónico'),
+				name: 'email', value: _var::post('email'))?>
+			<br>
+			<div class="bottom gap0">
+				<?=Kubox::input(type: 'password',
+					attrs: 'class="connect-to-right" required tabindex="2"',
+					box: 'class="grow"',
+					label: t('Y tu clave'),
+					placeholder: t('Aquí tu contraseña'),
+					name: 'clave', value: _var::post('clave'))?>
+
+				<button type="submit" class="connect-to-left" data-show_pass=".container.identificarse [name='clave']"><?=Ku::icon(t('Mostrar contraseña'), 'eye-s', 20, 20)?>
+			</div>
+			<br>
+		</section>
+		<footer>
+			<?=Kubox::buttonSubmitColor(attrs: 'tabindex="3"',
+				label: t('Por último pulsa aquí y entra'),
+				name: 'action', value: 'identificarse')?>
+			<br>
+		</footer>
+	</form>
+	
+	<?=Form::open(null, 'post', 'class="container registrarse hide"')?> 
+		<section>
+			<br>
+			<?=Kubox::input(type: 'text',
+				attrs: 'required tabindex="1"',
+				label: t('Con un eMail que no sea el personal'),
+				placeholder: t('Aquí el correo electrónico'),
+				name: 'email', value: _var::post('email'))?>
+			
+			<br>
+			<div class="bottom gap0">
+				<?=Kubox::input(type: 'password',
+					attrs: 'class="connect-to-right" required tabindex="2"',
+					box: 'class="grow"',
+					label: t('Una clave con un mínimo de 12 caracteres'),
+					placeholder: t('Aquí la contraseña'),
+					name: 'clave', value: _var::post('clave'))?>
+
+				<button type="submit" class="connect-to-left" data-show_pass=".container.registrarse [name='clave']"><?=Ku::icon(t('Mostrar contraseña'), 'eye-s', 20, 20)?>
+			</div>
+
+			<br>
+			<?=Kubox::input(type: 'text',
+				attrs: 'required tabindex="3"',
+				label: t('Y un apodo'),
+				placeholder: t('Aquí el apodo'),
+				name: 'apodo', value: _var::post('apodo'))?>
+			<br>
+		</section>
+
+		<section>
+			<div class="auto">
+				<a role="button" data-ajax=".ajax.show" href="/info/ventana/politicas" tabindex="4"><?=t('Ver políticas')?></a>	
+
+				<a role="button" data-ajax=".ajax.show" href="/info/ventana/privacidad" tabindex="5"><?=t('Ver privacidad')?></a>
+			</div>
+			<br>
+		</section>
+
+		<footer>
+			<label>
+				<input type="checkbox" <?=_var::post('terminos')?'checked ':''?> name="terminos" tabindex="6" value="1">
+				<em><?=t('Soy mayor de edad, acepto las políticas y solo entonces...')?></em>
+			</label>
+			<br>
+			<?=Kubox::buttonSubmitColor(attrs: 'tabindex="7"',
+				label: t('Me registro y voy al correo para confirmar la cuenta'),
+				name: 'action', value: 'registrarse')?>
+			<br>
+			<span><?=t('Si tienes algún problema para acceder podemos solucionarlo por...')?></span>
+			<br>
+			<div class="auto">
+				<a href="https://t.me/demonio69" rel="noopener noreferrer" tabindex="8" target="_blank" title="Enlace para chatear por Telegram con Lobo Blanco">
+					...Telegram
+					&nbsp;
+					<img alt="Icono de Telegram" src="/img/iconos/Telegram.svg" width="24" height="24">
+				</a>
+				<a href="https://web.whatsapp.com/send?phone=34603047311" rel="noopener noreferrer" tabindex="9" target="_blank" title="Enlace para chatear por WhatsApp al +34603047311">
+					o WhatsApp
+					&nbsp;
+					<img alt="Icono de WhatsApp" src="/img/iconos/WhatsApp.svg" width="24" height="24">
+				</a>
+			</div>	
+			<br>	
+		</footer>
+	</form>
+
+	<?=Form::open(null, 'post', 'class="container recordar hide"')?> 
+		<section>
+			<br>
+			<?=Kubox::input(type: 'text',
+				attrs: 'required tabindex="1"',
+				label: t('Con tu eMail'),
+				placeholder: t('Aquí tu correo electrónico'),
+				name: 'email', value: _var::post('email'))?>
+			<br>
+		</section>
+		<footer>
+			<?=Kubox::buttonSubmitColor(attrs: 'tabindex="2"',
+				label: t('Envíame un enlace para poder entrar con una clave nueva'),
+				name: 'action', value: 'recordar_clave')?>
+			<br>
+		</footer>
+	</form>
+
+	<?php /*<form method="post" class="container borrarse hide">
+		<section class="grid ph10 pt10">
+			<label class="xs12 m6">
+				<?=t('Con mi eMail')?>:
+				<input type="email" name="email" placeholder="<?=t('Aquí el correo electrónico...')?>" required tabindex="1">
+			</label>
+			<label class="xs12 m6">
+				<?=t('Y mi clave')?>:
+				<div class="flex">
+					<input type="password" class="connect-to-right" name="clave" placeholder="<?=t('Aquí la contraseña...')?>" required tabindex="2">
+					<button class="connect-to-left" data-show_pass=".container.borrarse [name='clave']"><img alt="<?=t('Mostrar contraseña')?>" src="/img/icons/eye-s.svg"></button>
+				</div>
+			</label>
+		</section>
+		<footer class="pb10 ph10">
+			<button type="submit" data-bg_color name="action" tabindex="3" value="borrarse"><?=t('Autorizo')?></button>
+			<span class="xs12" data-text_color><?=t('borrar mi cuenta, perder mis PX y todo lo publicado.')?></span>
+		</footer>
+	</form>*/ ?>
+	<br>
+	<br>
+	<br>
+	<br>
+</article>

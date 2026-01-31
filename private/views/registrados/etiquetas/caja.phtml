@@ -1,0 +1,7 @@
+
+<?php foreach ($etiquetas_usuario as $e_u):
+	if ($e_u->donde <> $donde):
+		continue;
+	endif; ?>
+	<a class="tag" data-ajax=".etiquetas-<?=$donde?>" rel="nofollow" href="/registrados/etiquetas/quitar/<?=$e_u->hashtag?>/<?=$e_u->donde?>"><?=$e_u->hashtag?></a>
+<?php endforeach; ?>

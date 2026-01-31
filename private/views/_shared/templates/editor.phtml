@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html id="important" data-color="yellow" data-theme="light" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title><?=t('Editor')?></title>
+
+        <link href="/css/editor.min.css?<?=filemtime('css/editor.min.css')?>" rel="stylesheet">
+        <link href="/css/<?=h($manual->plantilla)?>.min.css?<?=filemtime('css/'.h($manual->plantilla).'.min.css')?>" rel="stylesheet">
+		<?=Css::inc($version)?>
+	</head>
+	<body>
+		<button class="button-floating top right" data-show=".index">
+			<?=Ku::icon('menu')?>
+		</button>
+
+		<button class="button-floating top-second right" data-show=".settings">
+			<?=Ku::icon('settings')?>
+		</button>
+
+		<main class="<?=$format_page?> resultado">
+			<?php View::content(); ?>
+		</main>
+
+		<a href="#index" class="button-floating bottom-second right">
+			<?=Ku::icon('arrow-up')?>
+		</a>
+
+		<a class="button-floating bottom right" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=h($manuales_idu)?>">
+			<?=Ku::icon('plus')?>
+		</a>
+
+		<aside class="editor index hide pa10">
+			<button data-hide="aside">
+				<?=t('Cerrar ajustes')?>
+				<?=Ku::icon('arrow-right')?>
+			</button>		
+
+			<ul>
+				<?php foreach($reglas as $reg): ?>
+					<li><a data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$reg->manuales_idu?>/<?=$reg->idu?>"><?=$reg->nombre?> <sup class="nowrap"><?=$reg->peso?></sup></a></li>
+				<?php endforeach; ?>
+			</ul>
+		</aside>
+
+		<aside class="align-right editor settings hide pa10">
+			<button data-hide="aside">
+				<?=t('Cerrar ajustes')?>
+				<?=Ku::icon('arrow-right')?>
+			</button>
+
+			<button data-toggle_class="boxed, main">
+				<?=t('Ver cajas')?>
+				<?=Ku::icon('box')?>
+			</button>
+
+			<hr>
+
+			<div class="pages">
+				<h4><b>Pages:</b> <span></span></h4> 
+				<input type="text" name="pages_from" placeholder="From...">
+				<input type="text" name="pages_to" placeholder="To...">
+			</div>
+
+			<hr>
+
+			<button class="add-bleed">
+				<?=t('Añadir sangrado')?>
+				<?=Ku::icon('book')?>
+			</button>
+
+			<button class="print">
+				<?=t('Imprimir')?>
+				<?=Ku::icon('printer')?>
+			</button>
+		</aside>
+
+		<div class="ajax hide"></div>
+		<div class="ajax show"></div>
+
+		<?php /*<div class="overlay hide" data-confirm="<?=t("Sure?")?>" data-hide=".overlay, .modal"></div>*/ ?>
+
+		<?php View::partial('wysiwyg'); ?>
+
+		<script src="/javascript/editor.min.js?<?=filemtime('javascript/editor.min.js')?>"></script>
+		<?=Js::inc($version)?>
+	</body>
+</html>

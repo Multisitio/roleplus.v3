@@ -1,0 +1,8 @@
+
+<a role="button" class="fixed br5 big-round-button" data-ajax=".ajax.show" href="/atalaya/preguntas/formulario"><?=Ku::icon('plus')?></a>
+
+<ul>
+    <?php foreach ($preguntas as $pre): ?>
+        <li><?=$pre->pregunta?></li>
+    <?php endforeach; ?>
+</ul>

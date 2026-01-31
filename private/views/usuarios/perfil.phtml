@@ -1,0 +1,56 @@
+<?php Css::add('perfil.min'); ?>
+<?php Css::add('publicaciones.min'); ?>
+
+<div class="perfil" data-columns id="grid">
+	<?php
+	if ( ! empty($publicaciones_idu)):	
+		foreach($publicaciones as $pub):
+			include APP_PATH . 'views/publicaciones/una.phtml';
+		endforeach;
+	else:
+		include APP_PATH . 'views/usuarios/usuario.phtml';
+	endif;
+	?>
+
+	<article class="clasificacion">
+		<header class="pa5">		
+			<p><b><?=t('Publicaciones por...')?></b></p>
+			<div class="tabs inside">
+				<button class="active" data-hide=".clasificado_por" data-active=".clasificacion button" data-show=".clasificacion .etiquetas"><?=t('Etiquetas')?></button>
+
+				<button data-hide=".clasificado_por" data-active=".clasificacion button" data-show=".clasificacion .fecha"><?=t('Fechas')?></button>
+			</div>
+		</header>
+		<section class="clasificado_por etiquetas horizontal">
+			<?php View::partial('publicaciones/etiquetas', null, ['usuario'=>$usu]); ?>
+		</section>
+		<section class="clasificado_por fecha hide">
+			<?php View::partial('publicaciones/fechas', null, ['usuario'=>$usu]); ?>
+		</section>
+		<footer>
+		</footer>
+	</article>
+
+    <?php if ( ! Session::get('idu') && ! empty($consejo)): ?>
+		<article>
+			<header class="pa10">		
+				<a href="/usuarios/formularios"><h5><?=t('Identifícate para no ver publi aquí')?></h5></a>
+			</header>
+            <?php
+			$dir = empty($consejo->usuarios_idu) ? 'consejos' : "usuarios/$consejo->usuarios_idu";
+            $img = "img/$dir/$consejo->imagen";
+            $mini = "/img/$dir/";
+            $mini .= preg_match('/\.(gif|svg)$/i', $consejo->imagen)
+                ? $consejo->imagen : "l.$consejo->imagen";
+            if (_file::exists($img)): ?>
+                <a href="/consejos/contabilizar/<?=$consejo->idu?>" <?=strstr($consejo->url, 'http')?'rel="noopener noreferrer" target="_blank"':''?> title="<?=t('Consejo de')?> <?=$consejo->nombre?>"><img alt="<?=$consejo->imagen?>" src="<?=$mini?>" width="100%"></a>
+            <?php endif; ?>
+		</article>
+	<?php endif; 
+
+	if (empty($publicaciones_idu)):
+		foreach($publicaciones as $pub):
+			include APP_PATH . 'views/publicaciones/una.phtml';
+		endforeach;
+	endif; ?>
+</div>

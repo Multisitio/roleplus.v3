@@ -1,0 +1,77 @@
+
+<style>
+a {
+    text-decoration: none;
+}
+
+a[role="button"] {
+    background: #c00;
+    color: #fff;
+    display: inline-block;
+    font-weight:bold;
+    margin:0 5px 30px;
+    padding: 20px;
+    text-align: center;
+}
+
+body {
+    font-family: Verdana;
+}
+
+.center {
+    text-align: center;
+}
+
+h5 {
+    color: red;
+}
+
+img {
+    max-width:100%;
+}
+
+main {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+section{
+    padding: 25px 0 75px;
+}
+</style>
+
+<main>
+    <h1><?=t('Bienvenido seas visitante')?></h1>
+    <h2><?=t('Aquí tienes dos enlaces a sitios que no puedes dejar pasar.')?></h2>
+    <h3><?=t('Para empezar visita la red social de juegos de mesa y rol y ponte al día de todo lo relacionado con el mundo friki:')?></h3>
+
+    <div class="center">
+        <a href="https://roleplus.app">
+            <img src="/img/consejos/BannerROLEplus.png"><br>
+        </a>
+    </div>
+
+    <h5><?=t('Si creas una publicación en R+ diciendo "HOLA, vengo de MTG Arena Top y estoy encantado de estar aquí.", te pasaremos un código con 500 PX para que puedas usar en la red social.')?></h5>
+
+    <section class="center">
+        <a role="button" href="https://roleplus.app">IR A LA RED SOCIAL R+</a>
+    </section>
+
+    <h3><?=t('Por último no podemos dejar de recomendarte el canal de partidas y consejos sobre MTG Arena del veterano jugador de Magic, Lobo Blanco:')?></h3>
+
+    <div class="center">
+        <a href="https://www.youtube.com/channel/UCCO-VSNF4KQx4TgoQEP_N9A">
+            <img src="/img/consejos/BannerEncuentroMagico.png"><br>
+        </a>
+    </div>
+
+    <h5><?=t('Si te suscribes a los canales de YouTube y Twitch y nos dices en un directo "HOLA, vengo de MTG Arena Top y estoy encantado de estar aquí.", te hacemos un descuento de 5€ con la compra de cartas en nuestra tienda en CardMarket.')?></h5>
+
+    <section class="center">
+        <a role="button" href="https://www.youtube.com/channel/UCCO-VSNF4KQx4TgoQEP_N9A">IR AL CANAL DE YouTube</a>
+        <a role="button" href="https://www.twitch.tv/encuentro_magico">IR AL CANAL DE Twitch</a>
+        <a role="button" href="https://www.cardmarket.com/es/Magic/Users/demonio">IR A cardmarket</a>
+    </section>
+    <br>
+    <br>
+</main>

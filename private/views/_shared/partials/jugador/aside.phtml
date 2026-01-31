@@ -1,0 +1,36 @@
+<?php
+$aventura = View::getVar('aventura');
+$claves = View::getVar('claves');
+$conectados = View::getVar('conectados');
+$ficha = View::getVar('ficha');
+$partida = View::getVar('partida');
+$personajes = View::getVar('personajes');
+$personajes_usuarios = View::getVar('personajes_usuarios');
+$usuario = View::getVar('usuario');
+?>
+<aside style="display:none">
+	<h6><?=t('Escritorio Virtual')?> <sup>2.5</sup></h6>
+
+	<p class="sub">¡Hola participante!</p>
+
+	<a href="/ev/partidas"><img alt="<?=t('Volver a partidas')?>" loading="lazy" src="/img/icons/play.svg"> <?=t('Volver a partidas')?></a>
+
+	<?php if ( ! empty($partida->idu)): ?>
+		<a class="sub" href="/ev/jugar/partida/<?=$partida->idu?>"><small><?=t('Recargar')?> <?=$partida->nombre?></small></a>
+
+		<a class="share sub truncate" data-toast="<?=t('Enlace copiado al portapapeles.')?>" href="http<?=($_SERVER['HTTP_HOST']=='localhost')?'':'s'?>://<?=$_SERVER['HTTP_HOST']?>/ev/jugar/partida/<?=$partida->idu?>"><small><img alt="<?=t('Enlace')?>" loading="lazy" src="/img/icons/link-2s.svg"> <?=t('Copiar enlace a la partida')?></small></a>
+	<?php endif; ?>
+
+	<a href="/ev/personajes/montados/<?=$ficha->idu?>" target="_blank"><img alt="<?=t('Fichas')?>" loading="lazy" src="/img/icons/layout.svg"> <?=t('Fichas')?></a>
+
+	<div class="conectados" data-ch="ev_conectados">
+		<?php include APP_PATH . 'views/ev/panel/conectados.phtml'; ?>
+	</div>
+
+	<?php /*<a href="#"><img alt="<?=t('Manual')?>" loading="lazy" src="/img/icons/database.svg"> <?=t('Manual')?></a>*/ ?>
+
+	<?php /*<a href="/ev/ajustes"><img alt="<?=t('Ajustes')?>" loading="lazy" src="/img/icons/settings.svg"> <?=t('Ajustes')?></a>*/ ?>
+
+	<a href="/"><img alt="<?=t('Volver a R+')?>" loading="lazy" src="/img/icons/log-out.svg"> <?=t('Volver a R+')?></a>
+</aside>
+<div class="overlay aside" data-hide="aside, .overlay" style="display:none"></div>

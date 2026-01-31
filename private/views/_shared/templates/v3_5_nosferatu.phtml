@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html data-color="red" data-theme="dark" id="important" lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Puerta de acceso | ROLEplus 3.5</title>
+    <link href="https://kumbiacss.com/css/kumbia.min.css" rel="stylesheet">
+    <link href="/css/v3_5_nosferatu.min.css" rel="stylesheet">
+</head>
+<body>
+    <div></div>
+    <form action="/usuarios/identificarse" method="post">
+        <header>
+            <?php include 'img/v3_5/roleplus.svg'; ?>
+        </header>
+        <section>
+            <label>
+                <span>eMail</span>
+                <?=_img::icon('md/person')?>
+                <input type="text" name="fields[]" placeholder>
+                <i><?=_('Recomendamos una cuenta de Gmail en exclusiva.')?></i>
+            </label>
+            <label>
+                <span>Clave</span>
+                <?=_img::icon('md/key')?>
+                <input type="password" name="fields[]" placeholder>
+                <i><?=_('Mínimo 12 caracteres.')?></i>
+            </label>
+            <label>
+                <input type="checkbox" name="registrame">
+                <?=t('Soy nuevo, regístrame.')?>
+            </label>
+            <label>
+                <input type="checkbox" name="politicas">
+                <?=t('Acepto las políticas.')?>
+            </label>
+        </section>
+        <footer>
+            <button type="submit"><?=t('Entrar')?></button>
+        </footer>
+    </form>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html id="important" lang="es"
+	data-color="<?= empty($claves['color']) ? 'red' : $claves['color'] ?>"
+	data-theme="<?= empty($claves['tema']) ? 'light' : $claves['tema'] ?>">
+
+<head>
+	<meta charset="UTF-8">
+
+	<?php if (!empty($_GET['no-cache'])): ?>
+	  <meta http-equiv="Expires" content="0">
+	  <meta http-equiv="Last-Modified" content="0">
+	  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+	  <meta http-equiv="Pragma" content="no-cache">
+	<?php endif; ?>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#ed8340">
+	<meta property="og:type" content="website">
+
+	<title>
+	  <?= empty($title)
+		? t('Red social de juegos de mesa y rol')
+		: _str::truncate(strip_tags(h($title)), 155) ?>
+	</title>
+
+	<meta name="description"
+		content="<?= empty($description)
+		  ? t('Publicaciones, eventos, productos y noticias sobre juegos de guerra, juegos de mesa, juegos de rol, videojuegos, librojuegos y todo lo relacionado con el mundo friki.')
+		  : _str::truncate(_html::stripTags($description), 55) ?>">
+
+	<?php $image = empty($image) ? '/img/logos/LogoROLEplus512.svg' : $image; ?>
+	<meta property="og:image" itemprop="image" content="https://<?= $_SERVER['HTTP_HOST'] . $image ?>">
+
+	<link rel="apple-touch-icon" href="/img/logos/apple-touch-icon.png">
+	<link rel="apple-touch-icon" href="/img/logos/icon-192x192.png">
+	<link rel="manifest" href="/manifest.json?v=<?= $version ?>">
+	<link rel="stylesheet" href="/css/principal.min.css?v=<?= $version ?>">
+
+	<?php if (empty($claves['quitar_masonry'])): ?>
+	  <link rel="stylesheet" href="/css/masonry.min.css?v=<?= $version ?>">
+	<?php endif; ?>
+
+	<?= Css::inc($version) ?>
+</head>
+
+<body>
+	<?php View::partial('fondo'); ?>
+	<?php View::partial('publicaciones/nav'); ?>
+	<?php View::partial('publicaciones/aside'); ?>
+
+	<?php if (Session::get('idu')): ?>
+	  <a class="abrir-chat fixed bl5 big-round-button scroll-down-hide"
+		 href="/registrados/conversaciones/listado"
+		 data-ajax=".ajax.show"
+		 data-style="body, overflow:hidden"
+		 rel="nofollow">
+		<?= Ku::icon(t('Abrir ventana para conversar'), 'message-circle') ?>
+		<span class="sin-leer" data-ch="rp_chat_sin_leer_<?=Session::get('idu')?>">
+			<?php include APP_PATH . 'views/registrados/conversaciones/sin_leer.phtml'; ?>
+		</span>
+	  </a>
+	<?php endif; ?>
+
+	<main>
+	  <?php View::content(); ?>
+	</main>
+
+	<?php if (!empty($pregunta_sin_responder)):
+	  View::partial('pregunta_sin_responder', null, ['pregunta' => $pregunta_sin_responder]);
+	endif; ?>
+
+	<?php View::partial('publicaciones/footer'); ?>
+	<?php View::partial('toast'); ?>
+
+	<?php
+	$hashtag = ($controller_name == 'grupos' && !empty($grupo))
+	  ? _str::hashtag($grupo->hashtag)
+	  : '';
+	?>
+	<a class="abrir-editor fixed br5 big-round-button scroll-down-hide"
+	 href="/registrados/publicaciones/formulario?hashtag=<?= $hashtag ?>"
+	 data-ajax=".ajax.show"
+	 data-style="body, overflow:hidden"
+	 rel="nofollow">
+	  <?= Ku::icon(t('Abrir ventana para publicar'), 'edit-2') ?>
+	</a>
+
+	<div class="ajax hide"></div>
+	<div class="ajax show"></div>
+
+	<script src="/javascript/principal.min.js?v=<?= $version ?>"
+		data-idu="<?= Session::get('idu') ?>"></script>
+
+	<?php if (!Input::isAjax()): ?>
+	  <script src="/javascript/worker.js?v=<?= $version ?>" defer></script>
+	<?php endif; ?>
+
+	<?php if (Session::get('idu')): ?>
+	  <script src="/javascript/push.js?v=<?= $version ?>"></script>
+	<?php endif; ?>
+
+	<?php if (empty($claves['quitar_masonry'])): ?>
+	  <script src="/javascript/masonry.min.js?v=<?= $version ?>"></script>
+	<?php endif; ?>
+
+	<?php if (!empty($_GET['conversaciones'])): ?>
+	  <script>
+		$('.ajax.show').load("/registrados/conversaciones/conversacion/<?= $_GET['conversaciones'] ?>");
+	  </script>
+	<?php endif; ?>
+
+	<?php if (!empty($compartir_desde_fuera)): ?>
+	  <script>
+		$('.ajax.show').load('/registrados/publicaciones/formulario', {
+			'contenido': `<?= $compartir_desde_fuera ?>`
+		});
+	  </script>
+	<?php endif; ?>
+
+	<?php echo Js::inc($version) ?>
+
+	<?php if (!Session::get('idu') && !preg_match('/localhost|roleplus\.vh/', $_SERVER['HTTP_HOST'])): ?>
+	  	<script async crossorigin="anonymous"
+			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7247117571243976"></script>
+	<?php endif; ?>
+</body>
+</html>

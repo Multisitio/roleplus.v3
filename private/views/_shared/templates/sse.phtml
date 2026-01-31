@@ -1,0 +1,49 @@
+<?php
+header('Content-Type: text/event-stream');
+header('Cache-Control: no-cache');
+header('X-Accel-Buffering: no');
+#header('Access-Control-Allow-Credentials: true');
+#header('Access-Control-Allow-Methods: GET');
+##header('Access-Control-Expose-Headers: X-Events');
+
+/*header('Access-Control-Allow-Credentials: true');
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Access-Control-Allow-Origin: *");
+header("Allow: DELETE, GET, HEAD, OPTIONS, POST, PUT");*/
+
+#set_time_limit(0);
+#ini_set('auto_detect_line_endings', 1);
+#ini_set('mysql.connect_timeout','7200');
+#ini_set('max_execution_time', '0');
+
+#date_default_timezone_set('Europe/Madrid');
+##ob_end_clean();
+#gc_enable();
+
+$c = 1;
+$fecha = '';
+$id = 0;
+$row = '';
+while(1):
+	#echo "($id)$c\" ";
+	$rows = (new Actualizaciones)->leer($fecha, $usuarios_idu);
+	if ($rows):
+		$s = 'data: [';
+		foreach ($rows as $obj):
+			$s .= '{"from":"'.$obj->contenido.'","to":"'.$obj->contenedor.'","append":"'.$obj->adjuntar.'","date":"'.$obj->fecha.'"},';
+			$fecha = strtotime($obj->fecha);
+		endforeach;
+		echo rtrim($s, ',') . "]\n\n";
+		$c = 1;
+	else:
+		$c = ($c>4) ? 5 : ++$c;
+	endif;
+	# Vuelca el buffer en pantalla
+	while (ob_get_level() > 0) {
+		ob_end_flush();
+	}
+	flush();
+	# Tiempo de espera antes de mirar actualizaciones
+	sleep($c);
+endwhile;

@@ -1,0 +1,23 @@
+
+<article>
+	<header>
+		<h1>3) <?=t('¿Están creados los personajes?')?></h1>
+		<h2><?=t('Los jugadores necesitan escoger al menos un personaje para jugar.')?></h2>
+	</header>
+	<hr>
+	<section>
+		<h3><?=t('Si NO están toca crearlos:')?></h34>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/personajes/montados"><?=t('Ver personajes')?></a>
+			<a role="button" href="/ev/personajes/montar/<?=$fichas_idu?>"><?=t('Crear personaje')?></a>
+		</div>
+	</section>
+	<br>
+	<footer>
+		<h3><?=t('Si están creados toca ir al siguiente paso:')?></h3>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/asistente/fichas"><?=t('Anterior')?></a>
+			<a role="button" href="/ev/asistente/aventuras"><?=t('Siguiente')?></a>
+		</div>
+	</footer>
+</article>

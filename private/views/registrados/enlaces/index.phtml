@@ -1,0 +1,51 @@
+
+<div class="acortador" data-columns id="grid">
+    <article>
+        <?=Form::open()?>
+            <header>
+                <h1><?=t('Acortador de enlaces')?></h1>
+                <br>
+            </header>
+            <section>
+            <?=Kubox::input(type: 'text',
+                label: t('Nombre del enlace'),
+                placeholder: t('Aquí el nombre del enlace'),
+                name: 'nombre', value: _var::post('nombre'))?>
+                <br>
+            <?=Kubox::textarea(label: t('Dirección WEB'),
+                placeholder: t('Aquí la URL a acortar'),
+                name: 'enlace', value: _var::post('enlace'))?>
+            </section>
+            <footer>
+				<?=Kubox::buttonSubmitColor(label: t('Acortar'),
+					name: 'action', value: 'acortar')?>
+            </footer>
+        <?=Form::close()?>
+    </article>
+
+        <?php foreach ($enlaces as $enl): ?>
+            <article>
+                <header>
+                    <h2><?=h($enl->nombre)?></h2>
+                    <a href="<?=h($enl->enlace)?>"><?=h($enl->enlace)?></a>
+                </header>
+
+                <section>
+                    <br>
+                    <?=t('Acortado:')?>
+                    <a href="/enlaces/ir/<?=$enl->acortado?>">https://roleplus.app/enlaces/ir/<?=$enl->acortado?></a>
+                </section>
+
+                <section>
+                    <br>
+                    <span><?=t('Creado:')?> <?=_date::format($enl->creado, 'H:i d/m/y')?></span>
+                    <br>
+                    <span><?=t('Visitado:')?> <?=$enl->visitado?></span>
+                </section>
+
+                <footer>
+                    <a role="button" data-confirm="<?=t('¿Seguro?')?>" rel="nofollow" href="/registrados/enlaces/eliminar/<?=$enl->acortado?>"><?=t('Eliminar')?></a>
+                </footer>
+            </article>
+        <?php endforeach; ?>
+</div>

@@ -1,0 +1,17 @@
+
+<hr>
+<?php
+foreach ($mensajes as $men):
+	include APP_PATH . 'views/registrados/conversaciones/mensaje.phtml';
+endforeach;
+?>
+<script>
+// EV2
+window.onload = function(event) {
+	var chat = document.querySelector('.mensajes');
+	chat.scrollTo(0, chat.scrollHeight);
+}
+// R+3
+var chat = document.querySelector('.chat.conversacion');
+chat.scrollTo(0, chat.scrollHeight);
+</script>

@@ -1,0 +1,26 @@
+<div class="gap10 mensaje<?=(Session::get('idu')==$men->usuarios_idu)?' propio':''?>">
+	<?=Usuario::avatar($men)?>
+
+	<div class="rows">
+		<div class="cols space-between">
+			<b class="grow"><?=$men->apodo?></b>
+			<small>
+				<?=date('H:i:s', strtotime($men->creado))?>
+				<?=($ago=_date::ago($men->creado))?"($ago)":''?>
+			</small>
+		</div>
+		<div>
+			<?php
+				echo _dices::render_md(trim($men->contenido));
+			?>
+		</div>
+	</div>
+</div>
+<hr>
+
+<script>
+var chat = document.querySelector('.mensajes');
+chat.scrollTo(0, chat.scrollHeight);
+var chat = document.querySelector('.chat.conversacion');
+chat.scrollTo(0, chat.scrollHeight);
+</script>

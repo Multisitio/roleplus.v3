@@ -1,0 +1,19 @@
+
+<div data-columns id="grid">
+    <article>
+        <header>
+            <h1>Arreglos</h1>
+        </header>
+        <section>
+            <h2>Vistas previas</h2>
+            <p><b>Total:</b> <?=count($vistas_previas)?></p>
+            <p><b>En comentarios:</b> <?=count($en_comentarios)?></p>
+            <p><b>En publicaciones:</b> <?=count($en_publicaciones)?></p>
+            <p><b>Huerfanas:</b> <?=$huerfanas?></p>
+        </section>
+        <footer class="grid">
+            <a role="button" href="/atalaya/arreglos/vistas_previas/1">Eliminar huerfanos</a>
+            <a role="button" href="/atalaya/arreglos/vistas_previas/0/1">Asignar usuario</a>
+        </footer>
+    </article>
+</div>

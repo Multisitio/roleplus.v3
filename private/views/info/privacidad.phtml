@@ -1,0 +1,47 @@
+
+<ol>
+    <li>
+        <p><?=t('¿Quién es el responsable del tratamiento de sus datos?')?><br>
+        <b><?=t('Identidad')?>:</b> Raúl Montejano Rodríguez<br>
+        <b><?=t('Dirección postal')?>:</b> Calle Vereda Carpetana 7, 526b Loeches 28890 Madrid<br>
+        <b><?=t('Teléfono')?>:</b>  603047311<br>
+        <b><?=t('Email')?>:</b> <span data-email="raul dot montejano at multisitio dot es"></span></p>
+    </li>
+    <li>
+        <p><?=t('Tratamos su información (email y nombre de usuario) con la finalidad de gestionar la actividad en la red social, teniendo presente que en ningún caso se tomará ningún tipo de decisión automatizada en base a sus datos de carácter personal.')?></p>
+    </li>
+    <li>
+        <p><?=t('Los datos personales que ha proporcionado se conservarán hasta que usted se de de baja desde el formulario de acceso y, pudiendo proceder a su destrucción si el plazo de inactividad se alarga más de 6 meses.')?></p>
+    </li>
+    <li>
+        <p><?=t('El tratamiento de sus datos personales se ampara en que para la correcta ejecución, desarrollo y organización de la red social, usted presta consentimiento, a través de la aceptación expresa de estas cláusulas. Por tanto, la base legal encuentra su sustento en el citado consentimiento.')?></p>
+    </li>
+    <li>
+        <p><?=t('Los datos proporcionados (email y nombre de usuario), NO se comunicarán a otras personas físicas ni entidades. No obstante podría darse el caso del uso de datos generados en la red sin vincularle, de forma anónima, para mejorar la experiencia del usuario.')?></p>
+    </li>
+    <li>
+        <p><?=t('Las personas interesadas tienen derecho a acceder a sus datos personales, así como a solicitar la rectificación de los datos inexactos o, en su caso, solicitar su supresión cuando, entre otros motivos, los datos ya no sean necesarios para los fines que fueron recogidos.')?></p>
+    </li>
+    <li>
+        <p><?=t('En determinadas circunstancias, los interesados podrán solicitar la limitación del tratamiento de sus datos, en cuyo caso únicamente serán conservados, en su caso, para el ejercicio o la defensa de reclamaciones.')?></p>
+    </li>
+    <li>
+        <p><?=t('Los interesados pueden ejercer materialmente estos derechos solicitando la ejecución de cualquiera de los derechos mencionados mediante un escrito dirigido al responsable a su dirección postal o electrónica, indicando la referencia “Datos Personales”, especificando el derecho que se quiere ejercer y respecto a qué datos personales. Opcionalmente, puede redirigir el interesado a la Autoridad de Control competente para obtener información adicional acerca de sus derechos.')?></p>
+    </li>
+    <li>
+        <p><?=t('Los interesados pueden presentar una reclamación ante la Autoridad de Control en materia de Protección de Datos competente, especialmente cuando no haya obtenido satisfacción en el ejercicio de sus derechos por parte de la red social R+.')?></p>
+    </li>
+</ol>
+
+<a class="align-center vertical" href="https://consentcommons.com/el-sistema/" rel="nofollow noopener" target="_blank" title="Consent Commons">
+    <h6>Consent Commons</h6>
+    <p><img alt="Consent Commons" src="/img/logos/consentcommons.webp"></p>
+</a>
+
+<script>      
+// EMAILS ANTI SPAM
+$('[data-email]').each(function() {
+    var addr = $(this).data('email').replace(/ at /, '@').replace(/ dot /g, '.');
+    $(this).replaceWith('<a href="mailto:'+addr+'">'+addr+'</a>');
+});
+</script>

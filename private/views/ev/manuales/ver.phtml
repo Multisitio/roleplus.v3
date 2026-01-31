@@ -1,0 +1,47 @@
+
+<article>
+    <header>
+        <h1><?=$manual->nombre?></h1>
+    </header>
+    <section>
+        <ul class="manual">
+            <?php
+            function arbol_1912201247($reglas, $manuales_reglas_idu='Ninguno') {
+                $i=1;
+                foreach ($reglas as $reg)
+                {
+                    if ($reg->manuales_reglas_idu <> $manuales_reglas_idu) {
+                        continue;
+                    } ?>
+                    <li>
+                        <?php if ($reg->pagina_nueva): ?>
+                            <div class="end-page"></div>
+                        <?php endif; ?>
+                        <h2>
+                            <a name="<?=$reg->nombre?>"><?=$reg->nombre?></a>
+                            <?php if ( ! empty($reg->valor)): ?>
+                                <small>(<?=$reg->valor?>)</small>
+                            <?php endif; ?>
+                        </h2>
+                        <hr>
+                        <article>
+                            <?php if ($reg->fotos): ?>
+                                <img alt="<?=t('Imagen de la regla:')?> <?=$reg->nombre?>" src="/img/usuarios/<?=$reg->fotos_usuarios_idu?>/xl.<?=$reg->fotos?>">
+                                <br>
+                            <?php endif; ?>
+
+                            <?=$reg->descripcion_md?>
+                        </article>
+
+                        <?php if ( ! empty($reglas[$reg->idu])): ?>
+                            <ul><?php arbol_1912201247($reglas, $reg->idu); ?></ul>
+                        <?php endif; ?>
+                    </li>
+                    <?php
+                }
+            }
+            arbol_1912201247($reglas);
+            ?>
+        </ul>
+    </section>
+</article>

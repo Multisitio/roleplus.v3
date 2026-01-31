@@ -1,0 +1,30 @@
+<?php
+$titulo = t('Pregunta sin miedo');
+?>
+<form action="/registrados/ia/respuesta" data-ajax=".modal .respuesta" method="post">
+	<section>
+        <?=Kubox::textarea(label: t('Pregunta'),
+            placeholder: t('Aquí tu pregunta'),
+            name: 'frase', value: $respuesta->pregunta)?>
+
+        <div class="respuesta rows"></div>
+	</section>
+	<footer>
+		<?php if ($respuesta->idu): ?>
+			<div class="auto">
+				<?=Kubox::buttonSubmit(label: t('Eliminar'),
+					name: 'action', value: 'eliminar')?>
+
+				<?=Kubox::buttonSubmit(label: t('Duplicar'),
+					name: 'action', value: 'crear')?>
+
+				<?=Kubox::buttonSubmitColor(label: t('Actualizar'),
+					name: 'action', value: 'actualizar',
+					attrs: 'data-bg-color')?>
+			</div>
+            <input type="hidden" name="idu" value="<?=$respuesta->idu?>">
+		<?php else: ?>
+			<?=Kubox::buttonSubmitColor(label: t('Preguntar'))?>
+		<?php endif; ?>
+	</footer>
+</form>

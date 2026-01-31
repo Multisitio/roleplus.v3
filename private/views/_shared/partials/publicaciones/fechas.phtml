@@ -1,0 +1,20 @@
+<?php
+if ( ! empty($usuario->idu)): 
+	$fechas = (new Publicaciones)->fechas($usuario->idu);
+	$meses = _date::months();
+	?>
+	<ul>
+		<?php foreach ($fechas as $anyo=>$anyo_contenido): ?>
+			<li>
+				<a href="/usuarios/perfil/<?=urlencode($usuario->apodo)?>/fecha/<?=$anyo?>"><?=$anyo?> (<?=$anyo_contenido['veces']?>)</a>
+				<ul>
+					<?php foreach ($anyo_contenido['meses'] as $anyo_mes=>$veces): ?>
+						<li>
+							<a href="/usuarios/perfil/<?=urlencode($usuario->apodo)?>/fecha/<?=$anyo_mes?>"><?=$meses[date("n", strtotime("$anyo_mes/01"))]?> (<?=$veces?>)</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+<?php endif; ?>

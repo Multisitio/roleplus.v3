@@ -1,0 +1,46 @@
+
+<article class="mha w600 formularios tabs">
+	<header>
+		<a href="/usuarios/identificarse" class="tab active"><?=t("Identifícate")?></a>
+		<a href="/usuarios/registrarse" class="tab"><?=t("Regístrate")?></a>
+		<a href="/usuarios/recordar_clave" class="tab"><?=t("Recuérdame")?></a>
+	</header>
+
+	<?=Form::open(null, 'post', 'class="container identificarse"')?> 
+		<section>
+			<br>&nbsp;
+			<div class="align-center">
+				<?php View::partial('google_login', null, ['button'=>'signin', 'url'=>'usuarios/identificarse_con_google']); ?>
+			</div>
+			<div class="align-center mv10">--- O ---</div>
+			<?=Kubox::input(type: 'text',
+				attrs: 'required tabindex="1"',
+				label: t('Con tu eMail'),
+				placeholder: t('Aquí tu correo electrónico'),
+				name: 'email', value: _var::post('email'))?>
+			<br>
+			<div class="bottom gap0">
+				<?=Kubox::input(type: 'password',
+					attrs: 'class="connect-to-right" required tabindex="2"',
+					box: 'class="grow"',
+					label: t('Y tu clave'),
+					placeholder: t('Aquí tu contraseña'),
+					name: 'clave', value: _var::post('clave'))?>
+
+				<button type="submit" class="connect-to-left" data-show_pass=".container.identificarse [name='clave']"><?=Ku::icon(t('Mostrar contraseña'), 'eye-s', 20, 20)?>
+			</div>
+			<br>
+
+		</section>
+		<footer>
+			<?=Kubox::buttonSubmitColor(attrs: 'tabindex="3"',
+				label: t('Por último pulsa aquí y entra'),
+				name: 'identificarse', value: 1)?>
+			<br>
+		</footer>
+	</form>
+	<br>
+	<br>
+	<br>
+	<br>
+</article>

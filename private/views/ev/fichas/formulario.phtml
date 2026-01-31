@@ -1,0 +1,69 @@
+
+<article>
+	<form enctype="multipart/form-data" method="post">
+		<header>
+			<h1><?=t('Ficha')?></h1>
+		</header>
+
+		<section>
+			<label><?=t('Nombre')?></label>
+			<input type="text" name="nombre" placeholder="<?=t('Nombre de la ficha...')?>" value="<?=$ficha->nombre?>">
+			<div class="grid">
+				<div>
+					<label><?=t('Formato')?></label>
+					<select disabled name="formato">
+						<option value="a4">A4</option>
+					</select>
+				</div>
+				<div>
+					<label><?=t('Orientación')?></label>
+					<select name="orientacion">
+						<option value="portrait" <?=($ficha->orientacion=='portrait')?'selected':''?>><?=t('Vertical')?></option>
+						<option value="landscape"<?=($ficha->orientacion=='landscape')?'selected':''?>><?=t('Horizontal')?></option>
+					</select>
+				</div>
+			</div>
+			<label class="dropimage mh20 mt20">
+				<input type="file" name="imagenes[]">
+				<?php if ($ficha->fondo_ficha): ?>
+					<img alt="<?=t('Imagen de la partida:')?> <?=$ficha->nombre?>" src="/img/usuarios/<?=$ficha->usuarios_idu?>/l.<?=$ficha->fondo_ficha?>">
+				<?php endif; ?>
+			</label>
+
+			<label><?=t('Copiar cajas de...')?></label>
+			<select name="cajas_desde">
+				<option><?=t('Escoge una...')?></option>
+				<?php foreach ($fichas as $fic): ?>
+					<option value="<?=$fic->idu?>"><?=$fic->nombre?></option>
+				<?php endforeach; ?>
+			</select>
+		</section>
+
+		<footer class="grid">
+			<?php if ($ficha->idu): ?>
+				<button type="button" class="mas-acciones outline" data-toggle=".mas-acciones">+ <?=t('Opciones')?></button>
+
+				<button type="button" class="mas-acciones outline" data-toggle=".mas-acciones" style="display:none">- <?=t('Opciones')?></button>
+
+				<a role="button" class="mas-acciones outline" href="/ev/fichas"><?=t('Fichas')?></a>
+
+				<button type="submit" class="mas-acciones outline" name="action" value="actualizar"><?=t('Actualizar')?></button>
+
+				<a role="button" class="mas-acciones outline" href="/ev/fichas/formulario" style="display:none"><?=t('Nueva')?></a>
+
+				<button type="submit" class="mas-acciones outline" name="action" value="crear" style="display:none"><?=t('Duplicar')?></button>
+
+				<a role="button" class="mas-acciones outline" href="/ev/fichas/eliminar/<?=$ficha->idu?>" style="display:none"><?=t('Eliminar')?></a>
+
+				<a role="button" class="mas-acciones" href="/ev/fichas/cajas/<?=$ficha->idu?>"><?=t('Diseñar')?></a>
+
+				<input type="hidden" name="idu" value="<?=$ficha->idu?>">
+			<?php else: ?>
+				<a role="button" class="mas-acciones outline" href="/ev/fichas"><?=t('Fichas')?></a>
+
+				<button type="submit" name="action" value="crear"><?=t('Crear')?></button>
+			<?php endif; ?>
+		</footer>
+		<input type="hidden" name="fondo_ficha" value="<?=$ficha->fondo_ficha?>">
+	</form>
+</article>

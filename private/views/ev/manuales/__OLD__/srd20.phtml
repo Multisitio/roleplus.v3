@@ -1,0 +1,469 @@
+<?php
+$format_page = $manual->formato . ' portrait';
+?>
+<?php $page='cover'; foreach($reglas as $reg): ?>
+    <div class="<?=$page?>">
+        <?=$reg->descripcion?>
+        <a class="scroll-down-hide" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manuales_idu?>/<?=$reg->idu?>">
+            <?=Ku::icon('edit')?>
+        </a>
+    </div>
+<?php $page='page'; endforeach; ?>
+
+<?php /*<article>
+    <section>
+        <div>
+            <h3>Movimientos</h3>
+            <br>
+            <h4>Preguntar a la flora y fauna</h4>
+            <p><b>Cuando te adentras en el bosque la flora y la fauna te susurra en un lenguaje que solo entienden los elfos.</b><br>
+            <small>Haz una pregunta al Guardián sobre algo relacionado con el bosque y tira con Sobrevivir en los bosques.</small></p>
+            <br>
+            <h4>Hallar la senda bajo la hojarasca</h4>
+            <p><b>Cuando te adentras en el bosque puedes ver la senda que los tuyos ha seguido para moverse por el bosque de un lugar seguro a otro.</b><br>
+            <small>Haz una tirada con Sobrevivir en los bosques.</small></p>
+            <br>
+            <h4>Invisible como el viento</h4>
+            <p><b>Cuando quieres moverte sin hacer ruido ni dejar huellas, tu pisada se aligera.</b><br>
+            <small>Haz una tirada de Acechar si fallar supone un problema.</small></p></p>
+            <br>
+            <h4>Ver y escuchar lejos</h4>
+            <p>El ruido y la luz clara y fuerte te molestan. A cambio puedes oir y ver como los gatos con un espectro mucho más amplio que el de los humanos. Por lo tanto…
+            <b>Cuando por intuición te paras a escuchar y observar sueles discernir lo que está por venir.</b><br>
+            <small>Haz una tirada de Discernir.</small></p>
+            <br>
+            <h3>Posesiones</h3>
+            <p>Marca 3 iniciales y 1 etiqueta de cada elección:</p>
+            <h4>☐ Arco largo del pastor de bosques</h4>
+            <p> &nbsp; ❑ Más preciso, ❑ Más alcance</p>
+
+            <h4>☐ 12 Flechas con puntas de jade</h4>
+            <p> &nbsp; ❑ Daño mágico, ❑ Resistentes</p>
+
+            <h4>☐ Espada ancha con la runa de las estrellas</h4>
+            <p> &nbsp; ❑ Daño mágico, ❑ Más ligera</p>
+
+            <h4>☐ 2 espadas cortas, dientes de serpiente marina</h4>
+            <p> &nbsp; ❑ Daño mágico, ❑ Más daño</p>
+
+            <h4>☐ Peto de raíces de la tierra elevada</h4>
+            <p> &nbsp; ❑ Más ligero, ❑ Más resistente</p>
+
+            <h4>☐ Ropa de viaje de colores otoñales</h4>
+            <p> &nbsp; ❑ Más ligeras, ❑ Más resistente</p>
+
+            <h4>☐ Botas con las alas del águila bordadas</h4>
+            <p> &nbsp; ❑ Más ligeras, ❑ Más resistentes</p>
+            
+            <h4>☐ Arpa prestado del señor elemental del agua</h4>
+            <p> &nbsp; ❑ Más preciso, ❑ Mejor trabajado</p>
+
+            <h4>☐ Pan élfico (12 raciones)</h4>
+            <p> &nbsp; ❑ Más rico, ❑ Más saciante</p>
+            
+            <h4>☐ 12 monedas de la fuente de plata</h4>
+            <p> &nbsp; ❑ Más valiosas, ❑ Regresan a su bolsa</p>
+            <br>
+            <br>
+        </div>
+        <div></div>
+    </section>
+    <footer>
+        <div>EL PERSONAJE ✦ SRD20</div>
+    </footer>
+</article>
+
+<article>
+    <h2>Antecedentes</h2>
+    <section>
+        <table>
+            <tr>
+                <th>d20</th>
+                <th>Suceso</th>
+                <th>Alternativo</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Tu nombre o apodo está marcado para mal, ponlo a nivel 5 y anota que has hecho para ensuciar tu identidad. Es probable que te reconozcan cuando se dirijan a ti por tu nombre o apodo, lo que hayas elegido.</td>
+                <td>Tu nombre o apodo tiene nivel 2 porque debido a tu presencia evitaste una tragedia. Anota de que se trata y crea un vínculo a nivel 4 con una persona agradecida.</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Nada va ser como antes. Escribe tu actitud anterior, la actual y que te han arrebatado para que cambiara.</td>
+                <td>Elige Alegría, Miedo, Rabia o Tristeza, la emoción que permea tu actitud para con los demás. No sabes el motivo de por qué eres así, pero deseas averiguarlo saliendo de tu zona de confort. Anota esto como una de tus motivaciones.</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Te viste obligado a poner tierra de por medio, di por qué y anota el nombre del nuevo lugar. Si te has granjeado un nuevo enemigo, anota su nombre a nivel 3.</td>
+                <td>Has cambiado de procedencia en busca de nuevas oportunidades, anota el nombre del nuevo lugar y aquello que te motiva ahora.</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Te has visto con la obligación de unirte a un grupo de dudosa reputación. Anota el nombre de dicho grupo, a que se dedican, a qué te comprometen y a cambio de qué.</td>
+                <td>Perteneces a un nuevo grupo y crees que puedes obtener mucho de él. Anota el nombre del grupo, su motivación, lo que esperas de ello y ellos de ti.</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Aspecto descuidado tu aspecto, tu ropa está sucia y te aseas poco o nada. Anota que te obsesiona ahora que ocupa todo tu tiempo, energía y atención.</td>
+                <td>Has mejorando tu aspecto y tu interés por las altas esferas tras conocer a un aristócrata. Anota ropas lujosas, el nombre del sastre con el que estás en deuda y el nombre del aristócrata, ambos a nivel 2.</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Un accidente te ha generado una lesión crónica debilitado tu Fortaleza en -1. Anota que te pasó y quién te ayudó a un nivel acorde a tú relación con él.</td>
+                <td>Has creado un hábito que te proporciona +1 en Fortaleza mientras lo mantengas. Anota de que se trata.</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Un accidente o duelo te ha generado una lesión crónica dejando tu Agilidad mermada en -1. Anota que te pasó y a quién has jurado que lo pagará tarde o temprano a nivel 3.</td>
+                <td>Has encontrado una forma de ejercitar tu Agilidad ganado +1 mientras mantengas el hábito. Anota de que se trata.</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Quizá un golpe en la cabeza dejó tu Percepción mermada de por vida en -1. Anota quién es el culpable de tu desdicha a nivel 3 y cómo fue exactamente.</td>
+                <td>Alguien te dijo que nunca perdieras el norte y que supieras quién te rodea en todo momento y desde entonces esto te obsesiona ganando +1 en percepción, cosa que te hace que te cueste concentrarte en una tarea.</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Tu capacidad de aprendizaje nunca fue muy buena, -1 a Inteligencia, prefiriendo ganar dinero en trabajos de mierda a estudiar algo que pudieras sacar provecho a futuro. Suma 10 monedas de oro a tu bolsa.</td>
+                <td>Siempre has creído que la mejor inversión que podías hacer, era en ti mismo, +1 en inteligencia. Te gusta aprender de los demás y ahora tienes un maestro a nivel 4. Anota su nombre y aquello que te enseña.</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>En ocasiones un trauma se apodera de ti y te impide avanzar, -1 a Voluntad. Desconoces cuando se desarrollo y por qué. Anota la motivación de descubrir su origen y en que momentos de afecta.</td>
+                <td>Has aprendido que cuidar de los demás es lo más gratificante aunque a veces eso pueda costarte la vida, +1 en Voluntad.</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>En algún momento asumiste que tus relaciones sociales nunca serían fructíferas resultándote incómodas, -1 a Presencia. Anota esta creencia.</td>
+                <td>Siempre te sales con la tuya llevando a tu terreno a los demás, +1 en Presencia. Anota el nombre de un contacto a nivel 1 y lo que puede proporcionarte.</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Hay algo que te obsesiona hasta el punto de dejar atrás a tus compañero o ir contra ellos. Anota que es eso que te obsesiona.</td>
+                <td>Tienes una confianza en ti mismo que roza la temeridad. Eres incapaz de negarte a superar un reto si hay una mínima posibilidad de superarlo.</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>Conoces a alguien muy violento que en su día aceptaste como amigo. Esa persona esta obsesionada con estar contigo y suele meterte en problemas que no deseas allí donde vais. Anota su nombre a nivel 3.</td>
+                <td>Pagas a un maestro por sus enseñanzas, anota su nombre a nivel 3 y aquello que te enseña cuando no estas de aventuras.</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>Te encontraste una espada negra con runas rojas grabadas a lo largo de su filo. Sea el destino o una maldición lo que te ha ligado a esta espada, el caso es que no puedes alejarte de la espada, pues un dolor cada vez más intenso crece en ti cuanto más te alejas de ella.</td>
+                <td>Tienes un anillo de oro con runas élficas en su interior, pero si tiene algún poder lo desconoces por completo. Anota donde lo encontraste o quién te lo dió a nivel 1.</td>
+            </tr>
+        </table>
+    </section>
+    <footer>
+        <div>EL PERSONAJE ✦ SRD20</div>
+    </footer>
+</article>
+
+<article>
+    <section>
+        <table>
+            <tr>
+                <th>d20</th>
+                <th>Suceso</th>
+                <th>Alternativo</th>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>Anota una habilidad nueva en Fortaleza o suma 1 nivel a una habilidad que ya poseas en Fortaleza. Anota por qué te interesaste en ella.</td>
+                <td>Has desarrollado una maestría en una habilidad de Fortaleza un nivel por encima si tenias una, de lo contrario anota dos niveles a una habilidad de Fortaleza. Anota por qué te obsesiona.</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>Anota una habilidad nueva en Agilidad o suma 1 nivel a una habilidad que ya poseas en Agilidad. Anota por qué te interesaste en ella.</td>
+                <td>Has desarrollado una maestría en una habilidad de Agilidad un nivel por encima si tenias una, de lo contrario anota dos niveles a una habilidad de Agilidad. Anota por qué te obsesiona.</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>Anota una habilidad nueva en Percepción o suma 1 nivel a una habilidad que ya poseas en Percepción. Anota por qué te interesaste en ella.</td>
+                <td>Has desarrollado una maestría en una habilidad de Percepción un nivel por encima si tenias una, de lo contrario anota dos niveles a una habilidad de Percepción. Anota por qué te obsesiona.</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>Anota una habilidad nueva en Inteligencia o suma 1 nivel a una habilidad que ya poseas en Inteligencia. Anota por qué te interesaste en ella.</td>
+                <td>Has desarrollado una maestría en una habilidad de Inteligencia un nivel por encima si tenias una, de lo contrario anota dos niveles a una habilidad de Inteligencia. Anota por qué te obsesiona.</td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>Anota una habilidad nueva en Voluntad o suma 1 nivel a una habilidad que ya poseas en Voluntad. Anota por qué te interesaste en ella.</td>
+                <td>Has desarrollado una maestría en una habilidad de Voluntad un nivel por encima si tenias una, de lo contrario anota dos niveles a una habilidad de Voluntad. Anota por qué te obsesiona.</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>Anota una habilidad nueva en Presencia o suma 1 nivel a una habilidad que ya poseas en Presencia. Anota por qué te interesaste en ella.</td>
+                <td>Has desarrollado una maestría en una habilidad de Presencia un nivel por encima si tenias una, de lo contrario anota dos niveles a una habilidad de Presencia. Anota por qué te obsesiona.</td>
+            </tr>
+        </table>
+    </section>
+    <footer class="color-invert">
+        <div>EL PERSONAJE ✦ SRD20</div>
+    </footer>
+    <img class="absolute bottom left gradient-trans-to-bottom" src="/img/editor/srd20/72/heros_1.jpg">
+</article>
+
+<article>
+    <section>
+        <table>
+            <tr>
+                <th>Atributo</th>
+                <th>Habilidad</th>
+                <th>Maestría</th>
+            </tr>
+            <tr>
+                <td>Fortaleza</td>
+                <td>Forzar el físico</td>
+                <td>Actividad: Esprintar, Levantar/Cargar/Lanzar Pesos, Nadar al máximo, Saltar, Trepar…</td>
+            </tr>
+            <tr>
+                <td>Fortaleza</td>
+                <td>Intimidar</td>
+                <td>Torturar</td>
+            </tr>
+            <tr>
+                <td>Fortaleza</td>
+                <td>Luchar</td>
+                <td>Comandar</td>
+            </tr>
+            <tr>
+                <td>Fortaleza</td>
+                <td>Nadar</td>
+                <td>Socorrer</td>
+            </tr>
+            <tr>
+                <td>Agilidad</td>
+                <td>Fabricar</td>
+                <td>Oficio: Carpintero, Curtidor, Joyero, Herrero…</td>
+            </tr>
+            <tr>
+                <td>Agilidad</td>
+                <td>Coordinar</td>
+                <td>Actividad: Acrobacia, Malabarismos…</td>
+            </tr>
+            <tr>
+                <td>Agilidad</td>
+                <td>Montar</td>
+                <td>Animal: Águila, Caballo, Cabra, Camello, Elefante, Grifo…</td>
+            </tr>
+            <tr>
+                <td>Agilidad</td>
+                <td>Acechar</td>
+                <td>Emboscar</td>
+            </tr>
+            <tr>
+                <td>Percepción</td>
+                <td>Discernir</td>
+                <td>Presentir</td>
+            </tr>
+            <tr>
+                <td>Percepción</td>
+                <td>Desactivar</td>
+                <td>Pericia: Cerraduras, Trampas</td>
+            </tr>
+            <tr>
+                <td>Percepción</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Percepción</td>
+                <td>Apuntar</td>
+                <td>Arma: Cerbatana, Ballesta, Arco, Arrojadiza…</td>
+            </tr>
+            <tr>
+                <td>Inteligencia</td>
+                <td>Saber</td>
+                <td>Materia: Alquimia, Geografía e historia, Matemáticas, Medicina, Naturaleza…</td>
+            </tr>
+            <tr>
+                <td>Inteligencia</td>
+                <td>Entender idioma</td>
+                <td>Especie: Dragón, Elfo, Enano, Gigante, Humano, Orco…</td>
+            </tr>
+            <tr>
+                <td>Inteligencia</td>
+                <td>Deducir</td>
+                <td>Especialidad: Acertijos, Puzzles, Rastrear<?php #Escuela: Abjuración, Adivinación, Conjuración, Encantamiento, Evocación, Ilusión, Necromancia o Transmutación. ?></td>
+            </tr>
+            <tr>
+                <td>Inteligencia</td>
+                <td>Creer</td>
+                <td>Dios: (Hay un dios para cada cosa, elige una)</td>
+            </tr>
+            <tr>
+                <td>Voluntad</td>
+                <td>Resistir</td>
+                <td>Actividad: Aguantar peso/posición, Carrera continua/larga, Bucear, Nadar para mantenerse…</td>
+            </tr>
+            <tr>
+                <td>Voluntad</td>
+                <td>Sobrevivir</td>
+                <td>Terreno: Bajos fondos, Bosque, Campo, Desierto, Montaña…</td>
+            </tr>
+            <tr>
+                <td>Voluntad</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Voluntad</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Presencia</td>
+                <td>Negociar</td>
+                <td>Supervisar</td>
+            </tr>
+            <tr>
+                <td>Presencia</td>
+                <td>Engañar</td>
+                <td>Disfrazarse, Juego de manos (Escamotear)</td>
+            </tr>
+            <tr>
+                <td>Presencia</td>
+                <td>Interpretar</td>
+                <td>Actuar, Bailar, Cantar, Tocar instrumento (Arpa, Flauta, Laud, Tambor, Trompeta…)</td>
+            </tr>
+            <tr>
+                <td>Presencia</td>
+                <td>Persuadir</td>
+                <td>Interrogar</td>
+            </tr>
+        </table>
+    </section>
+    <footer>
+        <div>INTRODUCCIÓN ✦ SRD20</div>
+    </footer>
+</article>
+
+<div>
+    <p>Si necesitas redondear un número, simplemente quita los decimales.</p>
+
+    <p>En nuestro mundo fantástico, usamos medidas diferentes a las que estás acostumbrado. En lugar de kilómetros, metros y litros, usamos "pasos", "zancadas" y recipientes para referirnos al volumen de un líquido contenido. Aquí te dejo una tabla con las equivalencias:</p>
+    <table>
+        <tr>
+            <th>Sistema imperial</th>
+            <th>Internacional</th>
+            <th>SRD20</th>
+        </tr>
+        <tr>
+            <td>1 acre</td>
+            <td>4000 km</td>
+            <td>1 terreno</td>
+        </tr>
+        <tr>
+            <td>1 legua</td>
+            <td>4,8 km</td>
+            <td>1 paseo</td>
+        </tr>
+        <tr>
+            <td>1 milla</td>
+            <td>1,6 km</td>
+            <td>1 carrera</td>
+        </tr>
+        <tr>
+            <td>1 yarda</td>
+            <td>0,9 m</td>
+            <td>1 zancada</td>
+        </tr>
+        <tr>
+            <td>½ yarda</td>
+            <td>0,45 m</td>
+            <td>1 paso</td>
+        </tr>
+        <tr>
+            <td>1 pie</td>
+            <td>0,3 m</td>
+            <td>1 pie</td>
+        </tr>
+        <tr>
+            <td>1 pulgada</td>
+            <td>2,5 cm</td>
+            <td>1 moneda</td>
+        </tr>
+        <tr>
+            <td>1 libra</td>
+            <td>0,45 kg</td>
+            <td>1 bolsa</td>
+        </tr>
+        <tr>
+            <td>1 onza</td>
+            <td>28 g</td>
+            <td>1 trozo</td>
+        </tr>
+        <tr>
+            <td>1 galón</td>
+            <td>3,8 l</td>
+            <td>1 cubo</td>
+        </tr>
+        <tr>
+            <td>1 cuarta</td>
+            <td>0,9 l</td>
+            <td>1 botella</td>
+        </tr>
+        <tr>
+            <td>1 pinta</td>
+            <td>0,45 l</td>
+            <td>1 jarra</td>
+        </tr>
+    </table>
+
+    <p>¡Diviértete explorando nuestro mundo mágico con estas medidas increíbles!</p>
+
+    <h2>Atributos</h2>
+    <p>En el juego hay seis atributos que definen a los personajes y monstruos: <b>Fortaleza</b> (fortaleza), <b>Agilidad</b> (agilidad), <b>Percepción</b> (percepción), <b>Inteligencia</b> (inteligencia), <b>Voluntad</b> (voluntad) y <b>Presencia</b> (presencia). Cada uno tiene una puntuación que va de 3 a 18, y a mayor puntuación, mejor habilidad. Además, cada puntuación añade más posibilidades a la tirada de dados. Por ejemplo, si alguien tiene mucha fuerza, será más fácil para él levantar cosas pesadas.</p>
+
+    <table>
+        <tr>
+            <th>Valor</th>
+            <th>Extra</th>
+        </tr>
+        <tr>
+            <td>18 o más</td>
+            <td>1d6</td>
+        </tr>
+        <tr>
+            <td>16 a 17</td>
+            <td>1d4</td>
+        </tr>
+        <tr>
+            <td>13 a 15</td>
+            <td>1d2</td>
+        </tr>
+        <tr>
+            <td>9 a 12</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>6 a 8</td>
+            <td>[Debilidad 1]</td>
+        </tr>
+        <tr>
+            <td>4 a 5</td>
+            <td>[Debilidad 2]</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>[Debilidad 3]</td>
+        </tr>
+    </table>
+
+    <p>Veremos más adelante los tipos de debilidades y como funcionan.</p>
+</section>
+
+<section>
+    <h3>Consecuencias</h3>
+    <br>
+    
+    <h3>Tiradas enfrentadas</h3>
+    <p>A veces dos personajes jugadores o PJ quieren hacer lo mismo o uno intenta detener al otro. Para saber quién lo logra, se hace una prueba especial llamada "tirada enfrentada". Cada uno hace una tirada con un dado de 20 caras y suma su dado de maestría, habilidad o atributo si tiene uno. El que saque el número más alto gana y logra lo que quería, mientras que el otro no lo consigue. Si sacan el mismo número, ambos lo consiguen o pierden a la vez.</p>
+
+    <h3>Habilidades</h3>
+    <p>Cada personaje destaca en diferentes habilidades de una lista que cubre un amplio espectro de acciones. Las habilidades son una extensión de los atributos y aportan dados con más caras que los que aportan los atributos. cuando agregamos el de dado de una habilidad, no agregamos el dado de ningún atributo. Por ejemplo, si eres bueno en "escalar montañas", puedes agregar un dado extra a tu intento de trepar por Atletismo. Si no eres bueno en esa habilidad, solo tienes que intentar hacerlo con el dado que aporte un atributo, Fortaleza en el caso de Atletismo.</p>
+
+    <h3>Maestrías</h3>
+    <p>Las maestrías son especializaciones de las habilidades, a veces indican un objeto con el que se es especialmente bueno y otras indican otra habilidad más potente de aquella que requieren o parten. Por ejemplo, Acrobacias requiere Atletismo; Maestría con los arcos requiere Apuntar. Tenemos una lista de maestrías, pero no es una lista cerrada. Podrían surgir otras si la habilidad de la que parten da juego para ello. Queda a discreción del GM mantener la coherencia entre habilidades y maestrías.</p> </div>*/ ?>

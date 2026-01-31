@@ -1,0 +1,16 @@
+
+<?=Html::formOpen('/atalaya/codigos/crear_codigo')?>
+    <article>
+        <header>
+            <h1><?=t('Generador de códigos')?></h1>
+        </header>
+        <section class="grid">
+            <?=Html::boxInputText(t('De:'), 'de_idu', Session::get('idu'))?>
+            <?=Html::boxInputText(t('Experiencia:'), 'experiencia', 500)?>
+            <?=Html::boxButtonSubmit('&nbsp;', t('Generar código'))?>
+        </section>
+        <footer>
+            <?=Html::table($codigos)?>
+        </footer>
+    </article>
+<?=Html::closeTag('form')?>

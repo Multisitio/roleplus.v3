@@ -1,0 +1,45 @@
+<?php
+// firewall.phtml endurecido, solo lógica rápida y sin tocar BBDD
+
+$url     = $_SERVER['REQUEST_URI'];
+$host    = $_SERVER['HTTP_HOST'] ?? 'roleplus.app';
+$client  = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+
+// 1) URLs que claramente NO son de R+ (bots VoIP, WordPress, aprovisionamiento SIP, etc.)
+//    -> devolvemos 404 cortísimo y salimos
+if (preg_match('/(provisioning|yealink|wp_|wp\-)/i', $url)) {
+    header('HTTP/1.1 404 Not Found');
+    exit('<a href="/">https://' . $host . '</a>');
+}
+
+// 2) URLs que suelen ser intentos automáticos de búsqueda vieja / scrap basura
+if (preg_match('/buscador\?q/i', $url)) {
+    header('HTTP/1.1 404 Not Found');
+    exit('<a href="/">https://' . $host . '</a>');
+}
+
+// 3) Etiquetas legacy tipo /etiquetas/publicaciones/LOQUESEA
+if (preg_match('#/etiquetas/publicaciones/[\d\w %]+#i', $url)) {
+    header('HTTP/1.1 404 Not Found');
+    exit('<a href="/">https://' . $host . '</a>');
+}
+
+// 4) Rutas de iconos clásicos que algunos navegadores/bots piden
+//    Las redirigimos al asset real sin despertar más lógica
+if ($url === '/apple-touch-icon.png') {
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: /img/logos/apple-touch-icon.png");
+    exit;
+}
+if ($url === '/img/badge.png') {
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: /img/logos/badge.png");
+    exit;
+}
+
+// 5) NO hacemos nada con .cfg o .php AQUÍ
+//    (antes esto llamaba a Accesos->perderVida() y consultaba DB,
+//     eso lo quitamos para no regalárselo a los bots como vector DoS)
+
+// 6) Opcional: si quieres log local muy barato puedes syslogear, pero sin correo
+// error_log("[FW] {$client} => {$url}");

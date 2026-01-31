@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html id="important" lang="es"
+      data-color="<?= empty($claves['color']) ? 'red' : $claves['color'] ?>"
+      data-theme="<?= empty($claves['tema']) ? 'light' : $claves['tema'] ?>">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Cache-control" content="public">
+        <meta name="description" content="<?= t('Donde se publican las cosas.') ?>">
+        <meta name="theme-color" content="#ed8340">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><?= "$module_name $controller_name $action_name" ?></title>
+
+        <?php $version = time(); ?>
+
+        <link rel="manifest" href="/manifest.json?v=<?= $version ?>">
+        <link rel="stylesheet" href="/css/ev.min.css?v=<?= $version ?>">
+
+        <?= Css::inc($version) ?>
+
+        <!-- Registro del Service Worker centralizado y versionado -->
+        <script src="/javascript/worker.js?v=<?= $version ?>"></script>
+    </head>
+    <body>
+        <?php View::partial('jugador/fondo'); ?>
+
+        <?php View::partial('ev/nav'); ?>
+
+        <?php View::partial('jugador/aside'); ?>
+
+        <div class="apartados scroll-down-hide">
+            <a href="#tapiz" data-active=".apartados a"><?= t('Tapiz') ?></a>
+            <a class="active" href="#notas" data-active=".apartados a"><?= t('Notas') ?></a>
+            <a href="#jitsi" data-active=".apartados a">Jitsi</a>
+        </div>
+
+        <div class="jitsi" style="display:none">
+            <?php #View::partial('jitsi', false, ['room' => $partida->idu]); ?>
+        </div>
+
+		<main data-append data-ch="<?="pj_elementos_$partida->idu"?>">
+            <?php View::content(); ?>
+        </main>
+
+        <?php View::partial('toast'); ?>
+        <?php View::partial('ev/chat'); ?>
+
+        <a role="button"
+           class="flotante abajo derecha ma20 scroll-down-hide"
+           data-ajax=".ajax.show"
+           href="/ev/elementos/editar_partida/<?= $partida->idu ?>"
+           title="<?= t('Abrir el editor de elementos') ?>">
+            <img src="/img/icons/plus.svg" alt="<?= t('Abrir el editor de elementos') ?>" width="30" height="30" loading="lazy">
+        </a>
+
+        <div class="ajax hide"></div>
+        <div class="ajax show"></div>
+
+        <script src="/javascript/ev.min.js?v=<?= $version ?>" data-partidas_idu="<?= $partida->idu ?>"></script>
+        <?= Js::inc($version) ?>
+    </body>
+</html>

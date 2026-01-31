@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html data-color="red" data-theme="light" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta content="public" http-equiv="Cache-control">
+        <meta content="<?=t('Donde se publican las cosas.')?>" name="description">
+		<meta content="#ed8340" name="theme-color">
+		<meta content="width=device-width, initial-scale=1" name="viewport">
+		<title><?="$module_name $controller_name $action_name"?></title>
+		<?php $version = time(); ?>
+        <link href="/manifest.json?v=<?=$version?>" rel="manifest">
+        <link href="/css/default.min.css?v=<?=$version?>" rel="stylesheet">
+		<?=Css::inc()?>
+		<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/sw.js');
+		}
+		</script>
+	</head>
+	<body>
+		<main class="row">
+			<?php View::content(); ?>
+			<?php View::partial('toast'); ?>
+
+			<div class="ajax show"></div>
+		</main>
+
+		<script src="/javascript/publicaciones.min.js?v=<?=$version?>"></script>
+	</body>
+</html> 

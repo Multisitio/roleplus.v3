@@ -1,0 +1,34 @@
+
+<div class="caja titulo">
+	<div class="s2">
+		<label><?=t('Tamaño')?></label>
+		<select name="subtipo">
+			<?php for ($subtipo=1; $subtipo<=6; ++$subtipo):
+				$selected = ($subtipo == $caja->subtipo) ? 'selected' : ''; ?> 
+				<option <?=$selected?> value="<?=$subtipo?>"><?=$subtipo?></option>
+			<?php endfor; ?>
+		</select>
+	</div>
+	<div class="s10">
+		<label><?=t('Título')?></label>
+		<input type="text" name="nombre" value="<?=$caja->nombre?>">
+	</div>
+	<small class="s12"><?=t('Use el subtipo 1 para el encabezado más grande. 2 para un eslogan por ejemplo. 3 para las diferentes secciones. 4 para grupos dentro de secciones. 5 para encabezados aislados. 6 es como una línea en negrita.')?></small>
+
+	<label class="s4">
+		<input <?=($caja->alineado=='left')?'checked':''?> type="radio" name="alineado" value="left">
+		<span><?=t('Izquierda')?></span>
+	</label>
+
+	<label class="s4">
+		<input <?=($caja->alineado=='center')?'checked':''?> type="radio" name="alineado" value="center">
+		<span><?=t('Centrado')?></span>
+	</label>
+
+	<label class="s4">
+		<input <?=($caja->alineado=='right')?'checked':''?> type="radio" name="alineado" value="right">
+		<span><?=t('Derecha')?></span>
+	</label>
+
+</div>
+<input type="hidden" name="tipo" value="titulo">

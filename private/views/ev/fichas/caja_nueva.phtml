@@ -1,0 +1,125 @@
+
+<form class="modal-awake" enctype="multipart/form-data" method="post">
+	<header>
+		<div class="s12">
+			<button type="button" data-hide=".modal-awake, .overlay">X</button>
+			<h4 class="modal-title"><?=t('Caja')?></h4>
+		</div>
+		<div class="clear"></div>
+	</header>
+	<section>
+		<label class="s12"><?=t('Ancho para cuatro pantallas diferentes')?>:</label>
+		<div class="s3">
+			<label><?=t('Móvil')?></label>
+			<select name="tam_s">
+				<?php $caja->tam_s = is_numeric($caja->tam_s) ? $caja->tam_s : 12;
+				for ($s=0; $s<=12; ++$s):
+					$selected = ($s == $caja->tam_s) ? 'selected' : ''; ?> 
+					<option <?=$selected?> value="<?=$s?>"><?="$s/12"?> (<?=floor($s*100/12)?>%)</option>
+				<?php endfor; ?>
+			</select>
+		</div>
+		<div class="s3">
+			<label><?=t('Tableta')?></label>
+			<select name="tam_m">
+				<?php for ($m=0; $m<=12; ++$m):
+					$selected = ($m == $caja->tam_m) ? 'selected' : ''; ?> 
+					<option <?=$selected?> value="<?=$m?>"><?="$m/12"?> (<?=floor($m*100/12)?>%)</option>
+				<?php endfor; ?>
+				<option <?=( ! is_numeric($caja->tam_m))?'selected':''?> value="">--</option> 
+			</select>
+		</div>
+		<div class="s3">
+			<label><?=t('Ventana')?></label>
+			<select name="tam_l">
+				<?php for ($l=0; $l<=12; ++$l):
+					$selected = ($l == $caja->tam_l) ? 'selected' : ''; ?> 
+					<option <?=$selected?> value="<?=$l?>"><?="$l/12"?> (<?=floor($l*100/12)?>%)</option>
+				<?php endfor; ?> 
+				<option <?=($caja->tam_l==='')?'selected':''?> value="">--</option> 
+			</select>
+		</div>
+		<div class="s3">
+			<label><?=t('Pantalla')?></label>
+			<select name="tam_xl">
+				<option>--</option>
+				<?php for ($xl=0; $xl<=12; ++$xl):
+					$selected = ($xl == $caja->tam_xl) ? 'selected' : ''; ?> 
+					<option <?=$selected?> value="<?=$xl?>"><?="$xl/12"?> (<?=floor($xl*100/12)?>%)</option>
+				<?php endfor; ?> 
+				<option <?=($caja->tam_xl==='')?'selected':''?> value="">--</option> 
+			</select>
+		</div>
+		<small class="s12 mb15"><?=t('Imagine que el ancho disponible está dividido en 12 columnas (12 = 100%). Sabiendo esto piense cuantas columnas quiere que ocupe la caja respecto a la caja padre (contenedora). Un "--" significa que se tendrá en cuenta el valor de la anterior pantalla y un "0" que para esa pantalla esa caja se ocultará.')?></small>
+
+		<div class="s4">
+			<label>
+				<?=t('¿Línea nueva?')?>
+				<div class="display-cell">
+					<input type="checkbox" name="linea_nueva"<?=$caja->linea_nueva?' checked':''?>>
+					<span></span>
+				</div>
+			</label>
+		</div>
+
+		<div class="s8">
+			<label><?=t('Alto fijo')?></label>
+			<input type="text" name="alto" value="<?=$caja->alto?>">
+		</div>
+		<small class="s12 mb15"><?=t('Si no especifica ningún valor, la caja se ajustará al contenido. O puede poner un alto fijo como por ejemplo: 300px')?></small>
+
+		<div class="s12">
+			<label><?=t('Tipo de caja')?></label>
+			<select data-change_load=".caja-contenedor">
+				<?php foreach ($tipos as $tipo_key=>$tipo_val): ?>
+					<option <?=($tipo_key==$caja_tipo)?'selected':''?> value="/ev/fichas/caja_cargar/<?=$tipo_key?>"><?=$tipo_val?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		<div class="s2">
+			<label><?=t('Peso')?></label>
+			<input type="text" name="peso" value="<?=$caja->peso?>">
+		</div>
+		<div class="s10">
+			<label><?=t('Dentro de la caja división...')?></label>
+			<select name="padre_idu">
+				<option value=""><?=t('Ninguna')?></option>
+				<?php foreach ($cajas_padre as $caja_padre): ?>
+					<option <?=($caja_padre->idu==$caja->padre_idu)?'selected':''?> value="<?=$caja_padre->idu?>"><?=ucfirst($caja_padre->tipo)?> <?=$caja_padre->peso?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		<small class="s12"><?=t('En el peso pueden ir letras y/o números y sirve para ordenar las cajas en orden ascendente de forma textual, no numérica. Por lo tanto 10 va antes que 9. Esto tiene sus pros y sus contras.')?></small>
+
+		<hr class="s12">
+
+		<div class="caja-contenedor">
+			<?php include APP_PATH . "views/ev/fichas/cajas/$caja_tipo.phtml"; ?>
+		</div>
+
+		<div class="clear"></div>
+	</section>
+
+	<footer class="mv15">
+		<?php if ($caja->idu): ?>
+			<div class="s4">
+				<button type="submit" class="btn-block btn-danger-outline" name="action" value="caja_eliminar"><?=t('Eliminar')?></button>
+			</div>
+			<div class="s4">
+				<button type="submit" class="btn-block btn-success-outline" name="action" value="caja_crear"><?=t('Duplicar')?></button>
+			</div>
+			<div class="s4">
+				<button type="submit" class="btn-block btn-warning-outline" name="action" value="caja_actualizar"><?=t('Actualizar')?></button>
+			</div>
+			<input type="hidden" name="idu" value="<?=$caja->idu?>">
+		<?php else: ?>
+			<div class="s4">
+				<button type="submit" class="btn-block btn-success-outline" name="action" value="caja_crear"><?=t('Crear')?></button>
+			</div>
+		<?php endif; ?>
+		<br>
+		<br>
+	</footer>
+	<input type="hidden" name="fichas_idu" value="<?=$ficha->idu?>">
+</form>
+<div class="overlay"></div>

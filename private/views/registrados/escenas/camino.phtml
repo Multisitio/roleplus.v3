@@ -1,0 +1,12 @@
+
+<div class="camino grid">
+    <div class="xs9">
+        <input type="text" name="caminos[texto][]" placeholder="<?=t('Aquí el texto para cambiar de escena')?>…" value="<?=$cam->texto??''?>">
+    </div>
+    <div class="xs2">
+        <input type="text" name="caminos[escena][]" placeholder="<?=t('Escena')?>…" value="<?=$cam->escena??''?>">
+    </div>
+    <div class="xs1">
+        <button type="button" data-remove="parent parent" data-clean_if_there_is_only_one=".caminos"><?=Ku::icon('minus')?></button>
+    </div>
+</div>

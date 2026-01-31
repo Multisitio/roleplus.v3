@@ -1,0 +1,43 @@
+
+<div id="grid" data-columns>
+	<article class="cabecera">
+		<header>
+			<h1 class="s12"><?=($claves['jugador_rol']=='master')?t('Tus partidas'):t('Partidas')?></h1>
+		</header>
+
+		<?php if ($claves['jugador_rol'] == 'master'): ?>
+			<section class="grid">
+				<a role="button" href="/ev/partidas/formulario"><?=t('Crear partida')?></a>
+				<a role="button" class="outline" href="/ev/aventuras"><?=t('Aventuras')?></a>
+			</section>
+		<?php endif; ?>
+
+		<footer>
+			<input type="text" data-filter="article:not(.cabecera)" placeholder="<?=t('Filtra la lista...')?>">
+		</footer>
+	</article>
+
+	<?php foreach ($partidas as $par): ?>
+		<article>
+			<header>
+				<h3><?=$par->nombre?></h3>
+			</header>
+
+			<?php if ($par->fotos): ?>
+				<img alt="<?=t('Imagen de la partida:')?> <?=$par->nombre?>" class="mb10" src="/img/usuarios/<?=$par->usuarios_idu?>/l.<?=$par->fotos?>">
+			<?php endif; ?>
+
+			<section>
+				<?=$par->notas?>
+			</section>
+
+			<footer class="grid">
+				<?php if ($claves['jugador_rol'] == 'master'): ?>
+					<a role="button" class="outline" href="/ev/partidas/formulario/<?=$par->idu?>"><?=t('Editar')?></a>
+				<?php endif; ?>
+
+				<a role="button" href="/ev/<?=($claves['jugador_rol'] == 'master') ? 'panel' : 'jugar'?>/partida/<?=$par->idu?>"><?=t('Entrar')?></a>
+			</footer>
+		</article>
+	<?php endforeach; ?>
+</div>

@@ -1,0 +1,145 @@
+<?php
+$bot_token = Config::get("keys.telegram.bot{$bot}_token");
+$bot_parts = explode(':', $bot_token);
+$id_telegram_bot = $bot_parts[0];
+
+$update = json_decode(file_get_contents('php://input'), true);
+$chat_id = $update['message']['chat']['id'] ?? null;
+
+$text = '';
+if (empty($update['message'])) {
+    $url = "https://api.telegram.org/bot$bot_token/getWebhookInfo";
+    $response = file_get_contents($url);
+    _mail::toAdmin('No update...', '<pre>'.print_r($response, 1));
+    _var::die($response);
+}
+else {
+    $message = $update['message']['text'];
+    $message_id = $update['message']['message_id'];
+    $nombre = $update['message']['from']['first_name'] ?? '';
+    $alias = $update['message']['from']['username'] ?? '';
+    $id_telegram = $update['message']['from']['id'];
+
+    // 1. Registrar/Actualizar usuario de Telegram
+    (new TelegramUsuarios)->set($id_telegram, [
+        'alias' => $alias,
+        'nombre' => $nombre
+    ]);
+
+    // 2. Verificar o Resolver vinculación via Admin
+    if ($bot == 2) {
+        // A) Respuesta del Admin a una solicitud de identificación
+        if (isset($update['message']['reply_to_message'])) {
+             $reply = $update['message']['reply_to_message'];
+             
+             // Verificamos que sea respuesta a nuestro mensaje de "Usuario Desconocido" o "Usuario Capturado"
+             if ($reply['from']['id'] == $id_telegram_bot && (stripos($reply['text'], 'Usuario Desconocido') !== false || stripos($reply['text'], 'Usuario Capturado') !== false)) {
+                 // Extraer ID del usuario desconocido del mensaje original
+                 if (preg_match('/ID:\s+(\d+)/', $reply['text'], $matches)) {
+                     $candidato_id_telegram = $matches[1];
+                     $nick_r_plus = trim($message);
+                     
+                     // COMANDO ESPECIAL: INVITADO (Insensitive)
+                     if (stripos($nick_r_plus, 'invitado') !== false) {
+                         (new TelegramUsuarios)->linkUsuario($candidato_id_telegram, 'INVITADO');
+                         (new TelegramUsuarios)->set($candidato_id_telegram, ['alias' => "R+: INVITADO (Bot/Amigo)"]);
+                         $text = "✅ Usuario marcado correctamente como INVITADO.\nSophia no lo molestará.";
+                         _mail::toAdmin('Usuario Invitado', $text);
+                     }
+                     else {
+                         $userR = (new Usuarios)->first("SELECT idu, apodo, rol FROM usuarios WHERE apodo LIKE ?", [$nick_r_plus]);
+                         
+                         if ($userR) {
+                             (new TelegramUsuarios)->linkUsuario($candidato_id_telegram, $userR->idu);
+                             // Guardamos el nick de R+ en el alias de Telegram para tener referencia
+                             (new TelegramUsuarios)->set($candidato_id_telegram, ['alias' => "R+: $userR->apodo"]);
+                             
+                             $text = "✅ Vinculado: {$userR->apodo} (Nivel {$userR->rol}) -> ID $candidato_id_telegram";
+                             _mail::toAdmin('Vinculación exitosa', $text);
+                         } else {
+                             // ESTRATEGIA FANTASMA: Usuario no en R+ -> Marcar para borrar
+                             (new TelegramUsuarios)->linkUsuario($candidato_id_telegram, 'FANTASMA');
+                             (new TelegramUsuarios)->set($candidato_id_telegram, ['alias' => "R+: $nick_r_plus (FANTASMA)"]);
+                             
+                             $text = "⚠️ Nick '$nick_r_plus' NO EXISTE en R+. \nUsuario marcado como FANTASMA. Sophia lo expulsará en la próxima ronda.";
+                         }
+                     }
+                 } else {
+                     $text = "❌ Error: No puedo leer el ID en el mensaje original. (Regex failed)";
+                 }
+             }
+        }
+    }
+    
+    // 3. Verificar si está vinculado (para lógica normal de chat)
+    $tgUser = (new TelegramUsuarios)->getByTelegramId($id_telegram);
+    $usuarios_idu = $tgUser ? $tgUser->usuarios_idu : null;
+
+    // Ya no pedimos "Soy Nick" al usuario directamente.
+    // Solo respondemos como IA si está vinculado O si es el admin hablando.
+
+    // Si ya hay texto de vinculación, no preguntamos a OpenAI, enviamos directo.
+    // Si no hay texto, seguimos con la lógica normal.
+
+    if (empty($text)) {
+        if ($bot == 2 && preg_match('/.*(Sophia).*/mu', $message)) {
+            $role = 'Te llamas Sophia (la iA de R+ 3.0, la hermana mayor de Aria).';
+            if ($usuarios_idu) {
+                $u = (new Usuarios)->find($usuarios_idu);
+                $role .= " Estás hablando con {$u->apodo}.";
+            }
+            $text = (new Respuestas)->preguntarAOpenAi($message, $role);
+        }
+        elseif ($bot == 1) {
+            if (preg_match('/.*(Aria).*/mu', $message)) {
+                $role = 'Te llamas Aria (la iA de R+, la hermana menor de Sophia), responde a esto si no se trata de sexo, religión, política o fútbol (está prohibido y has de advertirlo si procede).';
+                #$role = 'Te llamas Aria (la iA de R+, la hermana menor de Sophia).';
+                $text = (new Respuestas)->preguntarAOpenAi($message, $role);
+            }
+            elseif (preg_match('/.*(fútbol|política|religión).*/mui', $message)) {
+                $role = 'Te llamas Aria (la iA de R+). Evalúa si el siguiente mensaje es motivo de expulsión del grupo sabiendo que no aceptamos comentarios sobre fútbol, política o religión. Si es motivo de expulsión, avísalo y si no lo es advierte que has analizado el mensaje y que es tolerable.';
+                $text = (new Respuestas)->preguntarAOpenAi($message, $role);
+            }
+        }
+    }
+}
+
+if (empty($text)) {
+    #_mail::toAdmin('No text...', '<pre>'.print_r($update, 1));
+    exit;
+}
+
+$data = [
+    'chat_id' => $chat_id,
+    'parse_mode' => 'HTML',
+    'reply_to_message_id' => $message_id,
+    'text' => "<pre>$text</pre>",
+];
+$url = "https://api.telegram.org/bot$bot_token/sendMessage";
+
+try {
+    if (class_exists('Kttp')) {
+        $response = Kttp::post($url)->formBody($data)->send();
+    } else {
+        // Fallback standard
+        $options = [
+            'http' => [
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            ]
+        ];
+        $context  = stream_context_create($options);
+        $response = file_get_contents($url, false, $context);
+    }
+    
+    // Log si error
+    if ($response) {
+        $json = json_decode($response);
+        if (!$json || !$json->ok) {
+            _mail::toAdmin('Telegram Error', "Error enviando msg: " . ($json->description ?? 'Unknown'));
+        }
+    }
+} catch (Throwable $e) {
+    _mail::toAdmin('Telegram Exception', $e->getMessage());
+}

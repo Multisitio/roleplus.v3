@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html data-color="<?=empty($claves['color'])?'red':$claves['color']?>" data-theme="<?=empty($claves['tema'])?'light':$claves['tema']?>" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta content="public" http-equiv="Cache-control">
+        <meta content="<?=t('Donde se publican las cosas.')?>" name="description">
+		<meta content="#ed8340" name="theme-color">
+		<meta content="width=device-width, initial-scale=1" name="viewport">
+		<title><?="$module_name $controller_name $action_name"?></title>
+		<?php $version = time(); ?>
+        <link href="https://kumbiacss.com/css/kumbia.min.css" rel="stylesheet">
+        <link href="/manifest.json?v=<?=$version?>" rel="manifest">
+		<link href="/css/masonry.min.css?v=<?=$version?>" rel="stylesheet">
+		<?=Css::inc()?>
+		<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/sw.js?v=<?=$version?>');
+		}
+		</script>
+	</head>
+
+	<body>
+		<nav>
+			<a href="/ev3" id="home"><img alt="md/home" loading="lazy" src="/img/icons/md/home.svg" width="18" height="18"> EV3</a>
+			<a href="/ev3/elementos" id="feed"><img alt="md/feed" loading="lazy" src="/img/icons/md/feed.svg" width="18" height="18"> Elementos</a>
+			<a href="#group" id="group"><img alt="md/group" loading="lazy" src="/img/icons/md/group.svg" width="18" height="18"> Group <sup>9+</sup></a>
+			<a href="#chat" id="chat"><img alt="md/chat" loading="lazy" src="/img/icons/md/chat.svg" width="18" height="18"> Chat <sup>99+</sup></a>
+			<a href="#notifications" id="notifications"><img alt="md/notifications" loading="lazy" src="/img/icons/md/notifications.svg" width="18" height="18"> Notices <sup>999+</sup></a>
+		</nav>
+
+		<main>
+			<?php View::content(); ?>
+		</main>
+	</body>
+</html> 

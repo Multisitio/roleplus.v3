@@ -1,0 +1,34 @@
+
+<div class="respuestas s12" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Preguntas y respuestas')?></h1>
+            <p><?=t('Encuentra la respuesta a tu pregunta o haz una nueva pregunta que pueda servir a otros y la contestaremos lo antes posible.')?></p>
+        </header>
+        <footer class="grid auto">
+            <a role="button" data-ajax=".ajax.show" data-bg_color rel="nofollow" data-style="body, overflow:hidden" href="/registrados/ia/preguntar"><?=t('Preguntar algo sin miedo')?></a>
+        </footer>
+    </article>
+
+    <?php foreach ($respuestas as $res): ?>
+        <article>
+            <header>
+                <div class="space-between">
+                    <h2><?=$res->pregunta?></h2>
+
+                    <a role="button" data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/registrados/ia/editor/<?=$res->idu?>"><?=Ku::icon(t('Editar'), 'edit')?></a>
+                </div>
+            </header>
+            <section>
+                <code><?=nl2br($res->respuesta)?></code>
+            </section>
+            <footer>
+                <hr>
+                <small>
+                    <b><?=t('Preguntado:')?></b> <?=$res->preguntado?><br>
+                    <b><?=t('Respondido:')?></b> <?=$res->respondido?>
+                </small>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>

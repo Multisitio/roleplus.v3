@@ -1,0 +1,6 @@
+<?php
+$sin_leer=0;
+foreach ((new Conversaciones)->idusDeMisConversaciones() as $cha):
+    $sin_leer += (new Conversaciones_mensajes)->sinLeer($cha->idu);
+endforeach;
+echo $sin_leer ? $sin_leer : '';

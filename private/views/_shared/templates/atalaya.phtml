@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html data-color="<?=empty($claves['color'])?'red':$claves['color']?>" data-theme="dark" id="important" lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title><?="$module_name $controller_name $action_name"?></title>
+        <?php /*<link href="/css/atalaya.min.css?v=<?=time()?>" rel="stylesheet">*/ ?>
+		<link href="https://kumbiacss.com/css/kumbia.min.css?v=<?=time()?>" rel="stylesheet">
+		<?=Css::inc()?>
+	</head>
+	<body>
+		<?php View::partial('toast'); ?>
+
+		<?php View::partial('atalaya/aside'); ?>
+
+		<main>
+			<?php View::partial('atalaya/nav'); ?>
+
+			<?php View::content(); ?>
+		</main>
+		
+		<div class="ajax hide"></div>
+		<div class="ajax show"></div>
+		
+        <?php /*<script src="/javascript/atalaya.min.js?v=<?=time()?>"></script>*/ ?>
+		<?=Js::inc()?>
+	</body>
+</html>

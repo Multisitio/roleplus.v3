@@ -1,0 +1,116 @@
+<?php Css::add('ajustes.min'); ?>
+<?php Js::add('ajustes.min'); ?>
+
+<div class="ajustes" data-columns id="grid">
+    <article>
+		<header>
+			<h1><?=t('Color para R+')?></h1>
+            <p><?=t('Puede elegir el color principal de la plataforma entre 18 posibles y un tema oscuro pinchando en la luna o en el sol para volver al claro.')?></p>
+		</header>
+		<section>
+			<?php View::partial('colorpicker'); ?>
+		</section>
+		<footer>
+		</footer>
+	</article>
+
+    <article>
+        <header>
+            <h2><?=t('No al boletín de R+')?></h2>
+            <p><?=t('Cada semana mandamos las publicaciones de R+, de la semana anterior, al correo de todos los usuarios que no han marcado esta opción.')?></p>
+        </header>
+        <section>
+            <?=Form::open('registrados/ajustes/no_al_boletin')?>
+                <?=Kubox::switch(label: t('No al boletín de R+'),
+                name: 'no_al_boletin', attrs: 'class="submit"',
+                checked: empty($claves['no_al_boletin'])?false:true)?>
+            <?=Form::close()?>
+        </section>
+        <footer>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2><?=t('No notificar +1')?></h2>
+            <p><?=t('De Trampero en adelante.')?></p>
+        </header>
+        <section>
+            <?=Form::open('registrados/ajustes/no_notificar_masuno')?>
+                <?=Kubox::switch(label: t('No notificar +1'),
+                name: 'no_notificar_masuno', attrs: 'class="submit"',
+                checked: empty($claves['no_notificar_masuno'])?false:true)?>
+            <?=Form::close()?>
+        </section>
+        <footer>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2><?=t('Quitar mampostería')?></h2>
+            <p><?=t('Para ver las cosas en una sola columna.')?><br>
+            <?=t('De Trampero en adelante.')?></p>
+        </header>
+        <section>
+            <?=Form::open('registrados/ajustes/quitar_masonry')?>
+                <?=Kubox::switch(label: t('Quitar mampostería'),
+                name: 'quitar_masonry', attrs: 'class="submit"',
+                checked: empty($claves['quitar_masonry'])?false:true)?>
+            <?=Form::close()?>
+        </section>
+        <footer>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2><?=t('Quitar publicidad')?></h2>
+            <p><?=t('De Portaestandarte en adelante.')?></p>
+        </header>
+        <section>
+            <?=Form::open('registrados/ajustes/quitar_publicidad')?>
+                <?=Kubox::switch(label: t('Quitar publicidad'),
+                name: 'quitar_publicidad', attrs: 'class="submit"',
+                checked: empty($claves['quitar_publicidad'])?false:true)?>
+            <?=Form::close()?>
+        </section>
+        <footer>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2><?=t('Suscripciones push')?></h2>
+            <p><?=t('Use el navegador si no desea notificaciones.')?></p>
+        </header>
+        <section>
+            <?php if ($suscripciones):
+                foreach ($suscripciones as $sus): ?>
+                    <hr>
+                    <div class="space-between align-left">
+                        <p><?=$sus->browser?></p>
+                        <a href="/registrados/ajustes/eliminar_suscripcion/<?=$sus->id?>"><?=Ku::icon(t('Borrar suscripción push'), 'x')?></a>
+                    </div>
+                <?php endforeach;
+            else: ?>
+                <p><?=t('No tiene suscripciones push activas.')?></p>
+            <?php endif; ?>
+            <hr>
+        </section>
+        <footer>
+        </footer>
+    </article>
+
+    <article>
+        <header>
+            <h2><?=t('Borrar cache')?></h2>
+            <p><?=t('No borra todas las cache, pero sirve para solucionar algunos problemas refrescando los estilos y efectos que no se actualizaron con el uso normal de la plataforma.')?></p>
+        </header>
+        <section>
+        </section>
+        <footer>
+            <button onclick="borrar_cache()"><?=t('Borrar cache')?></button>
+        </footer>
+    </article>
+</div>

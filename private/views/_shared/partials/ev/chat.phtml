@@ -1,0 +1,42 @@
+<?php
+$abrir_chat = View::getVar('abrir_chat');
+$claves = View::getVar('claves');
+$mensajes = View::getVar('mensajes');
+$partida = View::getVar('partida');
+$usuario = View::getVar('usuario');
+?>
+<div class="modal chat conversacion" style="display:none">
+	<header class="mb15">
+		<h3>
+            <?=t('Chat de la partida')?>
+		    <button class="transparent" data-hide=".modal.chat, .chat.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+        </h3>
+	</header>
+    <hr>
+	<section>
+		<div class="mensajes" data-append="1" data-autoscroll data-ch="ev_chat_<?=$partida->idu?>">
+			<?php include APP_PATH . 'views/registrados/conversaciones/mensajes.phtml'; ?>
+		</div>
+	</section>
+	<footer>
+		<form id="chat-form" action="/registrados/conversaciones/enviar" data-ajax=".ajax.hide" method="post">
+			<textarea name="contenido"></textarea>
+			<?php View::partial('botonera'); ?>
+			<div class="grid">
+				<?php if ($claves['jugador_rol']=='master'): ?>
+					<a role="button" class="outline" data-ajax=".chat .mensajes" rel="nofollow" href="/registrados/conversaciones/vaciar/<?=$partida->idu?>"><?=t('Vaciar')?></a>
+				<?php endif; ?>
+				<button type="reset" class="outline"><?=t('Limpiar')?></button>
+				<button type="submit"><?=t('Enviar')?></button>
+			</div>
+			<input type="hidden" name="conversaciones_idu" value="<?=$partida->idu?>">
+			<input type="hidden" name="ultimo_fecha" value="<?=empty($men->creado)?'':$men->creado?>">
+		</form>
+	</footer>
+</div>
+<div class="chat overlay" data-hide=".modal.chat, .chat.overlay" style="display:none"></div>
+
+<button class="chat scroll-down-hide" data-show=".modal.chat, .chat.overlay" title="<?=t('Abrir chat')?>">
+	<img alt="<?=t('Abrir chat')?>" loading="lazy" src="/img/icons/message-circle.svg" width="30" height="30">
+	<span class="sin-leer" data-ch="ev_chat_sin_leer_<?=$partida->idu?>"></span>
+</button>

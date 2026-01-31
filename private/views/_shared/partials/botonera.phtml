@@ -1,0 +1,23 @@
+<?php
+$add_to = empty($add_to) ? View::getVar('add_to') : $add_to;
+$usuario = View::getVar('usuario');
+?>
+<?php if ($usuario->rol > 1): ?>
+	<div class="botonera" data-add_to="<?=$add_to?>">
+		<button type="button" data-add="/r 4dpurple3f "><i class="dice size-6 purple-text">^</i></button>
+
+		<button type="button" data-add="/r 1dindigo4 "><i class="dice size-4 indigo-text">d</i></button>
+
+		<button type="button" data-add="/r 1dblue6 "><i class="dice size-6 blue-text">F</i></button>
+
+		<button type="button" data-add="/r 1dgreen8 "><i class="dice size-8 green-text">l</i></button>
+
+		<button type="button" data-add="/r 1dyellow10 "><i class="dice size-10 yellow-text">0</i></button>
+
+		<button type="button" data-add="/r 1dorange12 "><i class="dice size-12 orange-text">x</i></button>
+
+		<button type="button" data-add="/r 1dred20 "><i class="dice size-20 red-text">Z</i></button>
+	</div>
+<?php else: ?>
+    <kbd><?=t('La botonera para lanzar dados solo está disponible para los roles Trampero, Portaestandarte, Azotamentes y Chamán.')?></kbd>
+<?php endif; ?>

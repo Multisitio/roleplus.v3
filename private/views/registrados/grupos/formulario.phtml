@@ -1,0 +1,31 @@
+<?php
+$action = empty($elemento->idu) ? 'crear' : 'actualizar';
+$action .= '_elemento_de_mapa';
+echo Form::open("registrados/grupos/$action/$marcador", attrs: 'data-ajax=".ajax.hide"');
+?>
+    <label>Color:</label>
+    <?php foreach (['white', 'blue', 'green', 'red', 'yellow'] as $color): ?>
+        <input type="radio"<?=($elemento->color==$color || (!$elemento->color&&$color=='white'))?' checked':''?> class="<?=$color?>" name="color" value="<?=$color?>">
+    <?php endforeach; ?>
+    <br>
+    <label><?=t('Info')?>:</label>
+    <textarea name="contenido"><?=h($elemento->contenido)?></textarea>
+    <div class="grid">
+        <label>
+            Lat:
+            <input type="number" name="lat" step="any" value="<?=h($elemento->lat)?>">
+        </label>
+        <label>
+            Lng:
+            <input type="number" name="lng" step="any" value="<?=h($elemento->lng)?>">
+        </label>
+    </div>
+    <div class="grid">
+        <?php if ($elemento->idu): ?>
+            <a role="button" class="outline" data-ajax=".ajax.hide" rel="nofollow" href="/registrados/grupos/eliminar_elemento_de_mapa/<?=$elemento->idu?>/<?=$marcador?>"><?=t('Quitar')?></a>
+        <?php endif; ?>
+        <button type="submit" onclick="map.closePopup(popup)"><?=t('Grabar')?></button>
+    </div>
+    <input type="hidden" name="grupos_idu" value="<?=empty($elemento->grupos_idu)?$grupo->idu:$elemento->grupos_idu?>">
+    <input type="hidden" name="idu" value="<?=$elemento->idu?>">
+</form>

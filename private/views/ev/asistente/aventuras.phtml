@@ -1,0 +1,33 @@
+
+<article>
+	<header>
+		<h1>4) <?=t('¿Está creada la aventura?')?></h1>
+		<h2><?=t('Las aventuras las pueden usar (no editar) otros másters.')?></h2>
+	</header>
+
+	<section>
+		<h3><?=t('Si NO lo está toca crearla:')?></h3>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/aventuras"><?=t('Ver aventuras')?></a>
+			<a role="button" href="/ev/aventuras/formulario"><?=t('Crear aventura')?></a>
+		</div>
+		<div class="clear"></div>
+	</section>
+	<br>
+	<footer>
+		<form action="/ev/asistente/partidas" method="post">
+			<h3><?=t('Si está creada toca escoger una y darle a siguiente:')?></h3>
+			<select name="aventuras_idu">
+				<option value=""><?=t('Escoger una...')?></option>
+				<?php foreach ($aventuras as $ave):
+					$selected = ($aventuras_idu == $ave->idu) ? 'selected' : ''; ?>
+					<option <?=$selected?> value="<?=$ave->idu?>"><?=$ave->nombre?></option>
+				<?php endforeach; ?>
+			</select>
+			<div class="grid">
+				<a class="outline" role="button" href="/ev/asistente/personajes"><?=t('Anterior')?></a>
+				<button type="submit"><?=t('Siguiente')?></button>
+			</div>
+		</form>
+	</footer>
+</article>

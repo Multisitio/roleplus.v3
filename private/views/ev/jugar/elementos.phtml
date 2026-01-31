@@ -1,0 +1,19 @@
+<?php
+$listado = [];
+if (!empty($elementos)) {
+	$listado = array_values($elementos);
+	usort($listado, function ($a, $b) {
+		$na = isset($a->nombre) ? (string)$a->nombre : '';
+		$nb = isset($b->nombre) ? (string)$b->nombre : '';
+		return strcasecmp($na, $nb);
+	});
+}
+?>
+
+<?php if (!empty($listado)): ?>
+	<?php foreach ($listado as $ele): ?>
+		<?php include APP_PATH . 'views/ev/jugar/elemento.phtml'; ?>
+	<?php endforeach; ?>
+<?php else: ?>
+	<p><?= t('No hay elementos visibles todavía.') ?></p>
+<?php endif; ?>

@@ -1,0 +1,20 @@
+<?php Css::add('publicaciones.min'); ?>
+
+<div data-columns id="grid">
+    <?php include APP_PATH . 'views/publicaciones/una.phtml'; ?>
+
+    <?php if ( ! Session::get('idu') && ! empty($consejo)): ?>
+        <article>
+            <header class="pa10">		
+                <a href="/usuarios/formularios"><h5><?=t('Identifícate para no ver publi aquí')?></h5></a>
+            </header>
+            <?php
+            $dir = empty($consejo->usuarios_idu) ? 'consejos' : "usuarios/$consejo->usuarios_idu";
+            $img = "img/$dir/$consejo->imagen";
+            $mini = "/img/$dir/l.$consejo->imagen";
+            if (_file::exists($img)): ?>
+                <a href="/consejos/contabilizar/<?=$consejo->idu?>" <?=strstr($consejo->url, 'http')?'rel="noopener noreferrer" target="_blank"':''?> title="<?=t('Consejo de')?> <?=$consejo->nombre?>"><img alt="<?=$consejo->imagen?>" src="<?=$mini?>" width="540" height="540"></a>
+            <?php endif; ?>
+        </article>
+    <?php endif; ?>
+</div>

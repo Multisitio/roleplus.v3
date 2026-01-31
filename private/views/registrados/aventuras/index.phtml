@@ -1,0 +1,38 @@
+
+<div class="aventuras" data-columns id="grid">
+    <article>
+        <header>
+            <h1><?=t('Aventuras')?></h1>
+            <p><?=t('Crea o juega una aventura ya creada.')?></p>
+        </header>
+        <footer class="grid auto">
+            <a role="button" data-ajax=".ajax.show" data-bg_color rel="nofollow" data-style="body, overflow:hidden" href="/registrados/aventuras/formulario"><?=t('Crear una aventura')?></a>
+        </footer>
+    </article>
+
+    <?php foreach ($aventuras as $ave): ?>
+        <article>
+            <header>
+                <h2><?=h($ave->nombre)?></h2>
+            </header>
+
+            <section>
+                <p><?=$ave->introduccion?></p>
+            </section>
+
+            <?php if ($ave->fotos): ?>
+                <img alt="<?=t('Portada')?>: <?=$ave->fotos?>" src="/img/usuarios/<?=$ave->usuarios_idu?>/l.<?=$ave->fotos?>">
+            <?php endif; ?>
+
+            <footer class="grid auto">
+                <?php if ($ave->usuarios_idu == $usuario->idu): ?>
+                    <a role="button" data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/registrados/aventuras/formulario/<?=$ave->idu?>"><?=t('Editar')?></a>
+                <?php endif; ?>
+                
+                <?php if ($ave->publicada): ?>
+                    <a role="button" data-bg_color href="/registrados/aventuras/jugar/<?=$ave->idu?>"><?=t('Jugar')?></a>
+                <?php endif; ?>
+            </footer>
+        </article>
+    <?php endforeach; ?>
+</div>

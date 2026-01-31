@@ -1,0 +1,23 @@
+
+<article>
+	<header>
+		<h1>6) <?=t('¿Hay creado un elemento?')?></h1>
+		<h2><?=t('Los elementos de las escenas son la multimedia de la aventura.')?></h2>
+	</header>
+
+	<section>
+		<h3><?=t('Recomendamos crear tantos como se necesiten:')?></h3>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/escenas/formulario/<?=$aventuras_idu?>/<?=$escenas_idu?>"><?=t('Ver elementos')?></a>
+			<a role="button" href="/ev/escenas/formulario/<?=$aventuras_idu?>/<?=$escenas_idu?>#elemento"><?=t('Crear elemento')?></a>
+		</div>
+	</section>
+	<br>
+	<footer>
+		<h3><?=t('Si hay creados suficientes elementos toca darle a siguiente:')?></h3>
+		<div class="grid">
+			<a class="outline" role="button" href="/ev/asistente/escenas"><?=t('Anterior')?></a>
+			<a role="button" href="/ev/asistente/partidas"><?=t('Siguiente')?></a>
+		</div>
+	</footer>
+</article>

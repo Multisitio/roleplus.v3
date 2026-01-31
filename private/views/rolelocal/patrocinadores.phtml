@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            :root {
+                --background: #fff;
+                --primary: #900;
+            }
+
+            *,
+            *:before,
+            *:after {
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: #f4f4f4;
+                font-family: Arial, sans-serif;
+                line-height: 1.5;
+                margin: 0;
+                padding: 0;
+            }
+
+            main {
+                width: 80%;
+                margin: auto;
+                overflow: hidden;
+            }
+
+            h1 {
+                align-items: center;
+                color: #333;    
+                display: flex;
+                gap: 10px;
+            }
+
+            article {
+                padding: 30px;
+                background-color: #fff;
+                color: #333;
+                margin: 20px 0;
+                border-radius: 10px;
+            }
+
+            blockquote {
+                border-left: 4px solid #c00;
+                margin-left: 10px;
+                padding-left: 30px;
+            }
+
+            button,
+            [role=button] {
+                background: #900;
+                border: none;
+                border-radius: 5px;
+                color: #fff;
+                cursor: pointer;
+                display: block;
+                font: 16px Verdana;
+                margin-block: 0;
+                margin-inline: auto;
+                padding-block: 10px;
+                padding-inline: 30px;
+                text-decoration: none;
+                width: fit-content;
+            }
+
+            .center {
+                text-align: center;
+            }
+
+            .logo {
+                display: inline-block;
+                width: 120px;
+            }
+
+            label b {
+                color: #900;
+                display: block;
+                font-size: small;
+                margin-block: 30px 0;
+            }
+
+            form {
+                display: block;
+                margin-inline: auto;
+                max-width: 480px;
+            }
+
+            input,
+            textarea {
+                border: none;
+                border-bottom: 2px solid #900;
+                min-height: 40px;
+                padding-inline: 10px;
+                padding-block: 10px;
+                width: 100%;
+            }
+
+            .red {
+                color: #c00;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <article>
+                <h1><a href="/" class="logo"><img alt="Logo de ROLEplus D4!" src="/img/logos/roleplus_d4e.png" width="130px"></a> HOLA 👉 R+4 🎲🎲🎲🎲</h1>
+                <p>📢 <b>¿Te gustaría unirte como patrocinador de la cuarta versión de ROLEplus</b>, la red social de juegos de mesa y rol, <b>durante su campaña de lanzamiento?</b> <i>(Hasta el 10 de octubre de 2024)</i></p>
+
+                <p>💣 Si te unes a nuestra lista de patrocinadores <b>tu marca recibirá publicidad gratuita</b> en todas nuestras redes (Facebook, Instagram, ROLEplus y X) en un post con vuestro logo y una digna mención.</p>
+
+                <p>🏅 Te sugerimos una donación de 44€, pero puedes participar desde 0€ hasta la cantidad que consideres acorde a tu situación. <b>Lo importante es que sepamos que estás ahí</b>, con ROLEplus d4!</p>
+                
+                <a role="button" href="https://www.paypal.com/donate?campaign_id=MN7SCTGX8JT82">Me apunto</a>
+            </article>
+        </main>
+
+        <img alt="" src="<?=DOMAIN.'imagenes/pixel/'.base64_encode($referencia).'/oferta'?>" width="1" height="1">
+    </body>
+</html>

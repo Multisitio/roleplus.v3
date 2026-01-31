@@ -1,0 +1,111 @@
+<style>
+h2 {
+    margin: 0;
+}
+
+.grid {
+    display: grid;
+    gap: 5px  5px;
+    grid-template-columns: repeat(auto-fit, minmax(0%, 1fr));
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    float: left;
+    font-family: monospace;
+    margin: 10px;
+    text-align: left;
+    width: calc(50% - 20px);
+    word-break: break-word;
+}
+
+/* Sangria de las celdas */
+th, td {
+    padding: 5px;
+}
+
+/* Cebreado del cuerpo */
+tbody tr:nth-child(even) {
+    background-color: #eee;
+}
+
+/* Linea gruesa que separa la cabecera del cuerpo */
+tr:last-child th {
+    border-bottom: 3px solid grey;
+}
+
+/* Linea gruesa que separa la primera columna del resto */
+tr:last-child th:first-child,
+tbody td:first-child {
+    border-right: 3px solid grey;
+    white-space: nowrap;
+}
+
+/* Linea que separa el columna del pie */
+tfoot tr:first-child {
+    border-top: 2px solid grey;
+}
+</style>
+
+<table>
+    <caption><h2>Entorno inicial</h2></caption>
+    <thead>
+        <tr>
+            <th>Suma 2d8</th>        
+            <th>Pasaste<sup>1</sup> tus primeros 2d8 años...</th>        
+        </tr>
+    </thead>
+    <tr>
+        <td>[9 o más]</td>
+        <td>...en la ciudad;<br>
+        [16] en la zona privilegiada elevada/centro,<br>
+        [14-15] en la zona gremial intermedia,<br>
+        [11-13] en la zona obrera pegada a los muros,<br>
+        [10] en los bajos fondos bajo la ciudad o<br>
+        [9] en extramuros (en una granja o cabaña).</td>
+    </tr>
+    <tr>
+        <td>[entre 5 y 8]</td>
+        <td>...en el campo;<br>
+        [8] en la zona central/favorecida de un pueblo,<br>
+        [6-7] en la zona media o perímetro de un pueblo o<br>
+        [5] en una aldea.</td>
+    </tr>
+    <tr>
+        <td>[4 o menos]</td>
+        <td>...nada fijo; de un asentamiento a otro.</td>
+    </tr>
+    <tfoot>
+        <tr>
+            <td colspan="10">1. Pon en la ficha los años como sufijo del descriptor de entorno: Ciudad, Campo o Caminos.</td>
+        </tr>
+    </tfoot>
+</table>
+
+<table>
+    <caption><h2>Lateralidad</h2></caption>
+    <thead>
+        <tr>
+            <th>Suma 2d8</th>        
+            <th>Eres...</th>        
+        </tr>
+    </thead>
+    <tr>
+        <td>[16]</td>
+        <td>...ambidiestro<sup>1</sup></td>
+    </tr>
+    <tr>
+        <td>[entre 14 y 15]</td>
+        <td>...zurdo<sup>1</sup></td>
+    </tr>
+    <tr>
+        <td>[entre 2 y 13]</td>
+        <td>...diestro</td>
+    </tr>
+    <tfoot>
+        <tr>
+            <td colspan="10">1. Con guardia de zurdo tienes ventaja en combate contra diestros.</td>
+        </tr>
+    </tfoot>
+</table>

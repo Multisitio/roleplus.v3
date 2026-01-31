@@ -1,0 +1,23 @@
+
+<script>
+$(function(){
+    <?php if ( ! empty($marcador)): ?>
+        map.removeLayer(marcadores[<?=$marcador?>]);
+    <?php endif;
+    foreach ($elementos as $ele): ?>
+        var marcador = L.marker([
+            <?=$ele->lat?>,
+            <?=$ele->lng?>],
+            {icon: icon<?=ucfirst($ele->color)?>})
+                .addTo(map);
+                
+        var popup = L.popup({
+            closeOnClick: false,
+            autoClose: false
+        }).setContent('<div class="ele-<?=$ele->idu?>"><?=str_replace(["\r\n", "\n", "\r"], '<br>', h($ele->contenido))?><hr><a data-ajax=".ele-<?=$ele->idu?>" rel="nofollow" href="/registrados/grupos/editar_elemento_de_mapa/<?=$ele->idu?>/'+marcador._leaflet_id+'"><?=t('¿Editar?')?></a></div>');
+        marcador.bindPopup(popup);
+
+        marcadores[marcador._leaflet_id] = marcador;
+    <?php endforeach; ?>
+});
+</script>

@@ -1,0 +1,30 @@
+
+<h1>Botones</h1>
+
+<p>Este es un botón en HTML usando KumbiaCSS sin .classes:</p>
+
+<button>Button</button>
+<input type="submit">
+
+<?php _code::open('buttons'); ?>
+<button>Button</button>
+<input type="submit">
+<?php _code::close(); ?>
+
+<p>Los botones por defecto usan todo el ancho disponible. Añada el atributo role="button" al botón si necesita que este se ajuste a su contenido:</p>
+
+<a href="#" role="button">Link</a>
+<a href="#" role="button">Link</a>
+
+<?php _code::open('buttons-inline'); ?>
+<a href="#" role="button">Link</a>
+<a href="#" role="button">Link</a>
+<?php _code::close(); ?>
+
+<p><?=t('En un archivo aparte proporcionamos una serie de clases para dar estilos alternativos como este')?>:</p>
+
+<a class="outline" href="#" role="button">Outline</a>
+
+<?php _code::open('buttons-inline'); ?>
+<a class="outline" href="#" role="button">Outline</a>
+<?php _code::close(); ?>

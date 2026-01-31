@@ -1,0 +1,39 @@
+
+<div id="grid" data-columns>
+	<article class="cabecera">
+		<header>
+			<h1><?=t('Personajes')?></h1>
+		</header>
+
+		<section class="grid">
+			<a role="button" href="/ev/personajes/montar/<?=$ficha->idu?>"><?=t('Crear un personaje')?></a>
+			<a role="button" class="outline" href="/ev/fichas"><?=t('Fichas')?></a>
+		</section>
+
+		<footer>
+			<input type="text" data-filter="article:not(.cabecera)" placeholder="<?=t('Filtra la lista...')?>">
+		</footer>
+	</article>
+
+	<?php foreach ($personajes as $idu=>$per): ?>
+		<article id="<?=$idu?>">
+			<header>
+				<h3><?=empty($per['nombre'])?$per['nombre_personaje']:'La variable para el nombre de personaje debe ser nombre o nombre_personaje.'?></h3>
+			</header>
+
+			<?php if ($per['retrato']): ?>
+				<img alt="<?=t('Retrato')?>" class="mt10" src="/img/fichas/retratos/l.<?=$per['retrato']?>">
+			<?php endif; ?>
+
+			<footer class="grid">
+				<?php if (empty($personajes_usuarios[$idu])): ?>
+					<a role="button" class="outline" href="/ev/personajes/vincular/<?=$ficha->idu?>/<?=$idu?>"><?=t('Vincular')?></a>
+				<?php elseif (Session::get('idu') == $personajes_usuarios[$idu]->usuarios_idu): ?>
+					<a role="button" class="outline" href="/ev/personajes/vincular/<?=$ficha->idu?>/<?=$idu?>"><?=t('Desvincular')?></a>
+				<?php endif; ?>
+
+				<a role="button" href="/ev/personajes/montar/<?=$ficha->idu?>/<?=$idu?>"><?=t('Ver')?></a>
+			</footer>
+		</article>
+	<?php endforeach; ?>
+</div>

@@ -1,0 +1,9 @@
+<?php
+View::partial('boxes/v_timeline', null, [
+    'title'=>$cronologia->titulo,
+    'events'=>$eventos[$cronologia->idu],
+    'event_date'=>'fecha',
+    'event_title'=>'titulo',
+    'event_description'=>'relato',
+    'max'=>true,
+]);

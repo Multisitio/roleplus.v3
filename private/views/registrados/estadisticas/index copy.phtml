@@ -1,0 +1,224 @@
+<?php
+foreach ($usuarios as $usu) {
+    $niveles[$usu->rol] = empty($niveles[$usu->rol])
+		? $niveles[$usu->rol] = 1
+		: ++$niveles[$usu->rol];
+}
+$roles_plural = (new Usuarios)->roles('plural');
+$roles_singular = (new Usuarios)->roles('singular');
+?>
+<div id="grid" data-columns>
+    <article class="m0a mb25 radius br relative z-depth-1" style="max-width:530px">
+        <div class="flex-middle">
+            <?php View::partial('migajas'); ?>
+        </div>
+        <hr class="mv0">
+        <a class="block pa10 resaltado" data-show="aside.left" href="javascript:void(0)">
+            <i class="large left material-icons mr5 mt5">info_outline</i>
+            <small><?=t('Se halla en la sección donde se muestran todas las estadísticas de esta, nuestra red social R+.')?></small>
+        </a>
+    </article>
+    <article class="m0a mb25 pa10 radius br relative z-depth-1" style="max-width:530px">
+        <h3 class="montserrat">
+            <i class="material-icons medium">trending_up</i>
+            <a class="resaltado" href="/usuarios"><?=t('Usuarios')?></a>
+        </h3>
+        <hr>
+        <?=t('Registrados')?>: <?=$totales['usuarios_correctos']?> / <?=$usuarios_totales=count($usuarios)?> <?=t('confirmados')?>.
+        <hr>
+        <ul>
+            <?php for($i=7; $i>0; --$i): ?>
+                <li>
+                    <?=$niveles[$i]?> <b><?=($niveles[$i]>1)?$roles_plural[$i]:$roles_singular[$i]?></b> <small>(<?=t('Rol')?> <?=$i?>)</small>
+                </li>
+            <?php endfor; ?>
+        </ul>
+        <?php /*
+        $dias = 1;
+        $accesos_totales = 0;
+        foreach ($totales['accesos_diarios_diferentes'] as $fecha=>$accesos):
+            $accesos_totales += count($accesos);
+            ++$dias;
+        endforeach; ?>
+        <hr>
+        <?php
+        $i=1;
+        foreach ($totales['accesos_mensuales'] as $fecha=>$num): ?>
+            <small><b><?=$num?></b> <?=t('accesos')?> <?=strftime('%B %Y', strtotime($fecha))?></small><br>
+            <?php
+            if ($i == 12) {
+                break;
+            }
+            ++$i;
+        endforeach; ?>
+        <hr>
+        <?=t('Accesos diferentes por dia')?>: <?=round($accesos_totales/$dias,2) */ ?>
+        <hr>
+        <b>TOP <?=$top=$usuario->rol*10?> con más experiencia</b>
+        <ol class="ma0">
+            <?php foreach ($totales['usuarios_top_experiencia'] as $usu): ?>
+                <li><?=$usuarios[$usu->idu]->apodo?>: <?=$usu->experiencia?></li>
+            <?php endforeach; ?>
+        </ol>
+        <hr>
+        <b>TOP <?=$top?> con más seguidores</b>
+        <ol class="ma0">
+            <?php foreach ($totales['usuarios_top_seguidores'] as $usu): ?>
+                <li><?=$usuarios[$usu->idu]->apodo?>: <?=$usu->seguidores?></li>
+            <?php endforeach; ?>
+        </ol>
+    </article>
+    <article class="m0a mb25 pa10 radius br relative z-depth-1" style="max-width:530px">
+        <h3 class="montserrat">
+            <i class="material-icons medium">trending_up</i>
+            <a class="resaltado" href="/grupos"><?=t('Grupos')?></a>
+        </h3>
+        <hr>
+        <?=t('Creados')?>: <?=$totales['grupos']?>
+        <hr>
+        <b>TOP <?=$top?> con más miembros</b>
+        <ol class="ma0">
+            <?php foreach ($totales['grupos_top_miembros'] as $gru): ?>
+                <li><?=$gru->nombre?>: <?=$gru->miembros?></li>
+            <?php endforeach; ?>
+        </ol>
+        <hr>
+        <?=t('Publicaciones en grupos')?>: <?=$totales['grupos_publicaciones']?>
+        <hr>
+        <b>TOP <?=$top?> con más publicaciones</b>
+        <ol class="ma0">
+            <?php
+            $i=1;
+            foreach ($totales['grupos_top_n_publicaciones'] as $nom=>$num): ?>
+                <li><?=$nom?>: <?=$num?></li>
+                <?php
+                if ($i == $top) {
+                    break;
+                }
+                ++$i;
+            endforeach; ?>
+        </ol>
+    </article>
+    <article class="m0a mb25 pa10 radius br relative z-depth-1" style="max-width:530px">
+        <h3 class="montserrat">
+            <i class="material-icons medium">trending_up</i>
+            <a class="resaltado" href="/publicaciones"><?=t('Publicaciones')?></a>
+        </h3>
+        <hr>
+        <?=t('Publicaciones')?>: <?=$totales['mis_publicaciones']?> / <?=$totales['publicaciones']?>
+        <hr>
+        <?=t('Diarias')?>: <?=round($totales['publicaciones']/count($totales['publicaciones_diarias']))?>
+        <hr>
+        <?php
+        $publicaciones_mensuales = 0;
+        $publicaciones_mensuales_usuarios = 0;
+        $publicaciones_mensuales_usuarios_totales = 0;
+        foreach ($totales['publicaciones_mensuales_usuarios'] as $fecha=>$mensuales_usuarios):
+            foreach ($mensuales_usuarios as $usuarios_idu=>$num):
+                $publicaciones_mensuales += $num;
+                ++$publicaciones_mensuales_usuarios;
+            endforeach; ?>
+            <small>
+                <b><?=$publicaciones_mensuales_usuarios?></b>
+                <?=t('usuarios crearon')?>
+                <?=$publicaciones_mensuales?>
+                <?=t('publicaciones en')?>
+                <?=strftime('%B %Y', strtotime($fecha))?>
+            </small>
+            <br>
+            <?php
+            $publicaciones_mensuales = 0;
+            $publicaciones_mensuales_usuarios_totales += $publicaciones_mensuales_usuarios;
+            $publicaciones_mensuales_usuarios = 0;
+        endforeach; ?>
+        <hr>
+        <?=t('Media de usuarios publicando al mes')?>: <?=$media_publicando_al_mes=round($publicaciones_mensuales_usuarios_totales/count($totales['publicaciones_mensuales_usuarios']))?> (<?=round($media_publicando_al_mes*100/$usuarios_totales,2)?>%)
+        <hr>
+        <b>TOP <?=$top?></b>
+        <ol class="ma0">
+            <?php
+            $i=1;
+            foreach ($totales['num_publicaciones'] as $usuarios_idu=>$num): ?>
+                <li><?=$usuarios[$usuarios_idu]->apodo?>: <?=$num?></li>
+                <?php
+                if ($i == $top) {
+                    break;
+                }
+                ++$i;
+            endforeach; ?>
+        </ol>
+    </article>
+    <article class="m0a mb25 pa10 radius br relative z-depth-1" style="max-width:530px">
+        <h3 class="montserrat">
+            <i class="material-icons medium">trending_up</i>
+            <?=t('Comentarios')?>
+        </h3>
+        <hr>
+        <?=t('Comentarios')?>: <?=$totales['mis_comentarios']?> / <?=$totales['comentarios']?>
+        <hr>
+        <?=t('Diarios')?>: <?=round($totales['comentarios']/count($totales['comentarios_diarios']))?>
+        <hr>
+        <?php
+        $comentarios_mensuales = 0;
+        $comentarios_mensuales_usuarios = 0;
+        $comentarios_mensuales_usuarios_totales = 0;
+        foreach ($totales['comentarios_mensuales_usuarios'] as $fecha=>$mensuales_usuarios):
+            foreach ($mensuales_usuarios as $usuarios_idu=>$num):
+                $comentarios_mensuales += $num;
+                ++$comentarios_mensuales_usuarios;
+            endforeach; ?>
+            <small>
+                <b><?=$comentarios_mensuales_usuarios?></b>
+                <?=t('usuarios crearon')?>
+                <?=$comentarios_mensuales?>
+                <?=t('comentarios en')?>
+                <?=strftime('%B %Y', strtotime($fecha))?>
+            </small>
+            <br>
+            <?php
+            $comentarios_mensuales = 0;
+            $comentarios_mensuales_usuarios_totales += $comentarios_mensuales_usuarios;
+            $comentarios_mensuales_usuarios = 0;
+        endforeach; ?>
+        <hr>
+        <?=t('Media de usuarios comentando al mes')?>: <?=$media_comentando_al_mes=round($comentarios_mensuales_usuarios_totales/count($totales['comentarios_mensuales_usuarios']))?> (<?=round($media_comentando_al_mes*100/$usuarios_totales,2)?>%)
+        <hr>
+        <b>TOP <?=$top?></b>
+        <ol class="ma0">
+            <?php
+            $i=1;
+            foreach ($totales['num_comentarios'] as $usuarios_idu=>$num): ?>
+                <li><?=$usuarios[$usuarios_idu]->apodo?>: <?=$num?></li>
+                <?php
+                if ($i == $top) {
+                    break;
+                }
+                ++$i;
+            endforeach; ?>
+        </ol>
+    </article>
+    <?php /*
+    $urls = [
+        'usuarios/perfil/' . urlencode(Session::get('apodo')) =>t('Perfil'),
+        'publicaciones'=>t('Publicaciones'),
+        'grupos'=>t('Grupos'),
+        'eventos'=>t('Eventos'),
+        'usuarios'=>t('Frikis'),
+        'comentarios'=>t('Comentarios'),
+        'encuestas'=>t('Encuestas'),
+        'notificaciones'=>t('Notificaciones'),
+        'aplicaciones'=>t('Aplicaciones'),
+        'configuracion'=>t('Configuración'),
+    ];
+    foreach ($urls as $k=>$v): ?>
+        <article class="m0a mb25 pa10 radius br relative z-depth-1" style="max-width:530px">
+            <h3 class="montserrat">
+                <i class="material-icons medium">menu</i>
+                <a class="resaltado" href="/<?=$k?>"><?=_($v)?></a>
+                <?php if ( ! empty($totales[$k])): ?>
+                    <sup><?=$totales[$k]?></sup>
+                <?php endif; ?>
+            </h3>
+        </article>
+    <?php endforeach; */ ?>
+</div>

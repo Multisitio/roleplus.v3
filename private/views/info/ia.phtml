@@ -1,0 +1,40 @@
+
+<?php if (date('Hi') > 1300 and date('Hi') < 1601): ?>
+    <div class="col s12">
+        <h5 class="center-align"><?=t('Lo siento pero estoy en mi descanso corto; cargando baterias...zzZ')?></h5>
+        <br>
+    </div>
+<?php elseif ((date('Hi') > 1599 and date('Hi') < 1801) or ! empty($claves['apagar_ia'])): ?>
+    <div class="col s12">
+        <h5 class="center-align"><?=t('Lo siento pero estoy cargando datos...')?></h5>
+        <br>
+    </div>
+<?php elseif (date('Hi') > 0 and date('Hi') < 1001): ?>
+    <div class="block">
+        <h5 class="center-align"><?=t('Lo siento pero estoy en mi descanso largo; cargando baterias...zzZ')?></h5>
+        <br>
+    </div>
+<?php else: ?>
+    <form action="/info/responder" class="ml10" data-ajax=".ia.respuesta" method="post">
+        <div class="col s12">
+            <label><?=t('Pregunta')?></label>
+            <textarea class="bb materialize-textarea" name="pregunta">¿</textarea>
+        </div>
+        <div class="col s12 mb15">
+            <label><?=t('Respuesta')?></label>
+            <div class="bb ia respuesta pv20"></div>
+        </div>
+        <div class="col s12 m9 mb15">
+            <small><em><?=t('HOLA ciudadano, atienda a las instrucciones:<br>
+            1) Haga una pregunta, a ser posible relacionada con la platafoma.<br>
+            2) Si no encuentro la respuesta le preguntaré a los administradores.<br>
+            3) Si en pocos minutos no he contestado, vuelva más tarde y haga la misma pregunta.')?></em></small>
+        </div>
+        <div class="col s12 m3">
+            <button class="all-width bold btn" name="contacto" value="1"><?=t('Enviar')?></button>
+        </div>
+        <div class="clearfix"></div>
+    </form>
+    <?php
+    View::partial('socket', false, ['url'=>'/actualizaciones']);
+endif;
