@@ -1,0 +1,148 @@
+/* Grid
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#grid {
+    margin: 0 25px;
+}
+
+
+/* Base Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+html,
+body,
+main {
+    width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    width: 100%;
+}
+
+
+/* Typography
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+h1,
+h1>* {
+    line-height: 22px !important;
+}
+
+h2,
+h2>* {
+    line-height: 21px !important;
+}
+
+h3,
+h3>* {
+    line-height: 20px !important;
+}
+
+h4,
+h4>* {
+    line-height: 19px !important;
+}
+
+h5,
+h5>* {
+    line-height: 18px !important;
+}
+
+h6,
+h6>* {
+    line-height: 17px !important;
+}
+
+
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+select {
+    color: var(--primary);
+    padding: 0 20px;
+}
+
+select,
+[type="search"],
+[type="text"] {
+    box-shadow: 2px 2px 2px #666;
+    height: 48px;
+}
+
+select:focus,
+[type="search"]:focus,
+[type="text"]:focus {
+    box-shadow: 2px 2px 2px #666 !important;
+}
+
+
+/* Lists
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+/* Code
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+/* Tables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+/* Spacing
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+/* Utilities
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+/* Images
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+img {
+    height: auto;
+    max-width: 100%;
+}
+
+
+/* Clearing
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+/* Media Queries
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+@media (max-width:600px) {
+    #important .s0 {
+        display: none;
+    }
+}
+
+@media (min-width:601px) and (max-width:992px) {
+    #important .m0 {
+        display: none;
+    }
+}
+
+@media (min-width:993px) and (max-width:1200px) {
+    #important .l0 {
+        display: none;
+    }
+}
+
+@media (min-width:1201px) and (max-width:1920px) {
+    #important .xl0 {
+        display: none;
+    }
+}
+
+@media (min-width:1921px) {
+    #important .xxl0 {
+        display: none;
+    }
+}

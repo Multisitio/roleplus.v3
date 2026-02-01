@@ -1,0 +1,30 @@
+/* 4-draggable.css — Estilos de post-it draggable (por atributo) */
+
+article[data-draggable] {
+	margin: 0;
+	position: absolute;
+	z-index: 1;
+	width: 280px;
+	height: 280px;
+	overflow-y: auto;
+}
+
+/* El <header> es el área de agarre */
+article[data-draggable] > header {
+	position: relative; /* asegura anclaje del lápiz */
+	cursor: grab;
+	user-select: none;
+}
+
+/* Estado mientras se arrastra */
+article[data-draggable][data-dragging="1"] > header {
+	cursor: grabbing;
+}
+
+/* Lápiz arriba-derecha y por encima del contenido */
+article[data-draggable] > header a[data-ajax] {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+	z-index: 2;
+}

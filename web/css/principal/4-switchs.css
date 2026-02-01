@@ -1,0 +1,63 @@
+:root {
+    --icon-checkbox: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFF' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+:root:not([data-theme=light]) {
+    --switch-background-color: #374956;
+}
+
+:root[data-theme=light] {
+    --switch-background-color: hsl(205deg, 16%, 77%);
+}
+
+[role=switch] {
+    --border-width: 3px;
+    appearance: none;
+    margin-top: -0.125em;
+    margin-right: 0.375em;
+    margin-left: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0.375em;
+    vertical-align: middle;
+    cursor: pointer;
+    width: 2.25em;
+    height: 1.25em;
+    border-radius: 1.25em;
+}
+
+[role=switch]:not(:checked) {
+    background-color: var(--switch-background-color);
+    border: var(--border-width) solid var(--switch-background-color);
+}
+
+[role=switch]:before {
+    display: block;
+    width: calc(1.25em - (var(--border-width) * 2));
+    height: 100%;
+    border-radius: 50%;
+    background-color: #999;
+    content: "";
+    transition: margin 0.1s ease-in-out;
+}
+
+[role=switch]:checked {
+    background-color: var(--primary);
+}
+
+[role=switch]:checked,
+[role=switch]:checked:active,
+[role=switch]:checked:focus {
+    border: var(--border-width) solid var(--primary);
+    background-image: var(--icon-checkbox);
+    background-size: 16px auto;
+    background-repeat: no-repeat;
+}
+
+[role=switch]:checked::before {
+    margin-left: calc(1.125em - var(--border-width));
+    margin-inline-start: calc(1.125em - var(--border-width));
+}
+
+[role=switch]::-ms-check {
+    display: none;
+}

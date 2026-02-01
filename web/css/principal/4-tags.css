@@ -1,0 +1,49 @@
+.tag:before,
+.tags>*:before {
+    border-bottom: 10px solid transparent;
+    border-right: 8px solid #999;
+    border-top: 10px solid transparent;
+    content: "";
+    height: 0;
+    position: absolute;
+    top: 0;
+    left: -8px;
+    width: 0;
+}
+
+.tag,
+.tags>* {
+    background: #999;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 1px 1px 0 #666;
+    color: #000 !important;
+    display: inline-block;
+    line-height: 14px;
+    margin: 3px 0 3px 10px;
+    padding: 3px 5px 3px 7px;
+    position: relative;
+    white-space: nowrap;
+}
+
+.tag:after,
+.tags>*:after {
+    background: var(--background);
+    border-radius: 50%;
+    content: "";
+    height: 5px;
+    position: absolute;
+    top: 8px;
+    left: -2px;
+    width: 5px;
+}
+
+a.tag:hover,
+.tags>a:hover {
+    background: var(--primary);
+    color: var(--background);
+}
+
+a.tag:hover:before,
+.tags>a:hover:before {
+    border-right-color: var(--primary);
+}

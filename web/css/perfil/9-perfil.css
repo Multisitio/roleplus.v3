@@ -1,0 +1,63 @@
+.usuario h1,
+.usuario h2 {
+    display: flex;
+    gap: 5px;
+}
+
+.perfil article {
+    margin-bottom: 25px;
+}
+
+.perfil section:first-child {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.clasificado_por.etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.clasificado_por.fecha li {
+    padding: 5px 0 0;
+}
+
+.clasificado_por.fecha ul ul {
+    border-left: 1px solid var(--primary);
+    margin-left: 10px;
+}
+
+
+/*.usuario {
+    background: var(--background-card);
+    border-radius: 0 0 15px;
+    min-height: 175px; 
+    margin: 0 auto 25px;
+}
+
+.usuario .s3 {
+    text-align: right;
+}
+
+.usuario .s9 {
+    padding: 10px;
+}
+
+.usuario hr {
+    clear: unset;
+}
+
+.usuario img[src*='xs.'] {
+    height: 100%;
+    max-height: 160px;
+    max-width: 160px;
+    width: 100%; 
+}
+
+.usuario section {
+    padding: 0 0 0 10px;
+}*/

@@ -1,0 +1,12 @@
+.comentarios-sueltos article>div {
+    float: right;
+}
+
+.comentarios-sueltos article>div>small {
+    float: right;
+    margin: 0 5px 10px 0;
+}
+
+.comentarios-sueltos .comentario {
+    width: calc(100% - 90px);
+}

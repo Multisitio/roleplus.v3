@@ -1,0 +1,192 @@
+/* ALIGN POS */
+
+.align-center {
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+
+/* DISPLAY */
+
+.hide {
+    display: none;
+}
+
+
+/* FILTER */
+
+.filter-invert {
+    filter: invert(1);
+}
+
+
+/* GRADIENTS */
+
+.gradient-nc {
+    mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-n {
+    mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-nec {
+    mask-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-ne {
+    mask-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-ec {
+    mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-e {
+    mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-sec {
+    mask-image: linear-gradient(135deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-se {
+    mask-image: linear-gradient(135deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-sc {
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-s {
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-swc {
+    mask-image: linear-gradient(225deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-sw {
+    mask-image: linear-gradient(225deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-wc {
+    mask-image: linear-gradient(270deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-w {
+    mask-image: linear-gradient(270deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-nwc {
+    mask-image: linear-gradient(315deg, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 1) 100%);
+}
+
+.gradient-nw {
+    mask-image: linear-gradient(315deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 100%);
+}
+
+
+/* OPACITY */
+
+.opacity-25 {
+    opacity: .25;
+}
+
+.opacity-50 {
+    opacity: .5;
+}
+
+.opacity-75 {
+    opacity: .75;
+}
+
+
+/* OVERLAY */
+
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 97;
+}
+
+
+/* PADDING */
+
+.p0 {
+    padding: 0 !important;
+}
+
+.pa10 {
+    padding: 10px;
+}
+
+
+/* POSITION */
+
+.absolute {
+    position: absolute;
+}
+
+.bottom {
+    bottom: 0;
+}
+
+.left {
+    left: 0;
+}
+
+.center {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.right {
+    right: 0;
+}
+
+.top {
+    top: 0;
+}
+
+
+/* TABLE */
+
+table.td1-nowrap td:nth-child(1),
+table.col1-nowrap td:nth-child(1) {
+    white-space: nowrap;
+}
+
+table.col2-nowrap td:nth-child(2) {
+    white-space: nowrap;
+}
+
+table.col3-nowrap td:nth-child(3) {
+    white-space: nowrap;
+}
+
+table.col4-nowrap td:nth-child(4) {
+    white-space: nowrap;
+}
+
+table.td2-align-right td:nth-child(2) {
+    text-align: right;
+}
+
+
+/* WHITE SPACE */
+
+.nowrap {
+    white-space: nowrap;
+}

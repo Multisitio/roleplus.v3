@@ -1,0 +1,34 @@
+.modal {
+    background: var(--background);
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 800px;
+    width: 100%;
+    margin: auto;
+    padding: 10px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 99999999999;
+    text-align: initial;
+}
+
+.modal header [data-hide] {
+    float: right;
+}
+
+.modal li {
+    align-items: flex-start;
+    border-bottom: 1px solid var(--muted-border);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.modal li a img:not([src*='svg']) {
+    height: 60px;
+    width: 60px;
+}

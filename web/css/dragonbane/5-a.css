@@ -1,0 +1,28 @@
+.page a[href^="#"] {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.page a[href^="#"]:has(span) span:first-child {
+    grid-column: 1;
+}
+
+.page a[href^="#"]:has(span) span:last-child {
+    grid-column: 3;
+}
+
+.page a[href^="#"]::after {
+    content: "";
+    grid-column: 2;
+    border-bottom: 1px dotted currentColor;
+    margin: -10px 2pt 0;
+    width: calc(100% - 4pt);
+    height: 0;
+}
+
+.page :is(em, strong) {
+    color: var(--dragonred);
+}

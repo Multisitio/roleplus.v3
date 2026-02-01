@@ -1,0 +1,78 @@
+
+.resultado ul {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+}
+  
+.resultado :is(blockquote, small) ul {
+    margin-bottom: 0;
+}
+  
+.resultado ul > li {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 0.5em;
+}
+  
+.resultado :is(blockquote, small) ul > li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 0;
+}
+  
+.resultado ul > li::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    background: url(/img/editor/for_the_quest/calavera.svg?v2) no-repeat center center;
+    background-size: contain;
+}  
+  
+.resultado ul > li:has(> i:first-child > b)::before {
+    background: url(/img/editor/for_the_quest/punta_de_flecha.svg?v3) no-repeat center;
+    top: 0; 
+}  
+
+.resultado :is(blockquote, small) ul > li::before {
+    width: 12px;
+    height: 12px;
+    top: 4px;
+    background: none;
+    background-color: #fff;
+    mask: url(/img/editor/for_the_quest/calavera.svg?v2) no-repeat center center;
+    mask-size: contain;
+}
+
+.resultado blockquote ul > li::before {
+    top: 7px;
+}
+
+/*.resultado ul>li::before {
+    content: "✦ ";
+    margin-left: -15px;
+}*/
+
+.resultado ul.checkbox li::before {
+    content: "❑ ";
+}
+
+.resultado ul.radio li::before {
+    content: "🔾 ";
+}
+
+.resultado ul li:has(> :is(em, strong))::before,
+.resultado ul li:has(> b)~li:has(> :is(em, strong))::before {
+    color: var(--dragonred);
+}
+
+.resultado ul li:has(> :is(em, strong)):has(~ li > b)::before {
+    color: var(--demongreen);
+}
+
+.resultado ul li:has(> :is(em, strong)):has(~ li > b)>:is(em, strong) {
+    color: var(--demongreen);
+}

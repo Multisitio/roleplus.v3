@@ -1,0 +1,36 @@
+/* Botón flotante redondo */
+
+#important .button-floating {
+    background: white;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 1px #666;
+    cursor: pointer;
+    padding: 10px;
+    position: fixed;
+    z-index: 2;
+}
+
+.button-floating.bottom {
+    bottom: 10px;
+}
+
+.button-floating.bottom-second {
+    bottom: 70px;
+}
+
+.button-floating.left {
+    left: 10px;
+}
+
+.button-floating.right {
+    right: 10px;
+}
+
+.button-floating.top {
+    top: 10px;
+}
+
+.button-floating.top-second {
+    top: 70px;
+}

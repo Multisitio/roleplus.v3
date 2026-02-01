@@ -1,0 +1,44 @@
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault A3600
+
+    <FilesMatch ".(gif|jpg|jpeg|png|svg|webp)$">
+    # 2 weeks
+    ExpiresDefault A604800
+    Header append Cache-Control "public"
+    </FilesMatch>
+
+    <FilesMatch ".(xml|txt|html)$">
+    # 2 hours
+    ExpiresDefault A604800
+    Header append Cache-Control "public"
+    </FilesMatch>
+
+    <FilesMatch ".(js|css)$">
+    # 3 days
+    ExpiresDefault A604800
+    Header append Cache-Control "public"
+    </FilesMatch>
+</IfModule>
+
+DirectoryIndex index.php
+# Si esta mod_rewrite habilitado
+<IfModule mod_rewrite.c>
+    # Activar modo de reescritura
+    RewriteEngine On
+
+    # Directorio de instalación, puede ser necesario si 
+    # la aplicación se ubica en public_html
+    #RewriteBase /
+
+    # No permite reescritura si el archivo o directorio existe
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Para peticiones que no son archivos ni directorios
+    # Reescribe a index.php/
+    RewriteRule (.*) index.php/$1 [L]
+
+    # Reescribe a index.php?_url=URL
+    #RewriteRule ^(.*)$ index.php?_url=/$1 [QSA,L]
+</IfModule>

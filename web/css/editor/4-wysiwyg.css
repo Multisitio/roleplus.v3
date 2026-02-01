@@ -1,0 +1,8 @@
+.wysiwyg {
+    display: none;
+    position: absolute;
+}
+
+.wysiwyg button {
+    margin-right: 5px;
+}

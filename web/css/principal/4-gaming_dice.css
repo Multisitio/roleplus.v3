@@ -1,0 +1,122 @@
+@font-face {
+    font-family: 'GamingDice';
+    src: url('/fonts/gaming_dice/GamingDice.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'GamingDiceStandard';
+    src: url('/fonts/gaming_dice/GamingDiceStandard.ttf') format('truetype');
+}
+
+.dice {
+    color: grey;
+    font: 38px GamingDiceStandard;
+    vertical-align: middle;
+}
+
+.dice.size-3 {
+    font-size: 38px;
+}
+
+.dice.size-4 {
+    font-size: 32px;
+}
+
+.dice.size-6 {
+    font-size: 38px;
+}
+
+.dice.size-8 {
+    font-size: 32px;
+}
+
+.dice.size-10 {
+    font-size: 40px;
+}
+
+.dice.size-12 {
+    font-size: 42px;
+}
+
+.dice.size-20 {
+    font-size: 44px;
+}
+
+.red-text {
+    color: #e53935;
+}
+
+.pink-text {
+    color: #d81b60;
+}
+
+.purple-text {
+    color: #8e24aa;
+}
+
+.deep-purple-text {
+    color: #5e35b1;
+}
+
+.indigo-text {
+    color: #3949ab;
+}
+
+.blue-text {
+    color: #1e88e5;
+}
+
+.ligh-blue-text {
+    color: #039be5;
+}
+
+.cyan-text {
+    color: #00acc1;
+}
+
+.teal-text {
+    color: #00897b;
+}
+
+.green-text {
+    color: #43a047;
+}
+
+.light-green-text {
+    color: #7cb342;
+}
+
+.lime-text {
+    color: #c0ca33;
+}
+
+.yellow-text {
+    color: #fdd835;
+}
+
+.amber-text {
+    color: #ffb300;
+}
+
+.orange-text {
+    color: #fb8c00;
+}
+
+.deep-orange-text {
+    color: #f4511e;
+}
+
+.grey-text {
+    color: #757575;
+}
+
+.blue-grey-text {
+    color: #546e7a;
+}
+
+.botonera {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}

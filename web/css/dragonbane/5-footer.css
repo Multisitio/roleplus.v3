@@ -1,0 +1,29 @@
+.page footer {
+    color: var(--demongreen);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font: bold 8pt "Colus";
+    margin: auto;
+    min-width: 120px;
+    position: absolute;
+    bottom: 10px;
+    left: 30px;
+    right: 30px;
+    z-index: 1;
+    text-transform: uppercase;
+    width: fit-content;
+}
+
+.page footer::after {
+    background-image: url("data:image/svg+xml;utf8,<svg height='30' width='120' xmlns='http://www.w3.org/2000/svg'><path d='M0 0 L0 3   Q40 10, 60 30   Q80 10, 120 3  L 120 0 Z' fill='RGB(0, 96, 77)'/></svg>");
+    text-align: center;
+    color: white;
+    content: counter(page);
+    display: block;
+    font-size: 11pt;
+    padding: 2px 0 0;
+    width: 120px;
+    height: 30px;
+}

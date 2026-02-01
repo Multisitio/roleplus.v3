@@ -1,0 +1,37 @@
+.notificaciones li {
+    display: flex;
+    gap: 5px;
+    padding-top: 10px;
+}
+
+.notificaciones li>a:not([href*="limpiar"]) {
+    display: block !important;
+    flex-grow: 1;
+}
+
+.notificaciones>li>div:first-child {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 5px;
+}
+
+.notificaciones>a {
+    flex-direction: column;
+}
+
+.notificaciones li>a div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.notificaciones li>a i {
+    color: var(--color);
+    font-size: smaller;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notificaciones li>a time {
+    font-size: smaller;
+}

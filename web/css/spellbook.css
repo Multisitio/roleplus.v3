@@ -1,0 +1,39 @@
+.spellbook {
+    perspective: 1000px;
+    /* Create 3D perspective */
+    width: 400px;
+    height: 600px;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    backface-visibility: hidden;
+    /* Hide the back face of the page */
+    transform-style: preserve-3d;
+    /* Preserve 3D transforms */
+    transition: transform 0.5s;
+    /* Smooth transition for the flip effect */
+}
+
+.page-front {
+    z-index: 2;
+    /* Bring the front page to the top */
+}
+
+.page-back {
+    transform: rotateY(-180deg);
+    /* Initially flip the back page */
+}
+
+.spellbook:hover .page-front {
+    transform: rotateY(180deg);
+    /* Flip the front page on hover */
+}
+
+.spellbook:hover .page-back {
+    transform: rotateY(0deg);
+    /* Flip the back page on hover */
+}

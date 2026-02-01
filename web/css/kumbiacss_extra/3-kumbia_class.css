@@ -1,0 +1,156 @@
+[data-color="gray"] {
+    color: var(--gray-6);
+}
+
+[data-color="stone"] {
+    color: var(--stone-6);
+}
+
+[data-color="red"] {
+    color: var(--red-6);
+}
+
+[data-color="pink"] {
+    color: var(--pink-6);
+}
+
+[data-color="purple"] {
+    color: var(--purple-6);
+}
+
+[data-color="violet"] {
+    color: var(--violet-6);
+}
+
+[data-color="indigo"] {
+    color: var(--indigo-6);
+}
+
+[data-color="blue"] {
+    color: var(--blue-6);
+}
+
+[data-color="cyan"] {
+    color: var(--cyan-6);
+}
+
+[data-color="teal"] {
+    color: var(--teal-6);
+}
+
+[data-color="green"] {
+    color: var(--green-6);
+}
+
+[data-color="lime"] {
+    color: var(--lime-6);
+}
+
+[data-color="yellow"] {
+    color: var(--yellow-6);
+}
+
+[data-color="orange"] {
+    color: var(--orange-6);
+}
+
+[data-color="choco"] {
+    color: var(--choco-6);
+}
+
+[data-color="brown"] {
+    color: var(--brown-6);
+}
+
+[data-color="sand"] {
+    color: var(--sand-6);
+}
+
+[data-color="camo"] {
+    color: var(--camo-6);
+}
+
+[data-color="jungle"] {
+    color: var(--jungle-6);
+}
+
+.gray {
+    background: var(--gray-6);
+}
+
+.stone {
+    background: var(--stone-6);
+}
+
+.red {
+    background: var(--red-6);
+}
+
+.pink {
+    background: var(--pink-6);
+}
+
+.purple {
+    background: var(--purple-6);
+}
+
+.violet {
+    background: var(--violet-6);
+}
+
+.indigo {
+    background: var(--indigo-6);
+}
+
+.blue {
+    background: var(--blue-6);
+}
+
+.cyan {
+    background: var(--cyan-6);
+}
+
+.teal {
+    background: var(--teal-6);
+}
+
+.green {
+    background: var(--green-6);
+}
+
+.lime {
+    background: var(--lime-6);
+}
+
+.yellow {
+    background: var(--yellow-6);
+}
+
+.orange {
+    background: var(--orange-6);
+}
+
+.choco {
+    background: var(--choco-6);
+}
+
+.brown {
+    background: var(--brown-6);
+}
+
+.sand {
+    background: var(--sand-6);
+}
+
+.camo {
+    background: var(--camo-6);
+}
+
+.jungle {
+    background: var(--jungle-6);
+}
+
+.transparent {
+    background-color: transparent;
+    border: none;
+}

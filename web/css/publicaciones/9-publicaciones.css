@@ -1,0 +1,259 @@
+.caja-usuario .grow span {
+    display: flex;
+    gap: 5px;
+}
+
+article {
+    max-width: 540px;
+    /*min-width: 449px;*/
+    overflow-x: hidden;
+    width: 100%;
+}
+
+@media (max-width:992px) {
+    article {
+        margin: 0 auto 25px;
+    }
+}
+
+article.cabecera button {
+    justify-content: left;
+}
+
+
+/* HEADER */
+
+article .caja-usuario {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    padding-top: 5px;
+}
+
+article .caja-usuario b {
+    flex-grow: 1;
+}
+
+article .caja-usuario time {
+    font-size: smaller;
+    white-space: nowrap;
+}
+
+footer.filtro-etiquetas {
+    justify-content: center;
+}
+
+
+/* TEXT */
+
+article .etiquetas {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    padding-top: 5px;
+    width: 100%;
+}
+
+article .titulo {
+    width: 100% !important;
+}
+
+article .contenido {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+article .contenido a:not(.tag) {
+    display: block !important;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*white-space: nowrap; no corta los enlaces */
+}
+
+article>.contenido:first-letter {
+    float: left;
+    font-family: serif;
+    font-size: calc(var(--font-size) + 34px);
+    line-height: calc(var(--font-size) + 20px);
+    margin: 5px 5px 0 0;
+    text-transform: uppercase;
+}
+
+article .contenido [class*="leer-mas"] button {
+    justify-content: center;
+    width: 100%;
+}
+
+
+/* IMG */
+
+article>a {
+    display: block !important;
+}
+
+article picture {
+    display: grid;
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(0%, 1fr));
+    width: 100%;
+}
+
+#important article>a,
+#important article picture a {
+    box-shadow: none;
+    height: 100%;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+article picture a img {
+    display: block;
+    height: inherit;
+    object-fit: cover;
+    width: 100%;
+}
+
+
+/* COMMENTS */
+
+article .fragmentos {
+    font-size: smaller;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+article .comentario {
+    display: flex;
+    gap: 10px;
+}
+
+article .comentario>div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+article .comentario>div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+article .comentario [href*="experiencia"] {
+    font-size: 20px;
+}
+
+article .comentario .apodo-tiempo {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+article .comentario .apodo-tiempo>div {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+}
+
+article .comentario time {
+    float: right;
+    font-size: smaller;
+}
+
+article .comentar textarea {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+article .comentar .grid {
+    margin-top: 10px;
+}
+
+
+/* PREVIEWS */
+
+article .vistas-previas {
+    padding: 0;
+}
+
+article .vistas-previas section {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+article .vistas-previas h3 a {
+    color: var(--color) !important;
+}
+
+article .vistas-previas small {
+    display: block;
+    padding-top: 5px;
+}
+
+article .vistas-previas img {
+    display: block;
+    object-fit: cover;
+    width: 100%;
+}
+
+
+/* XP */
+
+.experiencia {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.experiencia>div {
+    align-items: center;
+    justify-content: right;
+}
+
+
+/* POOLS */
+
+article .encuesta {
+    flex-direction: column;
+}
+
+article .encuesta a:not(:first-child),
+article .encuesta span:not(:first-child) {
+    align-items: flex-start;
+    box-shadow: none;
+    flex-direction: column;
+    padding-bottom: 0;
+    width: 100%;
+}
+
+article .encuesta a progress {
+    height: 4px;
+    margin-bottom: -10px;
+}
+
+article .encuesta span progress {
+    height: 4px;
+}
+
+article .encuesta [href*="votantes"] {
+    width: fit-content;
+}
+
+
+/* FOOTER */
+
+article footer {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+article footer a[href*="comentarios"] {
+    flex-grow: 1;
+}

@@ -1,0 +1,28 @@
+picture:has(mark) {
+    display: block;
+    position: relative;
+}
+
+picture:has(mark) img {
+    mix-blend-mode: multiply;
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' preserveAspectRatio='none'><path fill='white' d='M0,0 H600 V390 L595,397 L585,390 L575,400 L565,390 L555,393 L545,390 L535,398 L525,390 L515,392 L505,390 L495,396 L485,390 L475,394 L465,390 L455,400 L445,390 L435,393 L425,390 L415,397 L405,390 L395,392 L385,390 L375,396 L365,390 L355,395 L345,390 L335,398 L325,390 L315,394 L305,390 L295,393 L285,390 L275,400 L265,390 L255,392 L245,390 L235,396 L225,390 L215,394 L205,390 L195,398 L185,390 L175,393 L165,390 L155,397 L145,390 L135,392 L125,390 L115,395 L105,390 L95,398 L85,390 L75,394 L65,390 L55,393 L45,390 L35,400 L25,390 L15,392 L5,390 L0,390 Z'/></svg>");
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+}
+
+mark {
+    background-color: var(--demongreen);
+    border-radius: 100%;
+    color: #fff;
+    display: inline-block;
+    font-family: Colus;
+    font-size: 12pt;
+    height: 22px;
+    line-height: 1.5;
+    text-align: center;
+    width: 22px;
+}
+
+picture mark {
+    position: absolute;
+}

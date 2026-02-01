@@ -1,0 +1,23 @@
+EV: Elementos
+=============
+Flujo para inyectar elementos en el Escritorio Virtual (EV).
+
+1a) Desde el botón añadir elemento se abre elementos/ventana.html para crearlo.
+1b) Desde el botón editar de un elemento se abre la misma ventana para editarlo.
+Nota: El formulario ventana envía los datos por AJAX al contenedor div.ajax.show.
+Nota2: El formulario incluye la acción eliminar elemento.
+Nota3: 2-kumbia.js se encarga de envía por AJAX. 
+2) El controlador Elementos se encarga de salvar los datos en los modelos:
+- Aventuras_elementos.
+- Partidas_elementos.
+Nota: El controlador no devuelve vista alguna, ya que se inyectan por SSE/WS.
+Nota2: Los modelos se encargan de guardar las imágenes.
+Nota3: Los modelos se encargan de notificar los resultados (logs) vía Toast.
+3) El controlador Elementos envía por SSE/WS al DJ y PPJJ el elemento creado/editado/eliminado sin refrescar el resto de elmentos.
+Nota: _url::enviarAlCanal hace de emisor y 2-suscriptor.js de receptor.
+Nota2: Los JS deben notificar sus acciones (logs) vía consola del navegador.
+---
+Problema:
+1) El formulario está generando refrescos, y debe funcionar 100% por AJAX.
+2) El elemento creado/editado/eliminado no se inyecta correctamente.
+3) Hay más, pero primero vamos a revisas archivo por archivo en orden.

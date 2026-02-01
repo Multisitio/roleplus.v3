@@ -1,0 +1,11 @@
+.grid {
+    grid-column-gap: var(--spacing-gutter);
+    grid-row-gap: var(--spacing-gutter);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0%, 1fr));
+    margin: 0;
+}
+
+.grid>* {
+    min-width: 0;
+}

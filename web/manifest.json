@@ -1,0 +1,35 @@
+{
+    "background_color": "#000",
+    "description": "Red social de juegos de mesa y rol.",
+    "display": "standalone",
+    "icons": [{
+        "src": "/img/logos/LogoROLEplus512.svg?v=221009",
+        "sizes": "512x512",
+        "type": "image/svg+xml"
+    }, {
+        "purpose": "any maskable",
+        "src": "/img/logos/LogoROLEplus512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }],
+    "name": "ROLEplus.app - Social Network",
+    "scope": "/",
+    "share_target": {
+        "action": "/index/compartir",
+        "enctype": "multipart/form-data",
+        "method": "POST",
+        "params": {
+            "text": "ROLEplus.app - Social Network",
+            "title": "roleplus.app",
+            "url": "https://roleplus.app/",
+            "files": [{
+                "name": "file",
+                "accept": ["image/*"]
+            }]
+        }
+    },
+    "short_name": "roleplus.app",
+    "id": "/?homescreen=1",
+    "start_url": "/?homescreen=1",
+    "theme_color": "#999"
+}

@@ -1,0 +1,23 @@
+#important .active {
+    background: var(--mark);
+}
+
+#important .tabs a,
+#important .tabs button {
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #999;
+    box-shadow: none;
+    color: var(--primary);
+    display: inline-block;
+    margin: 0px;
+    padding: 10px 5px;
+    text-align: center;
+}
+
+#important .tabs a.selected,
+#important .tabs button.selected {
+    border: 1px solid #999;
+    border-bottom: 1px solid transparent;
+    border-radius: var(--block-round) var(--block-round) 0 0;
+}

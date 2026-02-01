@@ -1,0 +1,142 @@
+/* Caja apartados */
+
+.apartados {
+	position: fixed;
+	left: 50%;
+	transform: translate(-50%);
+	top: 0;
+	z-index: 91;
+}
+
+.apartados a {
+	background: var(--primary-inverse);
+	border-radius: 15px;
+	padding: 1rem 1rem 0.5rem;
+}
+
+.apartados a.active {
+	background: var(--background);
+}
+
+
+/* Caja articulo */
+
+article footer a[role="button"],
+article footer button {
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+	padding-left: 10px;
+	padding-right: 10px;
+	text-overflow: ellipsis;
+	vertical-align: top;
+	white-space: nowrap;
+}
+
+article img {
+	vertical-align: text-top;
+}
+
+article > img {
+	margin: 0 auto;
+}
+
+
+/* Caja audio */
+
+audio {
+	max-width: 300px;
+	width: 100%;
+}
+
+.caja-audio {
+	margin-bottom: 1rem;
+}
+
+
+/* Caja input */
+
+
+/* Esto no mola porque los inputs en article se ven azules en vez de negros.
+input,
+input:focus {
+	background: transparent;
+}*/
+
+
+/* Caja img */
+
+.caja-img {
+	display: block;
+	margin-bottom: 1rem;
+}
+
+img:not([src*='svg']) {
+	display: block;
+	width: 100%;
+}
+
+
+/* Caja fielfset */
+
+fieldset {
+	border: 2px solid #999;
+	padding: 0 10px 10px;
+}
+
+fieldset legend {
+	padding: 5px;
+}
+
+
+/* Caja fondo */
+
+.fondo {
+	background: url('/img/aplicaciones/cuadricula.jpg') center no-repeat;
+	background-size: cover;
+	height: 100vh;
+	width: 100%;
+	position: fixed;
+	z-index: -1;
+}
+
+
+/* Caja main */
+
+main {
+	padding: 110px 0 !important;
+}
+
+@media (min-width:993px) {
+	main {
+		padding: 20px 100px !important;
+	}
+}
+
+
+/* Caja menu */
+
+.menu {
+	position: fixed;
+	left: 15px;
+	top: 15px;
+	z-index: 91;
+}
+
+#important .menu > button {
+	width: 80px;
+}
+
+.perfil {
+	position: fixed;
+	right: 15px;
+	top: 15px;
+	z-index: 91;
+}
+
+
+/* Caja texto */
+
+.caja-texto {
+	margin-bottom: 1rem;
+}

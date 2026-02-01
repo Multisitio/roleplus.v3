@@ -1,0 +1,39 @@
+
+article {
+    counter-increment: page;
+}
+
+.page article {
+    background: url('/img/editor/for_the_quest/96/pergamino.webp');
+    background-size: cover;
+    font: 14pt/1.5 'Minion Pro';
+    color: #333;
+}
+
+.page article:has(>section:first-child>h1+blockquote) {
+    background: url('/img/editor/for_the_quest/96/pergamino_cabecera.webp?v2');
+}
+
+:is(.cover, .page) article>section {
+    padding-inline: 1.5cm;
+    margin-bottom: 20px;
+}
+
+:is(.cover, .page) article>section:first-child {
+    padding-top: 1.5cm;
+}
+
+:is(.cover, .page) article>section:last-child {
+    padding-bottom: 2.4cm;
+    margin-bottom: 0;
+}
+
+div>*:last-child {
+    margin-bottom: 0;
+}
+
+p, table {
+    margin-bottom: 20px;
+    margin-top: 5px;
+    line-height: 1.2;
+}

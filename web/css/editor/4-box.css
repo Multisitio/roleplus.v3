@@ -1,0 +1,59 @@
+.boxed h1,
+.boxed h2,
+.boxed h3,
+.boxed h4,
+.boxed h5,
+.boxed h6,
+.boxed img,
+.boxed p,
+.boxed blockquote {
+    outline: 1px dotted black;
+}
+
+.boxed h1:before,
+.boxed h2:before,
+.boxed h3:before,
+.boxed h4:before,
+.boxed h5:before,
+.boxed h6:before,
+.boxed p:before,
+.boxed blockquote:before {
+    background: black;
+    color: white;
+    float: right;
+    font: 16px monospace;
+    margin: -1px -13px 0 0;
+    padding: 0px 2px 5px;
+}
+
+.boxed h1:before {
+    content: "1";
+}
+
+.boxed h2:before {
+    content: "2";
+}
+
+.boxed h3:before {
+    content: "3";
+}
+
+.boxed h4:before {
+    content: "4";
+}
+
+.boxed h5:before {
+    content: "5";
+}
+
+.boxed h6:before {
+    content: "6";
+}
+
+.boxed p:before {
+    content: "p";
+}
+
+.boxed blockquote:before {
+    content: "q";
+}

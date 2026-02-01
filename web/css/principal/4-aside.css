@@ -1,0 +1,64 @@
+aside {
+    background: var(--background);
+    box-shadow: 2px 0 2px #999;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 98;
+    height: 100%;
+    width: 235px;
+    overflow-y: auto;
+    padding: 0;
+}
+
+aside .logo {
+    display: flex;
+    align-items: center;
+}
+
+aside .logo svg {
+    width: 70px;
+}
+
+aside a,
+aside button,
+aside select {
+    width: calc(100% - 20px);
+}
+
+aside a,
+aside button {
+    gap: 5px;
+    justify-content: left !important;
+    margin-left: 5px;
+}
+
+aside select {
+    margin-left: 5px;
+}
+
+aside>a:not(:nth-child(2)),
+aside>button:not(:nth-child(2)) {
+    margin-top: 5px;
+}
+
+aside .sub {
+    display: block;
+    font-size: smaller;
+    padding: 0 10px 10px 20px;
+}
+
+aside .sub a {
+    display: block;
+    padding: 0 10px 10px 10px;
+}
+
+aside .sub img {
+    vertical-align: text-bottom;
+}
+
+aside .sub a,
+aside .sub button {
+    margin: 1px 0;
+    padding: 10px 0;
+}

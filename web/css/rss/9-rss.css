@@ -1,0 +1,32 @@
+a h5 {
+    display: inline-block;
+    max-width: calc(100% - 35px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+a[role="button"] {
+    text-align: center;
+}
+
+article section small {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+article header small {
+    float: right;
+}
+
+section a {
+    display: inline-block !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

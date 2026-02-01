@@ -1,0 +1,25 @@
+.page article {
+    background: url('/img/editor/dragonbane/96/pergamino.webp');
+    background-size: cover;
+    counter-increment: page;
+    font: 11pt 'Crimson Pro Regular';
+    color: #333;
+}
+
+:is(.cover, .page) article>section {
+    padding-inline: 1cm;
+    /*margin-bottom: 20px;*/
+}
+
+:is(.cover, .page) article>section:first-child {
+    padding-top: 0.6cm;
+}
+
+:is(.cover, .page) article>section:last-child {
+    padding-bottom: 2.4cm;
+    /*margin-bottom: 0;*/
+}
+
+/*div>*:last-child {
+    margin-bottom: 0;
+}*/

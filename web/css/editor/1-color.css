@@ -1,0 +1,465 @@
+:root:not([data-theme=light]) {
+    color-scheme: dark;
+    --background: #333;
+    --background-card: #111;
+    --background-card-hex: 17, 17, 17;
+    --background-element: #222;
+    --color: #ccc;
+    --primary-inverse: #000;
+    --primary-inverse-filter: brightness(0);
+}
+
+:root[data-theme=light] {
+    color-scheme: light;
+    --background: #eee;
+    --background-card: #fff;
+    --background-card-hex: 255, 255, 255;
+    --background-element: #fff;
+    --color: #000;
+    --primary-inverse: #fff;
+    --primary-inverse-filter: brightness(150%);
+}
+
+[data-theme=light][data-color="red"],
+[data-theme=light] [data-color="red"] {
+    --primary: #a62926;
+    --primary-filter: invert(19%) sepia(51%) saturate(3847%) hue-rotate(350deg) brightness(91%) contrast(81%);
+}
+
+[data-theme=dark][data-color="red"],
+[data-theme=dark] [data-color="red"] {
+    --primary: #ff726f;
+    --primary-filter: invert(66%) sepia(60%) saturate(1583%) hue-rotate(313deg) brightness(98%) contrast(105%);
+}
+
+[data-theme=light] button[data-color="red"],
+[data-theme=light] [role="button"][data-color="red"] {
+    background-color: #a62926;
+}
+
+[data-theme=dark] button[data-color="red"],
+[data-theme=dark] [role="button"][data-color="red"] {
+    background-color: #ff726f;
+}
+
+[src*=".svg"][data-color="red"] {
+    filter: sepia(99%) saturate(9999%) hue-rotate(19deg) brightness(99%) contrast(99%);
+}
+
+[data-theme=light][data-color="pink"],
+[data-theme=light] [data-color="pink"] {
+    --primary: #ac154c;
+    --primary-filter: invert(17%) sepia(50%) saturate(4021%) hue-rotate(320deg) brightness(95%) contrast(102%);
+}
+
+[data-theme=dark][data-color="pink"],
+[data-theme=dark] [data-color="pink"] {
+    --primary: #ff6ca1;
+    --primary-filter: invert(53%) sepia(24%) saturate(1183%) hue-rotate(289deg) brightness(102%) contrast(102%);
+}
+
+[data-theme=light] button[data-color="pink"],
+[data-theme=light] [role="button"][data-color="pink"] {
+    background-color: #ac154c;
+}
+
+[data-theme=dark] button[data-color="pink"],
+[data-theme=dark] [role="button"][data-color="pink"] {
+    background-color: #ff6ca1;
+}
+
+[data-theme=light][data-color="purple"],
+[data-theme=light] [data-color="purple"] {
+    --primary: #8e24aa;
+    --primary-filter: invert(20%) sepia(72%) saturate(2077%) hue-rotate(269deg) brightness(102%) contrast(106%);
+}
+
+[data-theme=dark][data-color="purple"],
+[data-theme=dark] [data-color="purple"] {
+    --primary: #e16fff;
+    --primary-filter: invert(65%) sepia(41%) saturate(5651%) hue-rotate(238deg) brightness(100%) contrast(103%);
+}
+
+[data-theme=light] button[data-color="purple"],
+[data-theme=light] [role="button"][data-color="purple"] {
+    background-color: #8e24aa;
+}
+
+[data-theme=dark] button[data-color="purple"],
+[data-theme=dark] [role="button"][data-color="purple"] {
+    background-color: #e16fff;
+}
+
+[data-theme=light][data-color="deep-purple"],
+[data-theme=light] [data-color="deep-purple"] {
+    --primary: #5e35b1;
+    --primary-filter: invert(21%) sepia(33%) saturate(6115%) hue-rotate(252deg) brightness(82%) contrast(87%)
+}
+
+[data-theme=dark][data-color="deep-purple"],
+[data-theme=dark] [data-color="deep-purple"] {
+    --primary: #b089ff;
+    --primary-filter: invert(72%) sepia(49%) saturate(5002%) hue-rotate(215deg) brightness(100%) contrast(102%);
+}
+
+[data-theme=light] button[data-color="deep-purple"],
+[data-theme=light] [role="button"][data-color="deep-purple"] {
+    background-color: #5e35b1;
+}
+
+[data-theme=dark] button[data-color="deep-purple"],
+[data-theme=dark] [role="button"][data-color="deep-purple"] {
+    background-color: #b089ff;
+}
+
+[data-theme=light][data-color="indigo"],
+[data-theme=light] [data-color="indigo"] {
+    --primary: #3949ab;
+    --primary-filter: invert(19%) sepia(97%) saturate(1678%) hue-rotate(221deg) brightness(96%) contrast(82%);
+}
+
+[data-theme=dark][data-color="indigo"],
+[data-theme=dark] [data-color="indigo"] {
+    --primary: #8697ff;
+    --primary-filter: invert(78%) sepia(63%) saturate(5394%) hue-rotate(204deg) brightness(102%) contrast(101%);
+}
+
+[data-theme=light] button[data-color="indigo"],
+[data-theme=light] [role="button"][data-color="indigo"] {
+    background-color: #3949ab;
+}
+
+[data-theme=dark] button[data-color="indigo"],
+[data-theme=dark] [role="button"][data-color="indigo"] {
+    background-color: #8697ff;
+}
+
+[data-theme=light][data-color="blue"],
+[data-theme=light] [data-color="blue"] {
+    --primary: #145a98;
+    --primary-filter: invert(22%) sepia(90%) saturate(1583%) hue-rotate(191deg) brightness(91%) contrast(85%);
+}
+
+[data-theme=dark][data-color="blue"],
+[data-theme=dark] [data-color="blue"] {
+    --primary: #3ca3ff;
+    --primary-filter: invert(49%) sepia(91%) saturate(868%) hue-rotate(185deg) brightness(100%) contrast(103%);
+}
+
+[data-theme=light] button[data-color="blue"],
+[data-theme=light] [role="button"][data-color="blue"] {
+    background-color: #145a98;
+}
+
+[data-theme=dark] button[data-color="blue"],
+[data-theme=dark] [role="button"][data-color="blue"] {
+    background-color: #3ca3ff;
+}
+
+[data-theme=light][data-color="light-blue"],
+[data-theme=light] [data-color="light-blue"] {
+    --primary: #025e8a;
+    --primary-filter: invert(22%) sepia(78%) saturate(1652%) hue-rotate(175deg) brightness(95%) contrast(98%);
+}
+
+[data-theme=dark][data-color="light-blue"],
+[data-theme=dark] [data-color="light-blue"] {
+    --primary: #04a7f6;
+    --primary-filter: invert(64%) sepia(42%) saturate(6716%) hue-rotate(170deg) brightness(97%) contrast(102%);
+}
+
+[data-theme=light] button[data-color="light-blue"],
+[data-theme=light] [role="button"][data-color="light-blue"] {
+    background-color: #025e8a;
+}
+
+[data-theme=dark] button[data-color="light-blue"],
+[data-theme=dark] [role="button"][data-color="light-blue"] {
+    background-color: #04a7f6;
+}
+
+[data-theme=light][data-color="cyan"],
+[data-theme=light] [data-color="cyan"] {
+    --primary: #00626e;
+    --primary-filter: invert(29%) sepia(66%) saturate(627%) hue-rotate(138deg) brightness(94%) contrast(103%);
+}
+
+[data-theme=dark][data-color="cyan"],
+[data-theme=dark] [data-color="cyan"] {
+    --primary: #00afc4;
+    --primary-filter: invert(55%) sepia(10%) saturate(7111%) hue-rotate(147deg) brightness(91%) contrast(101%);
+}
+
+[data-theme=light] button[data-color="cyan"],
+[data-theme=light] [role="button"][data-color="cyan"] {
+    background-color: #00626e;
+}
+
+[data-theme=dark] button[data-color="cyan"],
+[data-theme=dark] [role="button"][data-color="cyan"] {
+    background-color: #00afc4;
+}
+
+[data-theme=light][data-color="teal"],
+[data-theme=light] [data-color="teal"] {
+    --primary: #00645a;
+    --primary-filter: invert(26%) sepia(30%) saturate(1951%) hue-rotate(134deg) brightness(101%) contrast(101%);
+}
+
+[data-theme=dark][data-color="teal"],
+[data-theme=dark] [data-color="teal"] {
+    --primary: #00b2a0;
+    --primary-filter: invert(59%) sepia(62%) saturate(5050%) hue-rotate(142deg) brightness(96%) contrast(102%);
+}
+
+[data-theme=light] button[data-color="teal"],
+[data-theme=light] [role="button"][data-color="teal"] {
+    background-color: #00645a;
+}
+
+[data-theme=dark] button[data-color="teal"],
+[data-theme=dark] [role="button"][data-color="teal"] {
+    background-color: #00b2a0;
+}
+
+[data-theme=light][data-color="green"],
+[data-theme=light] [data-color="green"] {
+    --primary: #2a642c;
+    --primary-filter: invert(32%) sepia(22%) saturate(1215%) hue-rotate(72deg) brightness(93%) contrast(92%);
+}
+
+[data-theme=dark][data-color="green"],
+[data-theme=dark] [data-color="green"] {
+    --primary: #4bb34f;
+    --primary-filter: invert(63%) sepia(17%) saturate(1390%) hue-rotate(72deg) brightness(90%) contrast(97%);
+}
+
+[data-theme=light] button[data-color="green"],
+[data-theme=light] [role="button"][data-color="green"] {
+    background-color: #2a642c;
+}
+
+[data-theme=dark] button[data-color="green"],
+[data-theme=dark] [role="button"][data-color="green"] {
+    background-color: #4bb34f;
+}
+
+[src*=".svg"][data-color="green"] {
+    filter: invert(9%) sepia(99%) saturate(999%) hue-rotate(99deg) brightness(59%) contrast(999%);
+}
+
+[data-theme=light][data-color="light-green"],
+[data-theme=light] [data-color="light-green"] {
+    --primary: #436124;
+    --primary-filter: invert(33%) sepia(22%) saturate(1174%) hue-rotate(47deg) brightness(91%) contrast(87%);
+}
+
+[data-theme=dark][data-color="light-green"],
+[data-theme=dark] [data-color="light-green"] {
+    --primary: #78ae40;
+    --primary-filter: invert(53%) sepia(78%) saturate(319%) hue-rotate(47deg) brightness(98%) contrast(94%);
+}
+
+[data-theme=light] button[data-color="light-green"],
+[data-theme=light] [role="button"][data-color="light-green"] {
+    background-color: #436124;
+}
+
+[data-theme=dark] button[data-color="light-green"],
+[data-theme=dark] [role="button"][data-color="light-green"] {
+    background-color: #78ae40;
+}
+
+[data-theme=light][data-color="lime"],
+[data-theme=light] [data-color="lime"] {
+    --primary: #575c17;
+    --primary-filter: invert(30%) sepia(51%) saturate(625%) hue-rotate(25deg) brightness(95%) contrast(88%);
+}
+
+[data-theme=dark][data-color="lime"],
+[data-theme=dark] [data-color="lime"] {
+    --primary: #9da629;
+    --primary-filter: invert(61%) sepia(61%) saturate(493%) hue-rotate(25deg) brightness(90%) contrast(88%);
+}
+
+[data-theme=light] button[data-color="lime"],
+[data-theme=light] [role="button"][data-color="lime"] {
+    background-color: #575c17;
+}
+
+[data-theme=dark] button[data-color="lime"],
+[data-theme=dark] [role="button"][data-color="lime"] {
+    background-color: #9da629;
+}
+
+[data-theme=light][data-color="yellow"],
+[data-theme=light] [data-color="yellow"] {
+    --primary: #665715;
+    --primary-filter: invert(28%) sepia(64%) saturate(556%) hue-rotate(12deg) brightness(95%) contrast(87%);
+}
+
+[data-theme=dark][data-color="yellow"],
+[data-theme=dark] [data-color="yellow"] {
+    --primary: #b89d26;
+    --primary-filter: invert(56%) sepia(48%) saturate(681%) hue-rotate(12deg) brightness(103%) contrast(81%);
+}
+
+[data-theme=light] button[data-color="yellow"],
+[data-theme=light] [role="button"][data-color="yellow"] {
+    background-color: #665715;
+}
+
+[data-theme=dark] button[data-color="yellow"],
+[data-theme=dark] [role="button"][data-color="yellow"] {
+    background-color: #b89d26;
+}
+
+[src*=".svg"][data-color="yellow"] {
+    filter: invert(99%) sepia(9%) saturate(9999%) hue-rotate(9deg) brightness(255%) contrast(99%);
+}
+
+[data-theme=light][data-color="amber"],
+[data-theme=light] [data-color="amber"] {
+    --primary: #755200;
+    --primary-filter: invert(29%) sepia(46%) saturate(1508%) hue-rotate(18deg) brightness(96%) contrast(101%);
+}
+
+[data-theme=dark][data-color="amber"],
+[data-theme=dark] [data-color="amber"] {
+    --primary: #d29300;
+    --primary-filter: invert(46%) sepia(84%) saturate(1625%) hue-rotate(20deg) brightness(105%) contrast(101%);
+}
+
+[data-theme=light] button[data-color="amber"],
+[data-theme=light] [role="button"][data-color="amber"] {
+    background-color: #755200;
+}
+
+[data-theme=dark] button[data-color="amber"],
+[data-theme=dark] [role="button"][data-color="amber"] {
+    background-color: #d29300;
+}
+
+[data-theme=light][data-color="orange"],
+[data-theme=light] [data-color="orange"] {
+    --primary: #844a00;
+    --primary-filter: invert(26%) sepia(67%) saturate(7500%) hue-rotate(47deg) brightness(93%) contrast(101%);
+}
+
+[data-theme=dark][data-color="orange"],
+[data-theme=dark] [data-color="orange"] {
+    --primary: #ec8400;
+    --primary-filter: invert(54%) sepia(17%) saturate(4786%) hue-rotate(6deg) brightness(98%) contrast(101%);
+}
+
+[data-theme=light] button[data-color="orange"],
+[data-theme=light] [role="button"][data-color="orange"] {
+    background-color: #844a00;
+}
+
+[data-theme=dark] button[data-color="orange"],
+[data-theme=dark] [role="button"][data-color="orange"] {
+    background-color: #ec8400;
+}
+
+[data-theme=light][data-color="deep-orange"],
+[data-theme=light] [data-color="deep-orange"] {
+    --primary: #9e3413;
+    --primary-filter: invert(23%) sepia(29%) saturate(4661%) hue-rotate(354deg) brightness(92%) contrast(91%);
+}
+
+[data-theme=dark][data-color="deep-orange"],
+[data-theme=dark] [data-color="deep-orange"] {
+    --primary: #ff754a;
+    --primary-filter: invert(71%) sepia(43%) saturate(5775%) hue-rotate(329deg) brightness(102%) contrast(101%);
+}
+
+[data-theme=light] button[data-color="deep-orange"],
+[data-theme=light] [role="button"][data-color="deep-orange"] {
+    background-color: #9e3413;
+}
+
+[data-theme=dark] button[data-color="deep-orange"],
+[data-theme=dark] [role="button"][data-color="deep-orange"] {
+    background-color: #ff754a;
+}
+
+[data-theme=light][data-color="grey"],
+[data-theme=light] [data-color="grey"] {
+    --primary: #585858;
+    --primary-filter: invert(32%) sepia(1%) saturate(0%) hue-rotate(46deg) brightness(96%) contrast(84%);
+}
+
+[data-theme=dark][data-color="grey"],
+[data-theme=dark] [data-color="grey"] {
+    --primary: #9f9f9f;
+    --primary-filter: invert(67%) sepia(4%) saturate(6%) hue-rotate(31deg) brightness(95%) contrast(83%);
+}
+
+[data-theme=light] button[data-color="grey"],
+[data-theme=light] [role="button"][data-color="grey"] {
+    background-color: #585858;
+}
+
+[data-theme=dark] button[data-color="grey"],
+[data-theme=dark] [role="button"][data-color="grey"] {
+    background-color: #9f9f9f;
+}
+
+[data-theme=light][data-color="blue-grey"],
+[data-theme=light] [data-color="blue-grey"] {
+    --primary: #465b65;
+    --primary-filter: invert(32%) sepia(46%) saturate(219%) hue-rotate(154deg) brightness(93%) contrast(92%);
+}
+
+[data-theme=dark][data-color="blue-grey"],
+[data-theme=dark] [data-color="blue-grey"] {
+    --primary: #7ea4b6;
+    --primary-filter: invert(66%) sepia(12%) saturate(776%) hue-rotate(154deg) brightness(93%) contrast(88%);
+}
+
+[data-theme=light] button[data-color="blue-grey"],
+[data-theme=light] [role="button"][data-color="blue-grey"] {
+    background-color: #465b65;
+}
+
+[data-theme=dark] button[data-color="blue-grey"],
+[data-theme=dark] [role="button"][data-color="blue-grey"] {
+    background-color: #7ea4b6;
+}
+
+[data-theme=light][data-color="inverse"],
+[data-theme=light] [data-color="inverse"] {
+    --primary: #000;
+    --primary-filter: invert(0%) sepia(4%) saturate(0%) hue-rotate(293deg) brightness(94%) contrast(106%);
+}
+
+[data-theme=dark][data-color="inverse"],
+[data-theme=dark] [data-color="inverse"] {
+    --primary: #FFF;
+    --primary-filter: invert(100%) sepia(0%) saturate(7466%) hue-rotate(190deg) brightness(95%) contrast(103%);
+}
+
+[data-theme=light] button[data-color="inverse"],
+[data-theme=light] [role="button"][data-color="inverse"] {
+    background-color: #000;
+}
+
+[data-theme=dark] button[data-color="inverse"],
+[data-theme=dark] [role="button"][data-color="inverse"] {
+    background-color: #FFF;
+}
+
+#important [data-bg_color] {
+    background-color: var(--primary);
+    color: var(--primary-inverse);
+}
+
+#important [data-text_color] {
+    background-color: var(--primary-inverse);
+    color: var(--primary);
+}
+
+[data-bg_color] img[src*=".svg"] {
+    filter: var(--primary-inverse-filter);
+}

@@ -1,0 +1,3 @@
+ul:not(.notificaciones) li::before {
+    content: "✦ "
+}

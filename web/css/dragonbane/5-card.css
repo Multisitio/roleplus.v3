@@ -1,0 +1,82 @@
+.page .cards {
+    border: 3px solid #000;
+    flex: 0 0 696px;
+}
+
+.page .cards:has(> picture:only-child) {
+    flex: 0 0 236px;
+}
+
+.page .cards:has(> picture:nth-child(2):last-child) {
+    flex: 0 0 466px;
+}
+
+.page .cards picture {
+    background: url('/img/editor/dragonbane/96/pergamino_carta.webp') no-repeat;
+    border: 3px solid #000;
+    float: left;
+    position: relative;
+    z-index: 1;
+    width: 230px;
+    height: 320px;
+}
+
+.page .cards picture h5 {
+    background-image:
+        url("data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>"),
+        url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>"),
+        url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/></svg>");
+    margin-top: 3px;
+    position: relative;
+    top: 0;
+    z-index: 1;
+    text-align: center;
+    width: 98%;
+}
+
+.page .cards picture h6 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 10pt Colus;
+    margin-inline: auto;
+    position: relative;
+    top: -5px;
+    text-align: center;
+    width: 156px;
+    height: 44px;
+}
+
+.page .cards picture h6::before {
+    background: url('/img/editor/dragonbane/96/pergamino_para_titulos.webp?v=250415') no-repeat;
+    background-size: cover;
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 0;
+    z-index: -1;
+    width: 156px;
+    height: 44px;
+}
+
+.page .cards picture>*:not(h5, h6, hr, img) {
+    margin: 0 10px;
+}
+
+.page .cards picture hr {
+    position: absolute;
+    bottom: -5px;
+    width: 170px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.page .cards picture img {
+    opacity: .25;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: -1;
+}

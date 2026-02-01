@@ -1,0 +1,109 @@
+.v_container {
+    font-family: 'Roboto', sans-serif;
+}
+
+.v_container.max {
+    margin: 0 auto;
+    width: 80%;
+}
+
+.v_container h1 {
+    color: var(--primary);
+    text-align: center;
+}
+
+.v_container>section {
+    padding: 50px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.v_container>section:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -1px;
+    width: 2px;
+    height: 100%;
+    background: #CCD1D9;
+    z-index: 1;
+}
+
+.v_container>section>div {
+    width: -webkit-calc(50% + 8px);
+    width: -moz-calc(50% + 8px);
+    width: calc(50% + 8px);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-box-pack: justify;
+    justify-content: space-between;
+    clear: both;
+}
+
+.v_container>section>div:nth-child(odd) {
+    align-self: end;
+}
+
+.v_container>section>div:nth-child(even) {
+    align-self: start;
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.v_container>section>div>span {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary);
+    margin-top: 10px;
+    z-index: 2;
+}
+
+.v_container>section>div>section {
+    width: 95%;
+    padding: 0 15px;
+    color: #666;
+}
+
+.v_container>section>div>section time {
+    color: var(--primary);
+    margin-top: 6px;
+}
+
+.v_container>section>div>section p {
+    font-size: 14px;
+    line-height: 1.5em;
+    word-spacing: 1px;
+    color: #888;
+}
+
+@media screen and (max-width: 768px) {
+    .v_container {
+        padding-left: 5px;
+        background: var(--background-card);
+    }
+    .v_container.max {
+        width: 100%;
+    }
+    .v_container>section:before {
+        left: 8px;
+        width: 2px;
+    }
+    .v_container>section>div {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+    .v_container>section>div:nth-child(even) {
+        align-self: end;
+        flex-direction: row;
+        text-align: left;
+    }
+    .v_container>section>div>section time {
+        margin-top: 9px;
+    }
+}

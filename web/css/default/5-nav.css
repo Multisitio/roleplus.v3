@@ -1,0 +1,129 @@
+nav {
+    align-items: center;
+    background: var(--background);
+    box-shadow: 0 0 5px;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    height: 60px;
+    width: 100%;
+    z-index: 1;
+}
+
+nav a,
+nav button,
+nav form {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+
+nav .contador {
+    position: relative;
+}
+
+nav .contador span {
+    position: absolute;
+    top: -20px;
+    right: 0;
+}
+
+nav form,
+nav input {
+    margin-bottom: 0 !important;
+}
+
+nav .logo,
+nav .logo svg {
+    width: 80px !important;
+}
+
+nav form select {
+    border-radius: 100px 0 0 100px;
+    border-right: 0;
+    float: left;
+    width: 10rem;
+}
+
+nav form input {
+    border-radius: 0 100px 100px 0 !important;
+    float: left;
+}
+
+
+/*@media (max-width:600px) {
+    nav .logo,
+    nav .publicaciones {
+        display: none !important;
+    }
+}
+
+@media (min-width:601px) {
+    nav form input {
+        width: calc(100% - 11rem) !important;
+    }
+}
+
+@media (max-width:992px) {
+    nav form {
+        margin-left: 0 !important;
+    }
+}
+
+@media (min-width:993px) {
+    nav .logo,
+    nav .notificaciones,
+    nav .publicaciones,
+    nav button[src*="arrow-left"],
+    nav button[src*="search"] {
+        display: flex !important;
+    }
+    nav form {
+        display: flex !important;
+    }
+    nav [data-toggle*="buscar"] {
+        display: none !important;
+    }
+}*/
+
+.progress {
+    display: inline-block;
+    margin: 80px 0 20px;
+    padding: 0 12px;
+    width: 100%;
+}
+
+@media (max-width:600px) {
+    .progress {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+.progress a,
+.progress span {
+    background: var(--card-background);
+    border-radius: 5px;
+    color: var(--primary);
+    padding: 5px 10px;
+}
+
+.progress div {
+    display: flex;
+    align-self: center;
+}
+
+.progress section {
+    text-align: center;
+}
+
+.progress div:nth-child(2) {
+    justify-content: center;
+}
+
+.progress div:last-child {
+    justify-content: end;
+}
+
+.progress progress {
+    margin: 10px 0 5px;
+}

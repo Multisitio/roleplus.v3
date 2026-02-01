@@ -1,0 +1,49 @@
+aside {
+    background: var(--background);
+    box-shadow: var(--card-shadow);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 98;
+    height: 100%;
+    width: 235px;
+    overflow-y: auto;
+}
+
+aside>a,
+aside>button {
+    align-items: center;
+    display: flex;
+    padding: 10px;
+}
+
+aside>a img,
+aside>button img {
+    margin-right: 10px;
+}
+
+aside h6 {
+    padding: 15px 20px 5px 15px;
+}
+
+aside .sub {
+    display: block;
+    font-size: smaller;
+    padding: 0 10px 10px 15px;
+}
+
+aside .sub a {
+    display: block;
+    padding: 0 10px 10px 10px;
+}
+
+aside .sub img {
+    vertical-align: top;
+}
+
+aside a[role="button"],
+aside button {
+    margin: 5px 10px;
+    padding: 10px 0;
+    width: calc(100% - 20px);
+}

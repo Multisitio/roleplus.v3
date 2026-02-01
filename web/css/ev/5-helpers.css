@@ -1,0 +1,57 @@
+a.outline[role=button],
+button.outline,
+input[type=submit].outline {
+    background-color: transparent;
+    border: var(--button-border-width) solid var(--primary-border);
+    color: var(--primary);
+}
+
+.hide {
+    display: none;
+}
+
+.highlight,
+::selection {
+    background-color: yellow;
+    color: #000;
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 97;
+}
+
+.token {
+    border: 5px ridge var(--primary);
+    border-radius: 50% 50%;
+    height: 80px;
+    width: 80px !important;
+}
+
+.transparent,
+.transparent:focus,
+.transparent:hover {
+    background: transparent;
+    border: 0 !important;
+    box-shadow: none;
+    color: var(--primary);
+    display: inline-block;
+    font-size: unset;
+    /*font-size: .8335rem;*/
+    padding: 0;
+    width: unset;
+}
+
+.truncate {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}

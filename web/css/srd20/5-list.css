@@ -1,0 +1,11 @@
+.resultado :is(ol, ul) {
+    margin: 5px 0 10px 7.5px;
+}
+
+.resultado ol {
+    list-style: upper-roman;
+}
+
+.resultado ul>li::before {
+    color: var(--HB_Color_HeaderText);
+}

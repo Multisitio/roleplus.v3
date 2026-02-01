@@ -1,0 +1,275 @@
+/* Altos */
+
+
+/* Anchos */
+
+.w100 {
+    width: 100% !important;
+}
+
+
+/* Cajas */
+
+.clear {
+    clear: both;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.float-right {
+    float: right;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.tr {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.relative {
+    position: relative;
+}
+
+.shadow0 {
+    box-shadow: none !important;
+}
+
+
+/* Cajas hijas flotando a la izquierda */
+
+.left {
+    content: "";
+    clear: both;
+    display: table;
+    margin: 10px;
+}
+
+.left>*:not(.rest) {
+    float: left;
+    margin: 10px;
+}
+
+.left>*.rest {
+    overflow: hidden;
+    padding: 10px;
+}
+
+
+/* Cajas prediseñadas */
+
+fieldset.encuesta {
+    border-bottom: 0;
+    border-right: 0;
+    margin: 0 0 15px;
+    padding: 15px 20px 10px 15px;
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 7;
+}
+
+.point {
+    border-radius: 15px;
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+}
+
+.blue {
+    background: #1e88e5;
+}
+
+.green {
+    background: #43a047;
+}
+
+.grey {
+    background: #757575;
+}
+
+.orange {
+    background: #fb8c00;
+}
+
+.red {
+    background: #e53935;
+}
+
+.yellow {
+    background: #fdd835;
+}
+
+
+/* Color */
+
+.bg {
+    background: var(--background) !important;
+}
+
+
+/* Contenido */
+
+.align-center {
+    text-align: center;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+
+/* Enlaces */
+
+a.outline[role=button],
+button.outline,
+input[type=submit].outline {
+    background-color: transparent;
+    border: var(--button-border-width) solid var(--primary-border);
+    color: var(--primary);
+}
+
+.transparent,
+.transparent:focus,
+.transparent:hover {
+    background: transparent;
+    /*border: 0 !important;*/
+    /*box-shadow: none;*/
+    color: var(--primary);
+    /*display: inline-block;*/
+    /*font-size: .8335rem;*/
+    /*padding: 0;
+    width: unset;*/
+}
+
+.truncate {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+
+/* Fuentes */
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.smaller {
+    font-size: smaller;
+}
+
+
+/* Formularios */
+
+.file {
+    border: 3px dashed transparent;
+    display: inline-block;
+    padding: 15px;
+    position: relative;
+}
+
+.file [type="file"] {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.file:hover {
+    border: 3px dashed #999;
+}
+
+
+/* Margenes */
+
+
+/* Sangrias */
+
+.p0 {
+    padding: 0 !important;
+}
+
+.pb0 {
+    padding-bottom: 0;
+}
+
+.pl0 {
+    padding-left: 0;
+}
+
+.pr0 {
+    padding-right: 0;
+}
+
+.pa10 {
+    padding: 10px;
+}
+
+.ph10 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.pt15 {
+    padding-top: 15px;
+}
+
+.pv15 {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+
+/* Tamnyos */
+
+.xxs {
+    width: 80px;
+}
+
+.xs {
+    width: 160px;
+}
+
+.s {
+    width: 280px;
+}
+
+.m {
+    width: 540px;
+}
+
+.l {
+    width: 768px;
+}
+
+.xl {
+    width: 1024px;
+}
+
+.xxl {
+    width: 1920px;
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROLEplus v3.5 - Corrección Marcos</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           1. VARIABLES (Tu Paleta)
+           ========================================= */
+        :root {
+            /* TEMA OSCURO */
+            --bg-body: #111;
+            --bg-card: rgba(20, 20, 20, 0.6);
+            --text-main: #eee;
+
+            --color-primary: #3f0;
+            /* Verde Ácido */
+            --color-secondary: #f60;
+            /* Naranja Reactor */
+            --color-tertiary: #f09;
+            /* Magenta Astral */
+        }
+
+        body.tema-claro {
+            /* TEMA CLARO */
+            --bg-body: #eee;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --text-main: #111;
+
+            --color-primary: #040;
+            /* Verde Pantano */
+            --color-secondary: #920;
+            /* Óxido Industrial */
+            --color-tertiary: #706;
+            /* Violeta Abisal */
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 40px;
+            margin: 0;
+            transition: 0.3s;
+        }
+
+        /* =========================================
+           2. LA CORRECCIÓN: MARCO CIRCUITO FINO
+           ========================================= */
+
+        .circuito-box {
+            position: relative;
+            padding: 40px;
+            margin: 50px 0;
+            background: var(--bg-card);
+            /* Sombra sutil para separar del fondo */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- ESQUINA SUPERIOR IZQUIERDA (VERDE) --- */
+        .circuito-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* CLAVE DEL ÉXITO: Tamaño fijo para no estirar */
+            width: 200px;
+            height: 150px;
+            pointer-events: none;
+            /* Permite seleccionar el texto debajo */
+
+            background-color: var(--color-primary);
+
+            /* DIBUJO SVG FINO
+               Stroke-width reducido y geometría limpia.
+            */
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 150' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Línea principal: Horizontal -> Baja en diagonal -> Baja recta --%3E%3Cpath d='M0 2 H 140 L 160 22 V 80' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C!-- Bifurcación decorativa --%3E%3Cpath d='M 120 2 L 130 12' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C!-- Círculo final hueco --%3E%3Ccircle cx='160' cy='86' r='3' stroke='black' stroke-width='2' fill='none' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 2 H 140 L 160 22 V 80' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M 120 2 L 130 12' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='160' cy='86' r='3' stroke='black' stroke-width='2' fill='none' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+        }
+
+        /* --- ESQUINA INFERIOR DERECHA (NARANJA/SECUNDARIO) --- */
+        .circuito-box::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            /* CLAVE DEL ÉXITO: Tamaño fijo */
+            width: 200px;
+            height: 150px;
+            pointer-events: none;
+
+            background-color: var(--color-secondary);
+
+            /* DIBUJO SVG INVERTIDO */
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 150' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Línea principal invertida --%3E%3Cpath d='M 200 148 H 60 L 40 128 V 70' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C!-- Bifurcación decorativa --%3E%3Cpath d='M 80 148 L 70 138' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3C!-- Círculo final hueco --%3E%3Ccircle cx='40' cy='64' r='3' stroke='black' stroke-width='2' fill='none' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 200 148 H 60 L 40 128 V 70' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M 80 148 L 70 138' fill='none' stroke='black' stroke-width='2' vector-effect='non-scaling-stroke'/%3E%3Ccircle cx='40' cy='64' r='3' stroke='black' stroke-width='2' fill='none' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            /* Alineamos la máscara a la esquina inferior derecha del contenedor de la máscara */
+            -webkit-mask-position: bottom right;
+            mask-position: bottom right;
+        }
+
+        /* Brillo sutil en hover */
+        .circuito-box:hover::before {
+            filter: drop-shadow(0 0 4px var(--color-primary));
+        }
+
+        .circuito-box:hover::after {
+            filter: drop-shadow(0 0 4px var(--color-secondary));
+        }
+
+        h2 {
+            color: var(--color-primary);
+            margin-top: 0;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .btn-toggle {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 1px solid var(--color-primary);
+            background: transparent;
+            color: var(--color-primary);
+            font-family: inherit;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="btn-toggle" onclick="document.body.classList.toggle('tema-claro')">/// CAMBIAR TEMA</button>
+
+    <article class="circuito-box">
+        <h2>01. Protocolo de Fusión</h2>
+        <p>
+            Ahora el borde es <strong>fijo y nítido</strong>. He cambiado la lógica: en lugar de estirar una imagen pequeña
+            para cubrir toda la caja (lo que causaba el efecto "bloque borroso"), ahora usamos esquinas de tamaño fijo (200px).
+        </p>
+        <p>
+            Observa cómo la línea es fina (2px de grosor) y los círculos son pequeños y definidos,
+            respetando la estética "tecnoarcana" sin parecer un dibujo mal escalado.
+        </p>
+    </article>
+
+    <article class="circuito-box">
+        <h2 style="color: var(--color-secondary)">02. Integridad Estructural</h2>
+        <p>
+            Incluso si el contenido es más pequeño o más grande, las esquinas mantienen su proporción
+            y no se deforman. La bifurcación es visible en la línea superior.
+        </p>
+    </article>
+
+</body>
+
+</html>

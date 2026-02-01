@@ -1,0 +1,13 @@
+.botonera {
+    display: flex;
+    gap: 5px;
+    min-height: 48px;
+}
+
+.botonera button {
+    background: none;
+}
+
+.botonera i {
+    line-height: 0;
+}

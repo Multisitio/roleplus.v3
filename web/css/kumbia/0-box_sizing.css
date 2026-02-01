@@ -1,0 +1,11 @@
+/* Kumbia.CSS 1.0 December 2023 by Lobo Blanco and fiends of KumbiaPHP */
+
+html {
+    box-sizing: border-box
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit
+}

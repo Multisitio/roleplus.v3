@@ -1,0 +1,40 @@
+#important .big-round-button {
+    border-radius: 50%;
+    min-height: 64px;
+    min-width: 64px;
+    z-index: 1;
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 7;
+}
+
+.progress-box {
+    padding: 5px;
+}
+
+.progress-box mark {
+    border-radius: 5px;
+    padding: 5px 10px;
+    text-align: center;
+    width: 70px;
+}
+
+.progress-box span:last-child {
+    text-align: right;
+}
+
+.truncate {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}

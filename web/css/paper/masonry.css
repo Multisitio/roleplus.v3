@@ -1,0 +1,56 @@
+/* The Masonry Container */
+
+.masonry {
+    column-fill: initial;
+    column-gap: 25px;
+    text-align: center;
+    transition: all .5s ease-in-out;
+}
+
+.masonry .brick {
+    text-align: initial;
+}
+
+
+/* The Masonry Brick */
+
+.brick {
+    display: inline-block;
+    margin-bottom: 25px;
+    max-width: 525px;
+    vertical-align: top;
+}
+
+.brick>img {
+    max-width: 100%;
+}
+
+@media (max-width:1000px) {
+    .masonry {
+        column-count: 1;
+    }
+}
+
+@media (min-width:1001px) and (max-width:1360px) {
+    .masonry {
+        column-count: 2;
+    }
+}
+
+@media (min-width:1361px) and (max-width:1550px) {
+    .masonry {
+        column-count: 3;
+    }
+}
+
+@media (min-width:1551px) and (max-width:1920px) {
+    .masonry {
+        column-count: 4;
+    }
+}
+
+@media (min-width:1921px) {
+    .masonry {
+        column-count: 5;
+    }
+}

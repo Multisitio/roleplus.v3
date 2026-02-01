@@ -1,0 +1,21 @@
+.toast-container {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 9;
+    width: 235px;
+}
+
+.toast-container>div {
+    background: var(--warning-light);
+    border: 1px solid var(--primary);
+    border-left: 3px solid var(--primary);
+    padding: 10px;
+    position: relative;
+}
+
+.toast-container [data-remove="parent"] {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}

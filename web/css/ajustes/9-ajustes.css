@@ -1,0 +1,20 @@
+.theme_switcher a {
+    margin-bottom: 5px;
+    width: 10.08%
+}
+
+a.theme_switcher {
+    background: unset;
+    border: unset;
+    height: 60px;
+    width: 60px;
+    padding: 0;
+}
+
+figure {
+    text-align: center;
+}
+
+article {
+    text-align: center;
+}

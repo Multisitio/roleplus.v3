@@ -1,0 +1,57 @@
+.resultado ol.inline {
+    counter-reset: conteo-lista;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+}
+
+.resultado ol.inline li {
+    align-items: baseline;
+    counter-increment: conteo-lista;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.resultado ol.inline li::before {
+    content: counter(conteo-lista) ". ";
+    flex-shrink: 0;
+    font-weight: bold;
+
+}
+
+.resultado ul.inline {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.resultado ul.inline li {
+    align-items: anchor-center;
+    display: flex;
+    gap: 5px;
+}
+
+.resultado :is(ol, ul) {
+    padding-left: 15px;
+}
+
+.resultado ul {
+    list-style: none;
+}
+
+.resultado ul>li::before {
+    content: "✦ ";
+    margin-left: -15px;
+}
+
+.resultado ul>li li::before {
+    content: "⮞ ";
+    margin-left: -15px;
+}
+
+.resultado ul.checkbox li::before {
+    content: "❑ ";
+}
+
+.resultado ul.radio li::before {
+    content: "🔾 ";
+}

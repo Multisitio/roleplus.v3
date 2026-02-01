@@ -1,0 +1,41 @@
+#important .boxes>* {
+    border: 1px solid var(--muted-color);
+    float: left;
+    margin: var(--margin-box);
+    padding: 10px;
+}
+
+#important .counter {
+    counter-reset: n;
+}
+
+#important .counter>*::before {
+    counter-increment: n;
+    content: counter(n);
+}
+
+#important .grid {
+    display: grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    grid-template-columns: repeat(auto-fit, minmax(0%, 1fr));
+}
+
+#important .hide {
+    display: none;
+}
+
+#important .outline {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+#important .transparent {
+    background-color: transparent;
+    border: none;
+}
+
+#important .transparent img[src*=".svg"] {
+    filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(0);
+}

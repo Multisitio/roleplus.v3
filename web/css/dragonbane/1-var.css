@@ -1,0 +1,19 @@
+:root {
+    --fleshbrown: #c96;
+    --leatherbrown: #963;
+    --demongreen: #00604D;
+    --dragonred: #EE3D3C;
+    --parchmentyellow: #66550022;
+    --link: var(--dragonred);
+
+    /* SRD20 */
+    --HB_Color_Background: #EEE5CE;
+    --HB_Color_Accent: lightyellow;
+    --HB_Color_HeaderUnderline: #C0AD6A;
+    --HB_Color_HorizontalRule: #9C2B1B;
+    --HB_Color_HeaderText: #58180D;
+    --HB_Color_MonsterStatBackground: #F2E5B5;
+    --HB_Color_CaptionText: #766649;
+    --HB_Color_WatercolorStain: #BBAD82;
+    --HB_Color_Footnotes: darkred;
+}

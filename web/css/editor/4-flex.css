@@ -1,0 +1,119 @@
+.flex {
+    display: flex;
+}
+
+
+/* VERTICAL ALIGN */
+
+.align-bottom {
+    align-items: end;
+}
+
+.align-middle {
+    align-items: center;
+}
+
+.align-top {
+    align-items: start;
+}
+
+
+/* HORIZONTAL ALIGN */
+
+.justify-left {
+    justify-content: left;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-right {
+    justify-content: right;
+}
+
+.space-around {
+    justify-content: space-around;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+
+/*  DIRECTION (DEFAULT: HORIZONTAL) */
+
+.rows {
+    flex-direction: row;
+}
+
+.cols {
+    flex-direction: column;
+}
+
+
+/*  FOR STACK (DEFAULT: NOWRAP) */
+
+.wrap {
+    flex-wrap: wrap;
+}
+
+
+/*  VERTICAL & HORIZONTAL AIR */
+
+.gap0 {
+    gap: 0;
+}
+
+.gap5 {
+    gap: 5px;
+}
+
+.gap10 {
+    gap: 10px;
+}
+
+.gap15 {
+    gap: 15px;
+}
+
+.gap20 {
+    gap: 20px;
+}
+
+
+/* FOR GROW ELEMENT */
+
+.grow {
+    flex-grow: 1;
+}
+
+
+/* NO SHRINK */
+
+.shrink0 {
+    flex-shrink: 0;
+}
+
+
+/* CHILDREN AS ROWS */
+
+.resultado header:has(>div),
+.resultado section:has(>div),
+.resultado footer:has(>div),
+.rows {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    width: 100%;
+}
+
+
+/* CHILDREN WITH THE SAME WIDTH */
+
+.resultado header:has(>div)>div,
+.resultado section:has(>div)>div,
+.resultado footer:has(>div)>div {
+    flex: 1;
+    width: 100%;
+}

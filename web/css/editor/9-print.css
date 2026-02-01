@@ -1,0 +1,23 @@
+@media print {
+
+    article,
+    .page {
+        margin: 0 !important;
+    }
+
+    body {
+        padding: 0 !important;
+    }
+
+    a:has(img),
+    aside,
+    .button-floating,
+    .no-print {
+        display: none !important;
+    }
+
+    .letter.portrait>div {
+        height: 10.5in !important;
+        width: 8.25in !important;
+    }
+}

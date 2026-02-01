@@ -1,0 +1,103 @@
+/* BLOQUES */
+
+.left {
+    content: "";
+    clear: both;
+    display: table;
+    margin: 10px;
+}
+
+.left>*:not(.rest) {
+    float: left;
+    margin: 10px;
+}
+
+.left>*.rest {
+    overflow: hidden;
+    padding: 10px;
+}
+
+
+/* BOTONES */
+
+a[role="button"] {
+    width: 100%;
+}
+
+.transparent,
+.transparent:focus,
+.transparent:hover {
+    background: transparent;
+    border: 0 !important;
+    box-shadow: none;
+    color: var(--primary);
+    display: inline-block;
+    font-size: .8335rem;
+    padding: 0;
+    width: unset;
+}
+
+
+/* IMÁGENES */
+
+picture {
+    border: 10px solid #fff;
+    box-shadow: var(--card-shadow);
+    display: inline-block;
+}
+
+picture h6 {
+    margin: 10px 0 0;
+    text-align: center;
+}
+
+
+/* LISTAS */
+
+ul {
+    margin-left: 15px;
+}
+
+
+/* MARGENES POR DEFECTO */
+
+#important article,
+#important button,
+#important h1,
+#important header,
+#important input,
+#important section,
+#important footer {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+
+/* SANGRÍA POR DEFECTO */
+
+#important article {
+    margin-bottom: 1rem;
+    padding: 0 1rem;
+}
+
+#important main:not(.container, .container-fluid) {
+    padding: 0;
+}
+
+
+/* TEXTOS */
+
+.truncate {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.highlight,
+::selection {
+    background-color: yellow;
+    color: #000;
+}

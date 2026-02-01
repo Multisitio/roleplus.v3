@@ -1,0 +1,284 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>ROLEplus · Realtime debug</title>
+<style>
+	body {
+		font: 14px/1.35 system-ui, Segoe UI, Roboto, Ubuntu;
+		margin: 16px;
+	}
+
+	#top {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+		margin-bottom: 12px;
+	}
+
+	.card {
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		padding: 12px;
+	}
+
+	h2 {
+		margin: 0 0 8px 0;
+		font-size: 15px;
+	}
+
+	.row {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		margin-top: 6px;
+		flex-wrap: wrap;
+	}
+
+	input[type=text] {
+		padding: 6px 8px;
+		border: 1px solid #bbb;
+		border-radius: 6px;
+		width: 100%;
+		max-width: 360px;
+	}
+
+	select,
+	button {
+		padding: 6px 10px;
+		border: 1px solid #888;
+		border-radius: 6px;
+		background: #f6f6f6;
+		cursor: pointer;
+	}
+
+	#log {
+		white-space: pre-wrap;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		padding: 10px;
+		min-height: 280px;
+		background: #0a0a0a;
+		color: #d8ffd8;
+	}
+
+	.badge {
+		display: inline-block;
+		padding: 2px 8px;
+		border-radius: 999px;
+		font-size: 12px;
+	}
+
+	.ok {
+		background: #d1fae5;
+		color: #065f46;
+		border: 1px solid #10b981;
+	}
+
+	.err {
+		background: #fee2e2;
+		color: #991b1b;
+		border: 1px solid #ef4444;
+	}
+
+	.kv {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		font-size: 12px;
+		padding: 2px 6px;
+		background: #eef2ff;
+		color: #1e3a8a;
+		border-radius: 6px;
+		margin-left: 6px;
+	}
+
+	small {
+		color: #555;
+	}
+
+	.controls {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+	}
+
+	.controls label {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+</style>
+
+<div id="top">
+	<div class="card">
+		<h2>Canal y envío</h2>
+		<div class="row">
+			<label>Canal</label>
+			<input id="canal" type="text" value="chat_TEST">
+			<button id="recon">Conectar</button>
+		</div>
+		<div class="row">
+			<label>Servicio</label>
+			<select id="svc">
+				<option value="sse">SSE (/chat/pub)</option>
+				<option value="ws">WS (eco de canal)</option>
+			</select>
+		</div>
+		<div class="row">
+			<input id="msg" type="text" placeholder="mensaje">
+			<button id="send">Enviar</button>
+		</div>
+		<div class="row controls">
+			<button id="clear">Limpiar log</button>
+			<button id="copy">Copiar log</button>
+			<label><input type="checkbox" id="showHb"> Mostrar heartbeats WS</label>
+		</div>
+	</div>
+
+	<div class="card">
+		<h2>Estado</h2>
+		<div class="row">
+			<div>SSE</div>
+			<div id="sseState" class="badge err">desconectado</div>
+			<div>último data</div>
+			<div id="sseLast" class="kv">—</div>
+		</div>
+		<div class="row">
+			<div>WS</div>
+			<div id="wsState" class="badge err">desconectado</div>
+			<div>último mensaje</div>
+			<div id="wsLast" class="kv">—</div>
+		</div>
+	</div>
+</div>
+
+<div id="log"></div>
+
+<script>
+	const $ = s => document.querySelector(s);
+	const logBox = $('#log');
+
+	function now() {
+		const d = new Date();
+		const base = new Intl.DateTimeFormat('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Europe/Madrid' }).format(d);
+		const ms = String(d.getMilliseconds()).padStart(3, '0');
+		return `${base}.${ms}`;
+	}
+	function L(line, obj) {
+		const text = `[${now()}] ${line}`;
+		console.log(text, obj ?? '');
+		logBox.textContent += text + (obj ? ' ' + JSON.stringify(obj) : '') + '\n';
+		logBox.scrollTop = logBox.scrollHeight;
+	}
+	function setBadge(el, ok) { el.textContent = ok ? 'conectado' : 'desconectado'; el.className = 'badge ' + (ok ? 'ok' : 'err'); }
+
+	let es = null, esConnecting = false;
+	let wsRx = null, wsTx = null, wsConnecting = false;
+	let currentChannel = '';
+
+	/* ====== SSE ====== */
+	function sseConnected() { return es && es.readyState === 1; }
+	function closeSSE() { if (es) { try { es.close(); } catch (_) { } } es = null; esConnecting = false; setBadge($('#sseState'), false); }
+	function openSSE(ch) {
+		if (sseConnected() || esConnecting) return;
+		esConnecting = true;
+		const url = '/chat/sse?ch=' + encodeURIComponent(ch);
+		L(`SSE conectar ${url}`);
+		es = new EventSource(url);
+		es.onopen = _ => { esConnecting = false; setBadge($('#sseState'), true); L(`SSE OPEN ch=${ch}`); };
+		es.onerror = e => {
+			setBadge($('#sseState'), false);
+			L(`SSE ERROR state=${es?.readyState}`, { type: e.type });
+		};
+		es.onmessage = e => {
+			$('#sseLast').textContent = now();
+			L('SSE DATA RAW', { data: e.data });
+			let parsed = e.data;
+			try { parsed = JSON.parse(parsed); } catch (_) { }
+			if (parsed && typeof parsed === 'object' && Object.prototype.hasOwnProperty.call(parsed, 'msg')) {
+				try { parsed = JSON.parse(parsed.msg); } catch (_) { }
+			}
+			L('SSE DATA PARSED', parsed);
+		};
+	}
+
+	/* ====== WS ====== */
+	function wsReady() { return wsTx && wsTx.readyState === 1 && wsRx && wsRx.readyState === 1; }
+	function closeWS() {
+		if (wsRx) { try { wsRx.close(); } catch (_) { } } wsRx = null;
+		if (wsTx) { try { wsTx.close(); } catch (_) { } } wsTx = null;
+		wsConnecting = false; setBadge($('#wsState'), false);
+	}
+	function openWS(ch) {
+		if (wsReady() || wsConnecting) return;
+		wsConnecting = true;
+		const url = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/chat/ws?ch=' + encodeURIComponent(ch);
+		L(`WS conectar ${url}`);
+		wsRx = new WebSocket(url);
+		wsTx = new WebSocket(url);
+
+		const onok = _ => { if (wsReady()) { wsConnecting = false; setBadge($('#wsState'), true); L(`WS OPEN ch=${ch}`); } };
+		wsRx.onopen = onok; wsTx.onopen = onok;
+
+		wsRx.onmessage = e => {
+			if (!$('#showHb').checked && e.data === 'hb') return;
+			$('#wsLast').textContent = now();
+			L('WS RECV', { data: e.data });
+			try { L('WS RECV PARSED', JSON.parse(e.data)); } catch (_) { }
+		};
+		const onerr = ev => { setBadge($('#wsState'), false); L('WS ERROR/close', { type: ev.type }); };
+		wsRx.onerror = onerr; wsTx.onerror = onerr;
+		wsRx.onclose = onerr; wsTx.onclose = onerr;
+	}
+
+	/* ====== Envío ====== */
+	async function sendSSE(ch, texto) {
+		const bodyObj = { canal: ch, msg: { texto } };
+		const body = JSON.stringify(bodyObj);
+		const t0 = performance.now();
+		L('HTTP POST /chat/pub', { headers: { 'Content-Type': 'application/json' }, body: bodyObj });
+		let res, txt;
+		try {
+			res = await fetch('/chat/pub', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+			txt = await res.text().catch(() => '');
+			L(`HTTP /chat/pub RESP`, { status: res.status, ok: res.ok, text: txt, ms: Math.round(performance.now() - t0) });
+		} catch (e) {
+			L('HTTP /chat/pub ERROR', { error: String(e) });
+		}
+	}
+	function sendWS(ch, texto) {
+		const payload = JSON.stringify({ texto });
+		L('WS SEND', { payload, ch });
+		try { wsTx && wsTx.send(payload); } catch (e) { L('WS SEND ERROR', { error: String(e) }); }
+	}
+
+	/* ====== UI ====== */
+	function connectAll(ch) { currentChannel = ch; openSSE(ch); openWS(ch); }
+	function disconnectAll() { closeSSE(); closeWS(); $('#sseLast').textContent = '—'; $('#wsLast').textContent = '—'; }
+
+	$('#recon').addEventListener('click', () => {
+		const ch = $('#canal').value.trim(); if (!ch) return;
+		disconnectAll(); connectAll(ch);
+	});
+
+	$('#send').addEventListener('click', async () => {
+		const ch = $('#canal').value.trim();
+		const via = $('#svc').value;
+		const msg = $('#msg').value.trim();
+		if (!ch || !msg) return;
+
+		if (via === 'sse') {
+			if (!sseConnected()) openSSE(ch);
+			await sendSSE(ch, msg);
+		} else {
+			if (!wsReady() || currentChannel !== ch) openWS(ch);
+			sendWS(ch, msg);
+		}
+		$('#msg').value = ''; $('#msg').focus();
+	});
+
+	$('#clear').addEventListener('click', () => { logBox.textContent = ''; });
+	$('#copy').addEventListener('click', async () => {
+		try { await navigator.clipboard.writeText(logBox.textContent); L('LOG copiado al portapapeles'); }
+		catch (e) { L('ERROR al copiar log', { error: String(e) }); }
+	});
+
+	window.addEventListener('load', () => connectAll($('#canal').value.trim()));
+</script>

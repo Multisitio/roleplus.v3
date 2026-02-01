@@ -1,0 +1,144 @@
+#important .a4 {
+    height: 100%;
+    overflow: hidden;
+}
+
+.a4.landscape {
+    width: 29.7cm;
+}
+
+.a4.portrait {
+    width: 20.99cm;
+}
+
+.end-page {
+    page-break-after: always !important;
+}
+
+footer,
+label,
+nav,
+.no-print {
+    display: none !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-block-start: 1rem;
+    margin-block-end: 0;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    color: #a65980;
+    font-size: 1.6rem;
+}
+
+h4 {
+    color: #73828c;
+    font-size: 1.4rem;
+}
+
+h5 {
+    font-size: 1.2rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+hr {
+    background: grey;
+    border: none;
+    display: inline-block;
+    height: 1px;
+    width: 100%;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.no-space {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.only-print {
+    display: block;
+}
+
+
+/*ul, img, table { page-break-inside:avoid; }*/
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul ul {
+    border-left: 1px solid #eee;
+    padding-left: 20px;
+}
+
+ul.manual>li {
+    margin-block-start: 3rem;
+}
+
+ul.manual article ul {
+    list-style: disc;
+    border-left: none;
+}
+
+ul.manual article ul ul {
+    list-style: circle;
+}
+
+ul.manual article ul ul ul {
+    list-style: disc;
+}
+
+ul.manual article ul ul ul ul {
+    list-style: circle;
+}
+
+ul.manual article ul ul ul ul ul {
+    list-style: disc;
+}
+
+ul.manual article ul ul ul ul ul ul {
+    list-style: circle;
+}
+
+.ventana.mayor {
+    top: 0;
+}
+
+.w3-card {
+    box-shadow: none;
+}
+
+@media print and (orientation: portrait) {
+    /* Reglas para imprimir en formato vertical */
+    /*.a4.landscape { height:29.7cm; }*/
+}
+
+@media print and (orientation: landscape) {
+    /* Reglas para imprimir en formato apaisado */
+    /*.a4.landscape { height:21cm; }*/
+}

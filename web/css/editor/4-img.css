@@ -1,0 +1,10 @@
+img {
+    max-width: 100%;
+}
+
+.faded {
+    display: block;
+    height: auto;
+    mask-image: radial-gradient(ellipse farthest-side, black 40%, transparent 100%);
+    max-width: 100%;
+}

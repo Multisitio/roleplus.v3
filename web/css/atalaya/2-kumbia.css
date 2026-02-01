@@ -1,0 +1,363 @@
+/* Color */
+
+:where(html) {
+    /* Border */
+    --border-box: 1px;
+    /* Color */
+    --gray-6: #868e96;
+    --stone-6: #979b9d;
+    --red-6: #fa5252;
+    --pink-6: #e64980;
+    --purple-6: #be4bdb;
+    --violet-6: #7950f2;
+    --indigo-6: #4c6ef5;
+    --blue-6: #228be6;
+    --cyan-6: #15aabf;
+    --teal-6: #12b886;
+    --green-6: #40c057;
+    --lime-6: #82c91e;
+    --yellow-6: #fab005;
+    --orange-6: #fd7e14;
+    --choco-6: #d46e25;
+    --brown-6: #a87c56;
+    --sand-6: #867c65;
+    --camo-6: #999621;
+    --jungle-6: #9bbb36;
+    /* Margin */
+    --margin-box: 5px;
+    --vertical-tag-margin: 1em;
+}
+
+[data-primary_color="gray"] {
+    --primary-color: var(--gray-6);
+}
+
+[data-primary_color="stone"] {
+    --primary-color: var(--stone-6);
+}
+
+[data-primary_color="red"] {
+    --primary-color: var(--red-6);
+}
+
+[data-primary_color="pink"] {
+    --primary-color: var(--pink-6);
+}
+
+[data-primary_color="purple"] {
+    --primary-color: var(--purple-6);
+}
+
+[data-primary_color="violet"] {
+    --primary-color: var(--violet-6);
+}
+
+[data-primary_color="indigo"] {
+    --primary-color: var(--indigo-6);
+}
+
+[data-primary_color="blue"] {
+    --primary-color: var(--blue-6);
+}
+
+[data-primary_color="cyan"] {
+    --primary-color: var(--cyan-6);
+}
+
+[data-primary_color="teal"] {
+    --primary-color: var(--teal-6);
+}
+
+[data-primary_color="green"] {
+    --primary-color: var(--green-6);
+}
+
+[data-primary_color="lime"] {
+    --primary-color: var(--lime-6);
+}
+
+[data-primary_color="yellow"] {
+    --primary-color: var(--yellow-6);
+}
+
+[data-primary_color="orange"] {
+    --primary-color: var(--orange-6);
+}
+
+[data-primary_color="choco"] {
+    --primary-color: var(--choco-6);
+}
+
+[data-primary_color="brown"] {
+    --primary-color: var(--brown-6);
+}
+
+[data-primary_color="sand"] {
+    --primary-color: var(--sand-6);
+}
+
+[data-primary_color="camo"] {
+    --primary-color: var(--camo-6);
+}
+
+[data-primary_color="jungle"] {
+    --primary-color: var(--jungle-6);
+    /*--hover-color: blue;*/
+}
+
+
+/* Theme */
+
+[data-theme="day"] {
+    --bg-color-1: #fff;
+    --bg-color-2: #eee;
+    --bg-color-3: #ddd;
+    --text-color: #111;
+}
+
+[data-theme="morning"] {
+    --bg-color-1: #eee;
+    --bg-color-2: #ddd;
+    --bg-color-3: #ccc;
+    --text-color: #000;
+}
+
+[data-theme="afternoon"] {
+    --bg-color-1: #111;
+    --bg-color-2: #222;
+    --bg-color-3: #333;
+    --text-color: #fff;
+}
+
+[data-theme="night"] {
+    --bg-color-1: #000;
+    --bg-color-2: #111;
+    --bg-color-3: #222;
+    --text-color: #eee;
+}
+
+
+/* Other vars */
+
+:root {
+    --element-bottom-margin: 15px;
+    --muted-color: rgba(153, 153, 153, .25);
+}
+
+
+/* Link and button */
+
+a {
+    color: var(--primary-color);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a[role="button"],
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    appearance: button;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #999;
+    color: #000;
+    cursor: pointer;
+    height: 40px;
+    line-height: 33px;
+    margin-bottom: var(--element-bottom-margin);
+    min-width: 40px;
+    padding: 1px 6px;
+    width: 100%;
+}
+
+a[role="button"]:active,
+button:active,
+input[type="button"]:active,
+input[type="reset"]:active,
+input[type="submit"]:active {
+    box-shadow: none;
+}
+
+a[role="button"] img[src*=".svg"],
+button img[src*=".svg"],
+input[type="button"] img[src*=".svg"],
+input[type="reset"] img[src*=".svg"],
+input[type="submit"] img[src*=".svg"] {
+    filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%);
+}
+
+
+/* Input */
+
+input[type="date"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+select {
+    background-color: var(--bg-color-1);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #999;
+    color: var(--text-color);
+    height: 40px;
+    line-height: 33px;
+    margin-bottom: var(--element-bottom-margin);
+    min-width: 40px;
+    padding: 1px 6px;
+    width: 100%;
+}
+
+input[type="date"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="number"]:focus-visible,
+input[type="search"]:focus-visible,
+input[type="text"]:focus-visible,
+select:focus-visible {
+    outline: 0 !important
+}
+
+#important [role="button"] {
+    width: fit-content;
+}
+
+
+/* Label */
+
+label {
+    display: block;
+}
+
+
+/* Radio */
+
+
+/* Select */
+
+::placeholder,
+select {
+    color: #999;
+    font-style: italic;
+    text-overflow: ellipsis;
+}
+
+option:not([value=""]) {
+    color: var(--text-color);
+    font-style: normal;
+}
+
+
+/* Main tag */
+
+body {
+    background-color: var(--bg-color-1);
+    color: var(--text-color);
+}
+
+
+/* Other tags */
+
+br {
+    clear: both;
+}
+
+
+/* Semantic box */
+
+fieldset {
+    border: var(--border-box) solid var(--muted-color);
+    width: fit-content;
+}
+
+legend {
+    border: var(--border-box) solid var(--muted-color);
+    padding: 5px 10px;
+}
+
+
+/* Horizontal scroll */
+
+figure {
+    margin: 0 0 var(--vertical-tag-margin);
+    overflow-x: auto;
+    padding: 0 var(--border-box);
+}
+
+figure table {
+    margin-top: 0;
+}
+
+figure td {
+    white-space: nowrap;
+}
+
+
+/* Header */
+
+h1 {
+    color: var(--primary-color);
+}
+
+hr {
+    border: 1px solid var(--muted-color);
+    clear: both;
+}
+
+
+/* Table */
+
+table {
+    border-spacing: 0;
+    margin: var(--vertical-tag-margin) 0;
+    text-indent: 0;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid var(--muted-color);
+    padding: 10px;
+    stroke-opacity: .5;
+}
+
+
+/* Final breakpoint */
+
+@media (max-width: 575.98px) {
+    h1 {
+        font-size: 6vw;
+    }
+}
+
+@media (min-width: 576px) {
+    h1 {
+        font-size: 5vw;
+    }
+}
+
+@media (min-width: 768px) {
+    h1 {
+        font-size: 4vw;
+    }
+}
+
+@media (min-width: 992px) {
+    h1 {
+        font-size: 3vw;
+    }
+}
+
+@media (min-width: 1200px) {
+    h1 {
+        font-size: 2vw;
+    }
+}
+
+@media (min-width: 1400px) {
+    h1 {
+        font-size: 1vw;
+    }
+}

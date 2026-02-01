@@ -1,0 +1,211 @@
+.resultado :is(h1, h5, h6),
+.resultado .medieval-sharp {
+    color: var(--dragonred);
+    font-family: 'Medieval Sharp';
+    font-size: 16pt;
+    font-style: italic;
+    text-align: center;
+}
+
+.resultado blockquote h1 {
+    color: white;
+}
+
+.resultado h1 {
+    font-size: 22pt;
+    line-height: 1;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.page article:has(>section:first-child>h1+blockquote) h1 {
+    color: #000;
+    font-size: xxx-large;
+    margin: -20px 0 20px;
+}
+
+.resultado h1+cite {
+    display: block;
+    font-family: 'Medieval Sharp';
+    font-size: 13pt;
+    text-align: right;
+}
+
+.resultado .big-letter::first-letter {
+    float: left;
+    font-family: Pamela;
+    font-size: 43pt;
+    margin-block: -6pt -20px;
+    margin-inline: 0 13px;
+}
+
+.resultado h2 {
+    background: var(--dragonred);;
+    color: white;
+    font-size: 16pt;
+    height: 38px;
+    line-height: 1;
+    margin: 15px -75px 20px 0;
+    padding: 8px 0 0 10px;
+    position: relative;
+    text-align: left;
+    text-transform: uppercase;
+    transform: translate(110px, 0);
+} 
+
+h2::before {
+    background: url(/img/editor/for_the_quest/llave_fija.svg) no-repeat center center;
+    background-size: contain;
+    content: "";
+    position: absolute;
+    left: -43px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 60px;
+}
+
+.resultado h2.to-right {
+    margin: 15px 0 20px -75px;
+    padding: 8px 10px 0 0;
+    text-align: right;
+    transform: translate(-110px, 0);
+}
+
+h2.to-right::before {
+    left: unset;
+    right: -43px;
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.resultado h3 {
+    display: table;
+    margin: 20px auto;
+    position: relative;
+    color: var(--dragonred);
+    font-size: 18pt;
+    text-transform: uppercase;
+    padding: 0 60px;
+}
+
+.page article:has(>section:first-child>h1+blockquote) h3 {
+    color: black;
+    font-style: italic;
+}
+  
+.resultado h3::before,
+.resultado h3::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 44px;
+    height: 60px;
+    background: url(/img/editor/for_the_quest/punta_de_flecha.svg?v3) no-repeat center/contain;
+    transform: translateY(-50%);
+}
+
+.page article:has(>section:first-child>h1 + blockquote) h3::after,
+.page article:has(>section:first-child>h1 + blockquote) h3::before {
+    background: url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center/contain;
+    color: black;
+}
+
+.resultado h3::before {
+    left: 0;
+}
+  
+.resultado h3::after {
+    right: 0;
+    transform: translateY(-50%) rotate(180deg);
+}  
+
+.page article:has(>section:first-child>h1+blockquote) h3::before {
+    left: 0;
+}
+
+.page article:has(>section:first-child>h1+blockquote) h3::after {
+    right: 0;
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.resultado :is(h3, h4) {
+    text-align: center;
+}
+
+.page article:has(>section:first-child>h1+blockquote) h4 {
+    padding-left: 55px;
+    position: relative;
+    text-align: left;
+}
+
+.page article:has(>section:first-child>h1+blockquote) h4:before {
+    background: url(/img/editor/for_the_quest/punta_de_flecha_negra.svg?v2) no-repeat center/contain;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 20px;
+}
+
+.resultado h5 {
+    color: white;
+    font-size: 15pt;
+}
+
+/*.resultado h6 {
+    color: #333;
+    font-size: 10pt;
+}*/
+
+.resultado h6 {
+    color: #000;
+    display: inline-block;
+    font-size: xxx-large;
+    padding: 0 68px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+  
+.resultado h6::before,
+.resultado h6::after {
+    background: url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center / contain;
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 40px;
+}
+
+.resultado h6::before {
+    left: 0;
+}
+  
+.resultado h6::after {
+    right: 0;
+    transform: translateY(-50%) rotate(180deg);
+}  
+
+.resultado :is(div, section)>:is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0;
+}
+
+.resultado hr {
+    background: url(/img/editor/for_the_quest/96/lanza_dos_puntas.webp?v2) no-repeat center/contain;
+    border: 0;
+    margin: 0 auto;
+    width: 50%;
+    height: 17px;
+}
+
+.page article:has(>section:first-child>h1+blockquote) hr {
+    background: url(/img/editor/for_the_quest/lanza_negra.svg) no-repeat center/contain;
+    width: unset;
+}
+
+blockquote hr {
+    filter: invert(1);
+}

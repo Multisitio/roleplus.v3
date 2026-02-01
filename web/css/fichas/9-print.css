@@ -1,0 +1,56 @@
+@media print {
+    /*#important .a4 {
+        height: 100%;
+        overflow: hidden;
+    }
+    .a4.landscape {
+        width: 29.7cm;
+    }
+    .a4.portrait {
+        width: 20.99cm;
+    }
+    .end-page {
+        page-break-after: always !important;
+    }
+    footer,
+    label,
+    nav,
+    .no-print {
+        display: none !important;
+    }
+    .h1 {
+        font-size: 33px;
+    }
+    .no-margin {
+        margin: 0 !important;
+    }
+    .no-padding {
+        padding: 0 !important;
+    }
+    .no-space {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .only-print {
+        display: block;
+    }
+    .ventana.mayor {
+        top: 0;
+    }
+    .w3-card {
+        box-shadow: none;
+    }*/
+    .no-print {
+        display: none !important;
+    }
+}
+
+@media print and (orientation: portrait) {
+    /* Reglas para imprimir en formato vertical */
+    /*.a4.landscape { height:29.7cm; }*/
+}
+
+@media print and (orientation: landscape) {
+    /* Reglas para imprimir en formato apaisado */
+    /*.a4.landscape { height:21cm; }*/
+}

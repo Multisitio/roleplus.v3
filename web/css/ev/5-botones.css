@@ -1,0 +1,27 @@
+#important .flotante {
+    background: var(--background);
+    border-color: var(--background);
+    border-radius: 2rem;
+    line-height: 1;
+    margin: 1rem;
+    padding: 1rem;
+    position: fixed;
+    width: auto;
+    z-index: 95;
+}
+
+.flotante.abajo {
+    bottom: 0;
+}
+
+.flotante.arriba {
+    top: 0;
+}
+
+.flotante.derecha {
+    right: 0;
+}
+
+.flotante.izquierda {
+    left: 0;
+}

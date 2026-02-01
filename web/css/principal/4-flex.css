@@ -1,0 +1,124 @@
+.flex {
+    display: flex;
+}
+
+
+/* VERTICAL ALIGN */
+
+#important .bottom,
+#important .end {
+    align-items: end;
+}
+
+#important .middle {
+    align-items: center;
+}
+
+#important .start,
+#important .top {
+    align-items: start;
+}
+
+
+/* HORIZONTAL ALIGN */
+
+.left {
+    justify-content: left;
+}
+
+.center {
+    justify-content: center;
+}
+
+.right {
+    justify-content: right;
+}
+
+.space-around {
+    justify-content: space-around;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+
+/*  DIRECTION (DEFAULT: HORIZONTAL) */
+
+.horizontal {
+    flex-direction: row;
+}
+
+.vertical {
+    flex-direction: column;
+}
+
+
+/*  FOR STACK (DEFAULT: NOWRAP) */
+
+.wrap {
+    flex-wrap: wrap;
+}
+
+
+/*  VERTICAL & HORIZONTAL AIR */
+
+.gap0 {
+    gap: 0;
+}
+
+.gap5 {
+    gap: 5px;
+}
+
+.gap10 {
+    gap: 10px;
+}
+
+
+/* FOR GROW ELEMENT */
+
+.grow {
+    flex-grow: 1;
+}
+
+
+/* NO SHRINK */
+
+.shrink0 {
+    flex-shrink: 0;
+}
+
+
+/* CHILDREN AS ROWS */
+
+header,
+section,
+footer,
+.rows {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+/* CHILDREN AS COLS */
+
+header>div,
+section>div,
+footer>div,
+.cols {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}
+
+
+/* CHILDREN WITH THE SAME WIDTH */
+
+.auto>*,
+.auto>button,
+.auto>[role="button"] {
+    flex: 1;
+    width: 100%;
+}

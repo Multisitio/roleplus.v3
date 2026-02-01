@@ -1,0 +1,12 @@
+.editor h1,
+.editor h2,
+.editor h3,
+.editor h4,
+.editor h5,
+.editor h6 {
+    color: #333;
+}
+
+.editor hr {
+    margin: 15px 0;
+}

@@ -1,0 +1,45 @@
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-family: monospace;
+    text-align: left;
+    /*word-break: break-word;*/
+}
+
+
+/* Sangria de las celdas */
+
+th,
+td {
+    padding: 5px;
+}
+
+
+/* Cebreado del cuerpo */
+
+tbody tr:nth-child(even) {
+    background-color: var(--background);
+}
+
+
+/* Linea gruesa que separa la cabecera del cuerpo */
+
+tr:last-child th {
+    border-bottom: 3px solid grey;
+}
+
+
+/* Linea gruesa que separa la primera columna del resto */
+
+tr:last-child th:first-child,
+tbody td:first-child {
+    border-right: 3px solid grey;
+    white-space: nowrap;
+}
+
+
+/* Linea que separa el columna del pie */
+
+tfoot tr:first-child {
+    border-top: 2px solid grey;
+}

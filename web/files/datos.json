@@ -1,0 +1,22 @@
+[{
+        "lugar": "Monasterio de Artheon",
+        "posY": 0,
+        "posX": 0,
+        "estado": "Amistoso",
+        "marcador": "iconGreen"
+    },
+    {
+        "lugar": "Fortaleza fantasma",
+        "posY": 100,
+        "posX": 100,
+        "estado": "Neutral",
+        "marcador": "iconWhite"
+    },
+    {
+        "lugar": "Santuario de Ignadur",
+        "posY": 300,
+        "posX": 300,
+        "estado": "Hostil",
+        "marcador": "iconRed"
+    }
+]

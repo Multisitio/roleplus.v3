@@ -1,0 +1,33 @@
+/* Ventana de notificaciones */
+
+.notificaciones div a[role="button"] {
+    border: 1px solid #999 !important;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.notificaciones a[role="button"]:hover {
+    filter: sepia(100%);
+}
+
+.notificaciones li {
+    padding-top: 10px;
+}
+
+.notificaciones li>a {
+    display: block;
+    flex-grow: 1;
+}
+
+.notificaciones em {
+    color: var(--text);
+    display: inline-block;
+    font-size: smaller;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notificaciones small {
+    color: var(--text);
+    float: right;
+}

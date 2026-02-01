@@ -1,0 +1,23 @@
+.arrow {
+    border-style: solid;
+    border-width: 30px;
+    margin: auto;
+    padding: 0;
+    width: 0;
+}
+
+.arrow.down {
+    border-color: var(--primary) transparent transparent transparent;
+}
+
+.arrow.left {
+    border-color: transparent var(--primary) transparent transparent;
+}
+
+.arrow.up {
+    border-color: transparent transparent var(--primary) transparent;
+}
+
+.arrow.right {
+    border-color: transparent transparent transparent var(--primary);
+}

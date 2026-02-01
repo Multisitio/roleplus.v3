@@ -1,0 +1,30 @@
+.resultado table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: 11px 'RecursiveVF';
+    text-align: left;
+    width: 100%;
+}
+
+.resultado th,
+.resultado td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+.resultado tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, .3);
+}
+
+.resultado tr:last-child th {
+    border-bottom: 3px solid grey;
+}
+
+.resultado .big-tr:last-child th:first-child,
+.resultado .vertical-line td:first-child {
+    border-right: 3px solid grey;
+}
+
+.resultado tfoot tr:first-child {
+    border-top: 2px solid grey;
+}

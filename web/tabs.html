@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+        
+        label {
+            display: inline-block;
+        }
+        
+        label>span {
+            border: 1px solid transparent;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            cursor: pointer;
+            display: inline-block;
+            min-height: 40px;
+            padding-block: 10px;
+            padding-inline: 24px;
+            width: fit-content;
+        }
+        
+        label:has(input:checked)>span {
+            border-top: 2px solid red;
+            border-left: 1px solid red;
+            border-right: 1px solid red;
+            box-shadow: 0 -1px 0 0 red;
+        }
+        
+        label:not(:has(input:checked))>span {
+            border-bottom: 1px solid red;
+        }
+        
+        [name*="tab-"] {
+            display: none;
+        }
+        
+        [for*="tab"]+* {
+            display: none;
+        }
+        /*label:has(input:checked)+* {
+            display: block;
+        }*/
+    </style>
+</head>
+
+<body>
+    <label for="tab-button-1">
+        <span>Tab One</span>
+        <input type="radio" name="tab-button" id="tab-button-1" checked>
+    </label>
+    <label for="tab-button-2">
+        <span>Tab Two</span>
+        <input type="radio" name="tab-button" id="tab-button-2">
+    </label>
+    <label for="tab-button-3">
+        <span>Tab Three</span>
+        <input type="radio" name="tab-button" id="tab-button-3">
+    </label>
+
+    <pre>
+        <h2>Tab One Content</h2>
+        <p>Tab content...</p>
+    </pre>
+
+    <div>
+        <h2>Tab Two Content</h2>
+        <p>Tab content...</p>
+    </div>
+
+    <div>
+        <h2>Tab Three Content</h2>
+        <p>Tab content...</p>
+    </div>
+</body>
+
+</html>

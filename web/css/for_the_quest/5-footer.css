@@ -1,0 +1,23 @@
+.page footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 22px;
+    left: 30px;
+    right: 30px;
+}
+
+.page footer::after {
+    text-align: center;
+    color: #48000c;
+    content: counter(page);
+    display: block;
+    font-family: 'Medieval Sharp';    
+    font-size: 21pt;
+    font-style: italic;
+    font-weight: bold;
+    padding: 2px 0 0;
+    width: 120px;
+    height: 30px;
+}

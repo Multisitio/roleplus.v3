@@ -1,0 +1,100 @@
+body,
+html,
+#map {
+    height: 100%;
+    width: 100vw;
+    margin: 0;
+}
+
+.control {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 666;
+    text-align: right;
+    width: 250px;
+}
+
+[type="radio"],
+[type=radio]:checked {
+    background: transparent;
+}
+
+input[type="radio"].blue {
+    border-color: var(--blue);
+}
+
+input[type="radio"].green {
+    border-color: var(--green);
+}
+
+input[type="radio"].red {
+    border-color: var(--red);
+}
+
+input[type="radio"].white {
+    border-color: var(--white);
+}
+
+input[type="radio"].yellow {
+    border-color: var(--yellow);
+}
+
+.leaflet-container {
+    background: url('/img/aplicaciones/base.jpg') center no-repeat;
+    background-size: cover;
+}
+
+#important .leaflet-control-zoom {
+    border: 0;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+#important .leaflet-control-zoom a {
+    background: var(--primary);
+    border: 0;
+    color: var(--primary-inverse);
+    padding: 0;
+    margin: 1px;
+}
+
+#important .leaflet-popup-close-button {
+    font-size: 20px;
+    right: 5px;
+    top: 5px;
+}
+
+#important .leaflet-popup-content {
+    color: var(--text);
+}
+
+#important .leaflet-popup-content-wrapper {
+    background: var(--card-background);
+    border: 2px solid var(--primary);
+    width: 275px;
+}
+
+#important .leaflet-popup-content-wrapper textarea {
+    height: 150px;
+    resize: none;
+}
+
+#important .leaflet-popup-tip {
+    background: var(--card-background);
+}
+
+main {
+    height: 100%;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+}
+
+#important .outline {
+    background: transparent;
+}
+
+.seeker {
+    border: 2px solid var(--primary);
+}

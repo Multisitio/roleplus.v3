@@ -1,0 +1,35 @@
+
+blockquote {
+    background: var(--dragonred);
+    border-style: solid;
+    border-width: 16px 16px;
+    border-image-source: url(/img/editor/for_the_quest/borde_del_bloque.svg?v4);
+    border-image-slice: 80;
+    border-image-width: 1;
+    border-image-outset: 12px 16px;
+    color: #fff;
+    margin-block: 40px;
+    margin-inline: auto;
+    padding: 0;
+    position: relative;
+}
+
+.page article:has(>section:first-child>h1+blockquote) blockquote {
+    background: none;   
+    border: none;
+    color: #000;
+    font: bold 16pt 'Medieval Sharp';
+    height: 210px;
+    margin: 0;
+    padding: 0 40px;
+    position: relative;
+    text-align: center;
+}
+
+:is(div, section)>blockquote:first-child {
+    margin-top: 20px;
+}
+
+blockquote p:last-child {
+    margin-bottom: 10px;
+}

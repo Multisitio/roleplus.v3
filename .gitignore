@@ -1,0 +1,13 @@
+private/config/
+private/temp/
+.vscode/
+*.ini
+*.log
+Thumbs.db
+Thumbs.db
+__OLD__/
+**/__OLD__/
+Thumbs.db
+__OLD__*
+**/__OLD__*
+web/img/

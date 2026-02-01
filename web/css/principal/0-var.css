@@ -1,0 +1,71 @@
+@media (max-width: 575.98px) {
+     :root {
+        --font-size: 16px;
+        --h1: 20px;
+        --h2: 19px;
+        --h3: 18px;
+        --h4: 17px;
+        --h5: 16px;
+        --h6: 15px;
+    }
+}
+
+@media (min-width: 576px) {
+     :root {
+        --font-size: 17px;
+        --h1: 21px;
+        --h2: 20px;
+        --h3: 19px;
+        --h4: 18px;
+        --h5: 17px;
+        --h6: 16px;
+    }
+}
+
+@media (min-width: 768px) {
+     :root {
+        --font-size: 18px;
+        --h1: 22px;
+        --h2: 21px;
+        --h3: 20px;
+        --h4: 19px;
+        --h5: 18px;
+        --h6: 17px;
+    }
+}
+
+@media (min-width: 992px) {
+     :root {
+        --font-size: 19px;
+        --h1: 23px;
+        --h2: 22px;
+        --h3: 21px;
+        --h4: 20px;
+        --h5: 19px;
+        --h6: 18px;
+    }
+}
+
+@media (min-width: 1200px) {
+     :root {
+        --font-size: 20px;
+        --h1: 24px;
+        --h2: 23px;
+        --h3: 22px;
+        --h4: 21px;
+        --h5: 20px;
+        --h6: 19px;
+    }
+}
+
+@media (min-width: 1920px) {
+     :root {
+        --font-size: 21px;
+        --h1: 25px;
+        --h2: 24px;
+        --h3: 23px;
+        --h4: 22px;
+        --h5: 21px;
+        --h6: 20px;
+    }
+}

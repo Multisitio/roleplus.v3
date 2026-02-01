@@ -1,0 +1,44 @@
+#important article .preview {
+    padding: 0;
+}
+
+#important .preview h3 {
+    display: flex;
+}
+
+#important .preview h3 a {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#important .preview h3 button {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    margin-left: -1px;
+}
+
+.preview .images-to-load {
+    position: relative;
+    width: 100%;
+}
+
+.preview .images-to-load img {
+    width: 100%;
+}
+
+.preview .images-to-load button {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
+.preview .images {
+    justify-content: space-between;
+}
+
+.preview .images picture img,
+.preview>img {
+    filter: drop-shadow(0 0 2px grey);
+    margin: auto;
+    width: calc(100% - 10px);
+}

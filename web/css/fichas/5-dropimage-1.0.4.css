@@ -1,0 +1,47 @@
+.dropimage {
+    border: 3px dashed grey;
+    min-height: 150px;
+    position: relative;
+}
+
+.dropimage:after {
+    content: "+";
+    font-size: 72px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.dropimage:hover:after,
+.dropimagehover:after {
+    color: grey;
+    content: "Drop image";
+    font-size: 30px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.dropimage input {
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+}
+
+.dropimage img {
+    width: 100%;
+}
+
+.dropnocontent:after {
+    content: "" !important;
+}

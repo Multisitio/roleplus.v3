@@ -1,0 +1,40 @@
+.tabs header {
+    background: transparent !important;
+    display: inline-flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tabs header .tab {
+    background: rgba(153, 153, 153, .25);
+    border: 1px solid transparent !important;
+    border-radius: 5px 5px 0 0;
+    box-shadow: none !important;
+    margin: 0 5px;
+}
+
+.tabs header .active {
+    border: 1px solid var(--background-card);
+    border-bottom: 1px solid transparent;
+    background: var(--background-card);
+}
+
+.tabs.inside {
+    display: flex;
+}
+
+.tabs.inside>* {
+    border: 1px solid transparent !important;
+    border-bottom: 1px solid var(--primary) !important;
+    border-radius: 5px 5px 0 0;
+    box-shadow: none !important;
+    flex-grow: 1;
+    margin: 0;
+}
+
+.tabs.inside .active {
+    border: 1px solid var(--primary) !important;
+    border-bottom: 1px solid transparent !important;
+}

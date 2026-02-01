@@ -1,0 +1,15 @@
+form small,
+input:not([type=checkbox]):not([type=radio]),
+label,
+select,
+textarea {
+    display: block;
+    width: 100%;
+}
+
+input:not([type=checkbox]):not([type=radio]),
+.dropimage,
+select,
+textarea {
+    margin-bottom: 20px;
+}

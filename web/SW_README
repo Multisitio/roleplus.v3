@@ -1,0 +1,107 @@
+# ROLEplus — README.txt (estado actual de Service Worker / Worker / Push)
+
+## ARCHIVOS EN PRODUCCIÓN
+
+1. /javascript/worker.js
+
+   * Registra el SW en /sw.js usando la MISMA query de versión que el propio script.
+   * Evita doble inicialización.
+   * Si recibe el mensaje "SW_UNREGISTERED" del SW, recarga una vez la página.
+
+   Carga correcta en el template:
+
+   <script src="/javascript/worker.js?v=<?= $version ?>" defer></script>
+
+   (NO usar APP_VERSION aquí.)
+
+2. /sw.js
+
+   * Minimalista y seguro.
+   * install/activate: sin precache.
+   * fetch: NO intercepta (todo va a red).
+   * push: muestra notificaciones con el payload enviado por el servidor.
+   * notificationclick: abre/enfoca la URL recibida en el payload (campo "url").
+
+   Payload esperado del servidor:
+   {
+   "title": "...",
+   "body": "...",
+   "icon": "/img/logos/icon-192x192.png",
+   "badge": "/img/logos/badge.png",
+   "url": "/ruta/destino",
+   "requireInteraction": false,
+   "vibrate": [100,200,100,100,75,25,100,200,100,500]
+   }
+
+3. /javascript/push.js
+
+   * Suscripción mínima a Web Push con la clave VAPID pública actual.
+   * Pide permiso de notificaciones, obtiene/crea la PushSubscription y la envía al servidor.
+   * Reintenta la sincronización cuando cambia el controlador del SW.
+   * Expone en consola: RoleplusPush.resync()
+
+   Parámetros/constantes:
+   VAPID_PUBLIC = BKqpZbaUN6i-UhOBU2vKvTFg1H3iEL_KgSR8ai1C1t6TV_DaFxgXvITtG5PLNq3s5d4D8EqhTB0r1QzWC5y6n50
+   SUB_URL      = /registrados/notificaciones/suscribirse
+   Headers      = Content-Type: application/json, Accept: application/json, X-Requested-With: XMLHttpRequest
+   Credenciales = same-origin
+   Body         = JSON.stringify(subscription)  (usa toJSON() de PushSubscription)
+
+## BACKEND RELACIONADO (resumen)
+
+* Controlador: NotificacionesController
+
+  * suscribirse(): delega en Suscripciones->suscribirse() y responde JSON {"ok": true}
+  * prueba_push(): envía una notificación de prueba al usuario logueado y responde {"ok": true}
+  * unsuscribirse(): existe pero NO lo usa el cliente actual.
+
+* Modelo: Suscripciones (guarda/actualiza por endpoint + keys y limpia endpoints inválidos al enviar).
+
+## FLUJO DE VERSIONADO / DESPLIEGUE
+
+* El template inyecta $version en la URL de /javascript/worker.js.
+* worker.js lee su ?v=... y registra /sw.js?v=misma_versión.
+* Para forzar actualización a TODO el mundo:
+
+  1. Cambiar $this->version (por ejemplo '251009') y desplegar.
+  2. Los clientes descargarán el nuevo worker y éste registrará el nuevo SW versionado.
+  3. No hace falta pedir al usuario que borre nada manualmente.
+
+## CÓMO VERIFICAR RÁPIDO
+
+1. En consola:
+
+   * RoleplusPush.resync()
+   * navigator.serviceWorker.ready.then(r => r.pushManager.getSubscription()).then(s => console.log('sub?', !!s, s && s.endpoint));
+   * fetch('/registrados/notificaciones/prueba_push').then(r => r.json()).then(console.log)
+2. DevTools > Application > Service Workers:
+
+   * Debe aparecer /sw.js (Running / Activated, con la versión correcta si miras el query).
+3. DevTools > Network:
+
+   * POST a /registrados/notificaciones/suscribirse con status 200 y cuerpo {"ok":true}.
+
+## CÓMO DESACTIVAR RÁPIDO (TEMPORAL)
+
+* Quitar del template la línea del worker:
+
+  <script src="/javascript/worker.js?v=<?= $version ?>" defer></script>
+* Subir nueva $version para que todos carguen el HTML sin el registro del SW.
+* (Opcional avanzado) Publicar un sw.js “killer” que haga self.registration.unregister() y responda postMessage("SW_UNREGISTERED") a los clientes; NO es necesario con la estrategia anterior.
+
+## ERRORES HABITUALES Y LECTURA
+
+* 401 en /registrados/notificaciones/suscribirse → el usuario no está logueado.
+* 404 en /registrados/notificaciones/suscribirse → ruta mal puesta en push.js (SUB_URL).
+* “Fetch failed loading: POST {PH3}” con status 200 → el navegador sigue mostrando el log genérico, pero la petición realmente devolvió 200; verificar en la pestaña Network el status y el body.
+* “Permission ‘denied’” → el usuario rechazó notificaciones; el script no insistirá.
+* Si no llegan notificaciones:
+
+  * Comprobar que hay suscripción en DB para ese usuarios_idu.
+  * Usar /registrados/notificaciones/prueba_push para validar el envío.
+  * Ver que el SW esté activo y que el payload incluya “title” y “body”.
+
+## NOTAS
+
+* sw.js actual NO cachea nada (fetch passthrough). Si se quiere cache controlado en el futuro, sólo para assets estáticos con query ?v= y sin tocar tráfico dinámico.
+* Mantener siempre el pareado de versión: worker.js?v=X → registra /sw.js?v=X. Esto evita “zombis” de SW antiguos.

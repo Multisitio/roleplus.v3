@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+	<meta charset="utf-8">
+	<title>Kumbia Vanilla — Test Suite</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" href="./kumbia.js.test.css">
+</head>
+
+<body>
+	<header>
+		<h1>Kumbia Vanilla — Test Suite</h1>
+		<nav data-role="summary" aria-label="resumen">
+			<span>Total: <b data-out="total">0</b></span>
+			<span><i data-kind="dot" data-state="ok"></i> OK: <b data-out="oks">0</b></span>
+			<span><i data-kind="dot" data-state="fail"></i> Fallos: <b data-out="fails">0</b></span>
+		</nav>
+		<a href="#" rel="run">Re-ejecutar</a>
+	</header>
+
+	<main>
+		<section data-role="cards" role="list"></section>
+
+		<!-- Playground -->
+		<section data-role="playground" hidden>
+			<section data-ref="ajax-target"></section>
+			<a data-ajax href="/mock/get1">enlace ajax</a>
+
+			<section data-ref="form-target"></section>
+			<form action="/mock/postNormal" data-ajax>
+				<input type="text" name="foo" value="bar">
+				<button type="submit" name="submitBtn" value="clicked">Enviar</button>
+			</form>
+
+			<section data-ref="form-target-append"></section>
+			<form action="/mock/postAppend" data-ajax_append>
+				<input type="text" name="a" value="1">
+				<button type="submit">Append</button>
+			</form>
+
+			<section data-ref="form-target-prepend"><span>seed</span></section>
+			<form action="/mock/postPrepend" data-ajax_prepend>
+				<input type="text" name="b" value="2">
+				<button type="submit">Prepend</button>
+			</form>
+
+			<section data-ref="live-target"></section>
+			<input data-live data-href="/mock/search" value="">
+
+			<section data-ref="sel-target"></section>
+			<select data-ajax data-href="/mock/option/">
+				<option value="">-</option>
+				<option value="A">A</option>
+				<option value="B">B</option>
+			</select>
+
+			<select data-redirect="#goto-">
+				<option value="">-</option>
+				<option value="x">x</option>
+			</select>
+
+			<nav data-group="tabs">
+				<button>Uno</button>
+				<button>Dos</button>
+				<button>Tres</button>
+			</nav>
+
+			<button data-alert="hola">alert</button>
+			<button data-confirm="¿seguro?">confirm</button>
+
+			<section><span data-mark>x</span></section>
+			<section></section>
+			<button data-clone_append>clone</button>
+
+			<section style="display: none">fx</section>
+			<button data-show>show</button>
+			<button data-hide>hide</button>
+			<button data-toggle>toggle</button>
+			<button data-fadeOut>fade</button>
+
+			<section style="display: none; padding: 4px; background: #172033">slide</section>
+			<button data-slideDown>slideDown</button>
+
+			<button data-click>click</button>
+			<button data-proxy>proxy</button>
+
+			<section><button data-remove="parent">rm</button></section>
+			<section>
+				<section><button data-remove="parent parent">rm</button></section>
+			</section>
+			<section data-ref="rmSel"></section><button data-remove='section[data-ref="rmSel"]'>rm</button>
+
+			<section data-ref="sty"></section><button data-style='section[data-ref="sty"], color: red;'>style</button>
+
+			<section data-role="tcbox"></section>
+			<button data-toggle_class='active, section[data-role="tcbox"]'>toggleClass</button>
+
+			<section>
+				<section data-disp></section>
+				<section data-disp data-display="flex" style="display: none"></section>
+			</section>
+			<button data-toggle_display>toggleDisplay</button>
+
+			<section data-role="group">
+				<section data-grp="alpha"><input value="preset"></section>
+				<section data-grp="beta"><input value="preset"></section>
+			</section>
+			<select data-change_toggle>
+				<option value="">-</option>
+				<option value="alpha">alpha</option>
+			</select>
+		</section>
+	</main>
+
+	<script src="./kumbia.js"></script>
+	<script src="./kumbia.js.test.js"></script>
+</body>
+
+</html>

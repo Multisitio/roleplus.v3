@@ -1,0 +1,268 @@
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    color: yellow;
+}
+
+a.activo {
+    color: #E50914;
+}
+
+body {
+    background: #000;
+    color: #EEE;
+    height: 100%;
+}
+
+.fondo {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    width: 50%;
+}
+
+.filtros>a {
+    margin: 18px 10px;
+}
+
+.filtros div {
+    background: #222;
+    font-size: smaller;
+    position: absolute;
+    left: 0;
+    top: 50px;
+    z-index: 6;
+    text-align: center;
+    width: 165px;
+}
+
+.filtros div a {
+    display: block;
+    padding: 10px;
+}
+
+.filtros div a:hover {
+    background: #444;
+}
+
+hr {
+    opacity: 0.1;
+    margin: 5px 0;
+}
+
+html {
+    height: 100%;
+}
+
+input[type="text"] {
+    background: transparent;
+    border: 0;
+    color: #CCC;
+    width: 100%;
+}
+
+input:focus {
+    outline: 0;
+}
+
+
+/* Change Autocomplete styles in Chrome*/
+
+input:-internal-autofill-selected {
+    background: #222;
+    color: #CCC;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #CCC;
+    box-shadow: 0 0 0 0 #333 none;
+}
+
+label {
+    color: #999;
+    display: block;
+    font-size: smaller;
+}
+
+nav {
+    background: #222;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 6;
+}
+
+nav>div {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav .grow {
+    flex-grow: 1;
+}
+
+nav form.buscador {
+    background: #333;
+    border-radius: 5px;
+    flex-grow: 1;
+    padding: 5px;
+}
+
+nav form.buscador input {
+    background: transparent;
+    border: none;
+    vertical-align: middle;
+    width: calc(100% - 50px);
+}
+
+nav form.buscador input:-internal-autofill-selected {
+    background: #333 !important;
+}
+
+nav form.buscador button {
+    background: transparent;
+    border: none;
+}
+
+nav form.buscador button i {
+    color: #EEE;
+}
+
+nav .logo {
+    color: #E50914;
+    display: inline-block;
+    font-size: 28px;
+    padding: 0 0 0 10px;
+}
+
+nav .icono {
+    margin: 0 10px;
+}
+
+nav .avatar {
+    margin: 0 0 0 10px;
+}
+
+.otros-datos {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 5px;
+    font-size: smaller;
+    width: 100%;
+}
+
+.otros-datos-velo {
+    background: #000;
+    opacity: .75;
+    height: 28px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.sitio label input {
+    margin: 5px 10px 0 0;
+}
+
+.sitio label span {
+    margin: 2px 0 0;
+}
+
+.titulo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2px 10px 0;
+}
+
+.titulo-velo {
+    background: #000;
+    opacity: .75;
+    height: 42px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.canal {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    padding: 0 10px;
+}
+
+.velo {
+    background: #000;
+    opacity: .6;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 5;
+    height: 100%;
+    width: 100%;
+}
+
+.ventana {
+    background: #333;
+    color: #CCC;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50px;
+    z-index: 6;
+    max-height: calc(100% - 70px);
+    overflow-y: auto;
+    max-width: 530px;
+    width: 90%;
+}
+
+.etiquetas input {
+    vertical-align: middle;
+}
+
+[class*="caja-"] {
+    z-index: 1 !important;
+}
+
+@media (max-width:600px) {
+    #important .s0 {
+        display: none;
+    }
+}
+
+@media (min-width:601px) and (max-width:992px) {
+    #important .m0 {
+        display: none;
+    }
+}
+
+@media (min-width:993px) and (max-width:1200px) {
+    #important .l0 {
+        display: none;
+    }
+}
+
+@media (min-width:1201px) {
+    #important .xl0 {
+        display: none;
+    }
+}

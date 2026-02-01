@@ -1,0 +1,12 @@
+aside {
+    background: white;
+    box-shadow: -5px 0px 15px 5px grey;
+    height: 100%;
+    max-width: 250px;
+    overflow-y: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+}

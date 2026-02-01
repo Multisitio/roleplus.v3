@@ -1,0 +1,57 @@
+nav {
+    background: var(--primary);
+    box-shadow: 0 2px 2px #999;
+    display: flex;
+    gap: 5px;
+    height: 48px;
+    justify-content: space-between;
+    padding: 5px;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+}
+
+nav form {
+    max-width: calc(100% - 56px);
+}
+
+nav form:focus-visible {
+    display: flex !important;
+}
+
+nav form select {
+    flex-shrink: 0;
+    width: auto;
+}
+
+@media (max-width: 575.98px) {
+    nav form select {
+        flex-shrink: 1;
+    }
+}
+
+.nav-air {
+    height: 73px;
+}
+
+.persiana {
+    background-color: var(--background-card);
+    border-bottom: 4px solid var(--primary);
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -25px;
+    max-width: 800px;
+    padding: 10px;
+    width: 100%
+}
+
+
+/*.persiana form {
+    display: flex;
+    gap: 5px;
+}
+
+.persiana form button {
+    flex-shrink: 0;
+}*/

@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'Medieval Sharp';
+    src: url('/fonts/medieval_sharp/regular.woff2?v2');
+}
+ 
+@font-face {
+    font-family: 'Minion Pro';
+    src: url('/fonts/minion_pro/regular.woff2');
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'Myriad Pro';
+    src: url('/fonts/myriad_pro/regular.woff2');
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'Pamela';
+    src: url('/fonts/pamela/regular.woff2?v2');
+    font-weight: normal;
+    font-style: normal
+}

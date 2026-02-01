@@ -1,0 +1,80 @@
+:root {
+    --block-round: 15px;
+    --button-round: 5px;
+    --padding-grid: 10px;
+    --padding-primary: 20px;
+}
+
+blockquote {
+    border-left: 4px solid #eee;
+    font-size: smaller;
+    margin-left: 5px;
+    margin-top: 0;
+    padding-left: 30px;
+}
+
+.clear {
+    clear: both;
+}
+
+.dropimage {
+    min-height: 150px;
+}
+
+.fixed-bottom-right {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+input[type="number"] {
+    max-width: 70px;
+}
+
+.m0a {
+    margin: 0 auto;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+p {
+    margin: 0 0 20px;
+}
+
+.photo {
+    height: 300px;
+}
+
+.pl0 {
+    padding-left: 0;
+}
+
+.pl5 {
+    padding-left: 5px;
+}
+
+::placeholder {
+    color: #CCC;
+    font-style: italic;
+}
+
+.red {
+    color: red;
+}
+
+.retrato>div {
+    border: 3px dashed grey;
+    height: 150px;
+}
+
+.row div:not(.clear),
+.row small:not(.clear) {
+    padding-bottom: 4px;
+}
+
+textarea {
+    height: 120px;
+    width: 100%;
+}

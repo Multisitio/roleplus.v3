@@ -1,0 +1,57 @@
+.flex-row {
+    display: flex;
+    margin: 0 -0.5rem;
+    align-items: stretch;
+}
+
+.flex-row [class*="flex-"] {
+    padding: 0 0.5rem;
+}
+
+.flex-s1 {
+    flex: 0 0 8.33333%;
+}
+
+.flex-s2 {
+    flex: 0 0 16.66666%;
+}
+
+.flex-s3 {
+    flex: 0 0 24.99999%;
+}
+
+.flex-s4 {
+    flex: 0 0 33.33333%;
+}
+
+.flex-s5 {
+    flex: 0 0 41.66666%;
+}
+
+.flex-s6 {
+    flex: 0 0 49.99999%;
+}
+
+.flex-s7 {
+    flex: 0 0 58.33333%;
+}
+
+.flex-s8 {
+    flex: 0 0 66.66666%;
+}
+
+.flex-s9 {
+    flex: 0 0 74.99999%;
+}
+
+.flex-s10 {
+    flex: 0 0 83.33333%;
+}
+
+.flex-s11 {
+    flex: 0 0 91.66666%;
+}
+
+.flex-s12 {
+    flex: 1 1 100%;
+}

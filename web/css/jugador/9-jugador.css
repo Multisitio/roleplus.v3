@@ -1,0 +1,49 @@
+article footer a[role="button"],
+article footer button {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+article img {
+    vertical-align: text-top;
+}
+
+.elementos-boton {
+    background: var(--background);
+    border: 0;
+    border-radius: 50%;
+    padding: 20px;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 69px;
+}
+
+.fondo {
+    background: url('/img/aplicaciones/cuadricula.jpg') center no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    z-index: -1;
+}
+
+.menu {
+    position: fixed;
+    left: 15px;
+    top: 15px;
+    z-index: 1;
+}
+
+.perfil {
+    position: fixed;
+    right: 15px;
+    top: 15px;
+    z-index: 1;
+}

@@ -1,0 +1,61 @@
+/* Estilos para la página de aterrizaje */
+
+.landing-page {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+}
+
+.landing-page h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.landing-page p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.plan-section {
+    margin-bottom: 50px;
+}
+
+.plan-section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.plan-section p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.plan-section button {
+    font-size: 18px;
+    background-color: #4caf50;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.testimonials {
+    margin-top: 50px;
+}
+
+.testimonials h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.testimonial {
+    margin-bottom: 20px;
+}
+
+.testimonial p {
+    font-size: 18px;
+}
+
+.testimonial p:last-child {
+    font-style: italic;
+}

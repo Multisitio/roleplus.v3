@@ -1,0 +1,1 @@
+.usuario h1,.usuario h2{display:flex;gap:5px}.perfil article{margin-bottom:25px}.perfil section:first-child{display:flex;gap:5px;justify-content:space-between;padding-bottom:5px;padding-top:5px}.clasificado_por.etiquetas{display:flex;flex-wrap:wrap;gap:5px}.clasificado_por.fecha li{padding:5px 0 0}.clasificado_por.fecha ul ul{border-left:1px solid var(--primary);margin-left:10px}

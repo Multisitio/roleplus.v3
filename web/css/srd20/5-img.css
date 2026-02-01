@@ -1,0 +1,132 @@
+.cards > img {
+    float: left;
+    width: 224px;
+}
+
+.page-2 {
+    -webkit-mask-image: linear-gradient(
+        110deg,
+        rgba(0, 0, 0, 0) 62%,
+        rgba(0, 0, 0, 1) 100%
+    );
+    mask-image: linear-gradient(
+        105deg,
+        rgba(0, 0, 0, 0) 62%,
+        rgba(0, 0, 0, 1) 100%
+    );
+}
+
+.cards picture {
+    float: left;
+    position: relative;
+    height: 319.8px;
+    width: 224px;
+}
+
+.horizontal-cards picture {
+    display: block;
+    height: 224px;
+    width: 319.8px;
+}
+
+picture [src*="card.jpg"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+picture [src*="/card/defense.jpg"] {
+    position: absolute;
+    right: 7px;
+    bottom: 81px;
+    z-index: 1;
+    width: 28px;
+}
+
+picture [src*="/card/weight.jpg"] {
+    position: absolute;
+    left: 7px;
+    bottom: 81px;
+    z-index: 1;
+    width: 28px;
+}
+
+picture [src*="/card/images/"] {
+    position: absolute;
+    left: 6px;
+    top: 60px;
+    z-index: 1;
+    width: 212px;
+}
+
+picture [src*="/card/coins/"] {
+    position: absolute;
+    right: 6px;
+    top: 60px;
+    z-index: 2;
+    width: 50px;
+}
+
+picture .title {
+    /*background: rgba(0, 0, 0, 0.2);*/
+    color: #634a39;
+    font: 14px "BerkshireSwash";
+    position: absolute;
+    left: 43px;
+    top: 16px;
+    z-index: 1;
+    width: 133px;
+    text-align: center;
+}
+
+picture .price {
+    color: #634a39;
+    font: bold 25px "BookInsanity";
+    position: absolute;
+    right: 7px;
+    top: 71px;
+    z-index: 3;
+    width: 48px;
+    text-align: center;
+    text-shadow: 1px 1px 0 white;
+}
+
+picture .weight {
+    color: white;
+    font: 17px "MrEaves";
+    letter-spacing: -1px;
+    position: absolute;
+    left: 7px;
+    bottom: 81px;
+    z-index: 2;
+    width: 28px;
+    text-align: center;
+}
+
+picture .description {
+    color: black;
+    font: bold 0.6rem "BookInsanity";
+    position: absolute;
+    left: 20px;
+    bottom: 14px;
+    z-index: 2;
+    width: 184px;
+    height: 47px;
+    text-shadow: 0 0 3px white;
+}
+
+picture .description.long {
+    bottom: 122px;
+}
+
+picture .defense {
+    color: white;
+    font: 12px "MrEaves";
+    line-height: 10px;
+    position: absolute;
+    right: 7px;
+    bottom: 88px;
+    z-index: 2;
+    width: 28px;
+    text-align: center;
+}

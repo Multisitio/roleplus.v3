@@ -1,0 +1,35 @@
+.modal {
+    background: var(--background-card);
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 99;
+    text-align: initial;
+}
+
+.max-width-xxl {
+    max-width: 1920px;
+}
+
+.modal header,
+.modal section,
+.modal footer {
+    padding: 5px;
+}
+
+.modal header [data-hide] {
+    float: right;
+}
+
+
+/*.modal li a img:not([src*='svg']) {
+    height: 60px;
+    width: 60px;
+}*/

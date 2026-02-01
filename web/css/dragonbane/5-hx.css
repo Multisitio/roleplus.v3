@@ -1,0 +1,170 @@
+.resultado h1,
+.resultado h2,
+.resultado h3,
+.resultado h4,
+.resultado h5,
+.resultado caption,
+.resultado th {
+    font-family: 'Colus';
+    font-variant: small-caps;
+    font-weight: normal;
+    line-height: 100%;
+}
+
+.resultado h1,
+.resultado h2,
+.resultado h4 {
+    margin-bottom: 5px;
+}
+
+.resultado h1 {
+    color: var(--dragonred);
+    font-size: 48pt;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+.resultado h1+hr {
+    border-image: url("data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(238, 61, 60)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(238, 61, 60)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(238, 61, 60)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(238, 61, 60)'/></svg>") 16 8;
+    border-style: solid;
+    border-width: 0 32px 16px;
+    width: 50%;
+}
+
+.resultado :is(:is(h1, h2):first-child + p, section:has(:is(h1, h2)) + section > div:first-child > p:first-child)::first-letter {
+    color: transparent;
+    background-clip: text;
+    background-image: linear-gradient(-45deg, #322814, #006600, #322814);
+    float: left;
+    font-family: 'Colus';
+    font-size: 43pt;
+    line-height: 1.2;
+    margin: -6px 0 -16px 0;
+    padding: 0 10px 0 0;
+}
+
+.resultado section:has(h1)+section p:first-child {
+    color: var(--leatherbrown);
+}
+
+.resultado h2 {
+    background-image: linear-gradient(-45deg, #322814, #006600, #322814);
+    background-clip: text;
+    color: var(--demongreen);
+    /*display: flex; -> conflicto con text-align:center del padre */
+    font-size: 18pt;
+    padding-top: 10px;
+}
+
+.resultado h2~p {
+    color: var(--demongreen);
+}
+
+.resultado h3 {
+    border-bottom: 2px solid var(--leatherbrown);
+    color: var(--leatherbrown);
+    font-size: 12pt;
+}
+
+.resultado h3+p {
+    color: var(--leatherbrown);
+}
+
+.resultado div>:is(h1, h2, h3, h4, h5, h6):first-child {
+    padding-top: 0;
+}
+
+.resultado h4 {
+    font-size: 11pt;
+    padding-top: 10px;
+    text-transform: uppercase;
+}
+
+.resultado h3+h4 {
+    padding-top: 0;
+}
+
+.resultado h5 {
+    background-image:
+        url("data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>"),
+        url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>"),
+        url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/></svg>");
+    background-position: center, left center, right;
+    background-repeat: no-repeat;
+    background-size: calc(100% - 40px) 100%, 30px 40px, 30px 40px;
+    color: white;
+    font-size: 14pt;
+    height: 40px;
+    inset: -28px 0 auto;
+    margin-inline: auto;
+    padding: 0 20px;
+    place-content: center;
+    width: fit-content;
+}
+
+.page h5 {
+    filter: var(--tone, none);
+}
+
+.page .magic,
+.page .magic h5 {
+    --tone: hue-rotate(110deg);
+}
+
+.page .event,
+.page .event h5 {
+    --tone: hue-rotate(42deg);
+}
+
+.page .plant,
+.page .plant h5 {
+    --tone: hue-rotate(312deg);
+}
+
+.page .pnj,
+.page .pnj h5 {
+    --tone: hue-rotate(282deg) brightness(1.25);
+}
+
+.page .gold-item,
+.page .gold-item h5 {
+    --tone: hue-rotate(242deg) brightness(2);
+}
+
+.page .condition,
+.page .condition h5 {
+    --tone: hue-rotate(170deg);
+}
+
+.page .monster,
+.page .monster h5 {
+    --tone: hue-rotate(192deg) saturate(1.25);
+}
+
+.page .silver-item,
+.page .silver-item h5 {
+    --tone: saturate(0) brightness(1.25);
+}
+
+.page .bronze-item,
+.page .bronze-item h5 {
+    --tone: hue-rotate(212deg) brightness(1.25);
+}
+
+.resultado h5+p {
+    color: var(--demongreen);
+}
+
+.resultado h6 {
+    font-family: 'WalterTurncoat';
+    font-size: 12px;
+}
+
+.resultado hr:not(h1+hr) {
+    border-image: url("data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(0, 96, 77)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(0, 96, 77)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(0, 96, 77)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(0, 96, 77)'/></svg>") 16 8;
+    border-style: solid;
+    border-width: 0 32px 16px;
+    width: 50%;
+}

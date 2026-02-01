@@ -1,0 +1,14 @@
+/*main {
+    min-height: calc(100vh - 170px);
+}*/
+
+body>footer {
+    background: var(--primary);
+    justify-content: space-around;
+    height: 48px;
+    width: 100%;
+}
+
+body>footer>* {
+    margin: 0 0 10px;
+}

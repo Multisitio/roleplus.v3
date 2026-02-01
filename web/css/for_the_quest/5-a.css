@@ -1,0 +1,38 @@
+
+.page a[href^="#"]{
+    align-items: center;
+    color: #48000c;
+    display: grid;
+    font-family: 'Medieval Sharp';
+    font-size: 18pt;
+    font-style: italic;
+    font-weight: bold;
+    gap: 10px;
+    grid-template-columns: auto 1fr auto;
+    line-height: 1.9;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.page a[href^="#"]::after{
+    background: linear-gradient(currentColor 0 0) left center/100% 2px no-repeat, url("/img/editor/for_the_quest/96/lanza_punta_derecha.webp?v2") right center/auto 14px no-repeat;
+    content: "";
+    grid-column: 2;
+    grid-row: 1;
+    height: 14px;
+    width: 100%;
+}
+
+.page a[href^="#"]:has(span) span:first-child{
+    grid-column: 1;
+}
+
+.page a[href^="#"]:has(span) span:last-child{
+    grid-column: 3;
+    width: 45px;
+}
+
+.page :is(em, strong) {
+    color: var(--dragonred);
+}

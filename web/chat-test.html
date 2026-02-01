@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>ROLEplus · Prueba SSE/WS</title>
+	<style>
+		:root {
+			--ok: #0a7b34;
+			--bad: #9b1c1c;
+			--bg: #f6f7f8;
+			--bd: #d6d8db;
+		}
+
+		html,
+		body {
+			height: 100%;
+		}
+
+		body {
+			margin: 18px;
+			font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+			background: var(--bg);
+		}
+
+		.toolbar {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			flex-wrap: wrap;
+			margin-bottom: 14px;
+		}
+
+		.toolbar label {
+			font-weight: 600;
+		}
+
+		.toolbar input[type=text] {
+			width: 420px;
+			padding: 6px 8px;
+			border: 1px solid var(--bd);
+			border-radius: 6px;
+		}
+
+		.toolbar select,
+		.toolbar button {
+			padding: 6px 10px;
+			border: 1px solid var(--bd);
+			background: #fff;
+			border-radius: 6px;
+			cursor: pointer;
+		}
+
+		.hint {
+			color: #666;
+			font-size: 12px;
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 16px;
+		}
+
+		.card {
+			background: #fff;
+			border: 1px solid var(--bd);
+			border-radius: 10px;
+			padding: 12px;
+			min-height: 180px;
+		}
+
+		.card h2 {
+			margin: 0 0 10px;
+			font-size: 16px;
+		}
+
+		.state {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 10px;
+		}
+
+		.dot {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: var(--bad);
+		}
+
+		.dot.ok {
+			background: var(--ok);
+		}
+
+		.mono {
+			font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+			font-size: 12px;
+		}
+
+		.box {
+			border: 1px dashed var(--bd);
+			border-radius: 8px;
+			padding: 8px;
+			background: #fff;
+			min-height: 120px;
+			max-height: 260px;
+			overflow: auto;
+			white-space: pre-wrap;
+		}
+
+		.row {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			margin-top: 8px;
+		}
+
+		.muted {
+			color: #666;
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			border: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<header class="toolbar" role="group" aria-label="Controles">
+		<label for="canal">Canal:</label>
+		<input id="canal" type="text" value="notificaciones_3fc4b9f1" autocomplete="off" spellcheck="false" inputmode="latin">
+		<label for="modo">Enviar por:</label>
+		<select id="modo" aria-label="Modo de envío">
+			<option value="sse">SSE</option>
+			<option value="ws">WS</option>
+		</select>
+		<button id="btnPublicar" type="button">Publicar evento</button>
+		<span class="hint">Publicar envía <span class="mono">{ canal, url }</span> por el modo seleccionado.</span>
+	</header>
+
+	<main class="grid">
+		<section class="card" aria-labelledby="sseTitle">
+			<h2 id="sseTitle">SSE</h2>
+			<div class="state">
+				<span id="sseDot" class="dot" aria-hidden="true"></span>
+				<span id="sseTxt" class="muted">Desconectado</span>
+			</div>
+			<div id="sseLog" class="box mono muted" aria-live="polite">(sin eventos)</div>
+			<div class="row" role="group" aria-label="Acciones SSE">
+				<button id="btnSubSSE" type="button">Suscribir SSE</button>
+				<button id="btnUnsubSSE" type="button">Desuscribir SSE</button>
+			</div>
+			<!-- Hook para el suscriptor: forzamos SSE en este bloque -->
+			<div id="sseHook" class="ch-hook" data-ch="" data-box="#sseHook" data-append="false" data-mode="sse" hidden></div>
+		</section>
+
+		<section class="card" aria-labelledby="wsTitle">
+			<h2 id="wsTitle">WS</h2>
+			<div class="state">
+				<span id="wsDot" class="dot" aria-hidden="true"></span>
+				<span id="wsTxt" class="muted">Desconectado</span>
+			</div>
+			<div id="wsLog" class="box mono muted" aria-live="polite">(sin eventos)</div>
+			<div class="row" role="group" aria-label="Acciones WS">
+				<button id="btnSubWS" type="button">Suscribir WS</button>
+				<button id="btnUnsubWS" type="button">Desuscribir WS</button>
+			</div>
+			<!-- Hook para el suscriptor: forzamos WS en este bloque -->
+			<div id="wsHook" class="ch-hook" data-ch="" data-box="#wsHook" data-append="false" data-mode="ws" hidden></div>
+		</section>
+	</main>
+
+	<!-- Suscriptor con logs humanos (estados/cambios) -->
+	<script src="/javascript/componentes/2-suscriptor.js?v=25"></script>
+	<script>
+		(function () {
+			'use strict';
+
+			var canalInp = document.getElementById('canal');
+			var modoSel  = document.getElementById('modo');
+
+			var sseHook = document.getElementById('sseHook');
+			var wsHook  = document.getElementById('wsHook');
+
+			var sseDot  = document.getElementById('sseDot');
+			var sseTxt  = document.getElementById('sseTxt');
+			var sseLog  = document.getElementById('sseLog');
+
+			var wsDot   = document.getElementById('wsDot');
+			var wsTxt   = document.getElementById('wsTxt');
+			var wsLog   = document.getElementById('wsLog');
+
+			var sseMon  = null; // monitor SSE (solo para logs de esta página)
+			var wsMon   = null; // monitor WS  (solo para logs de esta página)
+
+			var MAX = 500;
+			var sseLines = [], wsLines = [];
+
+			function ts() { return new Date().toLocaleTimeString(); }
+			function appendLine(box, arr, text) {
+				if (arr.length === 0) box.classList.remove('muted');
+				arr.push(text);
+				if (arr.length > MAX) arr.shift();
+				box.textContent = arr.join('\n');
+				box.scrollTop = box.scrollHeight;
+			}
+
+			function setChannelOnHooks(ch) {
+				sseHook.dataset.ch = ch; wsHook.dataset.ch = ch;
+				var sseClone = sseHook.cloneNode(false), wsClone = wsHook.cloneNode(false);
+				sseHook.replaceWith(sseClone); wsHook.replaceWith(wsClone);
+				sseHook = sseClone; wsHook = wsClone;
+			}
+
+			function markConnected(which, isOn) {
+				var dot = (which === 'sse') ? sseDot : wsDot;
+				var txt = (which === 'sse') ? sseTxt : wsTxt;
+				if (isOn) { dot.classList.add('ok'); txt.textContent = 'Conectado (' + ts() + ')'; }
+				else { dot.classList.remove('ok'); txt.textContent = 'Desconectado (' + ts() + ')'; }
+			}
+
+			function parseUrlFromPayload(raw) {
+				var o = raw;
+				try { if (typeof o === 'string') o = JSON.parse(o); } catch(_) {}
+				if (!o || typeof o !== 'object') return null;
+				if (typeof o.url === 'string' && o.url) return o.url;
+				if (o.msg) {
+					var m = o.msg;
+					if (typeof m === 'string') {
+						try { var mj = JSON.parse(m); if (mj && mj.url) return mj.url; } catch(_) {}
+					} else if (m && typeof m.url === 'string') {
+						return m.url;
+					}
+				}
+				return null;
+			}
+
+			/* -------------------- MONITOR SSE -------------------- */
+			function startSSEMonitor(ch) {
+				stopSSEMonitor();
+				try {
+					var es = new EventSource('/chat/sse?ch=' + encodeURIComponent(ch));
+					es.onopen    = function(){ markConnected('sse', true); appendLine(sseLog, sseLines, '['+ts()+'] conectado a '+ch); };
+					es.onerror   = function(){ markConnected('sse', false); appendLine(sseLog, sseLines, '['+ts()+'] desconectado'); };
+					es.onmessage = function(ev){
+						var u = parseUrlFromPayload(ev.data);
+						appendLine(sseLog, sseLines, '['+ts()+'] evento url='+(u||'(sin url)'));
+					};
+					sseMon = es;
+				} catch(e) {
+					appendLine(sseLog, sseLines, '['+ts()+'] error: '+(e && e.message || e));
+				}
+			}
+			function stopSSEMonitor() {
+				if (sseMon && typeof sseMon.close === 'function') { try { sseMon.close(); } catch(_) {} }
+				sseMon = null;
+			}
+
+			/* -------------------- MONITOR WS -------------------- */
+			function startWSMonitor(ch) {
+				stopWSMonitor();
+				try {
+					var proto = (location.protocol === 'https:') ? 'wss:' : 'ws:';
+					var ws = new WebSocket(proto + '//' + location.host + '/chat/ws?ch=' + encodeURIComponent(ch));
+					ws.onopen    = function(){ markConnected('ws', true); appendLine(wsLog, wsLines, '['+ts()+'] conectado a '+ch); };
+					ws.onclose   = function(){ markConnected('ws', false); appendLine(wsLog, wsLines, '['+ts()+'] desconectado'); };
+					ws.onmessage = function(ev){
+						var u = parseUrlFromPayload(ev.data);
+						appendLine(wsLog, wsLines, '['+ts()+'] evento url='+(u||'(sin url)'));
+					};
+					ws.onerror   = function(){ appendLine(wsLog, wsLines, '['+ts()+'] error de socket'); };
+					wsMon = ws;
+				} catch(e) {
+					appendLine(wsLog, wsLines, '['+ts()+'] error: '+(e && e.message || e));
+				}
+			}
+			function stopWSMonitor() {
+				if (wsMon && typeof wsMon.close === 'function') { try { wsMon.close(); } catch(_) {} }
+				wsMon = null;
+			}
+
+			/* -------------------- BOTONES -------------------- */
+			document.getElementById('btnSubSSE').addEventListener('click', function () {
+				var ch = canalInp.value.trim();
+				setChannelOnHooks(ch);      // activa el hook (inyecta 2-suscriptor)
+				startSSEMonitor(ch);        // conexión paralela solo para log humano
+				appendLine(sseLog, sseLines, '['+ts()+'] suscrito a '+ch);
+			});
+			document.getElementById('btnUnsubSSE').addEventListener('click', function () {
+				var clone = sseHook.cloneNode(false);
+				clone.removeAttribute('data-ch');
+				sseHook.replaceWith(clone);
+				sseHook = clone;
+				stopSSEMonitor();
+				markConnected('sse', false);
+				appendLine(sseLog, sseLines, '['+ts()+'] desuscrito');
+			});
+
+			document.getElementById('btnSubWS').addEventListener('click', function () {
+				var ch = canalInp.value.trim();
+				setChannelOnHooks(ch);
+				startWSMonitor(ch);
+				appendLine(wsLog, wsLines, '['+ts()+'] suscrito a '+ch);
+			});
+			document.getElementById('btnUnsubWS').addEventListener('click', function () {
+				var clone = wsHook.cloneNode(false);
+				clone.removeAttribute('data-ch');
+				wsHook.replaceWith(clone);
+				wsHook = clone;
+				stopWSMonitor();
+				markConnected('ws', false);
+				appendLine(wsLog, wsLines, '['+ts()+'] desuscrito');
+			});
+
+			/* -------------------- PUBLICAR (pruebas) -------------------- */
+			document.getElementById('btnPublicar').addEventListener('click', function () {
+				var ch = canalInp.value.trim() || 'prueba';
+				var url = '/registrados/notificaciones';
+				var payload = { canal: ch, url: url };
+
+				if (modoSel.value === 'ws') {
+					var proto = (location.protocol === 'https:') ? 'wss:' : 'ws:';
+					var ws = new WebSocket(proto + '//' + location.host + '/chat/ws?ch=' + encodeURIComponent(ch));
+					ws.onopen = function(){ try { ws.send(JSON.stringify(payload)); } catch(_) {} try { ws.close(); } catch(_) {} };
+					appendLine(wsLog, wsLines, '['+ts()+'] publicado (WS) → '+url);
+					return;
+				}
+
+				fetch('/chat/pub', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'same-origin',
+					body: JSON.stringify(payload)
+				}).then(function(){ appendLine(sseLog, sseLines, '['+ts()+'] publicado (SSE) → '+url); });
+			});
+
+			/* Arranque: fija canal y no auto-suscribe (decides con botones) */
+			setChannelOnHooks(canalInp.value.trim());
+		})();
+	</script>
+</body>
+
+</html>

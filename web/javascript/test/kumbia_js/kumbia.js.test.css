@@ -1,0 +1,175 @@
+:root {
+	--ok: #22c55e;
+	--fail: #ef4444;
+	--ink: #e5e7eb;
+	--muted: #94a3b8;
+	--bg: #020617
+}
+
+* {
+	box-sizing: border-box
+}
+
+html,
+body {
+	height: 100%
+}
+
+body {
+	margin: 0;
+	font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+	color: var(--ink);
+	background: radial-gradient(1200px 800px at 20% -10%, #111827 0%, #0b1020 45%, var(--bg) 100%);
+}
+
+/* Header fijo encima de todo, centrado */
+body>header {
+	padding: 28px 20px 10px 20px;
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	gap: 16px;
+	align-items: center;
+	/* <- center (antes end) */
+	border-bottom: 1px solid #1f2937;
+	backdrop-filter: blur(6px);
+	position: sticky;
+	top: 0;
+	z-index: 2147483647;
+	isolation: isolate;
+}
+
+body>header>h1 {
+	margin: 0;
+	font-size: 22px;
+	letter-spacing: .3px
+}
+
+/* Resumen (sin margin) */
+nav[data-role="summary"] {
+	margin: 0;
+	/* <- sin margen */
+	padding: 10px 12px;
+	background: #0b1222;
+	border: 1px solid #1e293b;
+	border-radius: 12px;
+	font-size: 13px;
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	color: var(--muted);
+}
+
+nav[data-role="summary"] i[data-kind="dot"] {
+	width: 8px;
+	height: 8px;
+	border-radius: 999px;
+	background: var(--muted);
+	display: inline-block;
+}
+
+nav[data-role="summary"] i[data-kind="dot"][data-state="ok"] {
+	background: var(--ok)
+}
+
+nav[data-role="summary"] i[data-kind="dot"][data-state="fail"] {
+	background: var(--fail)
+}
+
+main {
+	padding: 24px;
+	max-width: 1100px;
+	margin: 0 auto
+}
+
+/* Lista de tarjetas */
+section[data-role="cards"] {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 16px;
+}
+
+/* Tarjetas */
+article {
+	background: linear-gradient(180deg, rgba(99, 102, 241, .08), rgba(99, 102, 241, .02));
+	border: 1px solid #1f2937;
+	border-radius: 16px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+	overflow: hidden;
+	min-height: 128px;
+	display: flex;
+	flex-direction: column;
+}
+
+article>header {
+	position: relative;
+	background: linear-gradient(90deg, rgba(99, 102, 241, .15), rgba(99, 102, 241, 0));
+	padding: 12px 14px;
+}
+
+article>header>strong {
+	display: block;
+	font-size: 14px
+}
+
+article>header>small {
+	display: block;
+	font-size: 12px;
+	color: var(--muted);
+	margin-top: 2px
+}
+
+article>header+* {
+	padding: 14px;
+	flex: 1;
+	display: grid;
+	gap: 12px
+}
+
+/* Estado */
+output[data-role="status"] {
+	position: absolute;
+	right: 12px;
+	top: 12px;
+	padding: 6px 10px;
+	border-radius: 12px;
+	font-weight: 700;
+	font-size: 12px;
+	border: 1px solid #334155;
+}
+
+output[data-role="status"][data-state="ok"] {
+	color: var(--ok);
+	background: color-mix(in oklab, var(--ok) 20%, transparent);
+	border-color: color-mix(in oklab, var(--ok) 50%, #000 30%);
+}
+
+output[data-role="status"][data-state="fail"] {
+	color: var(--fail);
+	background: color-mix(in oklab, var(--fail) 20%, transparent);
+	border-color: color-mix(in oklab, var(--fail) 50%, #000 30%);
+}
+
+/* Botón */
+a[rel="run"] {
+	display: inline-block;
+	padding: 6px 10px;
+	border-radius: 10px;
+	border: 1px solid #334155;
+	color: #e5e7eb;
+	text-decoration: none;
+}
+
+/* Cascada para tabs */
+nav[data-group="tabs"] button[aria-current="true"] {
+	text-decoration: underline
+}
+
+/* Utilidades */
+[hidden] {
+	display: none !important
+}
+
+[data-note] {
+	font-size: 11px;
+	color: var(--muted)
+}

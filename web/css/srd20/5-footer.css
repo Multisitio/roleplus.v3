@@ -1,0 +1,73 @@
+.page article footer:before {
+    background-image: url('/img/editor/srd20/72/footer3.png');
+    background-size: cover;
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 50px;
+    width: 100%;
+    transform: scaleX(-1);
+}
+
+#important .bleed .page article footer:before {
+    height: 62px;
+}
+
+.page:nth-child(even) footer:before {
+    transform: scaleX(1);
+}
+
+.page article footer {
+    color: var(--HB_Color_Footnotes);
+    font-size: .8em;
+    height: 43px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#important .bleed .page article footer {
+    height: 55px;
+}
+
+#important footer.color-invert {
+    color: gold;
+}
+
+.page:nth-child(odd) footer {
+    padding-left: 70px;
+    text-align: left;
+}
+
+.page:nth-child(even) footer {
+    padding-right: 70px;
+    text-align: right;
+}
+
+.page article footer:after {
+    counter-increment: page;
+    content: counter(page);
+    position: absolute;
+    bottom: 16px;
+    text-align: center;
+    width: 55px;
+}
+
+#important .bleed .page article footer:after {
+    bottom: 27.36px;
+}
+
+.page:nth-child(odd) footer:after {
+    left: 0;
+}
+
+.page:nth-child(even) footer:after {
+    right: 0;
+}
+
+.page footer {
+    text-transform: uppercase;
+}

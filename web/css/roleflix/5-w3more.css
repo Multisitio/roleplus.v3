@@ -1,0 +1,170 @@
+﻿a {
+    text-decoration: none;
+}
+
+fieldset {
+    border-radius: 5px;
+    margin: 0 0 10px;
+}
+
+.w3-button {
+    border: 1px solid transparent;
+}
+
+.w3-button:hover {
+    background: transparent !important;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+}
+
+.w3-check,
+.w3-radio {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.w3-modal-2 {
+    height: 100vh;
+    overflow-y: auto;
+    max-width: 530px;
+    width: 100%;
+    margin: auto;
+    padding: 10px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1003;
+}
+
+.w3-overlay-2 {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1002;
+}
+
+.w3-truncate {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (min-width:1201px) {
+    .w3-col.xl1 {
+        width: 8.33333%;
+    }
+    .w3-col.xl2 {
+        width: 16.66666%;
+    }
+    .w3-col.xl3 {
+        width: 24.99999%;
+    }
+    .w3-col.xl4 {
+        width: 33.33333%;
+    }
+    .w3-col.xl5 {
+        width: 41.66666%;
+    }
+    .w3-col.xl6 {
+        width: 49.99999%;
+    }
+    .w3-col.xl7 {
+        width: 58.33333%;
+    }
+    .w3-col.xl8 {
+        width: 66.66666%;
+    }
+    .w3-col.xl9 {
+        width: 74.99999%;
+    }
+    .w3-col.xl10 {
+        width: 83.33333%;
+    }
+    .w3-col.xl11 {
+        width: 91.66666%;
+    }
+    .w3-col.xl12 {
+        width: 99.99999%;
+    }
+}
+
+@media (min-width:1593px) {
+    .w3-col.xxl1 {
+        width: 8.33333%;
+    }
+    .w3-col.xxl2 {
+        width: 16.66666%;
+    }
+    .w3-col.xxl3 {
+        width: 24.99999%;
+    }
+    .w3-col.xxl4 {
+        width: 33.33333%;
+    }
+    .w3-col.xxl5 {
+        width: 41.66666%;
+    }
+    .w3-col.xxl6 {
+        width: 49.99999%;
+    }
+    .w3-col.xxl7 {
+        width: 58.33333%;
+    }
+    .w3-col.xxl8 {
+        width: 66.66666%;
+    }
+    .w3-col.xxl9 {
+        width: 74.99999%;
+    }
+    .w3-col.xxl10 {
+        width: 83.33333%;
+    }
+    .w3-col.xxl11 {
+        width: 91.66666%;
+    }
+    .w3-col.xxl12 {
+        width: 99.99999%;
+    }
+}
+
+
+/* Paleta pastel
+eee -> gris
+eef -> azul
+efe -> verde
+eff -> lila
+fee -> rojo
+fef -> rosa
+ffe -> amarillo
+*/
+
+.w3-pale-grey,
+.w3-hover-pale-grey:hover {
+    color: #000!important;
+    background-color: #eee!important
+}
+
+.w3-pale-pink,
+.w3-hover-pale-pink:hover {
+    color: #000!important;
+    background-color: #fef!important
+}
+
+.w3-pale-purple,
+.w3-hover-pale-purple:hover {
+    color: #000!important;
+    background-color: #eef!important
+}
+
+.w3-silver,
+.w3-hover-silver:hover:hover {
+    color: #000!important;
+    background-color: #ccc!important
+}

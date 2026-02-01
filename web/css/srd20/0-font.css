@@ -1,0 +1,62 @@
+@font-face {
+    font-family: 'BerkshireSwash';
+    src: url('/fonts/berkshire_swash.woff2');
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'BookInsanity';
+    src: url('/fonts/book_insanity.woff2');
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'BookInsanity';
+    src: url('/fonts/book_insanity_bold.woff2');
+    font-weight: bold;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'BookInsanity';
+    src: url('/fonts/book_insanity_italic.woff2');
+    font-weight: normal;
+    font-style: italic
+}
+
+@font-face {
+    font-family: 'BookInsanity';
+    src: url('/fonts/book_insanity_bold_italic.woff2');
+    font-weight: bold;
+    font-style: italic
+}
+
+@font-face {
+    font-family: 'MrEaves';
+    src: url('/fonts/mr_eaves_small_caps.woff2');
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'RecursiveVF';
+    src: url('/fonts/recursive_vf.woff2');
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'SolberaImitation';
+    src: url('/fonts/solbera_imitation.woff2');
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'WalterTurncoat';
+    src: url('/fonts/walter_turncoat_regular.woff2');
+    font-weight: normal;
+    font-style: normal
+}

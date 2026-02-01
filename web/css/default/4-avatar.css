@@ -1,0 +1,59 @@
+.avatar {
+    display: inline-block;
+    flex-shrink: 0;
+    height: 62px;
+    width: 62px;
+}
+
+.avatar img {
+    border-radius: 50%;
+    box-shadow: 2px 2px 2px #666;
+    height: 60px !important;
+    width: 60px !important;
+}
+
+.comentario .avatar {
+    height: 52px;
+    width: 52px;
+}
+
+.comentario .avatar img {
+    height: 50px !important;
+    width: 50px !important;
+}
+
+
+/*.mensaje .avatar {
+    display: inline-block;
+    text-align: center;
+    width: 80px;
+}S
+
+.mensaje .avatar img {
+    display: inline-block;
+    height: 70px;
+    width: 70px;
+}
+
+.comentarios-sueltos .avatar {
+    height: 80px;
+    width: 80px;
+}
+
+article .fragmentos .avatar {
+    float: left;
+}
+
+article .fragmentos .avatar>a:first-child img {
+    height: 60px;
+    width: 60px;
+}
+
+article:not(.cabecera) header .avatar img {
+    height: 80px;
+    width: 80px;
+}
+
+article .avatar {
+    display: inline-block;
+}*/

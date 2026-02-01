@@ -1,0 +1,43 @@
+.editor a {
+    text-decoration: none;
+}
+
+.editor a:not(.avatar):not(.tag),
+.editor button,
+.editor .button,
+.editor select,
+.editor summary,
+.editor textarea,
+.editor [type="email"],
+.editor [type="password"],
+.editor [type="number"],
+.editor [type="search"],
+.editor [type="text"] {
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 1px 1px 0 #666;
+    color: inherit;
+    /* inline-flex deja un margen de 5px al pie */
+    /* flex sin inline crea un bloque */
+    display: inline-flex;
+    gap: 8px;
+    /* height: fit-content estira el elemento por todo el alto */
+    height: fit-content;
+    justify-content: center;
+    /*margin-bottom: 5px; se aplicaba solo a los a y no a los button*/
+    min-height: 48px;
+    min-width: 48px;
+    outline: none;
+    padding: 5px;
+    word-break: break-word;
+}
+
+.editor a:not(.avatar):not(.tag),
+.editor button,
+.editor .button,
+.editor select,
+.editor summary {
+    cursor: pointer;
+}

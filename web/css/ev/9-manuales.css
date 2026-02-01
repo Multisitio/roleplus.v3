@@ -1,0 +1,54 @@
+ul.manual {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+ul.manual article ul {
+    border-left: none;
+}
+
+ul.manual article ul {
+    margin-left: 12px;
+    list-style: disc;
+}
+
+ul.manual article ul ul {
+    list-style: circle;
+}
+
+ul.manual article ul ul ul {
+    list-style: disc;
+}
+
+ul.manual article ul ul ul ul {
+    list-style: circle;
+}
+
+ul.manual article ul ul ul ul ul {
+    list-style: disc;
+}
+
+ul.manual article ul ul ul ul ul ul {
+    list-style: circle;
+}
+
+ul.manual button {
+    margin: 0 !important;
+}
+
+ul.manual h4 small:last-child {
+    float: right;
+}
+
+ul.manual hr {
+    border-top: 1px solid var(--primary);
+}
+
+ul.manual {
+    list-style: none;
+}
+
+ul.manual ul {
+    border-left: 2px solid var(--muted-border);
+    list-style: none;
+}

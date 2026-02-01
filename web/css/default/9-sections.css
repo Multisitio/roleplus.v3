@@ -1,0 +1,57 @@
+/* Entradas RSS
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.entradas-rss footer {
+    padding-bottom: 0;
+}
+
+
+/* Tienda
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.tienda article header {
+    padding: 5px 15px 0;
+}
+
+.tienda article header h4 {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.tienda article section {
+    padding: 5px 15px;
+}
+
+.tienda article footer {
+    padding: 0px 15px 15px;
+}
+
+.tienda article footer p {
+    text-align: center;
+}
+
+
+/* Vistas previas
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.vistas_previas>div {
+    margin-top: 15px;
+    position: relative;
+}
+
+.vistas_previas>div>h6>a,
+.vistas_previas>div>small {
+    display: inline-block;
+    max-width: calc(100% - 25px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.images-to-load>img,
+.vistas_previas>div>a>img:not([src*='svg']) {
+    width: 100%;
+}

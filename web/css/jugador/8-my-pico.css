@@ -1,0 +1,95 @@
+/* Enlaces y botones */
+
+a {
+    text-decoration: none !important;
+}
+
+a[role="button"],
+button {
+    height: min-content;
+    width: 100%;
+}
+
+a[role=button][disabled],
+button[disabled],
+input[type=button][disabled],
+input[type=reset][disabled],
+input[type=submit][disabled] {
+    background: var(--muted-background);
+    border-color: var(--muted-background);
+    color: var(--text);
+}
+
+
+/* Cajas */
+
+article {
+    margin: 0 auto 25px;
+    max-width: 800px;
+    padding: 0;
+}
+
+article header {
+    margin: 0;
+    padding: 1rem;
+}
+
+article>img {
+    display: block;
+}
+
+article section {
+    margin: 0;
+    padding: 0 1rem;
+}
+
+article footer {
+    margin: 0;
+    padding: 1rem;
+}
+
+
+/* Encabezados */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: 0;
+    margin-top: 0 !important;
+}
+
+h1,
+h3,
+h5 {
+    font-family: "Montserrat";
+    font-weight: lighter;
+}
+
+h1 {
+    color: var(--primary);
+}
+
+h3 {
+    color: var(--code-color-2);
+}
+
+h5 {
+    color: var(--code-color-4);
+}
+
+h2,
+h4,
+h6 {
+    color: var(--h6);
+    font-family: "Raleway";
+}
+
+
+/* Estructura */
+
+main {
+    padding: 0 !important;
+}
