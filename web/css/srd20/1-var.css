@@ -1,13 +1,30 @@
 :root {
-    --HB_Color_Background: #EEE5CE;
-    /*--HB_Color_Accent: #E0E5C1;*/
-    --HB_Color_Accent: lightyellow;
-    --HB_Color_HeaderUnderline: #C0AD6A;
-    --HB_Color_HorizontalRule: #9C2B1B;
-    --HB_Color_HeaderText: #58180D;
-    --HB_Color_MonsterStatBackground: #F2E5B5;
-    --HB_Color_CaptionText: #766649;
-    --HB_Color_WatercolorStain: #BBAD82;
-    /*--HB_Color_Footnotes: #C9AD6A;*/
-    --HB_Color_Footnotes: darkred;
+    /* Colors */
+    --color-bg-accent: lightyellow;
+    --color-text-header: #58180D;
+    --color-border-primary: #C0AD6A;
+    --color-text-footnote: darkred;
+    --color-text-emphasis: darkred;
+    --color-accent-gold: gold;
+    --color-card-text: #634a39;
+    --bg-table-stripe: rgba(255, 255, 255, .3);
+
+    /* Typography */
+    --font-body: 'BookInsanity', serif;
+    --font-title: 'MrEaves', sans-serif;
+    --font-table: 'RecursiveVF', sans-serif;
+    --font-decorative: 'BerkshireSwash', cursive;
+    --font-handwritten: 'WalterTurncoat', cursive;
+    --font-initial: 'SolberaImitation', serif;
+
+    /* Backgrounds & Textures */
+    --bg-page: url('/img/editor/srd20/72/parchment_bg.jpg');
+    --bg-blockquote: url('/img/editor/srd20/72/silver_parchment.jpg');
+    --bg-footer: url('/img/editor/srd20/72/footer3.png');
+    --border-image-blockquote: url('/img/editor/srd20/72/border_fancy.jpg');
+
+    /* Shadows & Effects */
+    --shadow-blockquote: 0 0 10px 0 #888;
+    --shadow-text-light: 1px 1px 0 white;
+    --shadow-text-glow: 0 0 3px white;
 }

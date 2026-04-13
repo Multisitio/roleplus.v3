@@ -1,10 +1,12 @@
 
 <?php if ( ! empty($v_p->title)): ?>
-    <a href="<?=$v_p->url?>" rel="noopener noreferrer" target="_blank">
-        <h3><?=$v_p->title?></h3>
-    </a>
-    
-    <?=empty($v_p->description)?'':"<p><small>$v_p->description</small></p>"?>
+    <section>
+        <a href="<?=$v_p->url?>" rel="noopener noreferrer" target="_blank">
+            <h3><?=$v_p->title?></h3>
+        </a>
+        
+        <?=empty($v_p->description)?'':"<p><small>$v_p->description</small></p>"?>
+    </section>
 
     <?php
     $file = "img/vistas_previas/$v_p->idu/$v_p->image";

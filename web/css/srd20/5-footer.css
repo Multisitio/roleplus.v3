@@ -1,5 +1,5 @@
 .page article footer:before {
-    background-image: url('/img/editor/srd20/72/footer3.png');
+    background-image: var(--bg-footer);
     background-size: cover;
     content: "";
     position: absolute;
@@ -10,16 +10,22 @@
     transform: scaleX(-1);
 }
 
-#important .bleed .page article footer:before {
-    height: 62px;
+.a5 .page article footer:before {
+    background-size: contain;
+    filter: contrast(0.5);
+    height: 43px;
 }
+
+/*#important .bleed .page article footer:before {
+    height: 62px;
+}*/
 
 .page:nth-child(even) footer:before {
     transform: scaleX(1);
 }
 
 .page article footer {
-    color: var(--HB_Color_Footnotes);
+    color: var(--color-text-footnote);
     font-size: .8em;
     height: 43px;
     width: 100%;
@@ -29,12 +35,12 @@
     z-index: 1;
 }
 
-#important .bleed .page article footer {
+/*#important .bleed .page article footer {
     height: 55px;
-}
+}*/
 
 #important footer.color-invert {
-    color: gold;
+    color: var(--color-accent-gold);
 }
 
 .page:nth-child(odd) footer {
@@ -42,13 +48,24 @@
     text-align: left;
 }
 
-.page:nth-child(even) footer {
+.a5 .page:nth-child(odd) footer {
+    padding-left: 44px;
+}
+
+.page:nth-child(2n) footer {
     padding-right: 70px;
     text-align: right;
 }
 
-.page article footer:after {
+.a5 .page:nth-child(2n) footer {
+    padding-right: 44px;
+}
+
+.page {
     counter-increment: page;
+}
+
+.page article footer:after {
     content: counter(page);
     position: absolute;
     bottom: 16px;
@@ -56,9 +73,14 @@
     width: 55px;
 }
 
-#important .bleed .page article footer:after {
-    bottom: 27.36px;
+.a5 .page article footer:after {
+    bottom: 17px;
+    width: 36px;
 }
+
+/*#important .bleed .page article footer:after {
+    bottom: 27px;
+}*/
 
 .page:nth-child(odd) footer:after {
     left: 0;

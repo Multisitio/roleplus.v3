@@ -1,32 +1,28 @@
-.cards > img {
+.cards>img {
     float: left;
     width: 224px;
 }
 
 .page-2 {
-    -webkit-mask-image: linear-gradient(
-        110deg,
-        rgba(0, 0, 0, 0) 62%,
-        rgba(0, 0, 0, 1) 100%
-    );
-    mask-image: linear-gradient(
-        105deg,
-        rgba(0, 0, 0, 0) 62%,
-        rgba(0, 0, 0, 1) 100%
-    );
+    -webkit-mask-image: linear-gradient(110deg,
+            rgba(0, 0, 0, 0) 62%,
+            rgba(0, 0, 0, 1) 100%);
+    mask-image: linear-gradient(105deg,
+            rgba(0, 0, 0, 0) 62%,
+            rgba(0, 0, 0, 1) 100%);
 }
 
 .cards picture {
     float: left;
     position: relative;
-    height: 319.8px;
+    height: 320px;
     width: 224px;
 }
 
 .horizontal-cards picture {
     display: block;
     height: 224px;
-    width: 319.8px;
+    width: 320px;
 }
 
 picture [src*="card.jpg"] {
@@ -69,8 +65,8 @@ picture [src*="/card/coins/"] {
 
 picture .title {
     /*background: rgba(0, 0, 0, 0.2);*/
-    color: #634a39;
-    font: 14px "BerkshireSwash";
+    color: var(--color-card-text);
+    font: 14px/1.25 var(--font-decorative);
     position: absolute;
     left: 43px;
     top: 16px;
@@ -80,20 +76,20 @@ picture .title {
 }
 
 picture .price {
-    color: #634a39;
-    font: bold 25px "BookInsanity";
+    color: var(--color-card-text);
+    font: bold 25px/1.25 var(--font-body);
     position: absolute;
     right: 7px;
     top: 71px;
     z-index: 3;
     width: 48px;
     text-align: center;
-    text-shadow: 1px 1px 0 white;
+    text-shadow: var(--shadow-text-light);
 }
 
 picture .weight {
     color: white;
-    font: 17px "MrEaves";
+    font: 17px/1.25 var(--font-title);
     letter-spacing: -1px;
     position: absolute;
     left: 7px;
@@ -105,14 +101,14 @@ picture .weight {
 
 picture .description {
     color: black;
-    font: bold 0.6rem "BookInsanity";
+    font: bold 0.6rem/1.25 var(--font-body);
     position: absolute;
     left: 20px;
     bottom: 14px;
     z-index: 2;
     width: 184px;
     height: 47px;
-    text-shadow: 0 0 3px white;
+    text-shadow: var(--shadow-text-glow);
 }
 
 picture .description.long {
@@ -121,7 +117,7 @@ picture .description.long {
 
 picture .defense {
     color: white;
-    font: 12px "MrEaves";
+    font: 12px/1.25 var(--font-title);
     line-height: 10px;
     position: absolute;
     right: 7px;

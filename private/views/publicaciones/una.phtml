@@ -50,9 +50,7 @@ else {
     <?php if ( ! empty($vistas_previas[$pub->idu])):
         $v_p = $vistas_previas[$pub->idu][0]; 
         if ($v_p->image): ?>
-            <section class="preview">
-                <?php View::partial('boxes/preview', null, ['v_p'=>$v_p]); ?>
-            </section>
+            <?php View::partial('boxes/preview', null, ['v_p'=>$v_p]); ?>
         <?php endif;
     elseif ($pub->enlace): ?>
         <?=Article::link($pub)?>

@@ -1,4 +1,4 @@
-.resultado ol.inline {
+/*.resultado ol.inline {
     counter-reset: conteo-lista;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -20,18 +20,18 @@
 }
 
 .resultado ul.inline {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    column-gap: 25px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin: 0;
 }
 
 .resultado ul.inline li {
-    align-items: anchor-center;
-    display: flex;
-    gap: 5px;
-}
+    margin-bottom: 0;
+}*/
 
 .resultado :is(ol, ul) {
-    padding-left: 15px;
+    padding-left: 11.25pt;
 }
 
 .resultado ul {
@@ -40,12 +40,12 @@
 
 .resultado ul>li::before {
     content: "✦ ";
-    margin-left: -15px;
+    margin-left: -11.25pt;
 }
 
 .resultado ul>li li::before {
     content: "⮞ ";
-    margin-left: -15px;
+    margin-left: -11.25pt;
 }
 
 .resultado ul.checkbox li::before {

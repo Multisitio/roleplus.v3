@@ -84,22 +84,14 @@ class Twitter extends LiteRecord
             'media'          => new \CURLFile(realpath($filePath), mime_content_type($filePath), basename($filePath))
         ];
 
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL            => $url,
-            CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => $postfields,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER     => [$header]
+        $res = _curl::post($url, $postfields, [
+            'headers' => [$header]
         ]);
-        $response = curl_exec($ch);
-        $http     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
-        if ($http >= 400 || !$response) {
+        if (!$res->ok || !$res->body) {
             return null;
         }
-        $json = json_decode($response, true);
+        $json = json_decode($res->body, true);
         return $json['data']['id'] ?? null;
     }
 
@@ -127,17 +119,12 @@ class Twitter extends LiteRecord
         }
         $header .= implode(', ', $tmp);
 
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL            => $url,
-            CURLOPT_POST           => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER     => [$header, 'Content-Type: application/json'],
-            CURLOPT_POSTFIELDS     => $jsonData
+        $res = _curl::post($url, $jsonData, [
+            'headers' => [$header, 'Content-Type: application/json']
         ]);
-        $resp = curl_exec($ch);
-        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+
+        $resp = $res->body;
+        $http = $res->info['http_code'];
 
         $decoded = json_decode($resp);
         if (!$decoded) {

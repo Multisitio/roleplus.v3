@@ -36,7 +36,7 @@
 				'casilla_y_texto' => print "
 					<label>
 						<div class='display-cell'>
-							<input type='checkbox' name='$c->variable_nombre'" . ($personaje[$c->variable_nombre] ? ' checked' : '') . "><span></span>
+							<input type='checkbox' name='$c->variable_nombre'" . ( ! empty($personaje[$c->variable_nombre]) ? ' checked' : '') . "><span></span>
 						</div>
 						<div class='display-cell'>" . nl2br($c->texto, false) . "</div>
 					</label>",
@@ -63,7 +63,8 @@
 					echo "<label>$c->nombre</label>
 					<div class='dropimage $dropClass $borderClass' style='$style'>
 						<input type='file' name='imagenes[]'>
-						<input type='hidden' name='fotos[]' value='$c->variable_nombre'>";
+						<input type='hidden' name='fotos[]' value='$c->variable_nombre'>
+						<input type='hidden' name='$c->variable_nombre' value='{$personaje[$c->variable_nombre]}'>";
 					if ($personaje[$c->variable_nombre]) {
 						echo "<img alt='" . t('Retrato') . "' src='/img/fichas/retratos/l.{$personaje[$c->variable_nombre]}'>";
 					}
@@ -87,7 +88,7 @@
 			<a class="paper-btn btn-warning-outline mh5" href="/ev/fichas/cajas/<?=$ficha->idu?>">< <?=t('Diseñar')?></a>
 		<?php endif; ?>
 
-		<?php if (Session::get('idu') == $personajes_usuarios->usuarios_idu): ?>
+		<?php if ($personajes_usuarios && Session::get('idu') == $personajes_usuarios->usuarios_idu): ?>
 			<button type="submit" class="paper-btn btn-danger-outline mh5" name="action" value="eliminar">- <?=t('Eliminar')?></button>
 			<button type="submit" class="paper-btn btn-success-outline mh5" name="action" value="salvar">+ <?=t('Salvar')?></button>
 		<?php endif; ?>

@@ -87,20 +87,15 @@ class _openai
 
 	private static function httpGet($url)
 	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-		curl_setopt($ch, CURLOPT_ENCODING, ''); // acepta gzip/deflate
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-			'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
-			'Accept-Language: es-ES,es;q=0.9,en;q=0.8'
+		$res = _curl::get($url, [
+			CURLOPT_MAXREDIRS      => 5,
+			CURLOPT_TIMEOUT        => 20,
+			'headers'              => [
+				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+				'Accept-Language: es-ES,es;q=0.9,en;q=0.8'
+			]
 		]);
-		$body = curl_exec($ch);
-		curl_close($ch);
-		return $body;
+		return $res->body;
 	}
 
 	private static function firstUrl($text)
@@ -178,26 +173,22 @@ class _openai
 
 	private static function postJson($url, $headers, $data)
 	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+		$res = _curl::post($url, json_encode($data), [
+			'headers' => $headers,
+			CURLOPT_TIMEOUT => 60
+		]);
 
-		$raw = curl_exec($ch);
-		$http = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		if (curl_errno($ch)) {
-			$raw .= ' Error:' . curl_error($ch);
+		$raw = $res->body;
+		$http = $res->info['http_code'];
+		if ($res->error) {
+			$raw .= ' Error:' . $res->error;
 		}
-		curl_close($ch);
 
 		$json = json_decode($raw);
 		_mail::toAdmin('_openai::ask[http '.$http.']', '<pre>'.$raw);
 
 		return [
-			'ok' => ($http >= 200 && $http < 300 && $json),
+			'ok' => ($res->ok && $json),
 			'http' => $http,
 			'raw' => $raw,
 			'json' => $json

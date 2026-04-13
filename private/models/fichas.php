@@ -99,7 +99,15 @@ class Fichas extends LiteRecord
     }
 
     public function una($idu)
-    {
+    {        
+        # 1. Transferimos Fichas
+        $sql = "UPDATE fichas SET usuarios_idu=? WHERE idu=?";
+        parent::query($sql, [Session::get('idu'), $idu]);
+
+        # 2. Transferimos Cajas de la ficha
+        $sql = "UPDATE fichas_cajas SET usuarios_idu=? WHERE fichas_idu=?";
+        parent::query($sql, [Session::get('idu'), $idu]);
+
 		$sql = 'SELECT * FROM fichas WHERE idu=?';
         $ficha = self::first($sql, [$idu]);
         return empty($ficha) ? self::cols() : $ficha;

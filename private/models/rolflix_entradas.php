@@ -32,7 +32,11 @@ class Rolflix_entradas extends LiteRecord
 		$sitios = (new Rolflix_sitios)->obtenerSitios();
 		foreach ($sitios as $sit) {
 			$i = $this->cargarSitio($sit->idu, $sit->canal_id, $sit);
-			$body[] = $log = "$sit->hashtag: $i vídeo/s nuevo/s.";
+			if ($i === false) {
+				$body[] = $log = "$sit->hashtag: Error obteniendo el feed RSS (Ver logs para mas detalles).";
+			} else {
+				$body[] = $log = "$sit->hashtag: $i vídeo/s nuevo/s.";
+			}
 			_var::flush("<hr>$log");
 		}
 		_mail::send('dj@roleplus.app', 'Vídeos de canales cargados vía RSS.', '<pre>'.print_r($body, 1));
@@ -47,10 +51,15 @@ class Rolflix_entradas extends LiteRecord
 
 		# XML EN TEXTO
         $url = "https://www.youtube.com/feeds/videos.xml?channel_id=$canal_id";
-		$texto = _link::curl_get_file_contents($url);
-		if ( ! $texto) {
-			return _mail::toAdmin('Error obteniendo el texto', _var::return($sit));
+		$res = _curl::get($url);
+		
+		if ( ! $res->ok) {
+			// Evitar enviar un correo por canal; si es error enviamos al log directo para depurar si estamos en local o para mantener silencio
+			error_log("Fallo RSS [$canal_id]. HTTP_CODE: " . $res->info['http_code'] . " - CURL_ERR: " . $res->error);
+			return false;
 		}
+		
+		$texto = $res->body;
 		$texto = str_ireplace(['<![CDATA[', ']]>'], '', $texto);
 
 		# ENTRADAS

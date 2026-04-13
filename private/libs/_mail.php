@@ -21,54 +21,25 @@ class _mail
 		$mail->isSMTP();
 		$mail->setLanguage('es');
 		$mail->CharSet = 'UTF-8';
-		$mail->Host = 'mail.multisitio.es';
-		$mail->SMTPOptions = [
-			'ssl' => [
-				'verify_peer' => false,
-				'verify_peer_name' => false,
-				'allow_self_signed' => true
-			]
-		];
+		$mail->Host = 'smtp.gmail.com';
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-		$mail->Username = 'webmaster@multisitio.es';
-		$mail->Password = 'h1SCTwrbmPZRcgnAtiG1tPPFMokBrVBG';
+		$mail->Username = 'distrotuz@gmail.com';
+		$mail->Password = 'fgrhrzowigkyjtyw';
 		$mail->Port = 587;
 
-		$mail->setFrom('ia@roleplus.app', 'Inteligencia Artificial de R+');
-		$mail->Sender = 'ia@roleplus.app';
-		$mail->addReplyTo('dj@roleplus.app', 'Director de Juego de R+');
+		$mail->setFrom('distrotuz@gmail.com', 'Inteligencia Artificial de R+');
+		$mail->Sender = 'distrotuz@gmail.com';
 		$mail->Subject = $subject;
 		$mail->addAddress($to);
 
 		if (empty($headers['IsText'])) {
 			$mail->isHTML(true);
-			$mail->Body = $body;
+			$mail->Body = "<!DOCTYPE html>\n<html>\n<body>\n" . $body . "\n</body>\n</html>";
+			$mail->AltBody = strip_tags($body);
 		} else {
 			$mail->isHTML(false);
 			$mail->Body = is_array($body) ? print_r($body, 1) : (string)$body;
-		}
-
-		/* ======================
-		 * DKIM en ruta permitida (open_basedir)
-		 * ====================== */
-		$dkimDomain = 'roleplus.app';
-		$dkimSelector = 'default';
-		// Ruta dentro de open_basedir (ajústala si usas otra)
-		$dkimPath = '/var/www/clients/client1/web6/private/dkim/default.private';
-
-		if (is_readable($dkimPath)) {
-			$dkimKey = file_get_contents($dkimPath);
-			if ($dkimKey) {
-				$mail->DKIM_domain = $dkimDomain;
-				$mail->DKIM_selector = $dkimSelector;
-				$mail->DKIM_private_string = $dkimKey; // evita file_exists() fuera de open_basedir
-				$mail->DKIM_passphrase = '';
-				$mail->DKIM_identity = $mail->From;
-			}
-		} else {
-			// No forcemos $mail->DKIM_private para no disparar el warning de open_basedir
-			error_log('PHPMailer: DKIM key not readable at ' . $dkimPath . ' (skipping DKIM).');
 		}
 
 		if (!$mail->send()) {

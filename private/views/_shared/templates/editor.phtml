@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title><?=t('Editor')?></title>
+		<title><?=h($manual->nombre)?></title>
 
         <link href="/css/editor.min.css?<?=filemtime('css/editor.min.css')?>" rel="stylesheet">
         <link href="/css/<?=h($manual->plantilla)?>.min.css?<?=filemtime('css/'.h($manual->plantilla).'.min.css')?>" rel="stylesheet">
@@ -33,7 +33,7 @@
 
 		<aside class="editor index hide pa10">
 			<button data-hide="aside">
-				<?=t('Cerrar ajustes')?>
+				<?=t('Contraer')?>
 				<?=Ku::icon('arrow-right')?>
 			</button>		
 
@@ -46,13 +46,8 @@
 
 		<aside class="align-right editor settings hide pa10">
 			<button data-hide="aside">
-				<?=t('Cerrar ajustes')?>
+				<?=t('Contraer')?>
 				<?=Ku::icon('arrow-right')?>
-			</button>
-
-			<button data-toggle_class="boxed, main">
-				<?=t('Ver cajas')?>
-				<?=Ku::icon('box')?>
 			</button>
 
 			<hr>
@@ -65,8 +60,11 @@
 
 			<hr>
 
-			<button class="add-bleed">
-				<?=t('Añadir sangrado')?>
+			<style id="page-style" media="print">
+				@page { size: A5; margin: 0; }
+			</style>
+			<button type="button" class="booklet-toggle">
+				<?=t('Modo imprenta (libreto)')?>
 				<?=Ku::icon('book')?>
 			</button>
 
@@ -74,6 +72,16 @@
 				<?=t('Imprimir')?>
 				<?=Ku::icon('printer')?>
 			</button>
+
+			<a role="button" href="/ev/manuales/formulario/<?=$reg->manuales_idu?>">
+				<?=t('Editar en texto')?>
+				<?=Ku::icon('edit')?>
+			</a>
+
+			<a role="button" href="/ev/manuales">
+				<?=t('Ver manuales')?>
+				<?=Ku::icon('book')?>
+			</a>
 		</aside>
 
 		<div class="ajax hide"></div>

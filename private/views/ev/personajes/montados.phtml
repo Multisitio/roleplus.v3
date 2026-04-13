@@ -21,7 +21,7 @@
 				<h3><?=empty($per['nombre'])?$per['nombre_personaje']:'La variable para el nombre de personaje debe ser nombre o nombre_personaje.'?></h3>
 			</header>
 
-			<?php if ($per['retrato']): ?>
+			<?php if ( ! empty($per['retrato'])): ?>
 				<img alt="<?=t('Retrato')?>" class="mt10" src="/img/fichas/retratos/l.<?=$per['retrato']?>">
 			<?php endif; ?>
 

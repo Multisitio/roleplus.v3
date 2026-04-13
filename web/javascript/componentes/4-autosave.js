@@ -1,123 +1,136 @@
 (function () {
-	"use strict";
+    "use strict";
 
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initAll);
-	} else {
-		initAll();
-	}
+    function showToast(message, type) {
+        var container = $(".toast-container");
+        if (container.length === 0) {
+            container = $('<div class="toast-container"></div>').appendTo('main');
+        }
+        var toastId = "toast-js-" + Math.floor(Math.random() * 1000000);
+        var title = (type === "error") ? "ERROR" : "INFO";
+        var html =
+            '<div class="mb15 ' + toastId + '">' +
+            '<button type="button" class="btn-small" data-remove="parent">' +
+            '<img alt="Cerrar" src="/img/icons/x.svg">' +
+            '</button>' +
+            '<h3>' + title + '</h3>' +
+            '<p>' + message + '</p>' +
+            '</div>';
+        var $toast = $(html).appendTo(container);
+        $toast.find('[data-remove="parent"]').on('click', function () {
+            $toast.fadeOut('slow', function () { $(this).remove(); });
+        });
+        setTimeout(function () {
+            if ($toast.parent().length > 0) {
+                $toast.fadeOut('slow', function () { $(this).remove(); });
+            }
+        }, 4000);
+    }
 
-	function initAll() {
-		var forms = document.querySelectorAll("form[data-autosave]");
-		for (var f = 0; f < forms.length; f++) {
-			initForm(forms[f]);
-		}
-	}
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initAll);
+    } else {
+        initAll();
+    }
 
-	function initForm(form) {
-		if (!form) return;
+    function initAll() {
+        var forms = document.querySelectorAll("form[data-autosave]");
+        for (var f = 0; f < forms.length; f++) {
+            initForm(forms[f]);
+        }
+    }
 
-		// ej: data-autosave="salvar"
-		var actionVal = (form.getAttribute("data-autosave") || "").trim();
+    function initForm(form) {
+        if (!form) return;
+        var actionVal = (form.getAttribute("data-autosave") || "").trim();
+        if (!actionVal) return;
+        var saveBtnSel = 'button[name="action"][value="' + actionVal + '"]';
+        var saveBtn = form.querySelector(saveBtnSel);
+        if (!saveBtn) return;
 
-		if (!actionVal) return;
+        saveBtn.style.display = "inline-block";
 
-		console.log('Encontrado [data-autosave="' + actionVal + '"]');
+        var watched = form.querySelectorAll(
+            'textarea, input[type="text"], input[type="checkbox"], input[type="file"]'
+        );
+        var lastData = takeSnapshot(watched);
+        var timer = null;
+        var saving = false;
+        var isSubmitting = false; // Flag para evitar el aviso al salvar manualmente
 
-		// buscamos el botón equivalente al de guardar manual
-		var saveBtnSel = 'button[name="action"][value="' + actionVal + '"]';
-		var saveBtn = form.querySelector(saveBtnSel);
+        form.addEventListener("submit", function() {
+            isSubmitting = true;
+        });
 
-		// si no hay botón => no es tu PJ => no hay autosave
-		if (!saveBtn) {
-			console.warn("Encontrado [data-autosave], pero botón no encontrado:", saveBtnSel);
-			return;
-		}
+        window.addEventListener("beforeunload", function (e) {
+            if (isSubmitting) return; // Si estamos enviando el form, no avisamos
 
-		// ocultar el botón salvar
-		saveBtn.style.display = "none";
+            var currentSnapshot = takeSnapshot(watched);
+            if (timer || currentSnapshot !== lastData) {
+                if (timer) doSave();
+                var msg = "¿Guardar cambios antes de salir?";
+                e.preventDefault();
+                e.returnValue = msg;
+                return msg;
+            }
+        });
 
-		// vigilamos estos campos
-		var watched = form.querySelectorAll(
-			'textarea, input[type="text"], input[type="checkbox"]'
-		);
+        function scheduleSave() {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(function () { doSave(); }, 3000);
+        }
 
-		var lastData = takeSnapshot(watched);
-		var timer = null;
-		var saving = false;
+        function doSave() {
+            timer = null;
+            if (saving) return;
+            var currentData = takeSnapshot(watched);
+            if (currentData === lastData) return;
+            var fd = new FormData(form);
+            fd.set("action", actionVal);
+            var url = (form.getAttribute("action") || "").trim() || window.location.href;
+            saving = true;
+            fetch(url, {
+                method: "POST",
+                cache: "no-store",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                body: fd,
+                credentials: "same-origin",
+                keepalive: true
+            })
+                .then(function (res) {
+                    if (res.ok) {
+                        lastData = currentData;
+                        showToast("Cambios guardados automáticamente", "success");
+                    }
+                })
+                .finally(function () { saving = false; });
+        }
 
-		function scheduleSave() {
-			if (timer) clearTimeout(timer);
-			timer = setTimeout(function () {
-				console.log("Guardado después de dejar de escribir por 3 segundos");
-				doSave();
-			}, 3000);
-		}
+        for (var i = 0; i < watched.length; i++) {
+            var el = watched[i];
+            var evt = (el.type === "checkbox" || el.type === "file") ? "change" : "input";
+            el.addEventListener(evt, scheduleSave);
+        }
+    }
 
-		function doSave() {
-			timer = null;
-			if (saving) return;
-
-			var currentData = takeSnapshot(watched);
-			if (currentData === lastData) return;
-
-			var fd = new FormData(form);
-			fd.set("action", actionVal); // imita el submit del botón "salvar"
-
-			var url = (form.getAttribute("action") || "").trim();
-			if (!url) url = window.location.href;
-
-			saving = true;
-			console.log("Autosave… POST ->", url);
-
-			fetch(url, {
-				method: "POST",
-				cache: "no-store",
-				headers: { "X-Requested-With": "XMLHttpRequest" },
-				body: fd,
-				credentials: "same-origin"
-			})
-			.then(function (res) {
-				if (res.ok) {
-					lastData = currentData;
-					console.log("Autosave OK (" + res.status + ")");
-				} else {
-					console.warn("Autosave fallo HTTP:", res.status);
-				}
-			})
-			.catch(function (err) {
-				console.warn("Autosave error de red:", err);
-			})
-			.finally(function () {
-				saving = false;
-			});
-		}
-
-		for (var i = 0; i < watched.length; i++) {
-			var el = watched[i];
-			var evt = (el.type === "checkbox") ? "change" : "input";
-			el.addEventListener(evt, scheduleSave);
-		}
-
-		window.addEventListener("beforeunload", function () {
-			if (timer) {
-				console.log("beforeunload con cambios pendientes -> forzando autosave inmediato");
-				doSave();
-			}
-		});
-	}
-
-	function takeSnapshot(nodeList) {
-		var out = [];
-		for (var i = 0; i < nodeList.length; i++) {
-			var el = nodeList[i];
-			var name = el.name || ("__idx" + i);
-			if (el.type === "checkbox") {
-				out.push(name + "=" + (el.checked ? "1" : "0"));
-			} else {
-				out.push(name + "=" + (el.value === undefined ? "" : el.value));
-			}
-		}
-		return out.join("&");
-	}
+    function takeSnapshot(nodeList) {
+        var out = [];
+        for (var i = 0; i < nodeList.length; i++) {
+            var el = nodeList[i];
+            var name = el.name || ("__idx" + i);
+            if (el.type === "checkbox") {
+                out.push(name + "=" + (el.checked ? "1" : "0"));
+            } else if (el.type === "file") {
+                if (el.files && el.files.length > 0) {
+                    var f = el.files[0];
+                    out.push(name + "=" + f.name + "|" + f.size + "|" + f.lastModified);
+                } else {
+                    out.push(name + "=");
+                }
+            } else {
+                out.push(name + "=" + (el.value === undefined ? "" : el.value));
+            }
+        }
+        return out.join("&");
+    }
 })();

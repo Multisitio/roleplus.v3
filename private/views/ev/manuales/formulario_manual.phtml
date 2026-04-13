@@ -11,7 +11,7 @@
 		<section>
 			<label><?=t('Formato')?></label>
 			<select name="formato">
-				<?php foreach (['a4'=>'A4', 'letter'=>'Letter'] as $key=>$val):
+				<?php foreach (['a4'=>'A4', 'a5'=>'A5', 'letter'=>'Letter'] as $key=>$val):
 					$selected = ($manual->formato == $key) ? 'selected' : ''; ?>
 					<option <?=$selected?> value="<?=$key?>"><?=$val?></option>
 				<?php endforeach; ?>

@@ -1,11 +1,13 @@
-@media print {
+/* @page managed dynamically by editor.phtml */
 
-    article,
-    .page {
+@media print {
+    body {
+        padding: 0 !important;
         margin: 0 !important;
     }
 
-    body {
+    article {
+        margin: 0 !important;
         padding: 0 !important;
     }
 
@@ -15,9 +17,41 @@
     .no-print {
         display: none !important;
     }
+}
 
-    .letter.portrait>div {
-        height: 10.5in !important;
-        width: 8.25in !important;
+@media print {
+    .booklet-mode {
+        /* A4 width */
+        width: 29.7cm;
+    }
+
+    .booklet-mode .resultado {
+        display: block;
+        width: 100%;
+        max-width: none;
+    }
+
+    .booklet-mode .resultado::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .booklet-mode .resultado>div {
+        float: left;
+        margin: 0 !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .booklet-mode .page {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .booklet-mode .blank-page article {
+        background: white !important;
+        box-shadow: none !important;
     }
 }

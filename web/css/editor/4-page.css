@@ -5,9 +5,13 @@ html {
 body {
     background: grey;
     counter-reset: page;
-    padding: 25px 25px 0;
+    padding: 18.75pt 18.75pt 0;
     width: fit-content;
 }
+
+/*main {
+    width: min-content;
+}*/
 
 :where(a) {
     color: var(--link);
@@ -15,7 +19,7 @@ body {
 }
 
 .resultado>div {
-    margin-bottom: 25px;
+    margin-bottom: 18.75pt;
 }
 
 article {
@@ -30,41 +34,12 @@ section {
 }
 
 .editor ul {
-    border-left: 4px solid lightgrey;
+    border-left: 3pt solid lightgrey;
     list-style: none;
-    padding-left: 5px;
+    padding-left: 3.75pt;
 }
 
 /* 8,5" (816px) x 11" (1056px) -> 8,75" x 11,25" */
-
-.letter.landscape article {
-    height: 8.5in;
-    width: 11in;
-}
-
-.letter.portrait>div {
-    background-color: white;
-}
-
-
-/*.letter.portrait>div:nth-child(odd) {
-    padding: .125in 0 .125in .125in;
-}
-
-.letter.portrait>div:nth-child(even) {
-    padding: .125in .125in .125in 0;
-}*/
-
-.letter.portrait article {
-    height: 11in;
-    width: 8.5in;
-}
-
-.letter.portrait.bleed article {
-    height: 11.25in;
-    width: 8.75in;
-    padding: 0.551181in 0.748031in 0.433071in;
-}
 
 .a4.landscape article {
     height: 21cm;
@@ -76,6 +51,35 @@ section {
     width: 21cm;
 }
 
+.a5.landscape article {
+    height: 14.8cm;
+    width: 21cm;
+}
+
+.a5.portrait article {
+    height: 21cm;
+    width: 14.8cm;
+}
+
+.letter.landscape article {
+    height: 8.5in;
+    width: 11in;
+}
+
+.letter.portrait article {
+    height: 11in;
+    width: 8.5in;
+}
+
+/*.letter.portrait.bleed article {
+    height: 11.25in;
+    width: 8.75in;
+    padding: 0.551181in 0.748031in 0.433071in;
+}*/
+
+.letter.portrait>div {
+    background-color: white;
+}
 
 /* BUTTON EDIT RULE */
 
@@ -87,11 +91,28 @@ section {
     background: white;
     border: 0;
     border-radius: 50%;
-    box-shadow: 0 0 10px 1px #666;
+    box-shadow: 0 0 7.5pt 0.75pt #666;
     cursor: pointer;
-    padding: 10px;
+    padding: 7.5pt;
     position: absolute;
-    right: -10px;
-    top: -10px;
+    right: -7.5pt;
+    top: -7.5pt;
     z-index: 2;
+}
+
+/* Booklet mode for screen preview */
+
+.booklet-mode .resultado {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 0;
+    justify-content: center;
+    max-width: 32cm;
+    margin: 0 auto;
+}
+
+.booklet-mode .blank-page article {
+    background: white !important;
+    box-shadow: none !important;
 }

@@ -35,7 +35,7 @@ class EvController extends GeneralController
 
 		$this->claves	= (new Configuracion)->todas();
 		$this->usuario	= (new Usuarios)->uno();
-        $this->version = '2512';
+        $this->version = '26';
 
 		# CRÍTICO rendimiento:
 		# liberamos el lock de la sesión aquí para que esta petición

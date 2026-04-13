@@ -4,13 +4,7 @@
 .resultado h4 {
     font-family: 'MrEaves';
     font-weight: 800;
-    color: var(--HB_Color_HeaderText);
-}
-
-.resultado h1,
-.resultado h2,
-.resultado h4 {
-    margin-bottom: 5px;
+    color: var(--color-text-header);
 }
 
 .resultado h1 {
@@ -20,14 +14,14 @@
     z-index: 1;
 }
 
-.resultado :is(:is(h1, h2) + p, section:has(:is(h1, h2)) + section > div:first-child > p:first-child)::first-letter {
+.resultado :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)::first-letter {
     color: rgba(0, 0, 0, 0);
     float: left;
     font-family: 'SolberaImitation';
-    font-size: 3.5cm;
+    font-size: 132px;
     line-height: 1em;
     margin-block-end: 0;
-    margin-block-start: -0.3cm;
+    margin-block-start: -11px;
     margin-inline-end: 10px;
     margin-inline-start: -40px;
     padding-left: 40px;
@@ -36,27 +30,27 @@
     -webkit-background-clip: text;
 }
 
+.resultado :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)+* {
+    clear: both;
+}
+
 .resultado h2 {
     font-size: 26px;
     line-height: .988em;
-    padding-top: 10px;
 }
 
 .resultado h3 {
     font-size: 22px;
-    border-bottom: 2px solid var(--HB_Color_HeaderUnderline);
+    border-bottom: 2px solid var(--color-border-primary);
     line-height: .995em;
-    margin-bottom: 7px;
-    padding-top: 10px;
 }
 
-.resultado div>:is(h1, h2, h3, h4, h5, h6):first-child {
+/*.resultado *>:is(h1, h2, h3, h4, h5, h6):first-child {
     padding-top: 0;
-}
+}*/
 
 .resultado h4 {
     font-size: 16px;
-    padding-top: 10px;
 }
 
 .resultado h3+h4 {
@@ -74,5 +68,5 @@
 }
 
 .resultado hr {
-    border-color: gold;
+    border-color: var(--color-accent-gold);
 }

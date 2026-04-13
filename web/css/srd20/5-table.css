@@ -1,30 +1,49 @@
 .resultado table {
     border-collapse: collapse;
     border-spacing: 0;
-    font: 11px 'RecursiveVF';
+    font: 11px/1.18 var(--font-table);
     text-align: left;
     width: 100%;
 }
 
-.resultado th,
-.resultado td {
-    padding: 5px;
+.resultado :is(th, td) {
+    padding: 3px;
     vertical-align: top;
 }
 
+.resultado table:has(th) :is(th, td) {
+    border-left: 1px solid var(--color-border-primary);
+}
+
+/*.resultado :is(th, td):first-child {
+    width: 1%;
+    white-space: nowrap;
+} esto no mola */
+
+.resultado table:has(th) :is(th, td):first-child {
+    border-left: none;
+}
+
+.resultado table:has(th) th {
+    border-bottom: 2px solid var(--color-border-primary);
+}
+
+.resultado table:has(th) :is(th, td):nth-child(2) {
+    border-left: 2px solid var(--color-border-primary);
+}
+
 .resultado tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, .3);
+    background-color: var(--bg-table-stripe);
 }
 
-.resultado tr:last-child th {
-    border-bottom: 3px solid grey;
+.resultado table:has(th) tr:last-child th {
+    border-bottom: 2px solid var(--color-border-primary);
 }
 
-.resultado .big-tr:last-child th:first-child,
-.resultado .vertical-line td:first-child {
-    border-right: 3px solid grey;
+.resultado table:has(th) :is(.big-tr:last-child th:first-child, .vertical-line td:first-child) {
+    border-right: 2px solid var(--color-border-primary);
 }
 
-.resultado tfoot tr:first-child {
-    border-top: 2px solid grey;
+.resultado table:has(th) tfoot tr:first-child {
+    border-top: 2px solid var(--color-border-primary);
 }

@@ -1,6 +1,26 @@
 .page article {
-    background: url('/img/editor/srd20/72/parchment_bg.jpg');
+    background: var(--bg-page);
     background-size: cover;
-    font: .34cm 'BookInsanity';
-    padding: 1.4cm 1.6cm 1.1cm;
+    font: 13px/1.25 var(--font-body);
+}
+
+.a4 article>header {
+    padding: 49px 49px 0;
+}
+
+.a4 article>section {
+    padding: 0 49px;
+}
+
+
+.a5 article>header {
+    padding: 18px 18px 0;
+}
+
+.a5 article>section {
+    padding: 0 18px;
+}
+
+article>footer {
+    padding: 23px 0 0;
 }

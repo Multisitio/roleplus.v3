@@ -1,42 +1,18 @@
 blockquote {
-    /*border-image: url('/img/editor/srd20/72/blockquote.png') 12 stretch;
-    border-image-outset: 9px 0px;
-    border-image-width: 11px;
-    border-style: solid;*/
-    /*background: url('/img/editor/srd20/72/blockquote_bottom.jpg') bottom / 100% no-repeat, url('/img/editor/srd20/72/blockquote_top.jpg') top / 100% no-repeat;*/
-    /*background-color: var(--HB_Color_Accent);*/
-    /*border-right: 1px solid sandybrown;*/
-    /*background: linear-gradient(90deg, rgba(255, 245, 190, 1) 0%, rgba(255, 255, 210, 1) 100%);
-    border-left: 1px solid sandybrown;
-    box-shadow: 0 0 3px 0 #888;
-    font-family: ScalySansRemake;
-    font-size: .318cm;
-    margin: 10px 0;
-    position: relative;
-    padding: 5px 10px;
-    width: 100%;*/
     border-style: solid;
     border-width: 8px 6px;
-    background-color: var(--HB_Color_Accent);
-    background-image: url('/img/editor/srd20/72/silver_parchment.jpg');
-    border-image: url('/img/editor/srd20/72/border_fancy.jpg') 14 round;
-    /*border-image: url('/img/editor/srd20/72/blockquote_top.jpg') 100;/*
-    /*border-image: repeating-linear-gradient(45deg, #f33, #3bf, #f33 1000px) 100;*/
+    background-color: var(--color-bg-accent);
+    background-image: var(--bg-blockquote);
+    border-image: var(--border-image-blockquote) 14 round;
     border-image-outset: 0px 2px;
     background-blend-mode: overlay;
     background-attachment: fixed;
-    box-shadow: 0 0 10px 0 #888;
-    /*box-shadow: 1px 4px 14px #888;*/
+    box-shadow: var(--shadow-blockquote);
     padding: 4px 2px;
     margin-left: auto;
     margin-right: auto;
 }
 
-div>blockquote:first-child {
+div>blockquote :first-child {
     margin-top: 0;
 }
-
-
-/*[src*="blockquote"] {
-    display: block;
-}*/

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html id="important" data-color="yellow" data-theme="light" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test Print Fix</title>
+
+    <base href="../">
+    <!-- Load individual CSS files instead of minified versions -->
+    <link href="/css/editor/0-modern-normalize.css" rel="stylesheet">
+    <link href="/css/editor/0-var.css" rel="stylesheet">
+    <link href="/css/editor/1-color.css" rel="stylesheet">
+    <link href="/css/editor/4-flex.css" rel="stylesheet">
+    <link href="/css/editor/4-helpers.css" rel="stylesheet">
+    <link href="/css/editor/4-list.css" rel="stylesheet">
+    <link href="/css/editor/4-page.css" rel="stylesheet">
+    <link href="/css/editor/5-margin.css" rel="stylesheet">
+    <link href="/css/editor/9-print.css" rel="stylesheet">
+
+    <link href="/css/srd20/0-font.css" rel="stylesheet">
+    <link href="/css/srd20/1-var.css" rel="stylesheet">
+    <link href="/css/srd20/5-a.css" rel="stylesheet">
+    <link href="/css/srd20/5-blockquote.css" rel="stylesheet">
+    <link href="/css/srd20/5-cover.css" rel="stylesheet">
+    <link href="/css/srd20/5-footer.css" rel="stylesheet">
+    <link href="/css/srd20/5-hx.css" rel="stylesheet">
+    <link href="/css/srd20/5-img.css" rel="stylesheet">
+    <link href="/css/srd20/5-list.css" rel="stylesheet">
+    <link href="/css/srd20/5-page.css" rel="stylesheet">
+    <link href="/css/srd20/5-table.css" rel="stylesheet">
+
+    <style>
+        /* FIX: reduce section padding to absorb 2px overflow */
+        .a5 article>section {
+            padding: 0.47cm;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="a5 portrait resultado">
+        <div class="page">
+            <article id="ficha">
+                <section style="padding-bottom:0">
+                    <h3>Micro RyF: hoja de personaje <sup>1.0</sup></h3>
+                </section>
+
+                <section style="padding-top:0">
+                    <div style="flex: 0 1 35%">
+                        <table>
+                            <tr>
+                                <td>Nombre del personaje:</td>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                            </tr>
+                            <tr>
+                                <td>Nombre del jugador:</td>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                            </tr>
+                            <tr>
+                                <td>Concepto del personaje:</td>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <h4>Atributos</h4>
+                        <ol>
+                            <li>Reparte 18 puntos.</li>
+                            <li>Mínimo 3 y máximo 6.</li>
+                        </ol>
+                        <table style="width: min-content">
+                            <tr>
+                                <th>Atributo (Atr)</th>
+                                <th>Nivel</th>
+                            </tr>
+                            <tr>
+                                <td>Físico (F)</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Destreza (D)</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Inteligencia (I)</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Percepción (P)</td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <th>Clave</th>
+                                <th>Valor</th>
+                            </tr>
+                            <tr>
+                                <td>Puntos de vida = Físico x5</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Defensa = Esquivar (total) +3</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Iniciativa = Reflejos (total)</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Maná = Inteligencia x5</td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <th>Arma (CaC o a distancia)</th>
+                                <th>Alcance</th>
+                                <th>Daño</th>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <table>
+                            <tr>
+                                <th>Tipo de protección</th>
+                                <th>Absorción</th>
+                                <th>Estorbo</th>
+                            </tr>
+                            <tr>
+                                <td>⮞</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                        <blockquote>
+                            <h5>Notas de la partida</h5>
+                            <br><br><br><br><br><br>
+                        </blockquote>
+                    </div>
+
+                    <div style="flex: 0 1 65%">
+                        <h4>Habilidades</h4>
+                        <ol>
+                            <li>Pon una habilidad a nivel 4, dos a nivel 3, tres a nivel 2 y cuatro a nivel 1.</li>
+                            <li>En «Total», suma el atributo al nivel de la habilidad.</li>
+                            <li>El nivel de una habilidad no puede superar el nivel de su atributo.</li>
+                        </ol>
+                        <table>
+                            <tr>
+                                <th>Atr.</th>
+                                <th>Habilidad</th>
+                                <th>Nivel</th>
+                                <th>Total</th>
+                            </tr>
+                            <tr>
+                                <td>(P)</td>
+                                <td>⮞ Advertir/Notar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Armas a distancia</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(F)</td>
+                                <td>⮞ Armas cuerpo a cuerpo</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Atletismo</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(P)</td>
+                                <td>⮞ Buscar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Cabalgar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Callejeo</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Comercio</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(P)</td>
+                                <td>⮞ Disfraz</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Escalar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Esquivar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(P)</td>
+                                <td>⮞ Etiqueta</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Fauna</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Leyes</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(P)</td>
+                                <td>⮞ Música</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Navegar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Nadar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(P)</td>
+                                <td>⮞ Rastrear</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(P)</td>
+                                <td>⮞ Reflejos</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Religión/Ocultismo</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Robar bolsillos</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Sanación/Hierbas</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Sigilo</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Supervivencia/Cazar</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(I)</td>
+                                <td>⮞ Tradición/Historia</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>(D)</td>
+                                <td>⮞ Trampas/Cerraduras</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>⮞</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>⮞</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </main>
+</body>
+
+</html>

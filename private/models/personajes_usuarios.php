@@ -21,26 +21,16 @@ class Personajes_usuarios extends LiteRecord
     #
     public function vincular($fichas_idu, $personajes_idu)
     {
-        $usuarios_idu = Session::get('idu');
-
-        # 1. Transferimos Fichas
-        $sql = "UPDATE fichas SET usuarios_idu=? WHERE idu=?";
-        parent::query($sql, [$usuarios_idu, $fichas_idu]);
-
-        # 2. Transferimos Cajas de la ficha
-        $sql = "UPDATE fichas_cajas SET usuarios_idu=? WHERE fichas_idu=?";
-        parent::query($sql, [$usuarios_idu, $fichas_idu]);
-
-        # 3. Transferimos Personajes (datos)
+        # Transferimos Personajes (datos)
         $sql = "UPDATE personajes SET usuarios_idu=? WHERE idu=?";
-        parent::query($sql, [$usuarios_idu, $personajes_idu]);
+        parent::query($sql, [Session::get('idu'), $personajes_idu]);
 
-        # 4. Eliminamos vinculaciones previas y creamos la nuestra
+        # Eliminamos vinculaciones previas y creamos la nuestra
         $sql = "DELETE FROM personajes_usuarios WHERE personajes_idu=?";
         parent::query($sql, [$personajes_idu]);
 
         $sql = "INSERT INTO personajes_usuarios SET fichas_idu=?, personajes_idu=?, usuarios_idu=?";
-        parent::query($sql, [$fichas_idu, $personajes_idu, $usuarios_idu]);
+        parent::query($sql, [$fichas_idu, $personajes_idu, Session::get('idu')]);
     }
 
     #
