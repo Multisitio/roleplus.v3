@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html id="important" lang="es">
+    <head>
+        <link href="/css/material-icons.css?v=200202" rel="stylesheet">
+<link href="/css/materialize.min.css?v=200202" rel="stylesheet">
+<link href="/css/hacks.css?v=200202" rel="stylesheet">
+<link href="/css/helpers.css?v=200202" rel="stylesheet">
+<link href="/css/style.css?v=200202" rel="stylesheet">
+<link href="/css/montserrat.css?v=200202" rel="stylesheet">
+<link href="/css/roboto.css?v=200202" rel="stylesheet">
+<link href="/grimorio.json?v=200202" rel="manifest">
+
+    <link href="/css/login.css?v=200202" rel="stylesheet">
+
+
+        <meta charset="utf-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Last-Modified" content="0">
+        <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+
+        <meta property="og:title" content="R+ donde se publican las cosas">
+        <meta property="og:description" content="Una red social donde compartir tu afición con otros. Publica, comenta, clasifica publicaciones en carpetas, crea grupos y sobre todo, mantente al día en una plataforma ágil y precisa.">
+        <meta property="og:image" content="https://rolplus.net/img/logo.jpg">
+        <meta property="og:url" content="https://rolplus.net/">
+        <meta name="twitter:card" content="https://rolplus.net/img/GoblinAssaultMini.jpg">
+
+        <!-- Add to home screen for Safari on iOS -->
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+        <meta content="Rol+" name="apple-mobile-web-app-title">
+        <link href="/img/icon-152x152.png" rel="apple-touch-icon">
+        <meta content="/img/icon-144x144.png" name="msapplication-TileImage">
+        <meta content="#bf360c" name="msapplication-TileColor">
+
+        <title>Acceso a Rol+</title>
+    </head>
+    <body class="row">
+        <div class="overlay"></div>
+        <div class="white-overlay"></div>
+
+        <header>
+            <div></div>
+            <section>
+                <a class="resaltado" data-ajax=".ajax.show" href="/info/ventana/politicas">Políticas</a>
+                &
+                <a class="resaltado" data-ajax=".ajax.show" href="/info/ventana/privacidad">Privacidad</a>
+            </section>
+        </header>
+
+        <main class="max-width row">
+            <div class="col s12 center-align">
+                <a href="/"><img src="/img/logo2.png"></a>
+            </div>
+            <div class="col s12 m12 l8 offset-l2 mt15 row tabs3">
+                <ul class=" center-align col s12 m8 l12 offset-m2">
+                    <li class="crear">
+                        <div class="bg"></div>
+                        <a class="resaltado" href="#crear" title="Crear usuario">Crear</a>
+                    </li>
+                    <li class="active entrar">
+                        <div class="bg"></div>
+                        <a class="resaltado" href="#entrar" title="Entrar en R+">Entrar</a>
+                    </li>
+                    <li class="resetear">
+                        <div class="bg"></div>
+                        <a class="resaltado" href="#resetear" title="Recordar tu clave">Recordar</a>
+                    </li>
+                    <li class="borrarse">
+                        <div class="bg"></div>
+                        <a class="resaltado" href="#borrarse" title="Borrar tu usuario">Abandonar</a>
+                    </li>
+                </ul>
+                <div class="col s10 offset-s1 m10 offset-m1 ph0 container" id="crear" style="display:none">
+                    <div class="bg"></div>
+                    
+<form action="" autocomplete="off" method="post">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="nombre">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="apellidos">
+    <div class="col s12 m8 offset-m2 l6 input mt10">
+        <label>Buzón</label>
+        <section>
+            <div></div>
+            <input autocomplete="off" name="email" placeholder="Pon aquí tu correo">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l6 input crear-pass mt10">
+        <label>
+            Clave            &nbsp;
+            <a class="show-pass" data-to=".crear-pass" href="javascript:void(0);"><i class="material-icons">visibility_off</i></a>
+        </label>
+        <section>
+            <div></div>
+            <input type="password" autocomplete="off" name="clave" data-toast="Tu clave ha de estar compuesta por una mayúscula, una minúscula, un número y al menos 8 caracteres." placeholder="Y una contraseña">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l6 input mt10">
+        <label>Apodo</label>
+        <section>
+            <div></div>
+            <input autocomplete="off" name="apodo" placeholder="Aquí un usuario">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l6 button mt10">
+        <label>Envíame un</label>
+        <section>
+            <button class="all-width btn green darken-1" name="action" value="registrar_usuario">Correo</button>
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l12 mt10">
+        <label class="center-align">
+            <input type="checkbox" class="filled-in" name="terminos" value="1">
+            <span class="resaltado">Soy mayor de edad y acepto las políticas impuestas sin reserva.</span>
+        </label>
+    </div>
+    <div class="clearfix"></div>
+</form>
+                </div>
+                <div class="col s10 offset-s1 m10 offset-m1 ph0 container" id="entrar"> 
+                    <div class="bg"></div>
+                    
+<form action="" autocomplete="on" method="post">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="nombre">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="apellidos">
+    <div class="col s12 m8 offset-m2 l8 offset-l2 input mt10">
+        <label>
+            Buzón        </label>
+        <section>
+            <div></div>
+            <input autocomplete="email" name="email" placeholder="Pon aquí tu correo">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l8 offset-l2 input entrar-pass mt10">
+        <label>
+            Clave            &nbsp;
+            <a class="show-pass" data-to=".entrar-pass" href="javascript:void(0);"><i class="material-icons">visibility_off</i></a>
+        </label>
+        <section>
+            <div></div>
+            <input type="password" autocomplete="current-password" name="clave" placeholder="Y una contraseña">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l8 offset-l2 button mt10">
+        <label>Di amigo y</label>
+        <section>
+            <button class="all-width btn blue darken-1" name="action" value="entrar_usuario">Entra</button>
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l12 mt10">
+        <label class="center-align">
+            <input type="checkbox" class="filled-in" name="terminos" value="1">
+            <span class="resaltado">Soy mayor de edad y acepto las políticas impuestas sin reserva.</span>
+        </label>
+    </div>
+    <div class="clearfix"></div>
+</form>
+                </div>
+                <div class="col s10 offset-s1 m10 offset-m1 ph0 container" id="resetear" style="display:none">
+                    <div class="bg"></div>
+                    
+<form action="" autocomplete="on" method="post">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="nombre">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="apellidos">
+    <div class="col s12 m8 offset-m2 l8 offset-l2 input mt10">
+        <label>Buzón</label>
+        <section>
+            <div></div>
+            <input autocomplete="email" name="email" placeholder="Pon aquí tu correo">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l8 offset-l2 button mv10">
+        <label>Envíame un</label>
+        <section>
+            <button class="all-width btn yellow black-text" name="action" value="resetear_usuario">Correo</button>
+        </section>
+    </div>
+    <div class="clearfix"></div>
+</form>
+                </div>
+                <div class="col s10 offset-s1 m10 offset-m1 ph0 container" id="borrarse" style="display:none">
+                    <div class="bg"></div>
+                    
+<form action="" autocomplete="on" method="post">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="nombre">
+    <input autocomplete="off" class="col s12 m8 offset-m2 l6 hide" name="apellidos">
+    <div class="col s12 m8 offset-m2 l8 offset-l2 input mt10">
+        <label>Buzón</label>
+        <section>
+            <div></div>
+            <input autocomplete="email" name="email" placeholder="Pon aquí tu correo">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l8 offset-l2 input borrarse-pass mt10">
+        <label>
+            Clave            &nbsp;
+            <a class="show-pass" data-to=".borrarse-pass" href="javascript:void(0);"><i class="material-icons">visibility_off</i></a>
+        </label>
+        <section>
+            <div></div>
+            <input type="password" autocomplete="current-password" name="clave" placeholder="Y una contraseña">
+        </section>
+    </div>
+    <div class="col s12 m8 offset-m2 l8 offset-l2 button mv10">
+        <label>Di Arioch y</label>
+        <section>
+            <button class="all-width btn red darken-4" name="action" value="borrar_usuario">Borrate</button>
+        </section>
+    </div>
+    <div class="clearfix"></div>
+</form>
+                </div>
+                                <div class="clearfix"></div>
+            </div>
+            <div class="center-align col s12 mt15">
+                <a class="btn-floating green" href="//rol.plus/">
+                    <i class="material-icons">visibility</i>
+                </a>
+                &nbsp;
+                <a class="btn-floating red darken-4" href="/info/ventana/nosotros" data-ajax=".ajax.show">
+                    <i class="material-icons">people</i>
+                </a>
+                &nbsp;
+                <a class="btn-floating yellow" href="/info/ventana/contacto" data-ajax=".ajax.show">
+                    <i class="material-icons black-text">email</i>
+                </a>
+                &nbsp;
+                <a class="btn-floating pulse blue" href="/info/ventana/ia" data-ajax=".ajax.show">
+                    <i class="material-icons black-text">android</i>
+                </a>
+            </div>
+            <div class="center-align col s12 mt15">
+                <a class="resaltado" href="?lang=en_US.utf8">EN</a>
+                /
+                <a class="resaltado" href="?lang=es_ES">ES</a>
+            </div>
+                    </main>
+
+        <script src="/javascript/jquery-3.3.1.min.js?v=20012801"></script>
+<script src="/javascript/materialize.min.js?v=20012801"></script>
+<script src="/javascript/function.js?v=20012801"></script>
+<script async src="/javascript/ajax.js?v=20012801"></script>
+<script async src="/javascript/data.js?v=20012801"></script>
+<script async src="/javascript/script.js?v=20012801"></script>
+<script async src="/javascript/worker.js?v=20012801"></script>
+
+
+
+        
+        <div class="ajax hide"></div>
+        <div class="ajax show"></div>
+    </body>
+</html>

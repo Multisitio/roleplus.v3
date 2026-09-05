@@ -8,7 +8,10 @@ __OLD__/
 **/__OLD__/
 __OLD__*
 **/__OLD__*
-web/img/
+web/img/rss/
+web/img/usuarios/
+web/img/vistas_previas/
+web/img/upload/
 scratch/
 scratch_*.php
 scratch_*.html
