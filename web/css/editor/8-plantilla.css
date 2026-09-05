@@ -35,9 +35,16 @@ main :not(li)>a[href^="#"]::after {
     width: 100%;
 }
 
+main section:has(> table) {
+    text-align: center;
+}
+
+main section:has(> table) > :not(table) {
+    text-align: var(--body-align, left);
+}
+
 main section > table {
     display: inline-table;
-    margin: 0 auto;
     vertical-align: top;
     text-align: left;
 }
