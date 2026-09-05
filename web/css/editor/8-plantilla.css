@@ -36,7 +36,7 @@ main :not(li)>a[href^="#"]::after {
 }
 
 main section > table {
-    display: table;
+    display: inline-table;
     margin: 0 auto;
     vertical-align: top;
     text-align: left;
