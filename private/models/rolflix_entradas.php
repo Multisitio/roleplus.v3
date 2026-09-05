@@ -38,6 +38,7 @@ class Rolflix_entradas extends LiteRecord
 				$body[] = $log = "$sit->hashtag: $i vídeo/s nuevo/s.";
 			}
 			_var::flush("<hr>$log");
+			usleep(500000); // Evitar rate-limiting (HTTP 429) por peticiones demasiado seguidas
 		}
 		_mail::send('dj@roleplus.app', 'Vídeos de canales cargados vía RSS.', '<pre>'.print_r($body, 1));
 		exit;
@@ -77,7 +78,9 @@ class Rolflix_entradas extends LiteRecord
 			}
 
 			$titulo = _str::cut2('<title', '>', $vid, '</title>');
+			$titulo = html_entity_decode($titulo, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 			$descripcion = _str::cut2('<media:description', '>', $vid, '</media:description>');
+			$descripcion = html_entity_decode($descripcion, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 			# MIRAMOS QUE NO SEA UN GAMEPLAY
 			if (preg_match('/(gameplay)/i', "$titulo $descripcion")) {
 				continue;
@@ -199,15 +202,18 @@ class Rolflix_entradas extends LiteRecord
 		}	
 
 		foreach ($entradas as $ent) {
-			$entradas_por_titulo[$ent->hashtag] = $ent;
+			$entradas_por_titulo[$ent->titulo] = $ent;
 		}
 
 		$keys = $values = [];
 		foreach ($entradas as $ent) {
 			$keys[] = '?';
-			$values[] = $ent->hashtag;
+			$values[] = $ent->titulo;
 		}
 		$in = implode(', ', $keys);
+		if (empty($in)) {
+			return [];
+		}
 		$sql = "SELECT titulo FROM publicaciones WHERE titulo IN ($in)";
 		$entradas_publicadas = self::all($sql, $values);
 		#_var::die([$sql, $values, $entradas_publicadas]);
@@ -307,9 +313,9 @@ class Rolflix_entradas extends LiteRecord
 	{
 		$sql = 'SELECT r_e.*, r_s.hashtag FROM rolflix_entradas r_e, rolflix_sitios r_s  WHERE r_e.rolflix_sitios_idu=r_s.idu AND r_e.idu=?';
 		$ent = self::first($sql, [$idu]);
-		$entrada['titulo'] = $ent->titulo;
+		$entrada['titulo'] = html_entity_decode($ent->titulo, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-        $entrada['contenido'] = (new Respuestas)->preguntarAOpenAi("Resumen y traduce si es necesario sin incluir enlaces ni otras distracciones que no sean emojis del siguiente texto (hazlo comprensible, enriquecedor y evocativo y siempre dirigiendote al lector en segunda persona): " . h($ent->descripcion));
+        $entrada['contenido'] = (new Respuestas)->preguntarAIa("Mantén intacto el texto original limitándolo a uno o dos párrafos. Traduce si es necesario y elimina toda la basura de enlaces a otras redes, etiquetas y formato extra. No uses ningún emoji: " . h($ent->descripcion));
 
 		$entrada['idioma'] = 'ES';
 		$entrada['etiquetas'] = $ent->hashtag;
@@ -325,8 +331,20 @@ class Rolflix_entradas extends LiteRecord
 	#
 	public function publicarEntrada($idu)
 	{
+		$ent = self::first('SELECT * FROM rolflix_entradas WHERE idu=?', [$idu]);
+		if (!$ent) {
+			Session::setArray('toast', t('Entrada no encontrada.'));
+			return false;
+		}
+
+		$ya_publicada = (new Publicaciones)->first('SELECT id FROM publicaciones WHERE titulo=? OR (enlace != "" AND enlace=?)', [$ent->titulo, $ent->enlace]);
+		if ($ya_publicada) {
+			Session::setArray('toast', t('Esta entrada ya está publicada.'));
+			return false;
+		}
+
 		$entrada = $this->prepararEntrada($idu);
-		(new Publicaciones)->crear($entrada);
+		return (new Publicaciones)->crear($entrada);
 	}
 
 	#

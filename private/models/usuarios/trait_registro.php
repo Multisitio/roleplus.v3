@@ -51,7 +51,7 @@ trait UsuariosRegistro
         }
 
         # ENVIANDO CORREO
-        $protocol = ($_SERVER["SERVER_PROTOCOL"]=='HTTP/1.1') ? 'http://' : 'https://';
+        $protocol = $this->requestIsSecure() ? 'https://' : 'http://';
         $url = $protocol . $_SERVER['HTTP_HOST'] . "/usuarios/resetear/$usuario->email/" . base64_encode($usuario->la_clave);
 
         ob_start();
@@ -72,9 +72,13 @@ trait UsuariosRegistro
         $to = $b['email'];
         $subject = t('Resetear la clave de R+');
 
-        _mail::sendText($to, $subject, $body);
-
-        Session::setArray('toast', t('Acuda a su cliente de correo.'));
+        $sent = _mail::sendText($to, $subject, $body);
+        Session::setArray(
+            'toast',
+            $sent
+                ? t('Acuda a su cliente de correo.')
+                : t('No se ha podido enviar el correo. Inténtelo de nuevo más tarde.')
+        );
 
         _mail::send('dj@roleplus.app', 'Usuario reseteando en R+', '<pre>'.print_r([$b['email'], $_SERVER], 1));
     }
@@ -153,7 +157,7 @@ trait UsuariosRegistro
         }
 
         # ENVIANDO CORREO
-        $protocol = ($_SERVER["SERVER_PROTOCOL"]=='HTTP/1.1') ? 'http://' : 'https://';
+        $protocol = $this->requestIsSecure() ? 'https://' : 'http://';
         $url = "{$protocol}{$_SERVER['HTTP_HOST']}/usuarios/confirmar/{$b['email']}/$llave";
 
         ob_start();
@@ -177,9 +181,13 @@ trait UsuariosRegistro
         $to = $b['email'];
         $subject = t('Confirma tu cuenta de correo a R+');
 
-        _mail::sendText($to, $subject, $body);
-
-        Session::setArray('toast', t('Confirme su email en su cliente de correo.'));
+        $sent = _mail::sendText($to, $subject, $body);
+        Session::setArray(
+            'toast',
+            $sent
+                ? t('Confirme su email en su cliente de correo.')
+                : t('No se ha podido enviar el correo. Inténtelo de nuevo más tarde.')
+        );
 
         _mail::send('dj@roleplus.app', 'Usuario registrandose en R+', '<pre>'.print_r($b, 1));
     }
@@ -198,5 +206,13 @@ trait UsuariosRegistro
         Session::setArray('toast', t('Llave reseteada, entre con una nueva.'));
 
         _mail::send('dj@roleplus.app', 'Usuario reseteado en R+', '<pre>'.print_r([$sql, $email, $llave], 1));
+    }
+
+    private function requestIsSecure()
+    {
+        $forwardedProtocol = strtolower($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '');
+        $https = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+
+        return $forwardedProtocol === 'https' || ($https !== '' && $https !== 'off');
     }
 }

@@ -1,0 +1,45 @@
+.band {
+    background: var(--HB_Color_Accent);
+    padding: 5px 10px;
+    position: relative;
+    width: 90%;
+}
+
+.band.left {
+    border-radius: 0 5px 5px 0;
+    box-shadow: 3px 2px 5px #666;
+    margin-left: -15px;
+}
+
+.band.right {
+    border-radius: 5px 0 0 5px;
+    box-shadow: -3px 2px 5px #666;
+    margin-right: -15px;
+}
+
+.band>*:first-child {
+    display: flex;
+    margin: 0;
+}
+
+.band.left>*:first-child {
+    flex-direction: row-reverse;
+}
+
+.band div {
+    border-bottom: 10px solid transparent;
+    border-top: 13px solid black;
+    position: absolute;
+    bottom: -22px;
+    z-index: -1;
+}
+
+.band.left div {
+    border-left: 15px solid transparent;
+    left: 0px;
+}
+
+.band.right div {
+    border-right: 15px solid transparent;
+    right: 0px;
+}

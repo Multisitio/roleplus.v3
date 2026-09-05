@@ -6,11 +6,24 @@
 
 		<title><?=h($manual->nombre)?></title>
 
-        <link href="/css/editor.min.css?<?=filemtime('css/editor.min.css')?>" rel="stylesheet">
-        <link href="/css/<?=h($manual->plantilla)?>.min.css?<?=filemtime('css/'.h($manual->plantilla).'.min.css')?>" rel="stylesheet">
-		<?=Css::inc($version)?>
+        <link href="/css/editor.min.css?v=<?=time()?>" rel="stylesheet">
+
+        <?php 
+        $plantilla_css = "css/" . h($manual->plantilla) . ".min.css";
+        if (file_exists($plantilla_css)): ?>
+            <link href="/<?= $plantilla_css ?>?<?= filemtime($plantilla_css) ?>" rel="stylesheet">
+        <?php endif; ?>
+
+        <?php if ($plantilla_manual): ?>
+            <link id="estilos-personalizados" href="<?= $plantilla_manual->getCssUrl() ?>" rel="stylesheet">
+            <style id="estilos-personalizados-inline"><?= $plantilla_manual->cssPersonalizado() ?></style>
+            <?php if (isset($ajustes->css_fuentes)): ?>
+                <style id="fuentes-personalizadas"><?= $ajustes->css_fuentes ?></style>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>
 	</head>
-	<body>
+	<body class="editor">
 		<button class="button-floating top right" data-show=".index">
 			<?=Ku::icon('menu')?>
 		</button>
@@ -19,79 +32,55 @@
 			<?=Ku::icon('settings')?>
 		</button>
 
-		<main class="<?=$format_page?> resultado">
+        <?php if ($editable): ?>
+            <button class="button-floating right" style="top: 130px;" data-show=".template">
+                <?=Ku::icon('image')?>
+            </button>
+        <?php endif; ?>
+
+		<main class="<?=$format_page?> plantilla" data-manuales-idu="<?=h($manuales_idu)?>">
 			<?php View::content(); ?>
 		</main>
 
-		<a href="#index" class="button-floating bottom-second right">
+		<a href="#index" class="button-floating <?= $editable ? 'bottom-third' : 'bottom-second' ?> right" style="<?= $editable ? 'bottom: 130px;' : 'bottom: 70px;' ?>" title="<?=t('Subir al índice')?>">
 			<?=Ku::icon('arrow-up')?>
 		</a>
 
-		<a class="button-floating bottom right" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=h($manuales_idu)?>">
-			<?=Ku::icon('plus')?>
+        <?php if ($editable): ?>
+            <a class="button-floating bottom-second right" style="bottom: 70px;" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=h($manuales_idu)?>" title="<?=t('Nueva regla')?>">
+                <?=Ku::icon('plus')?>
+            </a>
+        <?php endif; ?>
+
+		<a href="#last-page" class="button-floating bottom right scroll-bottom" style="bottom: 10px;" onclick="var p=document.querySelectorAll('main article[id], main div[data-idu], main div[data-page]'); if(p.length){p[p.length-1].scrollIntoView({behavior:'smooth', block:'start'});} else {window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});} return false;" title="<?=t('Ir a la última página')?>">
+			<?=Ku::icon('arrow-down')?>
 		</a>
 
-		<aside class="editor index hide pa10">
-			<button data-hide="aside">
-				<?=t('Contraer')?>
-				<?=Ku::icon('arrow-right')?>
-			</button>		
+		<?php View::partial('editor/menu_reglas', null, ['reglas' => $reglas]); ?>
 
-			<ul>
-				<?php foreach($reglas as $reg): ?>
-					<li><a data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$reg->manuales_idu?>/<?=$reg->idu?>"><?=$reg->nombre?> <sup class="nowrap"><?=$reg->peso?></sup></a></li>
-				<?php endforeach; ?>
-			</ul>
-		</aside>
+		<?php View::partial('editor/menu_opciones', null, ['manuales_idu' => $manuales_idu, 'manual' => $manual]); ?>
 
-		<aside class="align-right editor settings hide pa10">
-			<button data-hide="aside">
-				<?=t('Contraer')?>
-				<?=Ku::icon('arrow-right')?>
-			</button>
+		<?php View::partial('editor/menu_plantilla', null, [
+            'manual' => $manual, 
+            'manuales_idu' => $manuales_idu, 
+            'plantilla_manual' => $plantilla_manual,
+            'ajustes' => $ajustes
+        ]); ?>
 
-			<hr>
-
-			<div class="pages">
-				<h4><b>Pages:</b> <span></span></h4> 
-				<input type="text" name="pages_from" placeholder="From...">
-				<input type="text" name="pages_to" placeholder="To...">
-			</div>
-
-			<hr>
-
-			<style id="page-style" media="print">
-				@page { size: A5; margin: 0; }
-			</style>
-			<button type="button" class="booklet-toggle">
-				<?=t('Modo imprenta (libreto)')?>
-				<?=Ku::icon('book')?>
-			</button>
-
-			<button class="print">
-				<?=t('Imprimir')?>
-				<?=Ku::icon('printer')?>
-			</button>
-
-			<a role="button" href="/ev/manuales/formulario/<?=$reg->manuales_idu?>">
-				<?=t('Editar en texto')?>
-				<?=Ku::icon('edit')?>
-			</a>
-
-			<a role="button" href="/ev/manuales">
-				<?=t('Ver manuales')?>
-				<?=Ku::icon('book')?>
-			</a>
-		</aside>
+        <?php if ($editable): ?>
+            <?php View::partial('editor/menu_pinceles'); ?>
+            <?php View::partial('editor/menu_contexto', null, ['reglas' => $reglas, 'manuales_idu' => $manuales_idu]); ?>
+        <?php endif; ?>
 
 		<div class="ajax hide"></div>
 		<div class="ajax show"></div>
 
+		<?php View::partial('color_picker_ps'); ?>
+
 		<?php /*<div class="overlay hide" data-confirm="<?=t("Sure?")?>" data-hide=".overlay, .modal"></div>*/ ?>
 
-		<?php View::partial('wysiwyg'); ?>
+		<?php #View::partial('wysiwyg'); ?>
 
-		<script src="/javascript/editor.min.js?<?=filemtime('javascript/editor.min.js')?>"></script>
-		<?=Js::inc($version)?>
+		<script src="/javascript/editor.min.js?v=<?=time()?>"></script>
 	</body>
 </html>

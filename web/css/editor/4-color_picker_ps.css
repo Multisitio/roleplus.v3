@@ -1,0 +1,335 @@
+#ps-color-picker {
+    background: #3c3c3c;
+    border: 1px solid #1a1a1a;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
+    color: #eee;
+    display: none;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    height: fit-content;
+    left: 50%;
+    line-height: normal;
+    max-height: none;
+    max-width: none;
+    min-height: 0;
+    min-width: 0;
+    overflow: visible;
+    padding: 15px !important;
+    position: fixed;
+    right: auto;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+    width: 443px;
+    z-index: 99999;
+}
+
+#ps-color-picker *,
+#ps-color-picker *::before,
+#ps-color-picker *::after {
+    box-sizing: border-box;
+}
+
+#ps-color-picker>section {
+    align-items: start;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 256px 20px 105px;
+    height: auto;
+    margin: 0;
+    max-width: none;
+    min-height: 0;
+    overflow: visible;
+    padding: 0;
+    width: auto;
+}
+
+#ps-color-picker .color-plane {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+    width: 256px;
+}
+
+#ps-color-picker .map {
+    cursor: crosshair;
+    height: 256px;
+    margin: 0;
+    overflow: visible;
+    position: relative;
+    width: 256px;
+}
+
+#ps-color-picker .map canvas {
+    display: block;
+    height: 256px;
+    width: 100%;
+}
+
+#ps-color-picker .map .marker {
+    border: 1px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px #000;
+    height: 8px;
+    pointer-events: none;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 8px;
+}
+
+#ps-color-picker .hue {
+    background: linear-gradient(to bottom, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+    border: 1px solid #111;
+    cursor: row-resize;
+    flex: 0 0 20px;
+    height: 256px;
+    margin: 0;
+    max-width: 20px;
+    min-height: 0;
+    min-width: 20px;
+    position: relative;
+    width: 20px;
+}
+
+#ps-color-picker .hue .marker {
+    background: transparent;
+    height: 6px;
+    left: -4px;
+    pointer-events: none;
+    position: absolute;
+    right: -4px;
+}
+
+#ps-color-picker .hue .marker::before,
+#ps-color-picker .hue .marker::after {
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    content: '';
+    position: absolute;
+    top: -1px;
+}
+
+#ps-color-picker .hue .marker::before {
+    border-left: 5px solid #fff;
+    filter: drop-shadow(1px 1px 1px #000);
+    left: 0;
+}
+
+#ps-color-picker .hue .marker::after {
+    border-right: 5px solid #fff;
+    filter: drop-shadow(-1px 1px 1px #000);
+    right: 0;
+}
+
+#ps-color-picker .picker-side {
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: auto;
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    min-height: 0;
+    min-width: 105px;
+    overflow: visible;
+    padding: 0;
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 105px;
+    z-index: auto;
+}
+
+#ps-color-picker .preview {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+}
+
+#ps-color-picker .preview label {
+    color: #ccc;
+    display: block;
+    font-size: 10px;
+    line-height: normal;
+    margin: 0;
+    text-transform: lowercase;
+    width: auto;
+}
+
+#ps-color-picker .preview .swatches {
+    border: 1px solid #fff;
+    display: flex;
+    flex-direction: column;
+    height: 60px;
+    width: 100%;
+}
+
+#ps-color-picker .preview .swatches div {
+    flex: 1;
+}
+
+#ps-color-picker .hex {
+    align-items: center;
+    background: #2a2a2a;
+    border: 1px solid #111;
+    display: flex;
+    margin: 0;
+    min-height: 0;
+    padding: 0 6px;
+    width: 100%;
+}
+
+#ps-color-picker .hex span {
+    color: #999;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+}
+
+#ps-color-picker .hex input {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    color: #eee;
+    display: block;
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    height: auto;
+    line-height: normal;
+    margin-bottom: 0;
+    min-height: 0;
+    min-width: 0;
+    outline: 0;
+    padding: 2px 0;
+    text-align: center;
+    width: 100%;
+    word-break: normal;
+}
+
+#ps-color-picker .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#ps-color-picker .actions button {
+    align-items: center;
+    appearance: none;
+    background: #555;
+    border: 1px solid #111;
+    border-radius: 0;
+    box-shadow: 1px 1px 1px #000;
+    color: #eee;
+    cursor: pointer;
+    display: flex;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    height: auto;
+    justify-content: center;
+    line-height: normal;
+    margin: 0;
+    min-height: 0;
+    min-width: 0;
+    padding: 6px 0;
+    text-align: center;
+    text-transform: none;
+    white-space: nowrap;
+    width: 100%;
+    word-break: normal;
+}
+
+#ps-color-picker .actions button:hover {
+    background: #626262;
+}
+
+#ps-color-picker .history {
+    display: grid;
+    gap: 2px;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0 auto;
+    padding: 0;
+}
+
+#ps-color-picker .history button {
+    appearance: none;
+    background: #000;
+    border: 1px solid #111;
+    border-radius: 0;
+    box-shadow: none;
+    cursor: pointer;
+    display: block;
+    font-size: 0;
+    height: 20px;
+    line-height: 0;
+    margin: 0;
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    width: 20px;
+    word-break: normal;
+}
+
+#ps-color-picker .color-values {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0;
+    min-height: 0;
+    padding: 0;
+    width: 256px;
+}
+
+#ps-color-picker .color-values>div {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    width: auto;
+}
+
+#ps-color-picker .color-values label {
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    line-height: normal;
+    margin: 0;
+    width: auto;
+}
+
+#ps-color-picker .color-values label span {
+    color: #999;
+    font-size: 11px;
+    width: 12px;
+}
+
+#ps-color-picker .color-values input[type=number] {
+    background: #2a2a2a;
+    border: 1px solid #111;
+    border-radius: 0;
+    box-shadow: none;
+    color: #eee;
+    display: inline-block;
+    height: auto;
+    line-height: normal;
+    margin-bottom: 0;
+    min-height: 0;
+    min-width: 0;
+    padding: 2px 4px;
+    width: 65px;
+    word-break: normal;
+}

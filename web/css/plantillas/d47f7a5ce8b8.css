@@ -1,0 +1,546 @@
+/* Compilado: 2026-07-28 19:38:36 */
+@font-face { font-family: 'Pirata One'; src: url('/fonts/pirata_one.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Metal Mania'; src: url('/fonts/metal_mania.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Oregano'; src: url('/fonts/oregano.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Amarante'; src: url('/fonts/amarante.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Combo'; src: url('/fonts/combo.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Yrsa'; src: url('/fonts/yrsa.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Alegreya Sans'; src: url('/fonts/alegreya_sans.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Germania One'; src: url('/fonts/germania_one.woff2') format('woff2'); font-display: swap; }
+main {
+    --background-color: white;
+    --background-image: url('/img/usuarios/3fc4b9f1/l.adfab64398a1_pergamino-gris-dotch.webp');
+    --background-color-even: white;
+    --background-image-even: none;
+    --margin-asymmetric: 0;
+    --kdp-print-mode: 0;
+    --blockquote-border-left-color: #ff0000;
+    --blockquote-border-left-width: 3px;
+    --blockquote-margin-bottom: 10px;
+    --blockquote-margin-left: 5px;
+    --blockquote-margin-right: 0px;
+    --blockquote-margin-top: 0px;
+    --blockquote-padding-bottom: 0px;
+    --blockquote-padding-left: 10px;
+    --blockquote-padding-right: 0px;
+    --blockquote-padding-top: 0px;
+    --body-align: left;
+    --body-color: #666666;
+    --body-decoration: 0;
+    --body-family: 'Yrsa';
+    --body-size: 14px;
+    --body-style: normal;
+    --body-transform: none;
+    --body-variant: normal;
+    --footer-height: 100px;
+    --footer-imagen: url('/img/usuarios/3fc4b9f1/l.60a827efa9b4_pie-de-pagina-dotch.webp');
+    --footer-margin-bottom: 0px;
+    --footer-margin-left: 0px;
+    --footer-margin-right: 0px;
+    --footer-margin-top: 0px;
+    --footer-padding-bottom: 0px;
+    --footer-padding-left: 70px;
+    --footer-padding-right: 70px;
+    --footer-padding-top: 55px;
+    --footer-page-position: outside;
+    --footer-page-x: 72px;
+    --footer-page-y: 37px;
+    --h1-align: center;
+    --h1-color: #cc0000;
+    --h1-decoration: 0;
+    --h1-family: 'Pirata One';
+    --h1-size: 32px;
+    --h1-style: normal;
+    --h1-transform: uppercase;
+    --h1-variant: normal;
+    --h2-align: left;
+    --h2-color: #990000;
+    --h2-decoration: 0;
+    --h2-family: 'Pirata One';
+    --h2-size: 28px;
+    --h2-style: normal;
+    --h2-transform: none;
+    --h2-variant: normal;
+    --h3-align: left;
+    --h3-color: #660000;
+    --h3-decoration: 1px;
+    --h3-family: 'Metal Mania';
+    --h3-size: 24px;
+    --h3-style: normal;
+    --h3-transform: none;
+    --h3-variant: small-caps;
+    --h4-align: left;
+    --h4-color: #ff6600;
+    --h4-decoration: 0;
+    --h4-family: 'Oregano';
+    --h4-size: 18px;
+    --h4-style: normal;
+    --h4-transform: none;
+    --h4-variant: normal;
+    --h5-align: center;
+    --h5-color: #cc0000;
+    --h5-decoration: 0;
+    --h5-family: 'Amarante';
+    --h5-size: 18px;
+    --h5-style: normal;
+    --h5-transform: none;
+    --h5-variant: normal;
+    --h6-align: left;
+    --h6-color: #ff0000;
+    --h6-decoration: 0;
+    --h6-family: 'Combo';
+    --h6-size: 16px;
+    --h6-style: normal;
+    --h6-transform: none;
+    --h6-variant: normal;
+    --header-margin-bottom: 0px;
+    --header-margin-left: 0px;
+    --header-margin-right: 0px;
+    --header-margin-top: 0px;
+    --header-padding-bottom: 10px;
+    --header-padding-left: 20px;
+    --header-padding-right: 20px;
+    --header-padding-top: 20px;
+    --list-margin-bottom: 0px;
+    --list-margin-left: 0px;
+    --list-margin-right: 0px;
+    --list-margin-top: 0px;
+    --list-padding-bottom: 10px;
+    --list-padding-left: 20px;
+    --list-padding-right: 0px;
+    --list-padding-top: 0px;
+    --list-style-bullet: '✦ ';
+    --list-style-checkbox: '☐ ';
+    --list-style-radio: '🔾 ';
+    --list-style-sub-bullet: '⮞ ';
+    --list-style-ordered: decimal;
+    --list-style-ordered-sub: lower-latin;
+    --p-margin-bottom: 0px;
+    --p-margin-left: 0px;
+    --p-margin-right: 0px;
+    --p-margin-top: 0px;
+    --p-padding-bottom: 10px;
+    --p-padding-left: 0px;
+    --p-padding-right: 0px;
+    --p-padding-top: 0px;
+    --section-margin-bottom: 0px;
+    --section-margin-left: 0px;
+    --section-margin-right: 0px;
+    --section-margin-top: 0px;
+    --section-padding-bottom: 20px;
+    --section-padding-left: 20px;
+    --section-padding-right: 20px;
+    --section-padding-top: 0px;
+    --small-align: left;
+    --small-color: #ff9900;
+    --small-decoration: 0;
+    --small-family: 'Alegreya Sans';
+    --small-size: 80%;
+    --small-style: italic;
+    --small-transform: none;
+    --small-variant: normal;
+    --table-th-border-bottom-width: 3px;
+    --table-th-border-bottom-color: #ff0000;
+    --table-col1-border-right-width: 2px;
+    --table-col1-border-right-color: #000000;
+    --table-zebra-opacity: 25;
+    --table-zebra-color: #ffcccc;
+    --table-td-padding-x: 3px;
+    --table-td-padding-y: 0px;
+    --table-margin-top: 0px;
+    --table-margin-right: 0px;
+    --table-margin-bottom: 10px;
+    --table-margin-left: 0px;
+    --a-color: inherit;
+    --dropcap-family: 'Germania One';
+    --dropcap-size: 40px;
+    --dropcap-color: #cc0000;
+    --dropcap-margin-top: 2px;
+    --dropcap-margin-right: 7px;
+    --dropcap-margin-bottom: 0px;
+    --dropcap-margin-left: 0px;
+    --dropcap-align: left;
+    --dropcap-decoration: 0;
+    --dropcap-weight: normal;
+    --dropcap-style: normal;
+    --dropcap-transform: none;
+    --dropcap-variant: normal;
+    --h1-weight: normal;
+    --h2-weight: normal;
+    --h3-weight: normal;
+    --h4-weight: normal;
+    --h5-weight: normal;
+    --h6-weight: normal;
+    --body-weight: normal;
+    --small-weight: normal;
+    --table-zebra-bg: color-mix(in srgb, #ffcccc 25%, transparent);
+}
+
+main.plantilla h1 {
+    font-family: var(--h1-family);
+    font-size: var(--h1-size);
+    font-weight: var(--h1-weight);
+    font-style: var(--h1-style);
+    text-align: var(--h1-align);
+    text-transform: var(--h1-transform);
+    font-variant: var(--h1-variant);
+    text-decoration: none !important;
+    color: var(--h1-color);
+}
+
+main.plantilla h1::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-top: var(--h1-decoration) solid currentColor;
+    margin-block: -8px 8px;
+}
+
+main.plantilla h2 {
+    font-family: var(--h2-family);
+    font-size: var(--h2-size);
+    font-weight: var(--h2-weight);
+    font-style: var(--h2-style);
+    text-align: var(--h2-align);
+    text-transform: var(--h2-transform);
+    font-variant: var(--h2-variant);
+    text-decoration: none !important;
+    color: var(--h2-color);
+}
+
+main.plantilla h2::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-top: var(--h2-decoration) solid currentColor;
+    margin-block: -8px 8px;
+}
+
+main.plantilla h3 {
+    font-family: var(--h3-family);
+    font-size: var(--h3-size);
+    font-weight: var(--h3-weight);
+    font-style: var(--h3-style);
+    text-align: var(--h3-align);
+    text-transform: var(--h3-transform);
+    font-variant: var(--h3-variant);
+    text-decoration: none !important;
+    color: var(--h3-color);
+}
+
+main.plantilla h3::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-top: var(--h3-decoration) solid currentColor;
+    margin-block: -8px 8px;
+}
+
+main.plantilla h4 {
+    font-family: var(--h4-family);
+    font-size: var(--h4-size);
+    font-weight: var(--h4-weight);
+    font-style: var(--h4-style);
+    text-align: var(--h4-align);
+    text-transform: var(--h4-transform);
+    font-variant: var(--h4-variant);
+    text-decoration: none !important;
+    color: var(--h4-color);
+}
+
+main.plantilla h4::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-top: var(--h4-decoration) solid currentColor;
+    margin-block: -8px 8px;
+}
+
+main.plantilla h5 {
+    font-family: var(--h5-family);
+    font-size: var(--h5-size);
+    font-weight: var(--h5-weight);
+    font-style: var(--h5-style);
+    text-align: var(--h5-align);
+    text-transform: var(--h5-transform);
+    font-variant: var(--h5-variant);
+    text-decoration: none !important;
+    color: var(--h5-color);
+}
+
+main.plantilla h5::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-top: var(--h5-decoration) solid currentColor;
+    margin-block: -8px 8px;
+}
+
+main.plantilla h6 {
+    font-family: var(--h6-family);
+    font-size: var(--h6-size);
+    font-weight: var(--h6-weight);
+    font-style: var(--h6-style);
+    text-align: var(--h6-align);
+    text-transform: var(--h6-transform);
+    font-variant: var(--h6-variant);
+    text-decoration: none !important;
+    color: var(--h6-color);
+}
+
+main.plantilla h6::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-top: var(--h6-decoration) solid currentColor;
+    margin-block: -8px 8px;
+}
+
+main.plantilla {
+    font-family: var(--body-family);
+    font-size: var(--body-size);
+    font-weight: var(--body-weight);
+    font-style: var(--body-style);
+    text-align: var(--body-align);
+    text-transform: var(--body-transform);
+    font-variant: var(--body-variant);
+    text-decoration: none !important;
+    color: var(--body-color);
+}
+
+main.plantilla small {
+    font-family: var(--small-family);
+    font-size: var(--small-size);
+    font-weight: var(--small-weight);
+    font-style: var(--small-style);
+    text-align: var(--small-align);
+    text-transform: var(--small-transform);
+    font-variant: var(--small-variant);
+    text-decoration: none !important;
+    color: var(--small-color);
+}
+
+main.plantilla div article footer, main.plantilla > div footer, main.plantilla footer {
+    font-family: var(--h6-family);
+    font-size: var(--h6-size);
+    font-weight: var(--h6-weight);
+    font-style: var(--h6-style);
+    text-transform: var(--h6-transform);
+    font-variant: var(--h6-variant);
+    color: var(--h6-color);
+}
+
+main.plantilla caption {
+    font-family: var(--h5-family);
+    font-size: var(--h5-size);
+    font-weight: var(--h5-weight);
+    font-style: var(--h5-style);
+    text-transform: var(--h5-transform);
+    font-variant: var(--h5-variant);
+    color: var(--h5-color);
+}
+
+main table tfoot td, main table tfoot th {
+    font-family: var(--small-family);
+    font-size: var(--small-size);
+    font-weight: var(--small-weight);
+    font-style: var(--small-style);
+    text-align: var(--small-align);
+    text-transform: var(--small-transform);
+    font-variant: var(--small-variant);
+    color: var(--small-color);
+}
+
+main > div {
+    background-image: var(--background-image);
+    background-color: var(--background-color);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+main > div:nth-child(odd) {
+    background-image: var(--background-image);
+    background-color: var(--background-color);
+}
+
+main > div:nth-child(even) {
+    background-image: var(--background-image);
+    background-color: var(--background-color);
+}
+
+main header {
+    padding-top: var(--header-padding-top);
+    padding-right: var(--header-padding-right);
+    padding-bottom: var(--header-padding-bottom);
+    padding-left: var(--header-padding-left);
+    margin-top: var(--header-margin-top);
+    margin-right: var(--header-margin-right);
+    margin-bottom: var(--header-margin-bottom);
+    margin-left: var(--header-margin-left);
+}
+
+main section {
+    padding-top: var(--section-padding-top);
+    padding-right: var(--section-padding-right);
+    padding-bottom: var(--section-padding-bottom);
+    padding-left: var(--section-padding-left);
+    margin-top: var(--section-margin-top);
+    margin-right: var(--section-margin-right);
+    margin-bottom: var(--section-margin-bottom);
+    margin-left: var(--section-margin-left);
+}
+
+main p {
+    padding-top: var(--p-padding-top);
+    padding-right: var(--p-padding-right);
+    padding-bottom: var(--p-padding-bottom);
+    padding-left: var(--p-padding-left);
+    margin-top: var(--p-margin-top);
+    margin-right: var(--p-margin-right);
+    margin-bottom: var(--p-margin-bottom);
+    margin-left: var(--p-margin-left);
+}
+
+main blockquote {
+    padding-top: var(--blockquote-padding-top);
+    padding-right: var(--blockquote-padding-right);
+    padding-bottom: var(--blockquote-padding-bottom);
+    padding-left: var(--blockquote-padding-left);
+    margin-top: var(--blockquote-margin-top);
+    margin-right: var(--blockquote-margin-right);
+    margin-bottom: var(--blockquote-margin-bottom);
+    margin-left: var(--blockquote-margin-left);
+}
+
+main :is(ul, ol) {
+    padding-top: var(--list-padding-top);
+    padding-right: var(--list-padding-right);
+    padding-bottom: var(--list-padding-bottom);
+    padding-left: var(--list-padding-left);
+    margin-top: var(--list-margin-top);
+    margin-right: var(--list-margin-right);
+    margin-bottom: var(--list-margin-bottom);
+    margin-left: var(--list-margin-left);
+    list-style: none !important;
+}
+
+main :not(main):has(+ :is(ul, ol)) {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+main footer {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--footer-height);
+    z-index: 1;
+    box-sizing: border-box;
+    padding-top: var(--footer-padding-top);
+    padding-right: var(--footer-padding-right);
+    padding-bottom: var(--footer-padding-bottom);
+    padding-left: var(--footer-padding-left);
+    margin-top: var(--footer-margin-top);
+    margin-right: var(--footer-margin-right);
+    margin-bottom: var(--footer-margin-bottom);
+    margin-left: var(--footer-margin-left);
+}
+
+main ul > li::before {
+    content: var(--list-style-bullet);
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em !important;
+}
+main ul ul > li::before { content: var(--list-style-sub-bullet); }
+main ul.checkbox > li::before { content: var(--list-style-checkbox); }
+main ul.radio > li::before { content: var(--list-style-radio); }
+
+main ol {
+    list-style-type: var(--list-style-ordered) !important;
+}
+main ol ol {
+    list-style-type: var(--list-style-ordered-sub) !important;
+}
+
+main footer::before {
+    content: ''; display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: var(--footer-imagen); background-size: cover; background-repeat: no-repeat; background-position: center bottom; z-index: -1;
+}
+main > div:nth-child(odd) footer::before {
+    transform: scaleX(-1);
+}
+main footer::after {
+    content: counter(page); position: absolute; bottom: var(--footer-page-y); width: var(--footer-page-x);
+}
+main > div:nth-child(odd) footer { text-align: left; }
+main > div:nth-child(odd) footer::after { right: 0; left: auto; }
+main > div:nth-child(even) footer { text-align: right; }
+main > div:nth-child(even) footer::after { left: 0; right: auto; }
+
+main table {
+    margin-top: var(--table-margin-top);
+    margin-right: var(--table-margin-right);
+    margin-bottom: var(--table-margin-bottom);
+    margin-left: var(--table-margin-left);
+    border-collapse: collapse;
+}
+
+main table:has(th) thead tr th, main table:has(th) tr:has(th) th {
+    border-bottom: var(--table-th-border-bottom-width) solid var(--table-th-border-bottom-color);
+}
+main table:has(th) tr td:first-child, main table:has(th) tr th:first-child {
+    border-right: var(--table-col1-border-right-width) solid var(--table-col1-border-right-color);
+}
+main table:has(th:nth-child(2)) tbody tr:not(:has(td:nth-child(2))) td:first-child { border-right: none; }
+main table:has(th:nth-child(3)) tbody tr:not(:has(td:nth-child(3))) td:first-child { border-right: none; }
+main table:has(th:nth-child(4)) tbody tr:not(:has(td:nth-child(4))) td:first-child { border-right: none; }
+main table:has(th:nth-child(5)) tbody tr:not(:has(td:nth-child(5))) td:first-child { border-right: none; }
+main table:has(th:nth-child(6)) tbody tr:not(:has(td:nth-child(6))) td:first-child { border-right: none; }
+main table tfoot td, main table tfoot th {
+    border-top: 1px solid var(--table-th-border-bottom-color);
+}
+main table tfoot tr td:first-child, main table tfoot tr th:first-child {
+    border-right: none;
+}
+main table tbody tr:nth-child(even) {
+    background-color: var(--table-zebra-bg);
+}
+main table td, main table th {
+    padding: var(--table-td-padding-y) var(--table-td-padding-x);
+}
+
+main blockquote {
+    border-left: var(--blockquote-border-left-width) solid var(--blockquote-border-left-color);
+}
+main a, main em, main strong {
+    color: var(--a-color);
+}
+
+main :is(h1 + p, :is(header, section, div:not(.plantilla > div)):has(h1):not(:has(p)) + p, :is(header, section, div:not(.plantilla > div)):has(h1):not(:has(p)) + :is(section, div:not(.plantilla > div)) > p:first-of-type, .big-letter)::first-letter {
+    float: left;
+    font-family: var(--dropcap-family);
+    font-size: var(--dropcap-size);
+    line-height: 1;
+    margin-top: calc(var(--dropcap-margin-top) - 10px);
+    margin-right: var(--dropcap-margin-right);
+    margin-bottom: calc(var(--dropcap-margin-bottom) - 10px);
+    margin-left: var(--dropcap-margin-left);
+    padding: 10px 0;
+    background-image: linear-gradient(to bottom, var(--dropcap-color), color-mix(in srgb, var(--dropcap-color) 40%, transparent));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+

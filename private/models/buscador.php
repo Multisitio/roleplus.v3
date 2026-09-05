@@ -6,6 +6,9 @@ class Buscador extends LiteRecord
 	#
 	public function registrar($frase)
 	{
+        if ( ! Session::get('idu')) {
+            return;
+        }
 		$sql = 'SELECT id, cuanto FROM buscador WHERE quien=? AND que=?';
         $registro = self::first($sql, [Session::get('idu'), $frase]);
         if ($registro) {

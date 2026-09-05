@@ -61,4 +61,15 @@ class Acciones extends LiteRecord
         }
         return $arr;
     }
+
+    # Bloquear / Desbloquear usuario (incluye Toast)
+    public function bloquear($idu)
+    {
+        $bloqueado = $this->alternar($idu, 'usuarios', 'bloqueado');
+        Session::setArray('toast', $bloqueado
+            ? t('Usuario bloqueado.')
+            : t('Usuario desbloqueado.')
+        );
+        return $bloqueado;
+    }
 }

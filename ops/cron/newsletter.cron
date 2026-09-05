@@ -1,0 +1,2 @@
+# ROLEplus weekly newsletter — Monday at 10:00 Europe/Madrid.
+0 10 * * 1 /usr/bin/flock -n /var/lock/roleplus-newsletter.lock /usr/bin/php /var/www/roleplus.app/private/bin/kcli.php rolelocal/boletin/enviar

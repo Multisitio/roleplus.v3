@@ -19,7 +19,7 @@ Css::add('publicaciones.min');
                 <a class="gap5 w100" href="/usuarios/ver_conectados" data-ajax=".ajax.show">
                     <img alt="<?=t('Usuarios conectados')?>" src="/img/icons/users.svg" width="30" height="30">
                     <small>
-                        <span class="conectados" data-ch="rp_conectados">
+                        <span class="conectados" <?= Session::get('idu') ? 'data-ch="rp_conectados"' : '' ?>>
                             <?php include APP_PATH . 'views/usuarios/conectados.phtml'; ?>
                         </span>
                         <?=t('conectados')?>
@@ -71,7 +71,7 @@ Css::add('publicaciones.min');
             $mini .= preg_match('/\.(gif|svg)$/i', $consejo->imagen)
                 ? $consejo->imagen : "l.$consejo->imagen";
             if (_file::exists($img)): ?>
-                <a class="filtro-etiquetas pa0 shadow0" href="/consejos/contabilizar/<?=$consejo->idu?>" <?=strstr($consejo->url, 'http')?'rel="noopener noreferrer" target="_blank"':''?> title="<?=t('Consejo de')?> <?=$consejo->nombre?>"><img alt="<?=$consejo->imagen?>" src="<?=$mini?>" width="100%"></a>
+                <a class="filtro-etiquetas pa0 shadow0" href="/consejos/contabilizar/<?=$consejo->idu?>" <?=strstr($consejo->url, 'http')?'rel="noopener noreferrer" target="_blank"':''?> title="<?=t('Consejo de')?> <?=$consejo->nombre?>"><img alt="<?=$consejo->imagen?>" decoding="async" src="<?=$mini?>"<?=Article::imageSizeAttributes($mini)?>></a>
             <?php endif;
         endif; ?>
     </article>

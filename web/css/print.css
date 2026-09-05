@@ -86,44 +86,6 @@ hr {
 
 /*ul, img, table { page-break-inside:avoid; }*/
 
-ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-ul ul {
-    border-left: 1px solid #eee;
-    padding-left: 20px;
-}
-
-ul.manual>li {
-    margin-block-start: 3rem;
-}
-
-ul.manual article ul {
-    list-style: disc;
-    border-left: none;
-}
-
-ul.manual article ul ul {
-    list-style: circle;
-}
-
-ul.manual article ul ul ul {
-    list-style: disc;
-}
-
-ul.manual article ul ul ul ul {
-    list-style: circle;
-}
-
-ul.manual article ul ul ul ul ul {
-    list-style: disc;
-}
-
-ul.manual article ul ul ul ul ul ul {
-    list-style: circle;
-}
 
 .ventana.mayor {
     top: 0;

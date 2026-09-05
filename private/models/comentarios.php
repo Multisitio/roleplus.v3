@@ -172,8 +172,24 @@ class Comentarios extends LiteRecord
 	#
 	public function sueltos()
 	{
-		$sql = 'SELECT com.*, pub.titulo, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.hashtag FROM comentarios com, publicaciones pub, usuarios usu WHERE com.usuarios_idu=usu.idu AND com.publicaciones_idu=pub.idu AND com.borrado IS NULL ORDER BY com.publicado DESC LIMIT 150';
-		return self::all($sql);
+		$sql = 'SELECT com.*, pub.titulo, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.hashtag FROM comentarios com, publicaciones pub, usuarios usu WHERE com.usuarios_idu=usu.idu AND com.publicaciones_idu=pub.idu AND com.borrado IS NULL';
+		
+		$bloqueados_sql = '';
+		$bloqueados_vals = [];
+		if (Session::get('idu')) {
+			$bloqueados = (new Acciones)->registros('bloqueado');
+			if (!empty($bloqueados)) {
+				$b_keys = [];
+				foreach ($bloqueados as $blo) {
+					$b_keys[] = '?';
+					$bloqueados_vals[] = $blo->idu;
+				}
+				$bloqueados_sql = ' AND com.usuarios_idu NOT IN (' . implode(', ', $b_keys) . ')';
+			}
+		}
+
+		$sql .= $bloqueados_sql . ' ORDER BY com.publicado DESC LIMIT 150';
+		return self::all($sql, $bloqueados_vals);
 	}
 
 	#
@@ -181,6 +197,20 @@ class Comentarios extends LiteRecord
 	{
 		$no_listar = (new Etiquetas_usuarios)->todas('no_listar');
 		$vals = [$publicaciones_idu];
+
+		$bloqueados_sql = '';
+		$bloqueados_vals = [];
+		if (Session::get('idu')) {
+			$bloqueados = (new Acciones)->registros('bloqueado');
+			if (!empty($bloqueados)) {
+				$b_keys = [];
+				foreach ($bloqueados as $blo) {
+					$b_keys[] = '?';
+					$bloqueados_vals[] = $blo->idu;
+				}
+				$bloqueados_sql = ' AND com.usuarios_idu NOT IN (' . implode(', ', $b_keys) . ')';
+			}
+		}
 
 		if ($no_listar) {
 			$keys = [];
@@ -190,11 +220,11 @@ class Comentarios extends LiteRecord
 			}
 			$keys_str = implode(', ', $keys);
 
-			$sql = "SELECT com.*, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.hashtag, usu.rol FROM comentarios com, usuarios usu WHERE com.usuarios_idu=usu.idu AND com.publicaciones_idu=? AND com.usuarios_hashtag NOT IN ($keys_str) ORDER BY com.publicado";
+			$sql = "SELECT com.*, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.hashtag, usu.rol FROM comentarios com, usuarios usu WHERE com.usuarios_idu=usu.idu AND com.publicaciones_idu=? AND com.usuarios_hashtag NOT IN ($keys_str){$bloqueados_sql} ORDER BY com.publicado";
 		} else {
-			$sql = 'SELECT com.*, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.hashtag, usu.rol FROM comentarios com, usuarios usu WHERE com.usuarios_idu=usu.idu AND com.publicaciones_idu=? ORDER BY com.publicado';
+			$sql = "SELECT com.*, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.hashtag, usu.rol FROM comentarios com, usuarios usu WHERE com.usuarios_idu=usu.idu AND com.publicaciones_idu=?{$bloqueados_sql} ORDER BY com.publicado";
 		}
-		return self::all($sql, $vals) ?: [];
+		return self::all($sql, array_merge($vals, $bloqueados_vals)) ?: [];
 	}
 
 	#

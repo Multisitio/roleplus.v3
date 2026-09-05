@@ -1,0 +1,43 @@
+﻿<?php
+/**
+ * Partial: Barra superior de contexto (migas + select páginas + posición)
+ * Variables: $reglas, $manuales_idu
+ */
+?>
+<nav data-toolbar="contexto" aria-label="<?=t('Contexto del editor')?>">
+
+	<select title="<?=t('Ir a página')?>">
+		<?php $i = 1; foreach ($reglas as $reg):
+			$art_id = '';
+			if (!empty($reg->descripcion)) {
+				if (preg_match('/<article\b[^>]*\bid=["\']([^"\']+)["\']/i', $reg->descripcion, $m)) {
+					$art_id = $m[1];
+				}
+			}
+		?>
+		<option value="<?=h($reg->idu)?>"><?=h($reg->nombre) ?: ('article#' . $i)?></option>
+		<?php $i++; endforeach; ?>
+	</select>
+
+	<span aria-live="polite"></span>
+
+	<select title="<?=t('Posición de inserción')?>">
+		<option value="dentro"><?=t('Dentro')?></option>
+		<option value="antes"><?=t('Antes')?></option>
+		<option value="despues"><?=t('Después')?></option>
+		<option value="seleccion"><?=t('Selección')?></option>
+	</select>
+
+	<button type="button" data-toggle="guias" title="<?=t('Mostrar/ocultar guías visuales')?>">
+		<?=Ku::icon('eye')?>
+	</button>
+
+	<button type="button" data-action="save-page" class="active" title="<?=t('Guardar página (Ctrl+S)')?>">
+		<span class="save-countdown" style="display:none;font-weight:bold;font-size:12px;width:18px;text-align:center;">8</span>
+		<span class="save-icon"><?=Ku::icon('save')?></span>
+	</button>
+
+</nav>
+
+<output></output>
+

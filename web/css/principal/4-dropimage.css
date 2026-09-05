@@ -35,6 +35,10 @@
     z-index: 2;
 }
 
+.dropimage button img {
+    filter: brightness(0) invert(1);
+}
+
 .dropimage:not(.icon) button {
     right: -3px;
     top: -3px;

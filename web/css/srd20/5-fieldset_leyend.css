@@ -1,10 +1,10 @@
-.resultado fieldset {
+.plantilla fieldset {
     border: 2px solid var(--color-border-primary);
     margin: 0;
     padding: 10px;
 }
 
-.resultado legend {
+.plantilla legend {
     border: 2px solid var(--color-border-primary);
     padding: 0 5px;
 }

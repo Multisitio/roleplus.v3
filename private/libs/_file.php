@@ -4,7 +4,7 @@
 class _file
 {
 	# 1
-	public static function saveFiles($files, $save_to, $size='', $delete_original=false)
+	public static function saveFiles($files, $save_to, $size='', $delete_original=false, $animated_gif='webp')
 	{
 		$names = [];
 		foreach ($files['name'] as $key=>$val) {
@@ -21,28 +21,46 @@ class _file
 			$file['error']     = $files['error'][$key];
 			$file['size']      = $files['size'][$key];
 
-			$names[] = self::save($file, $save_to, $size, $delete_original);
+			$names[] = self::save($file, $save_to, $size, $delete_original, $animated_gif);
 		}
 		return implode(', ', $names);
 	}
 
 	# 1.1
-	public static function save($file, $save_to, $size='', $delete_original=false)
+	public static function save($file, $save_to, $size='', $delete_original=false, $animated_gif='webp')
 	{
-		
-		#_var::die([$file['tmp_name'], "$save_to/$filename", $size, $delete_original]);
-
-		if ($file['error']>0) {
+		if (($file['error'] ?? UPLOAD_ERR_NO_FILE) > 0) {
 			return;
 		}
 
-		$ext = explode('/', $file['type'])[1];
+		$tmp = (string) ($file['tmp_name'] ?? '');
+		$finfo = new finfo(FILEINFO_MIME_TYPE);
+		$mime = strtolower((string) $finfo->file($tmp));
+		if (strpos($mime, 'image/') === 0) {
+			$result = MediaProcessor::processUpload($file, $save_to, [
+				'basename' => _str::uid(),
+				'animated_gif' => $animated_gif,
+			]);
+			return $result['name'];
+		}
+
+		$allowed = [
+			'audio/mpeg' => 'mp3',
+			'video/mp4' => 'mp4',
+			'video/webm' => 'webm',
+		];
+		if (!isset($allowed[$mime])) {
+			throw new RuntimeException('Formato de archivo no admitido: ' . $mime);
+		}
+		$ext = $allowed[$mime];
 
 		$filename = _str::uid() . ".$ext";
 
 		self::doPath("$save_to/$filename");
 
-		move_uploaded_file($file['tmp_name'], "$save_to/$filename");
+		if (!move_uploaded_file($tmp, "$save_to/$filename")) {
+			throw new RuntimeException('No se pudo guardar el archivo subido.');
+		}
 
 		if ($size) {
 			#$start_time = microtime(1);

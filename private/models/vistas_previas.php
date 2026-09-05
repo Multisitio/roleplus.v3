@@ -34,8 +34,8 @@ class Vistas_previas extends LiteRecord
 				$path = $dir . $name;
 
 				$res = _link::curl_put_file_contents($src, $path);
-				if ($res && file_exists($path)) {
-					$image = $name;	// solo nombre + extensión en BD
+				if ($res && file_exists($dir . $res)) {
+					$image = $res;	// solo nombre + extensión en BD
 				}
 			}
 		}

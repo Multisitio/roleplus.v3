@@ -37,5 +37,10 @@ class PagesController extends AppController
     {
         array_unshift($params, $name);
         View::select(implode('/', $params));
+        if ($name === 'aventuras') {
+            View::template('aventuras');
+        } else {
+            View::template('pages');
+        }
     }
 }

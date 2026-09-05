@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="10" onload="alert(1)">
+  <script>alert(2)</script>
+  <rect width="20" height="10" fill="red"/>
+</svg>

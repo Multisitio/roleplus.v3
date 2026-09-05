@@ -1,0 +1,10 @@
+/* Compilado: 2026-05-07 20:36:50 */
+@font-face {
+    font-family: 'grenze gotisch';
+    src: url('../../fonts/grenze_gotisch.woff2');
+}
+
+body.editor main.plantilla h1 {
+    font-family: 'grenze gotisch';
+}
+

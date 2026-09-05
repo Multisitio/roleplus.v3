@@ -1,669 +1,827 @@
-/* 2-kumbia.js
- * Framework data-* autónomo (sin dependencias externas ni otros archivos).
+/* KUMBIA.JS v2.5
+ * Framework data-* autónomo, ultraligero y sin dependencias.
+ * Compatible con contenido dinámico (AJAX/SSE/WS).
  *
  * Reglas:
- * ✦ Siempre debes dar selector en data-ajax, data-live, data-ajax_append, etc.
- * ✦ Nada de heurística prev/next.
- * ✦ Sin optional chaining.
- * ✦ Contenedores con auto-scroll al inyectar AJAX: pon data-autoscroll.
- * ✦ El JS debe enganchar también a contenido inyectado dinámicamente (AJAX / SSE / WS).
+ * ✦ Selector obligatorio (data-ajax, data-live, etc.)
+ * ✦ Sin optional chaining
+ * ✦ data-autoscroll en el contenedor que scrollea
+ * ✦ Overlays visibles bloquean el scroll del body
+ * ✦ Respeta el display/opacity originales
  */
 
-(() => {
+((global) => {
 	"use strict";
 
-	/* ======================
-	 * UTILS INTERNOS
-	 * ====================== */
+	/* ========================================
+	 * CONFIG & LOG
+	 * ======================================== */
+	const CONFIG = {
+		debug: false,
+		headers: { "X-Requested-With": "XMLHttpRequest" },
+		credentials: "same-origin",
+		cache: "no-store"
+	};
 
-	function getData(el, key) {
-		const ds = el.dataset || {};
-		if (key in ds) return ds[key];
-
-		const snake = key.replace(/[A-Z]/g, function (m) { return "_" + m.toLowerCase(); });
-		if (snake in ds) return ds[snake];
-
-		const dash = key.replace(/[A-Z]/g, function (m) { return "-" + m.toLowerCase(); });
-		let v = el.getAttribute("data-" + dash);
-		if (v == null) v = el.getAttribute("data-" + snake);
-		if (v == null) v = el.getAttribute("data-" + key);
-		return v == null ? null : v;
+	function log() {
+		if (!CONFIG.debug) return;
+		var a = Array.prototype.slice.call(arguments);
+		a.unshift("[Kumbia]");
+		console.log.apply(console, a);
+	}
+	function warn() {
+		var a = Array.prototype.slice.call(arguments);
+		a.unshift("[Kumbia]");
+		console.warn.apply(console, a);
 	}
 
-	const DEFAULT_HEADERS = { "X-Requested-With": "XMLHttpRequest" };
+	/* ========================================
+	 * UTILS
+	 * ======================================== */
+	const Utils = {
+		getData: function (el, key) {
+			if (!el || !el.getAttribute) return null;
+			var v = el.getAttribute("data-" + key);
+			if (v !== null) return v;
 
-	function toQuery(p) {
-		if (!p) return "";
-		const qs = new URLSearchParams(p).toString();
-		return qs ? "?" + qs : "";
-	}
+			// fallback a camelCase si fallase el dash-case
+			var camel = key.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+			if (el.dataset && el.dataset[camel]) return el.dataset[camel];
+			return null;
+		},
 
-	async function fetchHtml(url, params) {
-		const full = url + toQuery(params);
-		const res = await fetch(full, {
-			method: "GET",
-			cache: "no-store",
-			headers: DEFAULT_HEADERS,
-			credentials: "same-origin"
-		});
-		if (!res.ok) throw new Error("GET " + full + " => " + res.status);
-		return res.text();
-	}
-
-	async function postForm(url, body) {
-		const res = await fetch(url, {
-			method: "POST",
-			cache: "no-store",
-			headers: DEFAULT_HEADERS,
-			body: body,
-			credentials: "same-origin"
-		});
-		if (!res.ok) throw new Error("POST " + url + " => " + res.status);
-		return res.text();
-	}
-
-	// Sanitiza fragmento: elimina <script> antes de inyectar
-	function parseHTMLWithoutScripts(html) {
-		const t = document.createElement("template");
-		t.innerHTML = html;
-		t.content.querySelectorAll("script").forEach(function (s) {
-			s.remove();
-		});
-		return t.content;
-	}
-
-	function selectorOf(el, raw) {
-		if (raw && raw.trim()) return raw.trim();
-		if (!el) return "(sin selector)";
-		if (el.id) return "#" + el.id;
-
-		const clsRaw = (el.className || "").toString().trim();
-		const clsArr = clsRaw.split(/\s+/).filter(Boolean);
-		if (clsArr.length) {
-			return el.tagName.toLowerCase() + "." + clsArr[0];
-		}
-
-		const nm = el.getAttribute ? el.getAttribute("name") : null;
-		if (nm) {
-			return el.tagName.toLowerCase() + '[name="' + nm + '"]';
-		}
-
-		return el.tagName ? el.tagName.toLowerCase() : "(nodo)";
-	}
-
-	function on(type, selector, handler) {
-		document.body.addEventListener(type, function (ev) {
-			const target = ev.target.closest(selector);
-			if (target && document.body.contains(target)) {
-				handler.call(target, ev);
+		requireSelector: function (raw, label) {
+			const sel = raw && raw.trim();
+			if (!sel) {
+				warn(label + ": falta selector");
+				return null;
 			}
-		});
-	}
+			return sel;
+		},
 
-	/* ======================
-	 * FX INTERNOS
-	 * ====================== */
+		selectorOf: function (el, fallback) {
+			if (fallback && fallback.trim()) return fallback.trim();
+			if (!el) return "(nodo nulo)";
+			if (el.id) return "#" + el.id;
 
-	function fxShow(el) {
-		if (el.classList && el.classList.contains("hide")) {
-			el.classList.remove("hide");
+			const cls = (el.className || "").toString().trim().split(/\s+/).filter(Boolean)[0];
+			if (cls) return el.tagName.toLowerCase() + "." + cls;
+
+			const name = el.getAttribute ? el.getAttribute("name") : null;
+			if (name) return el.tagName.toLowerCase() + '[name="' + name + '"]';
+
+			return el.tagName ? el.tagName.toLowerCase() : "(nodo)";
+		},
+
+		toQuery: function (p) {
+			if (!p) return "";
+			const qs = new URLSearchParams(p).toString();
+			return qs ? "?" + qs : "";
+		},
+
+		fetch: async function (url, opts) {
+			opts = opts || {};
+			const method = opts.method || "GET";
+			const full = method === "GET" ? (url + Utils.toQuery(opts.params)) : url;
+
+			const res = await fetch(full, {
+				method: method,
+				cache: CONFIG.cache,
+				headers: Object.assign({}, CONFIG.headers, opts.headers || {}),
+				body: opts.body,
+				credentials: CONFIG.credentials
+			});
+
+			if (!res.ok) throw new Error(method + " " + full + " → " + res.status);
+			return res.text();
+		},
+
+		// Construye una URL añadiendo UN segmento al pathname (sin permitir "/")
+		buildUrlWithSegment: function (base, value) {
+			var u = new URL(base, global.location ? global.location.href : "http://local/");
+			// nunca permitir "/" en el segmento
+			var seg = encodeURIComponent(String(value).replace(/\//g, ""));
+			if (!u.pathname.endsWith("/")) u.pathname += "/";
+			u.pathname += seg;
+			return u.toString();
+		},
+
+		parseHTML: function (html) {
+			const t = document.createElement("template");
+			t.innerHTML = html;
+			// quitar <script> crudos
+			const scripts = t.content.querySelectorAll("script");
+			for (var i = 0; i < scripts.length; i++) scripts[i].remove();
+			// saneado extra (defensa en profundidad)
+			Sanitize.cleanFragment(t.content);
+			return t.content;
+		},
+
+		on: function (type, sel, handler, root) {
+			root = root || document.body;
+			root.addEventListener(type, function (ev) {
+				const t = ev.target && ev.target.closest ? ev.target.closest(sel) : null;
+				if (t && root.contains(t)) {
+					handler.call(t, ev);
+				}
+			});
 		}
+	};
 
-		if (getComputedStyle(el).display === "none") {
-			var disp = el.getAttribute("data-display");
-			if (disp === "flex") {
-				el.style.display = "flex";
-			} else {
-				el.style.display = "";
-				if (getComputedStyle(el).display === "none") {
-					el.style.display = "block";
+	/* ========================================
+	 * SANITIZADO HTML (defensa cliente)
+	 * ======================================== */
+	const Sanitize = {
+		cleanFragment: function (root) {
+			if (!root || !root.querySelectorAll) return;
+
+			// 1) remover atributos on*
+			var all = root.querySelectorAll("*");
+			for (var i = 0; i < all.length; i++) {
+				var el = all[i];
+				// copiar atributos para iterar de forma segura
+				var attrs = el.attributes ? Array.prototype.slice.call(el.attributes) : [];
+				for (var j = 0; j < attrs.length; j++) {
+					var a = attrs[j];
+					if (!a || !a.name) continue;
+					var nm = a.name.toLowerCase();
+
+					// on* (onclick, onerror, …)
+					if (nm.indexOf("on") === 0) {
+						el.removeAttribute(a.name);
+						continue;
+					}
+
+					// href/src/xlink:href con javascript:
+					if (nm === "href" || nm === "src" || nm === "xlink:href") {
+						var val = a.value || "";
+						if (/^\s*javascript\s*:/i.test(val)) {
+							el.removeAttribute(a.name);
+							continue;
+						}
+					}
+
+					// style con url(javascript:...)
+					if (nm === "style") {
+						var sv = a.value || "";
+						if (/url\s*\(\s*javascript\s*:/i.test(sv)) {
+							el.removeAttribute("style");
+							continue;
+						}
+					}
+
+					// iframe[srcdoc] potencial
+					if (el.tagName === "IFRAME" && nm === "srcdoc") {
+						el.removeAttribute("srcdoc");
+						continue;
+					}
 				}
 			}
 		}
-	}
+	};
 
-	function fxHide(el) {
-		if (el.classList && !el.classList.contains("hide")) {
-			el.classList.add("hide");
-		}
-		el.style.display = "none";
-	}
-
-	function fxToggle(el) {
-		if (getComputedStyle(el).display === "none" || (el.classList && el.classList.contains("hide"))) {
-			fxShow(el);
-		} else {
-			fxHide(el);
-		}
-	}
-
-	function fxFadeOut(el, ms) {
-		if (ms == null) ms = 200;
-		el.style.transition = "opacity " + ms + "ms";
-		el.style.opacity = "1";
-		requestAnimationFrame(function () {
-			el.style.opacity = "0";
-			setTimeout(function () {
-				fxHide(el);
-			}, ms);
-		});
-	}
-
-	function fxSlideDown(el, ms) {
-		if (ms == null) ms = 200;
-		if (el.style.display === "none" || (el.classList && el.classList.contains("hide"))) {
-			if (el.classList && el.classList.contains("hide")) {
-				el.classList.remove("hide");
+	/* ========================================
+	 * OVERLAY & BODY SCROLL
+	 * ======================================== */
+	const Overlay = {
+		isOverlayNode: function (el) {
+			if (!el) return false;
+			if (el.tagName === "ASIDE" || el.tagName === "DIALOG") {
+				var pos = getComputedStyle(el).position;
+				if (pos === "fixed" || pos === "absolute") return true;
 			}
-			el.style.display = "";
+			if (el.classList && (
+				el.classList.contains("overlay") ||
+				el.classList.contains("modal") ||
+				el.classList.contains("w3-modal") ||
+				el.classList.contains("w3-modal-2")
+			)) return true;
+			if (el.getAttribute && el.getAttribute("role") === "dialog") return true;
+			return false;
+		},
+
+		// visible real: no display:none, no visibility:hidden y con cajas renderizadas
+		isVisible: function (el) {
+			if (!el) return false;
+			var cs = getComputedStyle(el);
+			if (!cs) return false;
+			if (cs.display === "none") return false;
+			if (cs.visibility === "hidden") return false;
+			// getClientRects cubre position:fixed (offsetParent puede ser null)
+			if (el.getClientRects && el.getClientRects().length === 0) return false;
+			return true;
+		},
+
+		anyVisible: function () {
+			var list = document.querySelectorAll(".overlay, [role=\"dialog\"], .modal, aside, dialog, .w3-modal, .w3-modal-2");
+			for (var i = 0; i < list.length; i++) {
+				if (Overlay.isVisible(list[i]) && Overlay.isOverlayNode(list[i])) return true;
+			}
+			return false;
+		},
+
+		lock: function () {
+			if (document.body.style.overflow !== "hidden") {
+				document.body.style.overflow = "hidden";
+			}
+		},
+
+		unlockIfNone: function () {
+			if (!Overlay.anyVisible()) {
+				document.body.style.overflow = "auto";
+			}
 		}
-		const h = el.scrollHeight;
-		el.style.overflow = "hidden";
-		el.style.maxHeight = "0";
-		el.style.transition = "max-height " + ms + "ms ease";
-		requestAnimationFrame(function () {
-			el.style.maxHeight = h + "px";
-			setTimeout(function () {
-				el.style.maxHeight = "";
-				el.style.overflow = "";
-			}, ms);
-		});
-	}
+	};
 
-	/* ======================
-	 * CORE data-*
-	 * ====================== */
+	/* ========================================
+	 * EFECTOS VISUALES
+	 * ======================================== */
+	const FX = {
+		saveState: function (el) {
+			// si cambia el display respecto a lo guardado, actualiza
+			var cs = getComputedStyle(el);
+			if (!cs) return;
+			var curDisp = cs.display;
+			var saved = el.getAttribute("data-display");
+			if (curDisp && curDisp !== "none" && saved !== curDisp) {
+				el.setAttribute("data-display", curDisp);
+			}
+			var curOp = cs.opacity;
+			var savedOp = el.getAttribute("data-opacity");
+			if (curOp && savedOp !== curOp) {
+				el.setAttribute("data-opacity", curOp);
+			}
+		},
 
-	function requireSelector(rawSel, label) {
-		if (!rawSel || !rawSel.trim()) {
-			console.warn(label + ": falta selector data-* obligatorio");
-			return null;
+		restoreState: function (el) {
+			var disp = el.getAttribute("data-display");
+			var opac = el.getAttribute("data-opacity");
+			if (disp) el.style.display = disp; else el.style.display = "";
+			if (opac) el.style.opacity = opac; else el.style.opacity = "";
+		},
+
+		show: function (el) {
+			if (el.classList && el.classList.contains("hide")) el.classList.remove("hide");
+			FX.restoreState(el);
+			if (Overlay.isOverlayNode(el)) Overlay.lock();
+			if (el.hasAttribute("data-autoscroll")) AutoScroll.force(el);
+		},
+
+		hide: function (el) {
+			FX.saveState(el);
+			if (el.classList && !el.classList.contains("hide")) el.classList.add("hide");
+			el.style.display = "none";
+			// no forzamos opacity si ya se guardó correctamente
+			if (Overlay.isOverlayNode(el)) Overlay.unlockIfNone();
+		},
+
+		toggle: function (el) {
+			var visible = getComputedStyle(el).display !== "none" && !(el.classList && el.classList.contains("hide"));
+			var wasOverlay = Overlay.isOverlayNode(el) && visible;
+			if (visible) FX.hide(el); else FX.show(el);
+			if (wasOverlay) Overlay.unlockIfNone();
+		},
+
+		fadeOut: function (el, ms) {
+			ms = ms == null ? 200 : ms;
+			el.style.transition = "opacity " + ms + "ms";
+			el.style.opacity = "1";
+			requestAnimationFrame(function () {
+				el.style.opacity = "0";
+				setTimeout(function () {
+					// setTimeout es el único temporizador usado aquí: si prefieres, elimina y usa solo hide() sin animación.
+					FX.hide(el);
+					el.style.transition = "";
+				}, ms);
+			});
+		},
+
+		slideDown: function (el, ms) {
+			ms = ms == null ? 200 : ms;
+			var cs = getComputedStyle(el);
+			if (cs.display === "none" || (el.classList && el.classList.contains("hide"))) {
+				if (el.classList && el.classList.contains("hide")) el.classList.remove("hide");
+				FX.restoreState(el);
+			}
+			var h = el.scrollHeight;
+			el.style.overflow = "hidden";
+			el.style.maxHeight = "0";
+			el.style.transition = "max-height " + ms + "ms ease";
+			requestAnimationFrame(function () {
+				el.style.maxHeight = h + "px";
+				setTimeout(function () {
+					el.style.maxHeight = "";
+					el.style.overflow = "";
+					el.style.transition = "";
+					if (el.hasAttribute("data-autoscroll")) AutoScroll.force(el);
+				}, ms);
+			});
 		}
-		return rawSel.trim();
-	}
+	};
 
-	const Kumbia = {
-		async aAjax(ev) {
+	/* ========================================
+	 * AUTOSCROLL
+	 * ======================================== */
+	const AutoScroll = (function () {
+		const pending = new WeakMap();
+
+		function force(box) {
+			if (!box) return;
+			if (pending.has(box)) return;
+			pending.set(box, true);
+			requestAnimationFrame(function () {
+				var beforeTop = box.scrollTop;
+				var beforeLeft = box.scrollLeft;
+				box.scrollTop = box.scrollHeight;
+				box.scrollLeft = box.scrollWidth;
+				log("autoscroll", Utils.selectorOf(box, ""), { top: beforeTop, left: beforeLeft }, "→", { top: box.scrollTop, left: box.scrollLeft });
+				pending.delete(box);
+			});
+		}
+
+		function setup(box) {
+			if (!box || box.__kumbiaObs) return;
+			var obs = new MutationObserver(function (muts) {
+				for (var i = 0; i < muts.length; i++) {
+					var m = muts[i];
+					if (m.type === "childList" && m.addedNodes && m.addedNodes.length) {
+						force(box);
+						break;
+					}
+				}
+			});
+			try {
+				obs.observe(box, { childList: true, subtree: true });
+				box.__kumbiaObs = obs;
+			} catch (e) {
+				warn("autoscroll observer fail:", e && e.message ? e.message : e);
+			}
+			force(box);
+		}
+
+		function disconnect(node) {
+			if (node && node.__kumbiaObs) {
+				try { node.__kumbiaObs.disconnect(); } catch (_) { }
+				delete node.__kumbiaObs;
+			}
+		}
+
+		function scan(root) {
+			root = root || document;
+			var boxes = root.querySelectorAll("[data-autoscroll]");
+			for (var i = 0; i < boxes.length; i++) setup(boxes[i]);
+		}
+
+		return { setup: setup, scan: scan, force: force, disconnect: disconnect };
+	})();
+
+	/* ========================================
+	 * DEFERRED REMOVE
+	 * ======================================== */
+	const DeferredRemove = {
+		apply: function (root) {
+			root = root || document;
+			var marks = root.querySelectorAll("[data-remove_id]");
+			for (var i = 0; i < marks.length; i++) {
+				var mk = marks[i];
+				var id = mk.getAttribute("data-remove_id");
+				if (id) {
+					var objetivo = document.querySelector('[data-id="' + CSS.escape(id) + '"]');
+					if (objetivo) {
+						AutoScroll.disconnect(objetivo);
+						objetivo.remove();
+					}
+				}
+				mk.remove();
+			}
+			Overlay.unlockIfNone();
+		}
+	};
+
+	const Handlers = {
+		// GET AJAX en enlaces
+		ajaxLink: async function (ev) {
 			ev.preventDefault();
 
-			const rawSel = getData(this, "ajax") || "";
-			const sel = requireSelector(rawSel, "ajax");
+			// Si coexiste data-confirm, preguntar antes de ejecutar
+			var msg = Utils.getData(this, "confirm");
+			if (msg && !confirm(msg)) return;
+			var href = this.href;
+			var sel = Utils.requireSelector(Utils.getData(this, "ajax"), "data-ajax");
+			if (!href || !sel) return;
+
+			var target = document.querySelector(sel);
+			if (!target) return;
+
+			log("AJAX GET", Utils.selectorOf(target, sel), "→", href);
+			try {
+				var html = await Utils.fetch(href);
+				target.innerHTML = "";
+				target.appendChild(Utils.parseHTML(html));
+				target.style.display = "";
+				AutoScroll.force(target);
+				if (Overlay.isOverlayNode(target)) Overlay.lock();
+			} catch (e) {
+				warn("AJAX falló:", e && e.message ? e.message : e);
+			}
+		},
+
+		// POST AJAX en formularios (por botón submit)
+		ajaxForm: async function (ev) {
+			ev.preventDefault();
+
+			var form = this.closest("form");
+			if (!form) return;
+
+			// limpiar inputs en contenedores ocultos, pero preservando hidden y [data-keep]
+			Handlers.cleanHiddenInputs(form);
+
+			var append = form.hasAttribute("data-ajax_append");
+			var prepend = form.hasAttribute("data-ajax_prepend");
+			var sel = Utils.requireSelector(
+				form.getAttribute("data-ajax_append") ||
+				form.getAttribute("data-ajax_prepend") ||
+				form.getAttribute("data-ajax"),
+				"form"
+			);
 			if (!sel) return;
 
-			const href = this.href || "";
-			if (!href) {
-				console.warn("ajax: falta href");
-				return;
-			}
+			var target = document.querySelector(sel);
+			if (!target) return;
 
-			const to = document.querySelector(sel);
-			if (!to) {
-				console.warn("ajax: selector no resuelve:", sel);
-				return;
-			}
+			var raw = (form.getAttribute("action") || "").trim();
+			var url = raw ? raw : (form.action || location.href);
 
-			const selStr = selectorOf(to, sel);
-			console.log([selStr, href]);
+			var fd = new FormData(form);
+			var nm = this.getAttribute("name");
+			if (nm !== null) fd.append(nm, this.value);
 
-			const html = await fetchHtml(href);
-			to.innerHTML = "";
-			to.appendChild(parseHTMLWithoutScripts(html));
-			to.style.display = "";
-		},
+			var btns = form.querySelectorAll('[type="submit"]');
+			for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
 
-		active() {
-			const explicit = getData(this, "active");
-			if (explicit && explicit.trim()) {
-				Array.prototype.forEach.call(document.querySelectorAll(explicit), function (el) {
-					el.removeAttribute("aria-current");
-					el.classList.remove("active");
-				});
-				this.setAttribute("aria-current", "true");
-				this.classList.add("active");
-				return;
-			}
+			log("AJAX POST", Utils.selectorOf(target, sel), "→", url);
+			try {
+				var html = await Utils.fetch(url, { method: "POST", body: fd });
+				var frag = Utils.parseHTML(html);
 
-			const parent = this.parentElement;
-			if (parent && parent.matches("nav, ul, ol, section, div")) {
-				Array.prototype.forEach.call(parent.querySelectorAll("button, a, li > a, li > button"), function (el) {
-					el.removeAttribute("aria-current");
-					el.classList.remove("active");
-				});
-				this.setAttribute("aria-current", "true");
-				this.classList.add("active");
+				if (append) {
+					target.appendChild(frag);
+				} else if (prepend) {
+					target.insertBefore(frag, target.firstChild);
+				} else {
+					target.innerHTML = "";
+					target.appendChild(frag);
+				}
+				target.style.display = "";
+				AutoScroll.force(target);
+				if (Overlay.isOverlayNode(target)) Overlay.lock();
+			} catch (e) {
+				warn("POST falló:", e && e.message ? e.message : e);
+			} finally {
+				for (var j = 0; j < btns.length; j++) btns[j].disabled = false;
 			}
 		},
 
-		alert() {
-			alert(getData(this, "alert"));
+		// Limpieza: inputs visibles vs ocultos
+		cleanHiddenInputs: function (container) {
+			// seleccionar contenedores ocultos por estilo/clase/atributo
+			var hiddenNodes = container.querySelectorAll('[style*="display:none"], [style*="display: none"], .hide, [hidden]');
+			for (var i = 0; i < hiddenNodes.length; i++) {
+				var n = hiddenNodes[i];
+
+				// borrar únicamente controles de formulario NO-whitelist dentro
+				var controls = n.querySelectorAll("input, textarea, select");
+				for (var k = 0; k < controls.length; k++) {
+					var c = controls[k];
+					var isHiddenType = (c.tagName === "INPUT" && (c.getAttribute("type") || "").toLowerCase() === "hidden");
+					var keep = c.hasAttribute("data-keep");
+					if (!isHiddenType && !keep) {
+						c.remove();
+					}
+				}
+			}
 		},
 
-		clone_append() {
-			const raw = getData(this, "cloneAppend") || "";
-			const i = raw.indexOf(", ");
-			if (i === -1) {
-				console.warn("clone_append: falta 'selectorOrigen, selectorDestino'");
-				return;
-			}
-			const a = raw.slice(0, i);
-			const b = raw.slice(i + 2);
+		// Live search
+		liveSearch: async function () {
+			var href = Utils.getData(this, "href");
+			var sel = Utils.requireSelector(Utils.getData(this, "live"), "data-live");
+			if (!href || !sel) return;
 
-			const el = document.querySelector(a);
-			const to = document.querySelector(b);
-			if (el && to) {
-				to.appendChild(el.cloneNode(true));
+			var target = document.querySelector(sel);
+			if (!target) return;
+
+			try {
+				var html = await Utils.fetch(href, { params: { keywords: this.value } });
+				target.innerHTML = "";
+				target.appendChild(Utils.parseHTML(html));
+				target.style.display = "";
+			} catch (e) {
+				warn("live falló:", e && e.message ? e.message : e);
+			}
+		},
+
+		// Select con AJAX (base + segmento seguro)
+		selectAjax: async function () {
+			var base = Utils.getData(this, "href");
+			var rawSel = Utils.getData(this, "ajax");
+			var sel = Utils.requireSelector(rawSel, "select data-ajax");
+			if (!base || !sel) return;
+
+			var target = document.querySelector(sel);
+			if (!target) return;
+
+			var href = Utils.buildUrlWithSegment(base, this.value);
+
+			log("SELECT AJAX", Utils.selectorOf(target, sel), href);
+			try {
+				var html = await Utils.fetch(href);
+				target.innerHTML = "";
+				target.appendChild(Utils.parseHTML(html));
+				target.style.display = "";
+			} catch (e) {
+				warn("select ajax falló:", e && e.message ? e.message : e);
+			}
+		},
+
+		// Efectos genéricos
+		effect: function (name) {
+			return function (ev) {
+				// Prioridad crítica: Confirmación
+				var msg = Utils.getData(this, "confirm");
+				if (msg) {
+					log("Confirmación requerida para", name, ":", msg);
+					if (!confirm(msg)) {
+						log("Acción cancelada por el usuario");
+						if (ev) {
+							if (ev.preventDefault) ev.preventDefault();
+							if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+						}
+						return;
+					}
+				}
+
+				var raw = Utils.getData(this, name) || "";
+				var nodes = raw.trim() ? document.querySelectorAll(raw) : [this];
+
+				for (var i = 0; i < nodes.length; i++) {
+					var el = nodes[i];
+					if (name === "click") el.click();
+					else if (name === "show") FX.show(el);
+					else if (name === "hide") FX.hide(el);
+					else if (name === "toggle") FX.toggle(el);
+					else if (name === "fadeOut") FX.fadeOut(el);
+					else if (name === "slideDown") FX.slideDown(el);
+				}
+			};
+		},
+
+		active: function () {
+			var sel = Utils.getData(this, "active");
+			var targets = [];
+			if (sel) {
+				targets = document.querySelectorAll(sel);
 			} else {
-				console.warn("clone_append: no resuelve", a, b);
+				var cont = this.closest ? this.closest("nav, ul, ol, section, div") : null;
+				if (cont && cont.querySelectorAll) {
+					targets = cont.querySelectorAll("button, a, li > a, li > button");
+				}
 			}
+			for (var i = 0; i < targets.length; i++) {
+				targets[i].removeAttribute("aria-current");
+				targets[i].classList.remove("active");
+			}
+			this.setAttribute("aria-current", "true");
+			this.classList.add("active");
 		},
 
-		confirm(ev) {
-			if (!confirm(getData(this, "confirm"))) {
+		alert: function () { alert(Utils.getData(this, "alert")); },
+
+		confirm: function (ev) {
+			// Si el elemento también tiene un efecto, éste ya maneja el confirm internamente
+			if (this.hasAttribute("data-hide") || this.hasAttribute("data-show") ||
+				this.hasAttribute("data-toggle") || this.hasAttribute("data-fadeOut") ||
+				this.hasAttribute("data-slideDown") || this.hasAttribute("data-remove")) return;
+			if (!confirm(Utils.getData(this, "confirm"))) {
 				ev.preventDefault();
 				ev.stopImmediatePropagation();
 			}
 		},
 
-		effect(name) {
-			return function () {
-				const raw = getData(this, name) || "";
-				const list = (raw && raw.trim())
-					? Array.prototype.slice.call(document.querySelectorAll(raw))
-					: [this];
+		remove: function () {
+			// Si coexiste data-confirm, preguntar antes de eliminar
+			var msg = Utils.getData(this, "confirm");
+			if (msg && !confirm(msg)) return;
 
-				list.forEach(function (el) {
-					if (name === "click") el.click();
-					if (name === "hide") fxHide(el);
-					if (name === "show") fxShow(el);
-					if (name === "toggle") fxToggle(el);
-					if (name === "fadeOut") fxFadeOut(el);
-					if (name === "slideDown") fxSlideDown(el);
-				});
-			};
-		},
+			var raw = Utils.getData(this, "remove") || "";
+			var parts = raw ? raw.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : [];
 
-		async formAjax(ev) {
-			ev.preventDefault();
-
-			const form = this.closest("form");
-			if (!form) return;
-
-			Array.prototype.forEach.call(form.querySelectorAll('[style*="none"]'), function (n) {
-				n.remove();
-			});
-
-			// Resolver URL: atributo action vacío usa la URL actual (form.action).
-			let url = (form.getAttribute("action") || "").trim();
-			if (!url) {
-                url = (form.action || location.href).toString().trim();
+			function rm(node) {
+				AutoScroll.disconnect(node);
+				node.remove();
 			}
 
-			const sel = (form.getAttribute("data-ajax_append")
-				|| form.getAttribute("data-ajax_prepend")
-				|| form.getAttribute("data-ajax")
-				|| "").trim();
-			const needed = requireSelector(sel, "form");
-			if (!needed) return;
-
-			const to = document.querySelector(sel);
-			if (!to) {
-				console.warn("form: selector no resuelve:", sel);
-				return;
-			}
-
-			const fd = new FormData(form);
-			const buttons = Array.prototype.slice.call(form.querySelectorAll('[type="submit"]'));
-			buttons.forEach(function (b) { b.disabled = true; });
-
-			const btnName = this.getAttribute("name");
-			if (btnName !== null) fd.append(btnName, this.value);
-
-			try {
-				const selStr = selectorOf(to, sel);
-				console.log([selStr, url]);
-
-				const html = await postForm(url, fd);
-
-				if (form.hasAttribute("data-ajax_append")) {
-					to.appendChild(parseHTMLWithoutScripts(html));
-					to.style.display = "";
-				} else if (form.hasAttribute("data-ajax_prepend")) {
-					const frag = parseHTMLWithoutScripts(html);
-					to.insertBefore(frag, to.firstChild);
-					to.style.display = "";
-				} else {
-					to.innerHTML = "";
-					to.appendChild(parseHTMLWithoutScripts(html));
-					to.style.display = "";
-				}
-			} finally {
-				buttons.forEach(function (b) { b.disabled = false; });
-			}
-		},
-
-		async live() {
-			const href = (getData(this, "href") || "").trim();
-			if (!href) {
-				console.warn("live: falta href");
-				return;
-			}
-
-			const rawSel = (getData(this, "live") || "").trim();
-			const sel = requireSelector(rawSel, "live");
-			if (!sel) return;
-
-			const to = document.querySelector(sel);
-			if (!to) {
-				console.warn("live: selector no resuelve:", sel);
-				return;
-			}
-
-			const selStr = selectorOf(to, sel);
-			console.log([selStr, href]);
-
-			const html = await fetchHtml(href, { keywords: this.value });
-			to.innerHTML = "";
-			to.appendChild(parseHTMLWithoutScripts(html));
-			to.style.display = "";
-		},
-
-		remove() {
-			const to = getData(this, "remove");
-
-			var el = null;
-			if (!to) {
-				el = this;
-			} else if (to === "parent parent") {
-				el = (this.parentElement && this.parentElement.parentElement)
-					? this.parentElement.parentElement
-					: null;
-			} else if (to === "parent") {
-				el = this.parentElement;
+			if (!parts.length) {
+				rm(this);
 			} else {
-				el = document.querySelector(to);
+				for (var i = 0; i < parts.length; i++) {
+					var p = parts[i];
+					var targets = [];
+					if (p === "parent") {
+						targets = this.parentElement ? [this.parentElement] : [];
+					} else if (p === "parent parent") {
+						var pp = this.parentElement;
+						targets = pp && pp.parentElement ? [pp.parentElement] : [];
+					} else {
+						targets = document.querySelectorAll(p);
+					}
+					for (var j = 0; j < targets.length; j++) rm(targets[j]);
+				}
 			}
-
-			if (el) el.remove();
+			Overlay.unlockIfNone();
 		},
 
-		async selectAjax() {
-			const base = (getData(this, "href") || "").trim();
-			if (!base) {
-				console.warn("select: falta href base");
-				return;
-			}
-			const href = base + this.value;
-
-			const rawSel = (getData(this, "ajax") || "").trim();
-			const sel = requireSelector(rawSel, "select");
-			if (!sel) return;
-
-			const to = document.querySelector(sel);
-			if (!to) {
-				console.warn("select: selector no resuelve:", sel);
-				return;
-			}
-
-			const selStr = selectorOf(to, sel);
-			console.log([selStr, href]);
-
-			const html = await fetchHtml(href);
-			to.innerHTML = "";
-			to.appendChild(parseHTMLWithoutScripts(html));
-			to.style.display = "";
-		},
-
-		selectRedirect() {
-			const base = getData(this, "redirect") || "";
-			location.href = base + this.value;
-		},
-
-		selectToggle() {
-			const scopeSel = getData(this, "changeToggle");
-			if (!(scopeSel && scopeSel.trim())) {
-				console.warn("selectToggle: falta data-change_toggle (selector base)");
-				return;
-			}
-
-			const val = this.value;
-			const target = document.querySelector(scopeSel + '[data-grp="' + CSS.escape(val) + '"]');
-
-			if (val && target) {
-				Array.prototype.forEach.call(target.querySelectorAll("input"), function (i) {
-					i.value = "";
-				});
-
-				Array.prototype.forEach.call(document.querySelectorAll(scopeSel), function (el) {
-					fxToggle(el);
-				});
-			}
-		},
-
-		style() {
-			const raw = getData(this, "style") || "";
-			const i = raw.indexOf(", ");
+		toggleClass: function () {
+			var raw = Utils.getData(this, "toggleClass") || "";
+			var i = raw.indexOf(", ");
 			if (i === -1) {
-				this.setAttribute("style", raw);
-				return;
-			}
-
-			const sel = raw.slice(0, i);
-			const styleText = raw.slice(i + 2);
-
-			Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
-				el.setAttribute("style", styleText);
-			});
-		},
-
-		toggleClass() {
-			const raw = getData(this, "toggleClass") || "";
-			const i = raw.indexOf(", ");
-
-			if (i === -1) {
-				const cn = raw.trim();
+				var cn = raw.trim();
 				if (cn) this.classList.toggle(cn);
 				return;
 			}
-
-			const cn = raw.slice(0, i);
-			const sel = raw.slice(i + 2);
-
-			Array.prototype.forEach.call(document.querySelectorAll(sel), function (el) {
-				el.classList.toggle(cn);
-			});
+			var cn2 = raw.slice(0, i).trim();
+			var sel = raw.slice(i + 2).trim();
+			var list = document.querySelectorAll(sel);
+			for (var k = 0; k < list.length; k++) list[k].classList.toggle(cn2);
 		},
 
-		toggleDisplay() {
-			const sel = getData(this, "toggleDisplay");
-			if (!(sel && sel.trim())) {
-				console.warn("toggleDisplay: falta selector en data-toggle_display");
+		selectRedirect: function () {
+			var base = Utils.getData(this, "redirect") || "";
+			if (!base) return;
+			var href = Utils.buildUrlWithSegment(base, this.value);
+			location.href = href;
+		},
+
+		style: function () {
+			var raw = Utils.getData(this, "style") || "";
+			var i = raw.indexOf(", ");
+			if (i === -1) { this.setAttribute("style", raw); return; }
+			var sel = raw.slice(0, i).trim();
+			var css = raw.slice(i + 2);
+			var list = document.querySelectorAll(sel);
+			for (var k = 0; k < list.length; k++) list[k].setAttribute("style", css);
+		},
+
+		clone_append: function () {
+			var raw = Utils.getData(this, "cloneAppend") || "";
+			var i = raw.indexOf(", ");
+			if (i === -1) {
+				warn("clone_append: falta 'origen, destino'");
 				return;
 			}
+			var src = raw.slice(0, i).trim();
+			var dst = raw.slice(i + 2).trim();
 
-			const nodes = Array.prototype.slice.call(document.querySelectorAll(sel));
-			nodes.forEach(function (el) {
-				if (getComputedStyle(el).display === "none") {
-					el.style.display = el.getAttribute("data-display") === "flex" ? "flex" : "";
-				} else {
-					el.style.display = "none";
-				}
-			});
+			var el = document.querySelector(src);
+			var to = document.querySelector(dst);
+			if (el && to) to.appendChild(el.cloneNode(true));
 		},
 
-		bind() {
-			on("click", "[data-active]", this.active);
-			on("click", "nav[data-group] > button, ul[data-group] > li > *", this.active);
+		toggleDisplay: function () {
+			var sel = Utils.getData(this, "toggleDisplay");
+			if (!(sel && sel.trim())) {
+				warn("toggleDisplay: falta selector");
+				return;
+			}
+			var nodes = document.querySelectorAll(sel);
+			for (var i = 0; i < nodes.length; i++) {
+				FX.toggle(nodes[i]);
+			}
+		},
 
-			on("click", "a[data-ajax]", this.aAjax);
+		selectToggle: function () {
+			var scopeSel = Utils.getData(this, "changeToggle");
+			if (!(scopeSel && scopeSel.trim())) {
+				warn("selectToggle: falta data-change_toggle");
+				return;
+			}
+			var val = this.value;
+			var target = document.querySelector(scopeSel + '[data-grp="' + CSS.escape(val) + '"]');
+			if (!val || !target) return;
 
-			on("click", 'form[data-ajax] [type="submit"]', this.formAjax);
-			on("click", 'form[data-ajax_append] [type="submit"]', this.formAjax);
-			on("click", 'form[data-ajax_prepend] [type="submit"]', this.formAjax);
-
-			on("change", "select[data-ajax]", this.selectAjax);
-			on("change", "select[data-redirect]", this.selectRedirect);
-			on("change", "select[data-change_toggle]", this.selectToggle);
-
-			on("click", "[data-alert]", this.alert);
-			on("click", "[data-click]", this.effect("click"));
-			on("click", "[data-clone_append]", this.clone_append);
-			on("click", "[data-confirm]", this.confirm);
-			on("click", "[data-fadeOut]", this.effect("fadeOut"));
-			on("click", "[data-hide]", this.effect("hide"));
-			on("keyup", "[data-live]", this.live);
-			on("click", "[data-remove]", this.remove);
-			on("click", "[data-show]", this.effect("show"));
-			on("click", "[data-slideDown]", this.effect("slideDown"));
-			on("click", "[data-style]", this.style);
-			on("click", "[data-toggle]", this.effect("toggle"));
-			on("click", "[data-toggle_class]", this.toggleClass);
-			on("click", "[data-toggle_display]", this.toggleDisplay);
+			// mostrar solo el target del grupo
+			var all = document.querySelectorAll(scopeSel);
+			for (var i = 0; i < all.length; i++) {
+				if (all[i] === target) FX.show(all[i]);
+				else FX.hide(all[i]);
+			}
+			// limpiar valores del target
+			var inputs = target.querySelectorAll("input, textarea, select");
+			for (var k = 0; k < inputs.length; k++) inputs[k].value = "";
 		}
 	};
 
-	/* ======================
-	 * UTILIDAD REUTILIZABLE: ELIMINACIÓN DIFERIDA
-	 * ======================
-	 * Convención declarativa y genérica:
-	 * ⮞ <div data-id="XYZ"> ...contenido vivo... </div>
-	 * ⮞ <span data-remove_id="XYZ"></span>
-	 *
-	 * Donde aparezca data-remove_id="XYZ":
-	 * ⮞ se busca [data-id="XYZ"], se elimina ese nodo
-	 * ⮞ se elimina también el marcador data-remove_id
-	 *
-	 * Se puede usar para borrar nodos ya existentes o recién inyectados
-	 * desde AJAX / SSE / WS sin <script> inline.
-	 */
+	/* ========================================
+	 * EVENTOS
+	 * ======================================== */
+	const Events = {
+		bind: function () {
+			var on = Utils.on;
 
-	function applyDeferredRemovals(root) {
-		var marks = (root || document).querySelectorAll('[data-remove_id]');
-		marks.forEach(function (mk) {
-			var id = mk.getAttribute('data-remove_id');
-			if (id) {
-				var objetivo = document.querySelector('[data-id="' + CSS.escape(id) + '"]');
-				if (objetivo) objetivo.remove();
+			on("click", "a[data-ajax]", Handlers.ajaxLink);
+			on("click", 'form[data-ajax] [type="submit"], form[data-ajax_append] [type="submit"], form[data-ajax_prepend] [type="submit"]', Handlers.ajaxForm);
+
+			on("change", "select[data-ajax]", Handlers.selectAjax);
+			on("keyup", "[data-live]", Handlers.liveSearch);
+			on("change", "select[data-redirect]", Handlers.selectRedirect);
+
+			on("click", "[data-active]", Handlers.active);
+			on("click", "[data-alert]", Handlers.alert);
+			on("click", "[data-confirm]", Handlers.confirm);
+			on("click", "[data-remove]", Handlers.remove);
+
+			on("click", "[data-toggle_class]", Handlers.toggleClass);
+			on("click", "[data-style]", Handlers.style);
+			on("click", "[data-clone_append]", Handlers.clone_append);
+			on("click", "[data-toggle_display]", Handlers.toggleDisplay);
+
+			on("click", "[data-show]", Handlers.effect("show"));
+			on("click", "[data-hide]", Handlers.effect("hide"));
+			on("click", "[data-toggle]", Handlers.effect("toggle"));
+			on("click", "[data-fadeOut]", Handlers.effect("fadeOut"));
+			on("click", "[data-slideDown]", Handlers.effect("slideDown"));
+			on("click", "[data-click]", Handlers.effect("click"));
+		}
+	};
+
+	/* ========================================
+	 * OBSERVER GLOBAL
+	 * ======================================== */
+	var observer = null;
+	const Observer = {
+		init: function () {
+			if (observer) {
+				try { observer.disconnect(); } catch (_) { }
 			}
-			mk.remove();
-		});
-	}
+			observer = new MutationObserver(function (muts) {
+				for (var i = 0; i < muts.length; i++) {
+					var m = muts[i];
+					if (m.type !== "childList" || !m.addedNodes) continue;
 
-	/* ======================
-	 * AUTOSCROLL + OBSERVER GLOBAL
-	 * ======================
-	 * REGLA: el elemento que TIENE barra de scroll vertical
-	 * es el que lleva data-autoscroll.
-	 *
-	 * Usamos el MISMO observer global también para:
-	 * ⮞ eliminación diferida (applyDeferredRemovals)
-	 */
+					m.addedNodes.forEach(function (n) {
+						if (!n || n.nodeType !== 1) return;
 
-	function forceScrollBottom(box) {
-		if (!box) return;
+						// enganchar cajas autoscroll
+						if (n.matches && n.matches("[data-autoscroll]")) AutoScroll.setup(n);
+						var inside = n.querySelectorAll ? n.querySelectorAll("[data-autoscroll]") : [];
+						for (var k = 0; k < inside.length; k++) AutoScroll.setup(inside[k]);
 
-		var beforeTop = box.scrollTop;
-		var beforeLeft = box.scrollLeft;
-
-		box.scrollTop = box.scrollHeight;
-		box.scrollLeft = box.scrollWidth;
-
-		console.log("[autoscroll] force ⇒", selectorOf(box, ""), {
-			top: beforeTop + "→" + box.scrollTop,
-			left: beforeLeft + "→" + box.scrollLeft
-		});
-	}
-
-	function setupAutoScrollBox(box) {
-		if (!box || box.__autoScrollObs) return;
-
-		console.log("[autoscroll] hook", selectorOf(box, ""));
-
-		var obs = new MutationObserver(function (mutList) {
-			var added = 0;
-
-			mutList.forEach(function (m) {
-				if (m.type === "childList" && m.addedNodes && m.addedNodes.length) {
-					added += m.addedNodes.length;
+						// removals diferidos si entran marcas
+						var hasRem =
+							(n.matches && n.matches("[data-remove_id]")) ||
+							(n.querySelectorAll && n.querySelectorAll("[data-remove_id]").length > 0);
+						if (hasRem) DeferredRemove.apply();
+					});
 				}
 			});
-
-			if (added > 0) {
-				console.log("[autoscroll] +" + added + " nuevos nodos en", selectorOf(box, ""));
-				setTimeout(function () { forceScrollBottom(box); }, 0);
+			try {
+				observer.observe(document.documentElement, { childList: true, subtree: true });
+			} catch (e) {
+				warn("observer fail:", e && e.message ? e.message : e);
 			}
-		});
-
-		try {
-			obs.observe(box, { childList: true, subtree: true });
-			box.__autoScrollObs = obs;
-		} catch (e) {
-			console.warn("[autoscroll] observer fail", e && e.message ? e.message : e);
 		}
+	};
 
-		// Primera vez: baja al final tal cual
-		setTimeout(function () { forceScrollBottom(box); }, 0);
+	/* ========================================
+	 * API
+	 * ======================================== */
+	const Kumbia = {
+		version: "2.5.0",
+		config: function (opts) { Object.assign(CONFIG, opts || {}); return Kumbia; },
+		use: function (plugin) { if (typeof plugin === "function") plugin(Kumbia, Utils, FX); return Kumbia; },
+		rescan: function () { AutoScroll.scan(); DeferredRemove.apply(); Observer.init(); return Kumbia; },
+		destroy: function () { if (observer) { try { observer.disconnect(); } catch (_) { } } },
+		utils: Utils,
+		fx: FX,
+		scroll: AutoScroll,
+		remove: DeferredRemove
+	};
+
+	/* ========================================
+	 * BOOT
+	 * ======================================== */
+	function boot() {
+		Events.bind();
+		AutoScroll.scan();
+		DeferredRemove.apply();
+		Observer.init();
+		log("Kumbia.js v" + Kumbia.version + " ready");
 	}
 
-	function scanAutoScroll(root) {
-		var boxes = (root || document).querySelectorAll("[data-autoscroll]");
-		boxes.forEach(function (b) {
-			setupAutoScrollBox(b);
-		});
+	global.Kumbia = Kumbia;
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", boot);
+	} else {
+		boot();
 	}
-
-	function bootAutoScroll() {
-		// Enganchar las cajas actuales
-		scanAutoScroll(document);
-
-		// Aplicar eliminaciones diferidas iniciales
-		applyDeferredRemovals(document);
-
-		// Vigilar DOM global para cajas nuevas y marcas de borrado
-		var mo = new MutationObserver(function (muts) {
-			for (var i = 0; i < muts.length; i++) {
-				var m = muts[i];
-				if (m.type !== "childList" || !m.addedNodes) continue;
-
-				m.addedNodes.forEach(function (n) {
-					if (n.nodeType !== 1) return;
-
-					// 1) autoscroll: enganchar cajas nuevas
-					if (n.matches && n.matches("[data-autoscroll]")) {
-						setupAutoScrollBox(n);
-					}
-					var qsScroll = n.querySelectorAll ? n.querySelectorAll("[data-autoscroll]") : [];
-					if (qsScroll && qsScroll.length) {
-						qsScroll.forEach(function (x) {
-							setupAutoScrollBox(x);
-						});
-					}
-
-					// 2) removals diferidos:
-					//    si entra un marcador data-remove_id,
-					//    puede venir sin el nodo objetivo en el mismo fragmento.
-					//    Para cubrir TODOS los casos, re-barrimos todo el DOM.
-					if (
-						(n.matches && n.matches("[data-remove_id]")) ||
-						(n.querySelectorAll && n.querySelectorAll("[data-remove_id]").length)
-					) {
-						applyDeferredRemovals(document);
-					}
-				});
-			}
-		});
-
-		try {
-			mo.observe(document.documentElement, { childList: true, subtree: true });
-		} catch (e) {
-			console.warn("[autoscroll] global observer fail", e && e.message ? e.message : e);
-		}
-	}
-
-	/* ======================
-	 * ARRANQUE
-	 * ====================== */
-
-	window.Kumbia = Kumbia;
-	Kumbia.bind();
-	bootAutoScroll();
-})();
+})(window);

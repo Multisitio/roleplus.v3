@@ -27,6 +27,11 @@
 /* RESPONSIVE (sin tocar anchos de los items) */
 @media (max-width: 972px) {
 	[data-columns] { grid-template-columns: 1fr; }
+	[data-columns] > * { grid-row-end: auto; }
+	[data-columns] > *:nth-child(n+4) {
+		content-visibility: auto;
+		contain-intrinsic-size: auto 600px;
+	}
 	main { padding-left: 0 !important; padding-right: 0 !important; }
 }
 @media (min-width: 973px) and (max-width: 1446px) {

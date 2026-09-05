@@ -3,18 +3,6 @@
 	'use strict';
 	if (!('serviceWorker' in navigator)) return;
 
-	// FIX PARA LIMPIAR CACHE CORRUPTA DEL ERROR 500
-	if (!localStorage.getItem('rp_cache_cleared_v1')) {
-		navigator.serviceWorker.getRegistrations().then(function(registrations) {
-			for(let r of registrations) {
-				if(r.active) { r.active.postMessage({ type: 'UNREGISTER' }); }
-				r.unregister();
-			}
-			localStorage.setItem('rp_cache_cleared_v1', '1');
-			setTimeout(function() { location.reload(true); }, 500);
-		});
-	}
-
 	// Evita doble init (páginas con inyecciones/reloads vía AJAX)
 	if (window.__roleplus_sw_inited__) return;
 	window.__roleplus_sw_inited__ = true;
@@ -28,13 +16,5 @@
 			// Silencioso en prod; dejar traza corta por si se necesita
 			try { console.warn('SW register error', e && (e.message || e)); } catch (_) { }
 		});
-	});
-
-	// Si el SW notifica que quedó desregistrado, recarga una vez
-	navigator.serviceWorker.addEventListener('message', function (e) {
-		var d = e && e.data || {};
-		if (d.type === 'SW_UNREGISTERED') {
-			try { location.reload(); } catch (_) { }
-		}
 	});
 })();

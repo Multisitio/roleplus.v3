@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var div, n,
-        v = document.getElementsByClassName("youtube-player");
+    var div, n, v = document.getElementsByClassName("youtube-player");
+
     for (n = 0; n < v.length; n++) {
         div = document.createElement("div");
         div.setAttribute("data-id", v[n].dataset.id);

@@ -1,0 +1,42 @@
+
+<div class="modal editor">
+	<form enctype="multipart/form-data" method="post">
+		<header>
+			<h3>
+				<?=t('Plantilla')?>
+				<button type="button" class="transparent" data-hide=".modal.editor, .editor.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+			</h3>
+		</header>
+
+		<section>
+			<label><?=t('Nombre')?></label>
+			<input type="text" name="nombre" placeholder="<?=t('Nombre de la plantilla...')?>" value="<?=$plantilla->nombre?>" required>
+
+			<label>
+                <input type="checkbox" name="publicado" value="1" <?=$plantilla->publicado?'checked':''?>> <?=t('Pública (otros podrán verla y usarla)')?>
+            </label>
+
+            <label class="dropimage mh20 mt20">
+				<input type="file" name="imagenes[]">
+				<?php if ($plantilla->fotos): ?>
+					<img alt="<?=t('Imagen de la plantilla:')?> <?=$plantilla->nombre?>" src="/img/usuarios/<?=$plantilla->usuarios_idu?>/l.<?=$plantilla->fotos?>">
+				<?php endif; ?>
+			</label>
+
+            <?php if ($plantilla->fotos): ?>
+				<input type="hidden" name="fotos" value="<?=$plantilla->fotos?>">
+			<?php endif; ?>
+		</section>
+
+		<footer class="grid">
+			<?php if ($plantilla->idu): ?>
+				<button type="submit" class="outline" name="action" value="eliminar" data-confirm="<?=t('¿Estás seguro?')?>"><?=t('Eliminar')?></button>
+				<button type="submit" name="action" value="actualizar"><?=t('Actualizar')?></button>
+				<input type="hidden" name="idu" value="<?=$plantilla->idu?>">
+			<?php else: ?>
+				<button type="submit" name="action" value="crear"><?=t('Crear')?></button>
+			<?php endif; ?>
+		</footer>
+	</form>
+</div>
+<div class="editor overlay" data-hide=".modal.editor, .editor.overlay"></div>

@@ -17,6 +17,13 @@ class PublicacionesController extends AppController
     #
     public function buscar($frase='')
     {
+        if ( ! Session::get('idu')) {
+            Input::isAjax()
+                ? View::select('', 'login')
+                : Redirect::to('/usuarios/formularios');
+            return false;
+        }
+
         if (Input::post('frase')) {
             $frase = urlencode(Input::post('frase'));
             return Redirect::to("/publicaciones/buscar/$frase");

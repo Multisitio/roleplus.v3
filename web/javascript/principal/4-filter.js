@@ -1,25 +1,25 @@
-/* INPUT LIVE FILTER */
-$('body').on('keyup', '[data-filter]', function() {
-    var item = $(this).data('filter');
-    var search = $(this).val();
-    $(item).hide();
-    $(item + ":icontains('" + search + "')").show();
-});
-
 /* INPUT LIVE FILTER ACCENTS */
-replaceAccents = function(q) {
-    q = q.replace(/[eéèêëEÉÈÊË]/gi, '[eéèêëEÉÈÊË]');
-    q = q.replace(/[aàâäAÀÁÂÃÄÅÆ]/gi, '[aàâäAÀÁÂÃÄÅÆ]');
-    q = q.replace(/[cçC]/gi, '[cçC]');
-    q = q.replace(/[iïîIÌÍÎÏ]/gi, '[iïîIÌÍÎÏ]');
-    q = q.replace(/[oôöÒÓÔÕÖ]/gi, '[oôöÒÓÔÕÖ]');
-    q = q.replace(/[uüûUÜÛÙÚ]/gi, '[uüûUÜÛÙÚ]');
-    q = q.replace(/[yYÿÝ]/gi, '[yYÿÝ]');
+window.replaceAccents = function(q) {
+    q = q.replace(/[eéèêëEÉÈÊË]/gi, '[E]');
+    q = q.replace(/[aàâäAÀÁÂÃÄÅÆ]/gi, '[A]');
+    q = q.replace(/[cçC]/gi, '[C]');
+    q = q.replace(/[iïîIÌÍÎÏ]/gi, '[I]');
+    q = q.replace(/[oôöÒÓÔÕÖ]/gi, '[O]');
+    q = q.replace(/[uüûUÜÛÙÚ]/gi, '[U]');
+    q = q.replace(/[yYÿÝ]/gi, '[Y]');
     return q;
 };
 
-/* INPUT LIVE FILTER IS SENSITIVE CASE */
-jQuery.expr[':'].icontains = function(a, i, m) {
-    var q = jQuery(a).text();
-    return replaceAccents(q).toUpperCase().indexOf(replaceAccents(m[3]).toUpperCase()) >= 0;
-};
+
+/* INPUT LIVE FILTER */
+Kumbia.utils.on('keyup', '[data-filter]', function() {
+    var itemSel = Kumbia.utils.getData(this, 'filter');
+    var search = window.replaceAccents(this.value).toUpperCase();
+    var items = document.querySelectorAll(itemSel);
+    
+    for(var i=0; i<items.length; i++){
+        var q = window.replaceAccents(items[i].textContent || items[i].innerText).toUpperCase();
+        if(q.indexOf(search) >= 0) Kumbia.fx.show(items[i]);
+        else Kumbia.fx.hide(items[i]);
+    }
+});

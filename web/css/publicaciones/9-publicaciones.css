@@ -64,7 +64,9 @@ article .contenido {
 }
 
 article .contenido a:not(.tag) {
-    display: block !important;
+    display: inline;
+    font-size: small;
+    line-height: 30px;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;

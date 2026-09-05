@@ -11,16 +11,16 @@ picture:has(mark) img {
 }
 
 mark {
-    background-color: var(--demongreen);
+    background-color: var(--color-primary);
     border-radius: 100%;
-    color: #fff;
+    color: var(--color-text-inverse);
     display: inline-block;
-    font-family: Colus;
-    font-size: 12pt;
-    height: 22px;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-mark);
+    height: var(--mark-size);
     line-height: 1.5;
     text-align: center;
-    width: 22px;
+    width: var(--mark-size);
 }
 
 picture mark {

@@ -1,23 +1,25 @@
-/* 5-filter.js - Vanilla JS version */
-
-function replaceAccents(q) {
-    q = q.replace(/[eéèêëEÉÈÊË]/gi, '[eéèêëEÉÈÊË]');
-    q = q.replace(/[aàâäAÀÁÂÃÄÅÆ]/gi, '[aàâäAÀÁÂÃÄÅÆ]');
-    q = q.replace(/[cçC]/gi, '[cçC]');
-    q = q.replace(/[iïîIÌÍÎÏ]/gi, '[iïîIÌÍÎÏ]');
-    q = q.replace(/[oôöÒÓÔÕÖ]/gi, '[oôöÒÓÔÕÖ]');
-    q = q.replace(/[uüûUÜÛÙÚ]/gi, '[uüûUÜÛÙÚ]');
-    q = q.replace(/[yYÿÝ]/gi, '[yYÿÝ]');
+/* INPUT LIVE FILTER ACCENTS */
+window.replaceAccents = function(q) {
+    q = q.replace(/[eéèêëEÉÈÊË]/gi, '[E]');
+    q = q.replace(/[aàâäAÀÁÂÃÄÅÆ]/gi, '[A]');
+    q = q.replace(/[cçC]/gi, '[C]');
+    q = q.replace(/[iïîIÌÍÎÏ]/gi, '[I]');
+    q = q.replace(/[oôöÒÓÔÕÖ]/gi, '[O]');
+    q = q.replace(/[uüûUÜÛÙÚ]/gi, '[U]');
+    q = q.replace(/[yYÿÝ]/gi, '[Y]');
     return q;
-}
+};
 
-document.body.addEventListener('keyup', e => {
-    const el = e.target;
-    const item = el.getAttribute('data-filter');
-    if (!item) return;
-    const search = replaceAccents(el.value).toUpperCase();
-    document.querySelectorAll(item).forEach(n => {
-        const text = replaceAccents(n.textContent).toUpperCase();
-        n.style.display = text.includes(search) ? '' : 'none';
-    });
+
+/* INPUT LIVE FILTER */
+Kumbia.utils.on('keyup', '[data-filter]', function() {
+    var itemSel = Kumbia.utils.getData(this, 'filter');
+    var search = window.replaceAccents(this.value).toUpperCase();
+    var items = document.querySelectorAll(itemSel);
+    
+    for(var i=0; i<items.length; i++){
+        var q = window.replaceAccents(items[i].textContent || items[i].innerText).toUpperCase();
+        if(q.indexOf(search) >= 0) Kumbia.fx.show(items[i]);
+        else Kumbia.fx.hide(items[i]);
+    }
 });

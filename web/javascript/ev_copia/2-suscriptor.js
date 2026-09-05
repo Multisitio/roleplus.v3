@@ -1,8 +1,8 @@
 /* 2-suscriptor.js
- * Suscriptor de tiempo real por canal.
+ * Suscriptor de tiempo real por canal (SSE/WS).
  *
  * CONTRATO (estricto):
- * - Params válidos: ch, url, box, append, mode.
+ * - Params validos: ch, url, box, append, mode.
  * - En el FRONT, box NO es opcional ⇒ SIEMPRE es el propio <tag data-ch="...">.
  *   (Se ignora cualquier "box" del payload).
  * - Transporte:
@@ -23,8 +23,13 @@
 	// --- Estado ---------------------------------------------------
 	// Evita re-suscribir el mismo nodo
 	const subscribed = new WeakSet();
-	// Guardar conexiones para cierre limpio
-	const conns = new Map(); // el -> {type:'sse'|'ws', conn:EventSource|WebSocket}
+
+	// el -> key (para limpiar rapido)
+	const elkey = new WeakMap();
+
+	// key = "<mode>:<canal>" -> handle
+	// handle: { type, conn, canal, mode, els:Set<Element>, opened, queue:Promise }
+	const channels = new Map();
 
 	// --- Utils ----------------------------------------------------
 	function parsePayload(raw) {
@@ -40,118 +45,201 @@
 			return null;
 		}
 
-		// append aquí solo sirve como override puntual en el mensaje
 		let append = null;
-		if (typeof o.append !== 'undefined') {
-			append = !!o.append;
-		}
+		if (typeof o.append !== 'undefined') append = !!o.append;
 
 		return { url, append };
 	}
 
-	async function fetchAndInject(baseEl, canal, url, appendFlag) {
-		try {
-			const resp = await fetch(url, {
-				credentials: 'same-origin',
-				headers: { 'X-Requested-With': 'XMLHttpRequest' },
-				cache: 'no-store'
-			});
-			if (!resp.ok) {
-				console.warn('[suscriptor] FETCH FAIL', { ch: canal, status: resp.status, url });
-				return;
-			}
-			const html = await resp.text();
+	async function fetchHtml(url, canal) {
+		const resp = await fetch(url, {
+			credentials: 'same-origin',
+			headers: { 'X-Requested-With': 'XMLHttpRequest' },
+			cache: 'no-store'
+		});
+		if (!resp.ok) {
+			console.warn('[suscriptor] FETCH FAIL', { ch: canal, status: resp.status, url });
+			return null;
+		}
+		return await resp.text();
+	}
 
-			if (appendFlag) {
-				baseEl.insertAdjacentHTML('beforeend', html);
-				console.info(`FETCH ${url} TO ${canal} APPEND`);
-			} else {
-				baseEl.innerHTML = html;
-				console.info(`FETCH ${url} TO ${canal}`);
-			}
-		} catch (e) {
-			console.warn('[suscriptor] FETCH ERROR', { ch: canal, err: (e && e.message) || String(e), url });
+	function inject(el, html, appendFlag) {
+		if (appendFlag) {
+			el.insertAdjacentHTML('beforeend', html);
+		} else {
+			el.innerHTML = html;
 		}
 	}
 
-	function startSSE(baseEl, canal, defAppend) {
-		const es = new EventSource('/chat/sse?ch=' + encodeURIComponent(canal));
-		let opened = false;
+	function logConnected(type, canal, anyAppend) {
+		if (anyAppend) {
+			console.info(`${type} CONNECTED TO ${canal} APPEND`);
+		} else {
+			console.info(`${type} CONNECTED TO ${canal}`);
+		}
+	}
 
-		es.onopen = () => {
-			opened = true;
-			if (defAppend) {
-				console.info(`SSE CONNECTED TO ${canal} APPEND`);
-			} else {
-				console.info(`SSE CONNECTED TO ${canal}`);
+	function keyOf(mode, canal) {
+		return mode + ':' + canal;
+	}
+
+	function anyElementAppend(els) {
+		for (const el of els) {
+			if (el && el.hasAttribute && el.hasAttribute('data-append')) return true;
+		}
+		return false;
+	}
+
+	function dispatch(handle, payload) {
+		if (!handle || !payload) return;
+		if (!handle.els || handle.els.size === 0) return;
+
+		const canal = handle.canal;
+		const url = payload.url;
+		const overrideAppend = (payload.append !== null) ? !!payload.append : null;
+
+		handle.queue = handle.queue.then(async function () {
+			if (!handle.els || handle.els.size === 0) return;
+
+			const html = await fetchHtml(url, canal);
+			if (html === null) return;
+
+			let didAppend = false;
+			for (const el of handle.els) {
+				if (!el || !el.isConnected) continue;
+
+				const defAppend = el.hasAttribute('data-append');
+				const appendFlag = (overrideAppend !== null) ? overrideAppend : defAppend;
+				inject(el, html, appendFlag);
+				if (appendFlag) didAppend = true;
 			}
+
+			if (didAppend) {
+				console.info(`FETCH ${url} TO ${canal} APPEND`);
+			} else {
+				console.info(`FETCH ${url} TO ${canal}`);
+			}
+		}).catch(function (e) {
+			console.warn('[suscriptor] DISPATCH ERROR', { ch: canal, err: (e && e.message) || String(e), url });
+		});
+	}
+
+	function startSSE(handle) {
+		const canal = handle.canal;
+		const es = new EventSource('/chat/sse?ch=' + encodeURIComponent(canal));
+
+		es.onopen = function () {
+			handle.opened = true;
+			logConnected('SSE', canal, anyElementAppend(handle.els));
 		};
-		es.onerror = () => {
-			if (!opened) console.warn('[suscriptor] SUBSCRIBE FAIL', { ch: canal, via: 'SSE' });
+		es.onerror = function () {
+			if (!handle.opened) console.warn('[suscriptor] SUBSCRIBE FAIL', { ch: canal, via: 'SSE' });
 			// EventSource reintenta solo
 		};
-		es.onmessage = (ev) => {
+		es.onmessage = function (ev) {
 			const p = parsePayload(ev.data);
 			if (!p) return;
-			const append = (p.append !== null) ? p.append : defAppend;
-			fetchAndInject(baseEl, canal, p.url, append);
+			dispatch(handle, p);
 		};
 
-		return { type: 'sse', conn: es };
+		handle.type = 'sse';
+		handle.conn = es;
 	}
 
-	function startWS(baseEl, canal, defAppend) {
+	function startWS(handle) {
+		const canal = handle.canal;
 		const proto = (location.protocol === 'https:') ? 'wss:' : 'ws:';
 		const ws = new WebSocket(proto + '//' + location.host + '/chat/ws?ch=' + encodeURIComponent(canal));
-		let opened = false;
 
-		ws.addEventListener('open', () => {
-			opened = true;
-			if (defAppend) {
-				console.info(`WS CONNECTED TO ${canal} APPEND`);
-			} else {
-				console.info(`WS CONNECTED TO ${canal}`);
-			}
+		ws.addEventListener('open', function () {
+			handle.opened = true;
+			logConnected('WS', canal, anyElementAppend(handle.els));
 		});
-		ws.addEventListener('error', () => {
-			if (!opened) console.warn('[suscriptor] SUBSCRIBE FAIL', { ch: canal, via: 'WS' });
+		ws.addEventListener('error', function () {
+			if (!handle.opened) console.warn('[suscriptor] SUBSCRIBE FAIL', { ch: canal, via: 'WS' });
 		});
-		ws.addEventListener('message', (ev) => {
+		ws.addEventListener('message', function (ev) {
 			const p = parsePayload(ev.data);
 			if (!p) return;
-			const append = (p.append !== null) ? p.append : defAppend;
-			fetchAndInject(baseEl, canal, p.url, append);
+			dispatch(handle, p);
 		});
 
-		return { type: 'ws', conn: ws };
+		handle.type = 'ws';
+		handle.conn = ws;
 	}
 
-	// --- Suscripción por nodo ------------------------------------
+	function ensureChannel(mode, canal) {
+		const key = keyOf(mode, canal);
+		let handle = channels.get(key);
+		if (handle) return handle;
+
+		handle = {
+			canal: canal,
+			conn: null,
+			els: new Set(),
+			mode: mode,
+			opened: false,
+			queue: Promise.resolve(),
+			type: mode
+		};
+
+		channels.set(key, handle);
+
+		if (mode === 'ws') {
+			startWS(handle);
+		} else {
+			startSSE(handle);
+		}
+
+		return handle;
+	}
+
+	// --- Suscripcion por nodo ------------------------------------
 	function subscribeNode(el) {
 		if (!el || subscribed.has(el)) return;
+
 		const canal = (el.dataset.ch || '').trim();
 		if (!canal) return;
-
-		// defAppend = true si el atributo data-append existe en el nodo,
-		// da igual cuál sea su valor.
-		const defAppend = el.hasAttribute('data-append');
 
 		const modeAttr = (el.dataset.mode || 'sse').toLowerCase();
 		const mode = (modeAttr === 'ws') ? 'ws' : 'sse';
 
-		// Arranca conexión y guarda handler para cierre
-		const handle = (mode === 'ws')
-			? startWS(el, canal, defAppend)
-			: startSSE(el, canal, defAppend);
+		const handle = ensureChannel(mode, canal);
+		handle.els.add(el);
 
-		conns.set(el, handle);
+		elkey.set(el, keyOf(mode, canal));
 		subscribed.add(el);
+	}
+
+	function unsubscribeNode(el) {
+		if (!el) return;
+
+		const key = elkey.get(el);
+		if (!key) return;
+
+		const handle = channels.get(key);
+		if (!handle) return;
+
+		if (handle.els && handle.els.has(el)) handle.els.delete(el);
+		elkey.delete(el);
+
+		if (!handle.els || handle.els.size !== 0) return;
+
+		try { handle.conn && handle.conn.close && handle.conn.close(); } catch (_) { }
+		channels.delete(key);
 	}
 
 	function scan(root) {
 		const list = (root || document).querySelectorAll('[data-ch]');
 		if (!list.length) return;
 		list.forEach(subscribeNode);
+	}
+
+	function unscan(root) {
+		const list = (root || document).querySelectorAll ? (root || document).querySelectorAll('[data-ch]') : [];
+		if (!list.length) return;
+		list.forEach(unsubscribeNode);
 	}
 
 	// --- Boot + re-scan hooks ------------------------------------
@@ -163,25 +251,29 @@
 		boot();
 	}
 
-	// Re-escaneo automático cuando llegan nodos vía AJAX/DOM
-	const mo = new MutationObserver((muts) => {
+	// Re-escaneo automatico cuando llegan/quitan nodos via AJAX/DOM
+	const mo = new MutationObserver(function (muts) {
 		for (let i = 0; i < muts.length; i++) {
 			const m = muts[i];
 			if (m.type !== 'childList') continue;
 
-			// Nuevos nodos directos
-			m.addedNodes && m.addedNodes.forEach((n) => {
-				if (n.nodeType !== 1) return; // ELEMENT_NODE
+			m.addedNodes && m.addedNodes.forEach(function (n) {
+				if (n.nodeType !== 1) return;
 				if (n.matches && n.matches('[data-ch]')) subscribeNode(n);
-				// Descendientes con data-ch
 				const qs = n.querySelectorAll ? n.querySelectorAll('[data-ch]') : [];
 				if (qs && qs.length) qs.forEach(subscribeNode);
+			});
+
+			m.removedNodes && m.removedNodes.forEach(function (n) {
+				if (n.nodeType !== 1) return;
+				if (n.matches && n.matches('[data-ch]')) unsubscribeNode(n);
+				unscan(n);
 			});
 		}
 	});
 	try { mo.observe(document.documentElement, { childList: true, subtree: true }); } catch (_) { }
 
-	// API pública para forzar re-scan manual
+	// API publica para forzar re-scan manual
 	window.rpScanHooks = function (root) {
 		try { scan(root || document); } catch (_) { }
 	};
@@ -189,12 +281,13 @@
 		try { scan((ev && ev.detail && ev.detail.root) || document); } catch (_) { }
 	});
 
-	// Cierre limpio al abandonar la página
+	// Cierre limpio al abandonar la pagina
 	window.addEventListener('pagehide', function () {
 		try { mo.disconnect(); } catch (_) { }
-		conns.forEach((h) => {
+
+		channels.forEach(function (h) {
 			try { h && h.conn && h.conn.close && h.conn.close(); } catch (_) { }
 		});
-		conns.clear();
+		channels.clear();
 	}, { once: true });
 })();

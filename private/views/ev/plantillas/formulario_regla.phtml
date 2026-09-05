@@ -1,0 +1,126 @@
+
+<div class="modal editor">
+    <?php $primera = $reglas[0]; ?>
+	<form method="post" class="auto-save">
+		<header>
+			<h3>
+				<?=t('Regla')?> [<?=$primera->selector?>]
+				<button type="button" class="transparent" data-hide=".modal.editor, .editor.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+			</h3>
+		</header>
+        <br>
+		<section style="margin-bottom:0">
+            <!-- 1. Selector (s12) -->
+			<div class="grid">
+				<div class="s10">
+					<label><small><b><?=t('Elemento')?></b></small></label>
+					<div class="asistido">
+						<select class="selector-select">
+							<option value=""><?=t('Selecciona un elemento...')?></option>
+							<?php foreach ($selectores as $sel): ?>
+								<option value="<?=h((string)$sel->selector)?>" <?=strcasecmp((string)$primera->selector, (string)$sel->selector) === 0 ? 'selected' : ''?>>
+									<?=h((string)$sel->selector)?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="experto">
+						<input type="text" class="selector-input" name="selector" value="<?=h((string)$primera->selector)?>" placeholder="<?=t('Selector CSS (ej: .clase, #id)...')?>">
+					</div>
+				</div>
+                <div class="s2">
+                    <label><small>&nbsp;</small></label>
+                    <button type="button" class="btn-delete-selector outline" data-selector="<?=$primera->selector?>" data-plantilla="<?=$plantillas_idu?>" title="<?=t('Eliminar elemento y todas sus propiedades')?>"><img src="/img/icons/minus.svg"></button>
+                </div>
+			</div>
+
+			<!-- 2. Filas de Propiedad + Valor (clonables) -->
+			<div class="reglas-container">
+                <?php foreach ($reglas as $regla): ?>
+				<div class="regla-row grid" <?=$regla->idu ? 'data-idu="'.$regla->idu.'"' : ''?>>
+					<div class="s5">
+						<label><small><b><?=t('Propiedad')?></b></small></label>
+						<div class="asistido">
+							<select class="propiedad-select">
+								<option value=""><?=t('Selecciona la propiedad...')?></option>
+								<?php 
+                                    $prop_encontrada = false;
+                                    foreach ($propiedades as $prop): 
+                                        if (strcasecmp((string)$regla->propiedad, (string)$prop->propiedad) === 0) $prop_encontrada = true;
+                                ?>
+									<option value="<?=h((string)$prop->propiedad)?>" data-idu="<?=h((string)$prop->idu)?>" <?=strcasecmp((string)$regla->propiedad, (string)$prop->propiedad) === 0 ? 'selected' : ''?>>
+										<?=h((string)$prop->propiedad)?>
+									</option>
+								<?php endforeach; ?>
+                                <?php if (!$prop_encontrada && $regla->propiedad): ?>
+                                    <option value="<?=h((string)$regla->propiedad)?>" selected><?=h((string)$regla->propiedad)?></option>
+                                <?php endif; ?>
+							</select>
+						</div>
+						<div class="experto">
+							<input type="text" class="propiedad-input" name="propiedad[]" value="<?=h((string)$regla->propiedad)?>" placeholder="<?=t('Propiedad CSS (ej: color)...')?>">
+						</div>
+					</div>
+
+					<div class="s5">
+						<label><small><b><?=t('Valor')?></b></small></label>
+						<div class="asistido">
+                            <?php 
+                                $ridu = (string)$regla->idu;
+                                $valores = $valores_reglas[$ridu] ?? []; 
+                            ?>
+							<select class="valor-select" <?=$regla->propiedad ? '' : 'disabled'?>>
+								<option value=""><?=t('Selecciona el valor...')?></option>
+								<?php 
+                                    $val_encontrado = false;
+                                    foreach ($valores as $val): 
+                                        if (strcasecmp((string)$regla->valor, (string)$val->valor) === 0) $val_encontrado = true;
+                                ?>
+									<option value="<?=h((string)$val->valor)?>" <?=strcasecmp((string)$regla->valor, (string)$val->valor) === 0 ? 'selected' : ''?>>
+										<?=h((string)$val->valor)?>
+									</option>
+								<?php endforeach; ?>
+                                <?php if (!$val_encontrado && $regla->valor): ?>
+                                    <option value="<?=h((string)$regla->valor)?>" selected><?=h((string)$regla->valor)?></option>
+                                <?php endif; ?>
+							</select>
+						</div>
+						<div class="experto">
+							<input type="text" class="valor-input" name="valor[]" value="<?=h((string)$regla->valor)?>" placeholder="<?=t('Valor CSS (ej: #ff0000)...')?>">
+						</div>
+					</div>
+
+					<div class="s2">
+						<label><small>&nbsp;</small></label>
+						<button type="button" class="btn-remove-row outline"><img src="/img/icons/minus.svg"></button>
+					</div>
+                    <input type="hidden" name="idus[]" value="<?=$regla->idu?>">
+				</div>
+                <?php endforeach; ?>
+			</div>
+
+			<!-- 3. Botón añadir fila -->
+			<div class="grid actions-grid">
+				<div class="s2">
+					<button type="button" class="btn-add-row outline"><img src="/img/icons/plus.svg"></button>
+				</div>
+                <div class="s10"></div>
+			</div>
+		</section>
+        <hr>
+        <br>
+		<footer class="grid">
+            <button type="button" id="toggle-expert" class="outline small"><?=t('Modo Experto')?></button>
+
+			<?php if ($primera->idu): ?>
+				<button type="submit" name="action" value="regla_actualizar"><?=t('Actualizar')?></button>
+				<input type="hidden" name="idu" value="<?=$primera->idu?>">
+			<?php else: ?>
+				<button type="submit" name="action" value="regla_crear"><?=t('Crear')?></button>
+			<?php endif; ?>
+            <input type="hidden" name="plantillas_idu" value="<?=$plantillas_idu?>">
+		</footer>
+	</form>
+</div>
+
+<div class="editor overlay" data-hide=".modal.editor, .editor.overlay"></div>

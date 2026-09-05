@@ -1,0 +1,241 @@
+:root {
+    /* Colores */
+    --bg-body: #f5f5f5;              /* Color de fondo del cuerpo de la página */
+    --bg-main: #ffffff;              /* Color de fondo de los registros y fichas */
+    --color-text-dark: #1c1c1c;      /* Color del texto principal (Narrativa para los PJ y títulos) */
+    --color-text-muted: #4a4a4a;     /* Color del texto secundario/atenuado (Notas del DJ) */
+    --color-highlight: #fef08a;      /* Color de fondo para resaltar enlaces destino al hacer scroll */
+    --color-border-dashed: #7a6b58;  /* Color de las líneas discontinuas divisorias */
+
+    /* Estilos tipográficos */
+    --font-family: 'Georgia', serif;  /* Familia tipográfica del contenido */
+    
+    /* Estructura del Registro de Campaña / Documento por defecto */
+    --campaign-max-width: 800px;     /* Ancho máximo del registro de campaña */
+    --campaign-padding: 20px;        /* Relleno del registro de campaña */
+
+    /* Estructura de Ficha Vertical (Retrato A4) */
+    --portrait-padding: 12mm;        /* Relleno de las fichas en vertical (reducido) */
+    --portrait-header-padding: 5mm;  /* Relleno inferior de la cabecera en vertical (reducido) */
+    --portrait-section-padding: 5mm; /* Espaciado de las secciones en vertical (reducido) */
+
+    /* Tamaños y alturas tipográficas */
+    --font-size-pj: 11pt;            /* Tamaño de fuente de la narrativa de los PJ */
+    --line-height-pj: 1.6;           /* Altura de línea de la narrativa de los PJ */
+    --font-size-dj: 10pt;            /* Tamaño de fuente de las notas del DJ */
+    --line-height-dj: 1.5;           /* Altura de línea de las notas del DJ */
+}
+
+/* Estilos generales y compartidos para Aventuras */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-body);
+    font-family: var(--font-family);
+    color: var(--color-text-dark);
+}
+
+/* ---------------------------------------------------- */
+/* Registro de Campaña / Documento por defecto (desapariciones) */
+/* ---------------------------------------------------- */
+main {
+    max-width: var(--campaign-max-width);
+    margin: 40px auto;
+    padding: var(--campaign-padding);
+    background-color: var(--bg-main);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+/* Párrafos base: notas del DJ o información general */
+main p {
+    font-size: var(--font-size-dj);
+    line-height: var(--line-height-dj);
+    color: var(--color-text-muted);
+    margin: 0 0 10px 0;
+    text-align: justify;
+}
+
+/* Párrafos de narrativa: la narrativa de los PJ va dentro de p i */
+main p i, main li i {
+    display: block;
+    font-style: italic;
+    font-size: var(--font-size-pj);
+    line-height: var(--line-height-pj);
+    color: var(--color-text-dark);
+}
+
+/* Si el párrafo contiene i, reinicia márgenes para evitar saltos dobles o aspecto tosco */
+main p:has(i) {
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+/* Títulos */
+main h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: var(--color-text-dark);
+}
+
+main h2 {
+    font-size: 13pt;
+    font-weight: bold;
+    margin-top: 18px;
+    margin-bottom: 12px;
+}
+
+main h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+main h4 {
+    font-size: 11.5pt;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+main h5 {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+main h6 {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+/* Anclas y destinos en el registro de campaña */
+h6:target a,
+a:target {
+    background-color: var(--color-highlight);
+}
+
+.red {
+    color: red;
+}
+
+
+/* ---------------------------------------------------- */
+/* Fichas imprimibles (main[sheet])                     */
+/* ---------------------------------------------------- */
+main[sheet] {
+    width: 210mm;
+    height: 297mm;
+    box-sizing: border-box;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-main);
+    padding: var(--portrait-padding);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+    max-width: none;
+}
+
+main[sheet] header {
+    width: 100%;
+    height: auto;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding-bottom: var(--portrait-header-padding);
+    margin: 0;
+}
+
+main[sheet] header img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 390px;
+    object-fit: cover;
+}
+
+main[sheet] section {
+    width: 100%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+main[sheet] section:first-of-type {
+    padding-bottom: var(--portrait-section-padding);
+}
+
+main[sheet] section:last-of-type {
+    border-top: 1px dashed var(--color-border-dashed);
+    padding-top: var(--portrait-section-padding);
+}
+
+/* Narrativa de los PJ en fichas (Cursiva, grande, legible) */
+main[sheet] p i, main[sheet] li i {
+    font-size: var(--font-size-pj);
+    line-height: var(--line-height-pj);
+    font-style: italic;
+    color: var(--color-text-dark);
+}
+
+/* Notas del DJ en fichas (Más pequeña, estilo normal, color atenuado) */
+main[sheet] p:not(:has(i)) {
+    font-size: var(--font-size-dj);
+    line-height: var(--line-height-dj);
+    color: var(--color-text-muted);
+    margin-top: 10px;
+}
+
+main[sheet] h1 {
+    font-size: 11pt;
+    line-height: 1.4;
+    margin: 0 0 3mm 0;
+    font-weight: bold;
+    color: var(--color-text-dark);
+}
+
+main[sheet] ul {
+    font-size: var(--font-size-pj);
+    line-height: var(--line-height-pj);
+    text-align: justify;
+    margin: 0 0 10px 0;
+    padding-left: 20px;
+}
+
+/* ---------------------------------------------------- */
+/* Ajustes de Impresión                                 */
+/* ---------------------------------------------------- */
+@page sheet-page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+    body:has(main[sheet]) {
+        background-color: #ffffff !important;
+        background-image: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    body:not(:has(main[sheet])) {
+        background-color: #ffffff !important;
+        background-image: none !important;
+    }
+    
+    main[sheet] {
+        page: sheet-page;
+        margin: 0 auto !important;
+        box-shadow: none !important;
+        background-color: #ffffff !important;
+        border: none !important;
+    }
+}
+

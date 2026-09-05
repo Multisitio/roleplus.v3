@@ -2,4 +2,9 @@
 $titulo = '';
 $width = 'max-width-xxl';
 ?>
-<img alt="<?=t('Imagen grade')?>" src="/img/<?=$dir?>/xxl.<?=$img?>" width="1920px" style="max-width:100%">
+<?php if (preg_match('/\.(mp4|webm)$/i', $img)): ?>
+    <?=Article::video('/img/' . $dir, $img)?>
+<?php else: ?>
+    <?php $src = preg_match('/\.(gif|svg)$/i', $img) ? "/img/$dir/$img" : "/img/$dir/xxl.$img"; ?>
+    <img alt="<?=t('Imagen grande')?>" decoding="async" src="<?=$src?>"<?=Article::imageSizeAttributes($src)?><?=Article::responsiveImageAttributes('/img/' . $dir, $img)?> style="max-width:100%">
+<?php endif; ?>

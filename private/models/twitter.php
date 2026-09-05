@@ -26,10 +26,32 @@ class Twitter extends LiteRecord
             $image_paths[] = "img/usuarios/$usuarios_idu/$image";
         }
 
-        $sql = 'SELECT * FROM vistas_previas WHERE donde_idu=?';
-        $preview_img = self::first($sql, [$list['idu']]);
-        if ($preview_img) {
-            $image_paths[] = "img/vistas_previas/$preview_img->idu/$preview_img->image";
+        $temp_files = [];
+
+        if (empty($image_paths)) {
+            $sql = 'SELECT * FROM vistas_previas WHERE donde_idu=?';
+            $preview_img = self::first($sql, [$list['idu']]);
+            if ($preview_img && !empty($preview_img->image)) {
+                $preview_path = "img/vistas_previas/$preview_img->idu/$preview_img->image";
+                if (file_exists($preview_path)) {
+                    $image_paths[] = $preview_path;
+                }
+            }
+
+            if (empty($image_paths) && !empty($list['enlace']) && stristr($list['enlace'], 'youtu')) {
+                $video_id = _var::getUrlVar($list['enlace']);
+                if ($video_id) {
+                    $yt_url = "https://i.ytimg.com/vi/$video_id/hqdefault.jpg";
+                    $content = _link::curl_get_file_contents($yt_url);
+                    if ($content) {
+                        $temp_file = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'yt_' . $video_id . '_' . uniqid() . '.jpg';
+                        if (file_put_contents($temp_file, $content) !== false) {
+                            $image_paths[] = $temp_file;
+                            $temp_files[] = $temp_file;
+                        }
+                    }
+                }
+            }
         }
 
         $media_ids = [];
@@ -39,6 +61,12 @@ class Twitter extends LiteRecord
                 if ($id) {
                     $media_ids[] = $id;
                 }
+            }
+        }
+
+        foreach ($temp_files as $temp_file) {
+            if (file_exists($temp_file)) {
+                unlink($temp_file);
             }
         }
 

@@ -56,31 +56,6 @@ document.body.addEventListener('click', e => {
 	}
 });
 
-// Textarea auto-height + tab
-function textareaAutoHeight() {
-	document.querySelectorAll('textarea').forEach(el => {
-		let height = el.scrollTop + el.scrollHeight;
-		if (height < 99) height = 99;
-		el.style.height = height + 'px';
-	});
-}
-textareaAutoHeight();
-document.body.addEventListener('click', e => {
-	if (e.target.tagName === 'TEXTAREA') textareaAutoHeight();
-});
-document.body.addEventListener('keyup', e => {
-	if (e.target.tagName === 'TEXTAREA') textareaAutoHeight();
-});
-document.body.addEventListener('keydown', e => {
-	if (e.target.tagName === 'TEXTAREA' && e.keyCode === 9) {
-		const v = e.target.value;
-		const s = e.target.selectionStart;
-		const eEnd = e.target.selectionEnd;
-		e.target.value = v.substring(0, s) + '\t' + v.substring(eEnd);
-		e.target.selectionStart = e.target.selectionEnd = s + 1;
-		e.preventDefault();
-	}
-});
 
 // Copiar al portapapeles (fallback clasico)
 function copiarAlPortapapeles(link) {
@@ -104,4 +79,4 @@ function showElements(selector) {
 }
 function hideElements(selector) {
 	document.querySelectorAll(selector).forEach(el => el.style.display = 'none');
-}
+} 

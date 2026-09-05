@@ -30,3 +30,7 @@ section a {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+article header h2 {
+    scroll-margin-top: 70px;
+}

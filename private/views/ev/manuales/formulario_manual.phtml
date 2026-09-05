@@ -1,81 +1,100 @@
 
-<div class="modal editor">
-	<form enctype="multipart/form-data" method="post">
-		<header>
-			<h3>
-				<?=t('Manual')?>
-				<button type="button" class="transparent" data-confirm="<?=t('¿Estás seguro?')?>" data-hide=".modal.editor, .editor.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
-			</h3>
-		</header>
+<form enctype="multipart/form-data" method="post" action="/ev/manuales/<?= h($manual->idu ? 'actualizar' : 'crear') ?>">
+    <section>
+        <div class="grid">
+            <label class="s3">
+                <small><b><?= t('Formato') ?></b></small>
+                <select name="formato">
+                    <?php foreach (['a4' => 'A4', 'a5' => 'A5', 'letter' => 'Letter'] as $key => $val):
+                        $selected = ($manual->formato == $key) ? 'selected' : ''; ?>
+                        <option <?= $selected ?> value="<?= $key ?>"><?= $val ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
 
-		<section>
-			<label><?=t('Formato')?></label>
-			<select name="formato">
-				<?php foreach (['a4'=>'A4', 'a5'=>'A5', 'letter'=>'Letter'] as $key=>$val):
-					$selected = ($manual->formato == $key) ? 'selected' : ''; ?>
-					<option <?=$selected?> value="<?=$key?>"><?=$val?></option>
-				<?php endforeach; ?>
-			</select>
+            <label class="s3">
+                <small><b><?= t('Orientación') ?></b></small>
+                <select name="orientacion">
+                    <?php foreach (['v' => t('Vertical'), 'h' => t('Horizontal')] as $key => $val):
+                        $selected = ($manual->orientacion == $key) ? 'selected' : ''; ?>
+                        <option <?= $selected ?> value="<?= $key ?>"><?= $val ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
 
-			<label><?=t('Plantilla')?></label>
-			<select name="plantilla">
-				<?php foreach (['dragonbane'=>'Dragonbane', 'for_the_quest'=>'For the Quest', 'srd20'=>'SRD20'] as $key=>$val):
-					$selected = ($manual->plantilla == $key) ? 'selected' : ''; ?>
-					<option <?=$selected?> value="<?=$key?>"><?=$val?></option>
-				<?php endforeach; ?>
-			</select>
+            <label class="s3">
+                <small><b><?= t('Plantilla') ?></b></small>
+                <input list="plantillas-list" name="plantilla" value="<?= h($manual->plantilla) ?>" placeholder="<?= t('Escribe o elige una...') ?>">
+                <datalist id="plantillas-list">
+                    <?php foreach ($plantillas as $pl): ?>
+                        <option value="<?= h($pl->nombre) ?>"></option>
+                    <?php endforeach; ?>
+                </datalist>
+            </label>
 
-			<label><?=t('Título')?></label>
-			<input type="text" name="nombre" placeholder="<?=t('Título del manual...')?>" value="<?=$manual->nombre?>">
+            <label class="s3">
+                <small><b><?= t('Alcance') ?></b></small>
+                <select name="alcance">
+                    <?php foreach ([
+                        'lectura' => t('Solo lectura'),
+                        'privado' => t('Privado'),
+                        'oculto' => t('Oculto'),
+                        'editor' => t('Editor')
+                    ] as $key => $val):
+                        $selected = ($manual->alcance == $key) ? 'selected' : ''; ?>
+                        <option <?= $selected ?> value="<?= $key ?>"><?= $val ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+        </div>
 
-			<label><?=t('Introdución')?></label>
-			<textarea name="introduccion" placeholder="<?=t('Texto para atraer a los máster...')?>"><?=$manual->introduccion?></textarea>
+        <label>
+            <small><b><?= t('Título') ?></b></small>
+            <input type="text" name="nombre" placeholder="<?= t('Título del manual...') ?>" value="<?= h($manual->nombre) ?>">
+        </label>
 
-			<label><?=t('Notas')?></label>
-			<textarea name="notas" placeholder="<?=t('Notas solo para usted...')?>"><?=$manual->notas?></textarea>
+        <label>
+            <small><b><?= t('Introducción') ?></b></small>
+            <textarea name="introduccion" placeholder="<?= t('Texto para atraer a los máster...') ?>"><?= h($manual->introduccion) ?></textarea>
+        </label>
 
-			<label><?=t('Ficha')?></label>
-			<select name="fichas_idu">
-				<option><?=t('Escoge una si está creada...')?></option>
-				<?php foreach ($fichas as $fic):
-					$selected = ($manual->fichas_idu == $fic->idu) ? 'selected' : ''; ?>
-					<option <?=$selected?> value="<?=$fic->idu?>"><?=$fic->nombre?></option>
-				<?php endforeach; ?>
-			</select>
+        <small><b><?= t('Portada') ?></b></small>
+        <label class="dropimage s12 <?= $manual->fotos ? 'dropnocontent' : '' ?>">
+            <input type="file" name="imagenes[]">
+            <button type="button" class="quitar" title="<?= t('Quitar imagen') ?>"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="15"></line><line x1="15" y1="9" x2="9" y2="15"></line></svg></button>
+            <?php if ($manual->fotos): ?>
+                <img alt="<?= t('Imagen del manual:') ?> <?= h($manual->nombre) ?>" src="/img/usuarios/<?= $manual->usuarios_idu ?>/l.<?= $manual->fotos ?>">
+            <?php endif; ?>
+        </label>
 
-			<label class="dropimage mh20 mt20">
-				<input type="file" name="imagenes[]">
-				<?php if ($manual->fotos): ?>
-					<img alt="<?=t('Imagen del manual:')?> <?=$manual->nombre?>" src="/img/usuarios/<?=$manual->usuarios_idu?>/l.<?=$manual->fotos?>">
-				<?php endif; ?>
-			</label>
+        <div class="s12 image-options">
+            <?php if (!$manual->fotos): ?>
+                <input type="hidden" name="fotos" value="<?= h($manual->fotos) ?>">
+            <?php endif; ?>
+        </div>
 
-			<?php if ($manual->fotos): ?>
-				<input type="checkbox" checked name="fotos" value="<?=$manual->fotos?>"> <?=$manual->fotos?>
-			<?php else: ?>
-				<input type="hidden" name="fotos" value="<?=$manual->fotos?>">
-			<?php endif; ?>
+        <label>
+            <small><b><?= t('Ficha') ?></b></small>
+            <select name="fichas_idu">
+                <option value=""><?= t('Escoge una...') ?></option>
+                <?php foreach ($fichas as $fic):
+                    $selected = ($manual->fichas_idu == $fic->idu) ? 'selected' : ''; ?>
+                    <option <?= $selected ?> value="<?= $fic->idu ?>"><?= h($fic->nombre) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </label>
+    </section>
 
-			<input type="hidden" name="fotos_usuarios_idu" value="<?=$manual->fotos_usuarios_idu?>">
-		</section>
-
-		<footer class="grid">
-			<?php if ($manual->idu): ?>
-				<a role="button" class="outline" data-ajax=".ajax.show" href="/ev/manuales/formulario_manual"><?=t('Nuevo')?></a>
-
-				<button type="submit" class="outline" name="action" value="eliminar"><?=t('Eliminar')?></button>
-
-				<button type="submit" class="outline" name="action" value="crear"><?=t('Duplicar')?></button>
-
-				<button type="submit" name="action" value="actualizar"><?=t('Actualizar')?></button>
-
-				<input type="hidden" name="idu" value="<?=$manual->idu?>">
-			<?php else: ?>
-				<a role="button" class="outline" href="/ev/manuales"><?=t('Manuales')?></a>
-
-				<button type="submit" name="action" value="crear"><?=t('Crear')?></button>
-			<?php endif; ?>
-		</footer>
-	</form>
-</div>
-<div class="editor overlay" data-confirm="<?=t('¿Estás seguro?')?>" data-hide=".modal.editor, .editor.overlay"></div>
+    <footer class="grid">
+        <?php if ($manual->idu): ?>
+            <a role="button" class="outline" data-ajax=".ajax.show" href="/ev/manuales/formulario_manual"><?= t('Nuevo') ?></a>
+            <button type="submit" class="outline" name="action" value="eliminar"><?= t('Eliminar') ?></button>
+            <button type="submit" class="outline" name="action" value="crear"><?= t('Duplicar') ?></button>
+            <button type="submit" name="action" value="actualizar"><?= t('Actualizar') ?></button>
+            <input type="hidden" name="idu" value="<?= h($manual->idu) ?>">
+        <?php else: ?>
+            <a role="button" class="outline" href="/ev/manuales"><?= t('Manuales') ?></a>
+            <button type="submit" name="action" value="crear"><?= t('Crear') ?></button>
+        <?php endif; ?>
+    </footer>
+</form>

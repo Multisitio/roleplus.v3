@@ -1,0 +1,28 @@
+/* Compilado: 2026-04-28 12:45:12 */
+@font-face {
+    font-family: 'caveat';
+    src: url('../fonts/caveat.woff2');
+}
+
+@font-face {
+    font-family: 'crimson text';
+    src: url('../fonts/crimson_text.woff2');
+}
+
+@font-face {
+    font-family: 'cinzel';
+    src: url('../fonts/cinzel.woff2');
+}
+
+body {
+    font-family: caveat;
+}
+
+h1 {
+    font-family: 'crimson text';
+}
+
+h2 {
+    font-family: 'cinzel';
+}
+

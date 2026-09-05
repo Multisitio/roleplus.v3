@@ -3,6 +3,56 @@
  */
 class Article
 {
+    /** Reserva la proporcion de una imagen para evitar saltos de diseno. */
+    public static function imageSizeAttributes($relativePath)
+    {
+        $absolutePath = PUB_PATH . ltrim($relativePath, '/');
+        $size = @getimagesize($absolutePath);
+        if (empty($size[0]) || empty($size[1])) {
+            return '';
+        }
+        return ' width="' . (int) $size[0] . '" height="' . (int) $size[1] . '"';
+    }
+
+    /** Añade solo variantes que ya existen; el contenido histórico sigue usando ImgController. */
+    public static function responsiveImageAttributes($directory, $filename)
+    {
+        if (!preg_match('/\.webp$/i', $filename)) {
+            return '';
+        }
+        $widths = ['m' => 384, 'l' => 640, 'xl' => 1024, 'xxl' => 1920];
+        $sources = [];
+        foreach ($widths as $prefix => $width) {
+            $relative = rtrim($directory, '/') . "/$prefix.$filename";
+            $absolute = PUB_PATH . ltrim($relative, '/');
+            if (is_file($absolute)) {
+                $size = @getimagesize($absolute);
+                $actualWidth = (int) ($size[0] ?? $width);
+                if ($actualWidth > 0 && !isset($sources[$actualWidth])) {
+                    $sources[$actualWidth] = $relative . ' ' . $actualWidth . 'w';
+                }
+            }
+        }
+        if (count($sources) < 2) {
+            return '';
+        }
+        ksort($sources, SORT_NUMERIC);
+        return ' srcset="' . htmlspecialchars(implode(', ', $sources), ENT_QUOTES, 'UTF-8') . '" sizes="(max-width: 680px) 100vw, 640px"';
+    }
+
+    public static function video($directory, $filename)
+    {
+        $src = rtrim($directory, '/') . '/' . $filename;
+        $posterName = preg_replace('/\.(mp4|webm)$/i', '.poster.webp', $filename);
+        $poster = rtrim($directory, '/') . '/' . $posterName;
+        $posterAttribute = is_file(PUB_PATH . ltrim($poster, '/'))
+            ? ' poster="' . htmlspecialchars($poster, ENT_QUOTES, 'UTF-8') . '"'
+            : '';
+        $mime = preg_match('/\.webm$/i', $filename) ? 'video/webm' : 'video/mp4';
+        return '<video autoplay controls loop muted playsinline preload="metadata"' . $posterAttribute . ' width="100%"><source src="'
+            . htmlspecialchars($src, ENT_QUOTES, 'UTF-8') . '" type="' . $mime . '"></video>';
+    }
+
     #
     public static function content($pub)
     {
@@ -68,20 +118,18 @@ class Article
         $fotos = explode(',', $pub->fotos);
         if (count($fotos) < 2) {
             $fot = $fotos[0];
-            $mini = preg_match('/\.(gif|webm)$/i', $fotos[0]) ? '' : 'l.';
+            $mini = preg_match('/\.(gif|svg|mp4|webm)$/i', $fotos[0]) ? '' : 'l.';
             $img = "img/usuarios/$pub->usuarios_idu/$fot";
             if ( ! _file::exists($img)) {
                 return;
             }
             ob_start();
-            if (preg_match('/\.webm$/i', $fotos[0])) {
-                ?><video autoplay controls width="100%">
-                    <source src="/img/usuarios/<?=$pub->usuarios_idu?>/<?="$mini$fot"?>" type="video/webm">
-                    <a href="/media/cc0-videos/flower.webm">WEBM</a>
-                </video><?php
+            if (preg_match('/\.(mp4|webm)$/i', $fotos[0])) {
+                echo self::video("/img/usuarios/$pub->usuarios_idu", $fot);
             }
             else {
-                ?><a data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/imagenes/ver/<?=$pub->usuarios_idu?>/<?=$fot?>"><img alt="<?=$fot?>" loading="lazy" src="/img/usuarios/<?=$pub->usuarios_idu?>/<?="$mini$fot"?>"></a><?php
+                $src = "/img/usuarios/$pub->usuarios_idu/$mini$fot"; ?>
+                <a data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/imagenes/ver/<?=$pub->usuarios_idu?>/<?=$fot?>"><img alt="<?=$fot?>" decoding="async" loading="lazy" src="<?=$src?>"<?=self::imageSizeAttributes($src)?><?=self::responsiveImageAttributes("/img/usuarios/$pub->usuarios_idu", $fot)?>></a><?php
             }
             $fotos = ob_get_contents();
             ob_end_clean();
@@ -92,12 +140,17 @@ class Article
         <picture>
             <?php foreach ($fotos as $fot):
                 $fot = trim($fot);
-                $mini = preg_match('/\.gif$/i', $fot) ? '' : 'l.';
+                $mini = preg_match('/\.(gif|svg|mp4|webm)$/i', $fot) ? '' : 'l.';
                 $img = "img/usuarios/$pub->usuarios_idu/$fot";
                 if ( ! _file::exists($img)) {
                     continue;
                 } ?>
-                <a data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/imagenes/ver/<?=$pub->usuarios_idu?>/<?=$fot?>"><img alt="<?=$fot?>" loading="lazy" src="/img/usuarios/<?=$pub->usuarios_idu?>/<?="$mini$fot"?>"></a>
+                <?php $src = "/img/usuarios/$pub->usuarios_idu/$mini$fot"; ?>
+                <?php if (preg_match('/\.(mp4|webm)$/i', $fot)): ?>
+                    <?=self::video("/img/usuarios/$pub->usuarios_idu", $fot)?>
+                <?php else: ?>
+                    <a data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/imagenes/ver/<?=$pub->usuarios_idu?>/<?=$fot?>"><img alt="<?=$fot?>" decoding="async" loading="lazy" src="<?=$src?>"<?=self::imageSizeAttributes($src)?><?=self::responsiveImageAttributes("/img/usuarios/$pub->usuarios_idu", $fot)?>></a>
+                <?php endif; ?>
                 <?php if ($i==2): ?>
                     </picture><picture>
                 <?php endif;

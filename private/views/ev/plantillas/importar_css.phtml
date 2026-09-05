@@ -1,0 +1,22 @@
+
+<div class="modal editor">
+	<form method="post" action="/ev/plantillas/procesar_importacion">
+		<header>
+			<h3>
+				<?=t('Importador de CSS')?>
+				<button type="button" class="transparent" data-hide=".modal.editor, .editor.overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
+			</h3>
+		</header>
+		<section>
+			<label>
+				<small><b><?=t('Pegue su código CSS aquí')?>:</b></small>
+				<textarea name="css" placeholder="<?=t('Ej: .mi-clase { color: red; }')?>" style="min-height: 300px; font-family: monospace;"></textarea>
+			</label>
+			<input type="hidden" name="plantillas_idu" value="<?=$plantillas_idu?>">
+		</section>
+		<footer class="grid">
+			<button type="submit" name="action" value="procesar_importacion"><?=t('Importar Reglas')?></button>
+		</footer>
+	</form>
+</div>
+<div class="editor overlay" data-hide=".modal.editor, .editor.overlay"></div>

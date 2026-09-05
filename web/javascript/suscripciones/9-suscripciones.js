@@ -1,4 +1,4 @@
-$(() => {
+document.addEventListener("DOMContentLoaded", () => {
     paypal.Buttons({
         style: {
             shape: 'rect',
@@ -66,4 +66,4 @@ $(() => {
             alert(data.subscriptionID);
         }
     }).render('.plan-40');
-});
+}); 

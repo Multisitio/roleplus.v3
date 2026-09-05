@@ -20,6 +20,12 @@
 (function () {
 	'use strict';
 
+	// Evitar que usuarios no logeados (invitados/bots) inicien SSE/WS
+	const scriptEl = document.querySelector('script[data-idu]');
+	if (!scriptEl || !scriptEl.getAttribute('data-idu')) {
+		return;
+	}
+
 	// --- Estado ---------------------------------------------------
 	// Evita re-suscribir el mismo nodo
 	const subscribed = new WeakSet();

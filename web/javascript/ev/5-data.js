@@ -148,14 +148,36 @@ document.body.addEventListener('keyup', e => {
     if (e.target.tagName === 'TEXTAREA') textareaAutoHeight();
 });
 
-// Tab in textarea
+// Tab y Shift+Tab en textarea
 document.body.addEventListener('keydown', e => {
     if (e.target.tagName === 'TEXTAREA' && e.keyCode === 9) {
         const v = e.target.value;
         const s = e.target.selectionStart;
         const eEnd = e.target.selectionEnd;
-        e.target.value = v.substring(0, s) + '\t' + v.substring(eEnd);
-        e.target.selectionStart = e.target.selectionEnd = s + 1;
+        const linesStart = v.lastIndexOf('\n', s - 1) + 1;
+
+        if (e.shiftKey) {
+            const selectedText = v.substring(linesStart, eEnd);
+            const lines = selectedText.split('\n');
+            const removed = lines.map(l => l.charAt(0) === '\t' ? 1 : 0);
+            const newText = lines.map(l => l.charAt(0) === '\t' ? l.substring(1) : l).join('\n');
+            e.target.value = v.substring(0, linesStart) + newText + v.substring(eEnd);
+            e.target.selectionStart = Math.max(linesStart, s - removed[0]);
+            e.target.selectionEnd = eEnd - removed.reduce((a, b) => a + b, 0);
+        } else {
+            if (s === eEnd) {
+                e.target.value = v.substring(0, s) + '\t' + v.substring(eEnd);
+                e.target.selectionStart = e.target.selectionEnd = s + 1;
+            } else {
+                const selectedText = v.substring(linesStart, eEnd);
+                const lines = selectedText.split('\n');
+                const newText = lines.map(line => '\t' + line).join('\n');
+                e.target.value = v.substring(0, linesStart) + newText + v.substring(eEnd);
+                e.target.selectionStart = s + 1;
+                e.target.selectionEnd = eEnd + lines.length;
+            }
+        }
         e.preventDefault();
     }
 });
+

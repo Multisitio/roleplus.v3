@@ -15,8 +15,9 @@
     text-align: initial;
 }
 
-.modal header [data-hide] {
-    float: right;
+.modal header {
+    display: flex;
+    justify-content: space-between;
 }
 
 .modal header h3 {

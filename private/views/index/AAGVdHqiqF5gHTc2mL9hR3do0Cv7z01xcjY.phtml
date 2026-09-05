@@ -54,7 +54,7 @@ function handleBotResponse($message, $chat_id, $philosophers, $philosopher) {
         $random_philosopher = array_rand(array_diff_key($philosophers, [$philosopher => $data]));
         $role_text .= " Haz una pregunta al filósofo " . $philosophers[$random_philosopher]['name'] . " sobre este asunto, menciónale.";
     }
-    $response_text = (new Respuestas)->preguntarAOpenAi($message['text'], $role_text, $data['name']);
+    $response_text = (new Respuestas)->preguntarAIa($message['text'], $role_text, $data['name']);
     _mail::toAdmin('sendMessage', [$data['token'], $chat_id, $response_text, $message]);
     sendMessage($data['token'], $chat_id, $response_text, $message, $data);
 

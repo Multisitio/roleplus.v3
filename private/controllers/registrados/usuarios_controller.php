@@ -47,11 +47,13 @@ class UsuariosController extends RegistradosController
     #
     public function bloquear($idu)
     {
-        $this->idu = (new Acciones)->alternar($idu, 'usuarios', 'bloqueado');   
+        $this->usu = (new Usuarios)->uno($idu);
+        $this->idu = (new Acciones)->bloquear($idu);
 
-        if (Input::isAjax()) {   
-            $this->bloqueados = (new Acciones)->registros('bloqueado');
-            View::select('seguir');
+        if (Input::isAjax()) {
+            $this->bloqueados  = (new Acciones)->registros('bloqueado');
+            $this->notificando = (new Acciones)->registrosPorElementoYAccion('usuarios', 'notificar');
+            View::select('notificar');
         }
         else {
             Redirect::to(parse_url($_SERVER['HTTP_REFERER'])['path']);
@@ -76,6 +78,7 @@ class UsuariosController extends RegistradosController
             Redirect::to(parse_url($_SERVER['HTTP_REFERER'])['path']);
         }
         $this->notificando = (new Acciones)->registrosPorElementoYAccion('usuarios', 'notificar');
+        $this->bloqueados = (new Acciones)->registros('bloqueado');
     }
 
     /*

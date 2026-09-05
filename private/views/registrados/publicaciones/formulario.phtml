@@ -1,8 +1,23 @@
 <?php
 $titulo = t('Publicación');
 $confirmar_cierre = true;
+
+$referer = $_SERVER['HTTP_REFERER'] ?? '';
+$referer_path = parse_url($referer, PHP_URL_PATH) ?: '/';
+$referer_path = rtrim($referer_path, '/');
+if ($referer_path === '') {
+    $referer_path = '/';
+}
+$es_listado = ($referer_path === '/' || strpos($referer_path, '/publicaciones') === 0);
+$usar_ajax = (empty($publicacion->idu) && ! $es_listado && empty($rss_idu) && empty($youtube_idu));
 ?>
-<form action="/registrados/publicaciones/crear" enctype="multipart/form-data" method="post" onsubmit="removeHideElements(this)">
+<form action="/registrados/publicaciones/crear" enctype="multipart/form-data" method="post" onsubmit="removeHideElements(this)" <?= $usar_ajax ? 'data-ajax=".ajax.show"' : '' ?>>
+	<?php if (!empty($rss_idu)): ?>
+		<input type="hidden" name="rss_idu" value="<?=h($rss_idu)?>">
+	<?php endif; ?>
+	<?php if (!empty($youtube_idu)): ?>
+		<input type="hidden" name="youtube_idu" value="<?=h($youtube_idu)?>">
+	<?php endif; ?>
 	<section>
 		<?php
 		$idiomas = Config::get('combos.idiomas');
@@ -89,7 +104,7 @@ $confirmar_cierre = true;
 			</div>
 		</div>*/ ?>
 
-		<?=Kubox::input(type: 'text', label: t('Título'), placeholder: t('Pon un título único'), name: 'titulo', value: h($publicacion->titulo), attrs: 'autofocus required tabindex="1"')?>
+		<?=Kubox::input(type: 'text', label: t('Título'), placeholder: t('Pon un título único'), name: 'titulo', value: html_entity_decode($publicacion->titulo ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8'), attrs: 'autofocus required tabindex="1"')?>
 
 		<?php
 		$contenido = empty($contenido_desde_fuera)
@@ -188,6 +203,12 @@ $confirmar_cierre = true;
 					name: 'action', value: 'editar')?>
 
 				<?=Form::hidden(field: 'idu', value: $publicacion->idu)?>
+				<?php if ( ! empty($youtube_idu)): ?>
+					<?=Form::hidden(field: 'youtube_idu', value: $youtube_idu)?>
+				<?php endif; ?>
+				<?php if ( ! empty($rss_idu)): ?>
+					<?=Form::hidden(field: 'rss_idu', value: $rss_idu)?>
+				<?php endif; ?>
 			<?php else: ?>
 				<?=Kubox::buttonSubmitColor(label: t('Publicar'),
 					name: 'action', value: 'crear')?>

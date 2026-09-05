@@ -1,0 +1,15 @@
+.plantilla header:has(>div),
+.plantilla section:has(>div),
+.plantilla footer:has(>div) {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+}
+
+.plantilla header:has(>div)>div,
+.plantilla section:has(>div)>div,
+.plantilla footer:has(>div)>div {
+    flex: 1;
+    width: 100%;
+}

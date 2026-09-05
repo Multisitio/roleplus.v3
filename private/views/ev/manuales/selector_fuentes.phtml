@@ -1,0 +1,34 @@
+<?php 
+/**
+ * Selector de Fuentes para el Editor de Manuales
+ * Este modal usa el template ventana.phtml
+ */
+?>
+
+<style>
+    <?=$css_previsualizaciones?>
+</style>
+
+<div class="font-list-container" data-nivel="<?= $nivel ?>">
+    <?php foreach ($fuentes as $fuente): ?>
+        <div class="font-item <?= ($fuente === $fuente_actual) ? 'active' : '' ?>" 
+             data-font="<?= h($fuente) ?>"
+             style="font-family: '<?= h($fuente) ?>';">
+            <span><?= h($fuente) ?>: Así luce esta tipografía.</span>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<hr>
+
+<div class="import-google-font">
+    <label><small><b><?= t('Importar desde Google Fonts') ?>:</b></small></label>
+    <div class="grid">
+        <input type="text" id="google-font-name" name="fuente_h1_import" placeholder="Ej: Playwrite Argentina Guides" class="s10">
+
+        <button type="button" class="button primary s2" id="btn-import-google-font">
+            <?= Ku::icon('download') ?>
+        </button>
+    </div>
+    <small class="muted-text"><?= t('Escribe el nombre exacto de la fuente en') ?> <a href="https://fonts.google.com" target="_blank">https://fonts.google.com</a></small>
+</div>

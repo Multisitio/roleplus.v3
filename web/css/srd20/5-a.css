@@ -1,3 +1,28 @@
-.page :is(em, strong) {
-    color: var(--color-text-emphasis);
+.plantilla > div :not(li)>a[href^="#"] {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.plantilla > div :not(li)>a[href^="#"]:has(span) span:first-child {
+    grid-column: 1;
+}
+
+.plantilla > div :not(li)>a[href^="#"]:has(span) span:last-child {
+    grid-column: 3;
+}
+
+.plantilla > div :not(li)>a[href^="#"]::after {
+    content: "";
+    grid-column: 2;
+    border-bottom: 1px dotted currentColor;
+    margin: -10px 3px 0;
+    width: calc(100% - 5px);
+    height: 0;
+}
+
+.plantilla > div :is(em, strong) {
+    color: darkred;
 }

@@ -1,0 +1,45 @@
+<article id="ps-color-picker">
+    <section>
+        <div class="color-plane">
+            <div class="map">
+                <canvas width="256" height="256"></canvas>
+                <div class="marker"></div>
+            </div>
+            <footer class="color-values">
+                <div class="web-safe">
+                    <input type="checkbox" id="web-color-check" checked>
+                    <label for="web-color-check">Solo colores Web</label>
+                </div>
+                <div class="value-row">
+                    <label><span>H:</span><input type="number" min="0" max="360" data-type="h"></label>
+                    <label><span>S:</span><input type="number" min="0" max="100" data-type="s"></label>
+                    <label><span>B:</span><input type="number" min="0" max="100" data-type="b"></label>
+                </div>
+                <div class="value-row">
+                    <label><span>R:</span><input type="number" min="0" max="255" data-type="r"></label>
+                    <label><span>G:</span><input type="number" min="0" max="255" data-type="g"></label>
+                    <label><span>B:</span><input type="number" min="0" max="255" data-type="b_rgb"></label>
+                </div>
+            </footer>
+        </div>
+        <div class="hue">
+            <div class="marker"></div>
+        </div>
+        <div class="picker-side">
+            <div class="preview">
+                <label>actual</label>
+                <div class="swatches">
+                    <div class="curr"></div>
+                    <div class="next"></div>
+                </div>
+                <label>nuevo</label>
+            </div>
+            <div class="hex"><span>#</span><input type="text" maxlength="6" spellcheck="false"></div>
+            <div class="actions">
+                <button class="ok" type="button">OK</button>
+                <button class="cancel" type="button">Cancelar</button>
+            </div>
+            <nav class="history"></nav>
+        </div>
+    </section>
+</article>

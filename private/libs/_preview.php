@@ -123,6 +123,7 @@ class _preview extends _cut
     public static function getTags($html, $tag_selected)
     {
 		$tags = parent::cuts("<$tag_selected", $html, '>');
+		$tags_with_attrs = [];
 		foreach ($tags as $tag) {
 			$tags_with_attrs[] = self::getAttrs($tag);
 		}
@@ -132,7 +133,7 @@ class _preview extends _cut
 	# 1.3.1.1
     public static function getAttrs($tag)
     {
-		preg_match_all('/(\w+)="([^"]+)"/', $tag, $matches, PREG_SET_ORDER);
+		preg_match_all('/(\w+)=["\']([^"\']+)["\']/', $tag, $matches, PREG_SET_ORDER);
 		$attrs = [];
 		foreach ($matches as $mat) {
 			$attrs[$mat[1]] = $mat[2];
@@ -195,10 +196,66 @@ class _preview extends _cut
 		}
 
 		# Others
-		$src1 = parent::cuts('src="', $html, '"') ?: [];
-		$src2 = parent::cuts("src='", $html, "'") ?: [];
-		$images = array_merge($src1, $src2);
-		#_var::die($images);
+		$metaImages = [];
+		$metas = self::getTags($html, 'meta');
+		foreach ($metas as $attrs) {
+			if (empty($attrs['content'])) {
+				continue;
+			}
+			if (!empty($attrs['property']) && ($attrs['property'] === 'og:image' || $attrs['property'] === 'og:image:secure_url')) {
+				$metaImages[] = $attrs['content'];
+			}
+			if (!empty($attrs['name']) && $attrs['name'] === 'twitter:image') {
+				$metaImages[] = $attrs['content'];
+			}
+		}
+
+		$links = self::getTags($html, 'link');
+		foreach ($links as $attrs) {
+			if (empty($attrs['href'])) {
+				continue;
+			}
+			if (!empty($attrs['rel']) && $attrs['rel'] === 'image_src') {
+				$metaImages[] = $attrs['href'];
+			}
+		}
+
+		if (!empty($metaImages)) {
+			$images = $metaImages;
+		} else {
+			// 1. Extraer imágenes de fondo inline (por ejemplo, imágenes en la cabecera del blog)
+			preg_match_all('/style=["\'](?:[^"\']+\b)?background(?:-image)?\s*:\s*url\((?:&quot;|&#039;|[\'"]?)([^)\'"]+?)(?:&quot;|&#039;|[\'"]?)\)/i', $html, $matches_bg);
+			$bg_images = $matches_bg[1] ?: [];
+			foreach ($bg_images as &$bg) {
+				$bg = str_replace(['&quot;', '&#039;'], '', $bg);
+			}
+			unset($bg);
+
+			// 2. Buscar la posición de algún contenedor principal de contenido
+			$main_pos = false;
+			$patterns = [
+				'/class\s*=\s*["\'][^"\']*(?:post-body|entry-content|post-content|article-content|post_body|article-body|main-content)[^"\']*["\']/i',
+				'/itemprop\s*=\s*["\'][^"\']*(?:articleBody|description)[^"\']*["\']/i',
+				'/<article\b/i'
+			];
+
+			foreach ($patterns as $pattern) {
+				if (preg_match($pattern, $html, $matches, PREG_OFFSET_CAPTURE)) {
+					$main_pos = $matches[0][1];
+					break;
+				}
+			}
+
+			$search_html = $main_pos !== false ? substr($html, $main_pos) : $html;
+
+			// Extraer srcs de etiquetas <img> preservando el orden DOM
+			preg_match_all('/<img\b[^>]*src=["\']([^"\']+)["\']/i', $search_html, $matches_img);
+			$img_images = $matches_img[1] ?: [];
+
+			// Unir ambas listas priorizando las imágenes de fondo de cabecera/maquetación
+			$images = array_merge($bg_images, $img_images);
+		}
+
 		$images = self::onlyImages($images); 
 		$images = self::imagesWithDomain($images, $url); 
 		$images = self::largerImages($images); 
@@ -208,8 +265,17 @@ class _preview extends _cut
     # 1.4.1
     public static function onlyImages($images)
     {
+		$only_images = [];
 		foreach ($images as $img){
-			if (preg_match('/\.js/i', $img)) {
+			if (preg_match('/\.(js|css)/i', $img)) {
+				continue;
+			}
+			// Excluir iconos/logos/widgets comunes
+			if (preg_match('/(?:icon|logo|kofi|paypal|button|widget|badge|avatar|theme)/i', $img)) {
+				continue;
+			}
+			// Excluir miniaturas muy pequeñas (s16, s72, w72, etc.)
+			if (preg_match('/blogspot\.com|blogger\.googleusercontent\.com|googleusercontent\.com|lh\d\.googleusercontent\.com/i', $img) && preg_match('/(?:\/|=)(?:s16|s28|s32|s36|s72|s72-c|w72-h72)\b/i', $img)) {
 				continue;
 			}
 			$only_images[] = $img;

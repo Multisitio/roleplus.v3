@@ -1,4 +1,4 @@
-.page article {
+.plantilla>div article {
     background: var(--bg-page);
     background-size: cover;
     font: 13px/1.25 var(--font-body);
@@ -18,9 +18,25 @@
 }
 
 .a5 article>section {
-    padding: 0 18px;
+    padding: 18px 18px 0;
 }
 
 article>footer {
     padding: 23px 0 0;
+}
+
+.plantilla header:has(>div),
+.plantilla section:has(>div),
+.plantilla footer:has(>div) {
+    display: flex;
+    flex-direction: row;
+    gap: 18px;
+    width: 100%;
+}
+
+.plantilla header:has(>div)>div,
+.plantilla section:has(>div)>div,
+.plantilla footer:has(>div)>div {
+    flex: 1;
+    width: 100%;
 }

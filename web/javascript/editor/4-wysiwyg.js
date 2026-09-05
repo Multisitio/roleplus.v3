@@ -17,7 +17,7 @@ sections.forEach(section => {
     });
 });
 
-var editor = document.querySelector('.resultado');
+var editor = document.querySelector('.plantilla');
 var menu = document.querySelector('.wysiwyg');
 
 editor.addEventListener('mouseup', (e) => {

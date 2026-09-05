@@ -267,11 +267,11 @@ class Rss_entradas extends LiteRecord
 	{
 		$sql = 'SELECT * FROM rss_entradas WHERE idu=?';
 		$ent = self::first($sql, [$idu]);
-		$entrada['titulo'] = $ent->titulo;
+		$entrada['titulo'] = html_entity_decode($ent->titulo, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 		$entrada['idioma'] = $ent->idioma;
 		$entrada['etiquetas'] = _str::hashtag(_cut::cut('//', str_replace('www.', '', $ent->url), '.'));
 
-        $entrada['contenido'] = (new Respuestas)->preguntarAOpenAi("Resumen y traduce si es necesario sin incluir enlaces ni otras distracciones que no sean emojis del siguiente texto (hazlo comprensible, enriquecedor y evocativo y siempre dirigiendote al lector en segunda persona): " . h($ent->contenido) . " [$ent->url]");
+        $entrada['contenido'] = (new Respuestas)->preguntarAIa("Mantén intacto el texto original limitándolo a uno o dos párrafos. Traduce si es necesario y elimina toda la basura de enlaces a otras redes, etiquetas y formato extra. No uses ningún emoji: " . h($ent->contenido));
 
 		#$entrada['enlace'] = stristr($ent->url, 'ivoox') ? $ent->url : '';
 		$entrada['enlace'] = $ent->url;
@@ -288,8 +288,20 @@ class Rss_entradas extends LiteRecord
 	#
 	public function publicarEntrada($idu)
 	{
+		$ent = self::first('SELECT * FROM rss_entradas WHERE idu=?', [$idu]);
+		if (!$ent) {
+			Session::setArray('toast', t('Entrada no encontrada.'));
+			return false;
+		}
+
+		$ya_publicada = (new Publicaciones)->first('SELECT id FROM publicaciones WHERE titulo=? OR (enlace != "" AND enlace=?)', [$ent->titulo, $ent->url]);
+		if ($ya_publicada) {
+			Session::setArray('toast', t('Esta entrada ya está publicada.'));
+			return false;
+		}
+
 		$entrada = $this->prepararEntrada($idu);
-		(new Publicaciones)->crear($entrada);
+		return (new Publicaciones)->crear($entrada);
 	}
 
 	#

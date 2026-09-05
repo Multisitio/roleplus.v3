@@ -32,7 +32,7 @@ class YoutubeController extends RegistradosController
     public function publicar($idu)
     {
         (new Rolflix_entradas)->publicarEntrada($idu);
-        View::select('');
+        View::select('publicado');
     }
 
     #

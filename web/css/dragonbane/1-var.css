@@ -1,19 +1,93 @@
 :root {
-    --fleshbrown: #c96;
-    --leatherbrown: #963;
-    --demongreen: #00604D;
-    --dragonred: #EE3D3C;
-    --parchmentyellow: #66550022;
-    --link: var(--dragonred);
+   /* ═══════════════════════════════════════
+       COLORES TEMÁTICOS
+       ═══════════════════════════════════════ */
+   --color-accent: #EE3D3C;
+   --color-band-bg: lightyellow;
+   --color-band-shadow: #666;
+   --color-bg-cover: white;
+   --color-bg-even-row: #66550022;
+   --color-blockquote-bg: #00ff0011;
+   --color-blockquote-shadow: #888;
+   --color-emphasis: darkred;
+   --color-primary: #00604D;
+   --color-secondary: #963;
+   --color-tertiary: #c96;
+   --color-text: #333;
+   --color-text-inverse: #fff;
 
-    /* SRD20 */
-    --HB_Color_Background: #EEE5CE;
-    --HB_Color_Accent: lightyellow;
-    --HB_Color_HeaderUnderline: #C0AD6A;
-    --HB_Color_HorizontalRule: #9C2B1B;
-    --HB_Color_HeaderText: #58180D;
-    --HB_Color_MonsterStatBackground: #F2E5B5;
-    --HB_Color_CaptionText: #766649;
-    --HB_Color_WatercolorStain: #BBAD82;
-    --HB_Color_Footnotes: darkred;
+   /* Gradientes reutilizados */
+   --gradient-forest: linear-gradient(-45deg, #322814, #006600, #322814);
+
+   --bg-band:
+      url("data:image/svg+xml;charset=utf8,%3Csvg height='40' width='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml;charset=utf8,%3Csvg height='40' width='30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml;charset=utf8,%3Csvg height='40' width='30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/%3E%3C/svg%3E");
+
+
+   /* ═══════════════════════════════════════
+       TIPOGRAFÍA
+       ═══════════════════════════════════════ */
+   --font-annotation: 'WalterTurncoat';
+   --font-body: 'Crimson Pro Regular';
+   --font-handwritten: 'Caveat';
+   --font-heading: 'Colus';
+   --font-size-body: 15px;
+   --font-size-caption: 19px;
+   --font-size-card-title: 13px;
+   --font-size-drop-cap: 57px;
+   --font-size-footer: 11px;
+   --font-size-footer-num: 15px;
+   --font-size-h1: 64px;
+   --font-size-h2: 24px;
+   --font-size-h3: 16px;
+   --font-size-h4: 15px;
+   --font-size-h5: 19px;
+   --font-size-h6: 12px;
+   --font-size-mark: 16px;
+
+   /* Listas */
+   --list-bullet: "✦ ";
+   --list-checkbox: "❑ ";
+   --list-padding: 25px;
+   --list-radio: "🔾 ";
+   --list-sub-bullet: "⮞ ";
+
+   /* ═══════════════════════════════════════
+       ESPACIADO
+       ═══════════════════════════════════════ */
+   --column-gap: 20px;
+   --spacing-after-heading: 10px;
+   --spacing-block-heading: 15px 0;
+   --spacing-block-list: 8px 10px;
+   --spacing-blockquote-block: 40px 20px;
+   --spacing-cell: 5px;
+   --spacing-heading-bottom: 8px;
+   --spacing-li: 8px;
+   --spacing-page-bottom: 90px;
+   --spacing-page-inline: 40px;
+   --spacing-page-top: 40px;
+
+   /* ═══════════════════════════════════════
+       BORDES
+       ═══════════════════════════════════════ */
+   --border-card: 3px solid #000;
+   --border-h3: 2px solid var(--color-secondary);
+   --border-td: 1px solid var(--color-secondary);
+   --border-th: 2px solid var(--color-secondary);
+
+   /* ═══════════════════════════════════════
+       TAMAÑOS FIJOS (Cards)
+       ═══════════════════════════════════════ */
+   --card-height: 320px;
+   --card-min-width: 230px;
+   --card-title-height: 44px;
+   --card-title-width: 156px;
+
+   /* ═══════════════════════════════════════
+       MISC
+       ═══════════════════════════════════════ */
+   --footer-counter-width: 120px;
+   --img-watermark-opacity: .25;
+   --mark-size: 22px;
 }

@@ -54,6 +54,13 @@ class UsuariosController extends AppController
     #
     public function buscar($frase='')
     {
+        if ( ! Session::get('idu')) {
+            Input::isAjax()
+                ? View::select('', 'login')
+                : Redirect::to('/usuarios/formularios');
+            return false;
+        }
+
         if (Input::post('frase')) {
             $frase = urlencode(Input::post('frase'));
             return Redirect::to("/usuarios/buscar/$frase");
@@ -73,6 +80,7 @@ class UsuariosController extends AppController
         $this->frase = $frase;
         $this->roles = Config::get('roles.singular'); 
         $this->notificando = (new Acciones)->registrosPorElementoYAccion('usuarios', 'notificar');
+        $this->bloqueados = (new Acciones)->registros('bloqueado');
 
         View::select('index');
     }

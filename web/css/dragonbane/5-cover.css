@@ -1,5 +1,5 @@
 .cover article {
-    background: white;
+    background: var(--color-bg-cover);
 }
 
 .cover article [src*="portada"] {

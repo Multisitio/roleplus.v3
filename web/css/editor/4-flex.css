@@ -66,19 +66,19 @@
 }
 
 .gap5 {
-    gap: 3.75pt;
+    gap: 5px;
 }
 
 .gap10 {
-    gap: 7.5pt;
+    gap: 10px;
 }
 
 .gap15 {
-    gap: 11.25pt;
+    gap: 15px;
 }
 
 .gap20 {
-    gap: 15pt;
+    gap: 20px;
 }
 
 
@@ -98,22 +98,9 @@
 
 /* CHILDREN AS ROWS */
 
-.resultado header:has(>div),
-.resultado section:has(>div),
-.resultado footer:has(>div),
 .rows {
     display: flex;
     flex-direction: row;
     gap: 20px;
-    width: 100%;
-}
-
-
-/* CHILDREN WITH THE SAME WIDTH */
-
-.resultado header:has(>div)>div,
-.resultado section:has(>div)>div,
-.resultado footer:has(>div)>div {
-    flex: 1;
     width: 100%;
 }

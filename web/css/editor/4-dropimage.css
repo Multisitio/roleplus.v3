@@ -3,6 +3,7 @@
     min-height: 150px;
     position: relative;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .dropimage:after {
@@ -20,16 +21,31 @@
     content: "";
 }
 
+.dropnocontent {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
 .dropnocontent:hover:after {
     content: "+";
 }
 
 .dropimage.dropnocontent button,
 .dropimage.dropnocontent .quitar {
-    background: var(--background);
+    background: #fff !important;
+    color: #999;
+    margin-bottom: 0;
+    padding: 5px;
     position: absolute;
-    right: -15px;
-    top: -15px;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    width: fit-content;
+}
+
+.dropimage.dropnocontent button svg {
+    display: block;
 }
 
 .dropimage:not(.dropnocontent) button,
@@ -47,9 +63,16 @@
     padding: 0;
     position: absolute;
     width: 100%;
+    z-index: 5;
 }
 
-.dropimage img {
+.dropimage>img {
     display: block;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }

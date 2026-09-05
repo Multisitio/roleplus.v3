@@ -49,7 +49,7 @@
 		<div class="ajax hide"></div>
 		<div class="ajax show"></div>
 
-		<script src="/javascript/ev.min.js?v=<?=$version?>" data-partidas_idu="<?=$partida->idu?>"></script>
+		<script src="/javascript/ev.min.js?v=<?=$version?>" data-partidas_idu="<?=$partida->idu?>" data-idu="<?=Session::get('idu')?>"></script>
 		<?=Js::inc()?>
 		<div class="clear"></div>
 	</body>

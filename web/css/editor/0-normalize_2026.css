@@ -1,0 +1,80 @@
+/*
+Línea base CSS 2026
+===================
+*/
+
+/* 1. Encapsular en la capa base para aislar la especificidad */
+@layer reset {
+
+    /* 2. Modelo de caja predecible */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    /* 3. Limpiar márgenes por defecto de forma segura */
+    * {
+        margin: 0;
+    }
+
+    /* 4. Permitir animaciones nativas hacia tamaño automático */
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            interpolate-size: allow-keywords;
+        }
+    }
+
+    /* 5. Comportamiento base del documento */
+    body {
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        font-family: system-ui, sans-serif;
+    }
+
+    /* 6. Evitar desbordamiento de elementos multimedia */
+    video,
+    canvas,
+    svg {
+        display: block;
+        max-width: 100%;
+    }
+
+    img {
+        max-width: 100%;
+        vertical-align: bottom;
+    }
+
+    /* 7. Heredar tipografía en controles de formulario */
+    input,
+    button,
+    textarea,
+    select {
+        font: inherit;
+    }
+
+    /* 8. Prevenir desbordamiento de texto */
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        overflow-wrap: break-word;
+    }
+
+    /* 9. Envoltura de texto fluida y simétrica */
+    p {
+        text-wrap: pretty;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        text-wrap: balance;
+    }
+}

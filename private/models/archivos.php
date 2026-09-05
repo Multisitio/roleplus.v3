@@ -49,7 +49,7 @@ class Archivos
 		$name = empty($new_name) ? basename($name) : $new_name;
 		$name = preg_replace('/[^a-z0-9\.]/i', '_', $name);
 
-		if ( ! preg_match('/(gif|jpeg|jpg|png|mp3|mp4|svg|svgz|webp)$/i', $name) ) {
+		if ( ! preg_match('/(avif|bmp|gif|heic|heif|jpeg|jpg|png|tif|tiff|mp3|mp4|svg|svgz|webp)$/i', $name) ) {
 			return false;
 		}
 		return _str::uid() . "_$name";
@@ -97,6 +97,22 @@ class Archivos
 				}
 
 				$destino = "$dir/$name";
+
+				if ($file_type === 'img' || $file_type === 'imagenes') {
+					$file = [
+						'name' => $files['name'][$key],
+						'tmp_name' => $files['tmp_name'][$key],
+						'error' => $files['error'][$key],
+						'size' => $files['size'][$key] ?? 0,
+					];
+					$result = MediaProcessor::processUpload($file, $dir, [
+						'basename' => pathinfo($name, PATHINFO_FILENAME),
+						'animated_gif' => 'webp',
+					]);
+					$name = $result['name'];
+					$names["$dir/$name"] = $name;
+					continue;
+				}
 
 				# Solo mover si realmente es un upload válido (seguridad)
 				if (is_uploaded_file($files['tmp_name'][$key])) {

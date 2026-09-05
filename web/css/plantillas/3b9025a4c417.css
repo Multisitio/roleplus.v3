@@ -1,0 +1,24 @@
+/* Compilado: 2026-05-13 11:02:52 */
+@font-face {
+    font-family: 'Orbitron';
+    src: url('/fonts/orbitron.woff2');
+}
+
+@font-face {
+    font-family: 'Rajdhani';
+    src: url('/fonts/rajdhani.woff2');
+}
+
+.plantilla>div h1 {
+    text-align: center;
+    color: #990000;
+    font-weight: normal;
+    font-style: normal;
+    font-family: 'Orbitron';
+}
+
+.plantilla>div h2 {
+    color: #003366;
+    font-family: 'Rajdhani';
+}
+

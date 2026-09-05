@@ -4,10 +4,9 @@ $confirmar_cierre = empty($confirmar_cierre) ? '' : 'data-confirm="' . t('Â¿EstÃ
 
 <div class="modal <?=$width??''?>">
 	<header>
-        <div class="space-between">
-		    <h3><?=$titulo?></h3>
-            <button class="transparent" <?=$confirmar_cierre?> data-hide=".modal, .overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
-        </div>
+        <h3><?=$titulo?></h3>
+        
+        <button class="transparent" <?=$confirmar_cierre?> data-hide=".modal, .overlay"><img alt="<?=t('Cerrar ventana')?>" src="/img/icons/x.svg"></button>
 	</header>
 
     <?php if ( ! empty($filtro_filas)): ?>

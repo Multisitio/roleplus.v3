@@ -1,124 +1,132 @@
-/* 4-drop-or-paste-image.js - Vanilla JS version */
+(function () {
+    const renderPreview = (img_box, result) => {
+        const imgs = img_box.querySelectorAll(':scope > img');
+        for (let i = 0; i < imgs.length; i++) imgs[i].remove();
+        img_box.style.backgroundImage = 'url(' + result + ')';
+        img_box.classList.add('dropnocontent');
+    };
 
-document.body.addEventListener('paste', e => {
-	const el = e.target;
-	if (el.tagName !== 'TEXTAREA') return;
-	const clipboard = e.clipboardData || e.originalEvent.clipboardData;
-	const form = el.closest('form');
-	const imgBox = form.querySelector('.dropimage:last-of-type');
-	if (!imgBox) return;
-	const label = imgBox.parentElement;
-	const boxContainer = label.parentElement;
+    const cloneIfNeeded = (container) => {
+        if (!container || !container.classList.contains('multiple')) return;
+        const box_container = container.parentElement;
+        const images = document.querySelectorAll('.modal .dropimage').length;
+        if (images < 4) {
+            const other = container.cloneNode(true);
+            const otherDrop = other.querySelector('.dropimage') || (other.classList.contains('dropimage') ? other : null);
+            if (otherDrop) {
+                otherDrop.classList.remove('dropimagehover', 'dropnocontent');
+                otherDrop.removeAttribute('style');
+                const otherInput = otherDrop.querySelector('[type="file"]');
+                if (otherInput) otherInput.value = '';
+            }
+            if (box_container) box_container.appendChild(other);
+        }
+    };
 
-	const input = imgBox.querySelector('[type="file"]');
-	if (!clipboard.files.length) return;
-	input.files = clipboard.files;
+    Kumbia.utils.on('paste', 'textarea', function (eve) {
+        const clipboard = (eve.clipboardData || window.clipboardData);
+        if (!clipboard || !clipboard.files || !clipboard.files.length) return;
 
-	const data = clipboard.items[0].getAsFile();
-	const reader = new FileReader();
-	reader.onloadend = () => {
-		imgBox.style.backgroundImage = 'url(' + reader.result + ')';
-		imgBox.style.backgroundRepeat = 'no-repeat';
-		imgBox.style.backgroundSize = 'cover';
-	};
-	reader.readAsDataURL(data);
+        const form = this.closest('form');
+        if (!form) return;
+        const img_boxes = form.querySelectorAll('.dropimage');
+        if (!img_boxes.length) return;
 
-	if (label.classList.contains('multiple')) {
-		const images = document.querySelectorAll('.modal .dropimage').length;
-		if (images < 4) {
-			const other = label.cloneNode(true);
-			boxContainer.appendChild(other);
-			const newImgBox = other.querySelector('.dropimage');
-			newImgBox.classList.remove('dropimagehover');
-			other.querySelector('[type="file"]').value = '';
-		}
-	}
+        const img_box = img_boxes[img_boxes.length - 1];
+        const input = img_box.querySelector('[type="file"]');
+        if (input) {
+            input.files = clipboard.files;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
 
-	imgBox.classList.add('dropnocontent');
-});
+        const reader = new FileReader();
+        reader.onloadend = () => renderPreview(img_box, reader.result);
+        reader.readAsDataURL(clipboard.files[0]);
+        cloneIfNeeded(img_box.parentElement);
+    });
 
-document.body.addEventListener('change', e => {
-	const el = e.target;
-	if (el.type !== 'file' || !el.parentElement.classList.contains('dropimage')) return;
-	const imgBox = el.parentElement;
-	const label = imgBox.parentElement;
-	const boxContainer = label.parentElement;
-	const reader = new FileReader();
+    Kumbia.utils.on('change', '.dropimage [type="file"]', function () {
+        const img_box = this.closest('.dropimage');
+        if (!img_box || !this.files || !this.files[0]) return;
 
-	reader.onloadend = () => {
-		imgBox.style.backgroundImage = 'url(' + reader.result + ')';
-		imgBox.style.backgroundRepeat = 'no-repeat';
-		imgBox.style.backgroundSize = 'cover';
-	};
-	reader.readAsDataURL(e.target.files[0]);
+        const reader = new FileReader();
+        reader.onloadend = () => renderPreview(img_box, reader.result);
+        reader.readAsDataURL(this.files[0]);
+        cloneIfNeeded(img_box.parentElement);
+    });
 
-	if (label.classList.contains('multiple')) {
-		const images = document.querySelectorAll('.modal .dropimage').length;
-		if (images < 4) {
-			const other = label.cloneNode(true);
-			boxContainer.appendChild(other);
-			const newImgBox = other.querySelector('.dropimage');
-			newImgBox.classList.remove('dropimagehover');
-			other.querySelector('[type="file"]').value = '';
-		}
-	}
+    Kumbia.utils.on('click', '.dropimage button, .dropimage .quitar', function (eve) {
+        eve.preventDefault();
+        eve.stopPropagation();
 
-	imgBox.classList.add('dropnocontent');
-});
+        const img_box = this.closest('.dropimage');
+        const container = img_box ? img_box.parentElement : null;
+        let clean = 0;
 
-document.body.addEventListener('click', e => {
-	const el = e.target;
-	if (el.tagName !== 'BUTTON' || !el.parentElement.classList.contains('dropimage')) return;
-	e.preventDefault();
-	const imgBox = el.parentElement;
-	const label = imgBox.parentElement;
-	const boxContainer = label.parentElement;
-	let clean = 0;
+        if (container && container.classList.contains('multiple')) {
+            const images = document.querySelectorAll('.modal .dropimage').length;
+            if (images > 1) {
+                container.remove();
+            } else {
+                clean = 1;
+            }
 
-	if (label.classList.contains('multiple')) {
-		const images = document.querySelectorAll('.modal .dropimage').length;
-		if (images > 1) {
-			label.remove();
-		} else {
-			clean = 1;
-		}
-		const emptyBox = document.querySelectorAll('.modal .dropimage:not(.dropnocontent)').length;
-		if (emptyBox < 1 && images < 5) {
-			const newBox = label.cloneNode(true);
-			boxContainer.appendChild(newBox);
-			const newImgBox = newBox.querySelector('.dropimage');
-			newImgBox.classList.remove('dropimagehover');
-			newBox.querySelector('[type="file"]').value = '';
-		}
-	} else {
-		clean = 1;
-	}
+            const empty_box = document.querySelectorAll('.modal .dropimage:not(.dropnocontent)').length;
+            if (empty_box < 1 && images < 5) {
+                const new_box = container.cloneNode(true);
+                if (container.parentElement) container.parentElement.appendChild(new_box);
+                const new_img_box = new_box.querySelector('.dropimage') || (new_box.classList.contains('dropimage') ? new_box : null);
+                if (new_img_box) {
+                    new_img_box.removeAttribute('style');
+                    new_img_box.classList.remove('dropimagehover', 'dropnocontent');
+                    const inp = new_img_box.querySelector('input');
+                    if (inp) inp.value = '';
+                }
+            }
+        } else {
+            clean = 1;
+        }
 
-	if (clean === 1) {
-		imgBox.style = '';
-		imgBox.classList.remove('dropimagehover', 'dropnocontent');
-		imgBox.querySelectorAll('img').forEach(img => img.remove());
-		imgBox.querySelector('input').value = '';
-	}
-});
+        if (clean === 1 && img_box) {
+            img_box.removeAttribute('style');
+            img_box.classList.remove('dropimagehover', 'dropnocontent');
+            const imgs = img_box.querySelectorAll(':scope > img');
+            for (let i = 0; i < imgs.length; i++) imgs[i].remove();
+            const inp = img_box.querySelector('input');
+            if (inp) inp.value = '';
+        }
+    });
 
-document.addEventListener('dragenter', e => {
-	const el = e.target.closest('.dropimage');
-	if (el) {
-		e.preventDefault();
-		el.classList.add('dropimagehover');
-	}
-});
+    Kumbia.utils.on('dragenter dragover', '.dropimage', function (eve) {
+        eve.preventDefault();
+        this.classList.add('dropimagehover');
+    });
 
-document.addEventListener('dragover', e => {
-	const el = e.target.closest('.dropimage');
-	if (el) {
-		e.preventDefault();
-		el.classList.add('dropimagehover');
-	}
-});
+    Kumbia.utils.on('dragleave', '.dropimage', function () {
+        this.classList.remove('dropimagehover');
+    });
 
-document.addEventListener('dragleave', e => {
-	const el = e.target.closest('.dropimage');
-	if (el) el.classList.remove('dropimagehover');
-});
+    Kumbia.utils.on('drop', '.dropimage', function (eve) {
+        eve.preventDefault();
+        eve.stopPropagation();
+        this.classList.remove('dropimagehover');
+
+        const files = eve.dataTransfer && eve.dataTransfer.files;
+        if (!files || !files.length) return;
+
+        const input = this.querySelector('[type="file"]');
+        if (input) {
+            try {
+                input.files = files;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            } catch (e) {
+                console.warn('[dropimage] Could not set input.files:', e);
+            }
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = () => renderPreview(this, reader.result);
+        reader.readAsDataURL(files[0]);
+        cloneIfNeeded(this.parentElement);
+    });
+})();

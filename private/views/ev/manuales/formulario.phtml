@@ -1,4 +1,5 @@
 <?php
+$editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor');
 $_SESSION['palabras'] = str_word_count($manual->nombre);
 ?>
 <article>
@@ -6,14 +7,16 @@ $_SESSION['palabras'] = str_word_count($manual->nombre);
 		<h1>
 			<?=empty($manual->nombre)?t('Manual'):$manual->nombre?>
 							
-			<a data-ajax=".ajax.show" href="/ev/manuales/formulario_manual/<?=$manual->idu?>" title="<?=t('Editar manual')?>"><sup><img src="/img/icons/edit-2s.svg"></sup></a>
+			<?php if ($editable): ?>
+				<a data-ajax=".ajax.show" href="/ev/manuales/formulario_manual/<?=$manual->idu?>" title="<?=t('Editar manual')?>"><sup><img src="/img/icons/edit-2s.svg"></sup></a>
+			<?php endif; ?>
 		</h1>
 		<h2><?=t('Reglas')?></h2>
 	</header>
     <section>
         <ul class="manual">
             <?php
-            function arbol_1912201247($reglas, $manuales_reglas_idu='Ninguno') {
+            function arbol_1912201247($reglas, $manuales_reglas_idu='Ninguno', $editable=true) {
                 $i=1;
                 foreach ($reglas as $reg)
                 {
@@ -31,7 +34,7 @@ $_SESSION['palabras'] = str_word_count($manual->nombre);
 							
 							<button type="button" class="regla_<?=$reg->idu?> transparent" data-toggle=".regla_<?=$reg->idu?>" style="display:none"><img src="/img/icons/minus.svg"> <?=$reg->nombre?></button>
 							
-							<a data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$reg->manuales_idu?>/<?=$reg->idu?>" title="<?=t('Editar regla')?>"><sup><img src="/img/icons/edit-2s.svg"></sup></a>
+							<a data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$reg->manuales_idu?>/<?=$reg->idu?>" title="<?= $editable ? t('Editar regla') : t('Ver código') ?>"><sup><img src="<?= $editable ? '/img/icons/edit-2s.svg' : '/img/icons/search.svg' ?>"></sup></a>
 
 							<small><?=$reg->peso?></small> 
                         </h4>
@@ -48,7 +51,7 @@ $_SESSION['palabras'] = str_word_count($manual->nombre);
                         </article>
 
                         <?php if ( ! empty($reglas[$reg->idu])): ?>
-                            <ul><?php arbol_1912201247($reglas, $reg->idu); ?></ul>
+                            <ul><?php arbol_1912201247($reglas, $reg->idu, $editable); ?></ul>
                         <?php endif; ?>
                     </li>
                     <?php
@@ -56,7 +59,7 @@ $_SESSION['palabras'] = str_word_count($manual->nombre);
                     $_SESSION['palabras'] += str_word_count($reg->descripcion);
                 }
             }
-            arbol_1912201247($reglas);
+            arbol_1912201247($reglas, 'Ninguno', $editable);
             ?>
         </ul>
         <?=t('Palabras')?>: <?=$_SESSION['palabras']?>
@@ -65,13 +68,17 @@ $_SESSION['palabras'] = str_word_count($manual->nombre);
 		<?php if ( ! empty($manual->idu)): ?>
 			<a role="button" class="outline" href="/ev/manuales/ver/<?=$manual->idu?>" target="_blank" title="<?=t('Ver reglas')?>"><?=t('Imprimir')?></a>
 
-			<a role="button" class="outline" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manual->idu?>" title="<?=t('Abrir el editor de reglas')?>"><?=t('Regla nueva')?></a>
+			<?php if ($editable): ?>
+				<a role="button" class="outline" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manual->idu?>" title="<?=t('Abrir el editor de reglas')?>"><?=t('Regla nueva')?></a>
+			<?php endif; ?>
 
 			<a role="button" href="/ev/manuales/editor/es/<?=$manual->idu?>" title="<?=t('Editor')?>"><?=t('Editor')?></a>
         <?php endif; ?>
 	</footer>
 </article>
 
+<?php if ($editable): ?>
 <a role="button" class="flotante abajo derecha ma20 scroll-down-hide" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manual->idu?>" title="<?=t('Abrir el editor de reglas')?>">
 	<img alt="<?=t('Abrir el editor de reglas')?>" loading="lazy" src="/img/icons/plus.svg" width="30" height="30">
 </a>
+<?php endif; ?>

@@ -32,7 +32,7 @@ class RssController extends RegistradosController
     public function publicar($idu)
     {
         (new Rss_entradas)->publicarEntrada($idu);
-        View::select('');
+        View::select('publicado');
     }
 
     #

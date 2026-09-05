@@ -1,3 +1,37 @@
+# === ANTI-DDOS RULES - Global Protection ===
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Block requests to /cards/ with long query strings (DDoS pattern: randomized filters)
+RewriteCond %{REQUEST_URI} ^/cards/ [NC]
+RewriteCond %{QUERY_STRING} ^.{100,}$ [NC]
+RewriteRule .* - [F,L]
+
+# Block requests to /tracker/ with suspicious patterns
+RewriteCond %{REQUEST_URI} ^/tracker/ [NC]
+RewriteCond %{QUERY_STRING} ^.{100,}$ [NC]
+RewriteRule .* - [F,L]
+
+# Block known bad bot user agents from the attack
+RewriteCond %{HTTP_USER_AGENT} "AliyunSecBot" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "MSIE 6\.0.*Windows NT 10" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "MSIE 7\.0.*Windows NT 5\.01" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "MSIE 8\.0.*Windows NT 5\.2" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Opera/8\." [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Opera/9\." [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Android 1\.1" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Android 4\.4.*rv:35\.0" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "CPU iPhone OS 3_0" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "CPU iPhone OS 3_3" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "CPU iPad OS 9_3_5" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "CPU iPad OS 12_4_8" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Windows NT 5\.0\)" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "Windows NT 5\.01" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "rv:1\.9\.0" [NC]
+RewriteRule .* - [F,L]
+</IfModule>
+# === END ANTI-DDOS RULES ===
+
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresDefault A3600
@@ -21,11 +55,46 @@
     </FilesMatch>
 </IfModule>
 
+# Baseline compatible with the legacy application and its HTTPS integrations.
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=15552000"
+    Header always set Content-Security-Policy "default-src 'self' https: data: blob:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: wss:; media-src 'self' https: blob:; frame-src https:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self' https:; upgrade-insecure-requests"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), geolocation=(), microphone=(), payment=(), usb=()"
+    Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
+    Header always set X-Permitted-Cross-Domain-Policies "none"
+    Header always set X-XSS-Protection "0"
+</IfModule>
+
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+    AddType image/avif .avif
+    AddType image/svg+xml .svg .svgz
+    AddType video/mp4 .mp4
+    AddType video/webm .webm
+</IfModule>
+
 DirectoryIndex index.php
 # Si esta mod_rewrite habilitado
 <IfModule mod_rewrite.c>
     # Activar modo de reescritura
     RewriteEngine On
+
+    # Prohibir acceso a archivos ocultos (excepto .well-known) y volcados de sistema
+    RewriteRule "(^|/)\.(?!well-known)" - [F,L]
+    RewriteRule "\.(env|bak|yml|yaml|ini|log|sql|conf|sh|md)$" - [NC,F,L]
+
+    # Bloquear ejecucion directa de scripts PHP (excepto el controlador frontal index.php)
+    RewriteCond %{REQUEST_URI} !^/index\.php [NC]
+    RewriteRule \.(php|phtml)$ - [F,L]
+
+    # Dar un 404 nativo a estaticos inexistentes sin despertar a PHP
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} \.(php|js|css|json|xml|txt|html)$ [NC]
+    RewriteRule .* - [R=404,L]
 
     # Directorio de instalación, puede ser necesario si 
     # la aplicación se ubica en public_html

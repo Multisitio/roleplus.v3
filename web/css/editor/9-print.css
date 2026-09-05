@@ -1,57 +1,111 @@
-/* @page managed dynamically by editor.phtml */
-
 @media print {
-    body {
-        padding: 0 !important;
-        margin: 0 !important;
+
+    /* ========================================= */
+    /* 0. CONFIGURACIÓN DE PÁGINA                */
+    /* ========================================= */
+    
+    @page {
+        size: A4;
+        margin: 0mm;
     }
 
+    /* ========================================= */
+    /* 1. LIMPIEZA DE IMPRESIÓN                  */
+    /* ========================================= */
+
+    html,
+    body,
+    main,
+    body > div,
+    main > div,
     article {
         margin: 0 !important;
         padding: 0 !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
     }
 
     a:has(img),
     aside,
+    nav,
     .button-floating,
-    .no-print {
+    .no-print,
+    .wysiwyg,
+    .editor-badge {
         display: none !important;
     }
-}
 
-@media print {
-    .booklet-mode {
-        /* A4 width */
-        width: 29.7cm;
+    [data-empty-helper="true"] {
+        outline: none !important;
+        background: transparent !important;
+        min-height: 0 !important;
     }
 
-    .booklet-mode .resultado {
+    /* ========================================= */
+    /* 2. PAGINACIÓN BASE (PARA TODOS)           */
+    /* ========================================= */
+
+    main > div {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        overflow: hidden;
+    }
+
+    main > div ~ div {
+        page-break-before: always;
+        break-before: page;
+    }
+
+    /* ========================================= */
+    /* 3. ESCALADO ESPECÍFICO DE A5 A A4         */
+    /* ========================================= */
+
+    /* Solo aplicamos la transformación y el forzado de contenedor si el documento es A5 */
+    .a5 main > div {
+        width: 210mm !important;
+        height: 297mm !important;
+    }
+
+    .a5 main > div article {
+        transform: scale(1.4189, 1.4142) !important;
+        transform-origin: top left !important;
+    }
+
+    /* ========================================= */
+    /* 4. MODO LIBRITO (BOOKLET MODE)            */
+    /* ========================================= */
+
+    .booklet-mode {
         display: block;
         width: 100%;
         max-width: none;
     }
 
-    .booklet-mode .resultado::after {
+    .booklet-mode.editor::after {
         content: "";
         display: table;
         clear: both;
     }
 
-    .booklet-mode .resultado>div {
-        float: left;
-        margin: 0 !important;
-        page-break-inside: avoid;
-        break-inside: avoid;
+    /* Restaurar dimensiones originales para que cabalguen dos A5 sobre el A4 apaisado */
+    .booklet-mode .a5 main > div,
+    body.booklet-mode.a5 main > div {
+        width: 148mm !important;
+        height: 210mm !important;
     }
 
-    .booklet-mode .page {
-        page-break-after: avoid;
-        page-break-inside: avoid;
-        break-inside: avoid;
+    .booklet-mode .a5 main > div article,
+    body.booklet-mode.a5 main > div article {
+        transform: none !important;
     }
 
-    .booklet-mode .blank-page article {
-        background: white !important;
-        box-shadow: none !important;
+    body.booklet-mode main > div ~ div {
+        page-break-before: avoid;
+        break-before: avoid;
+    }
+
+    body.booklet-mode main > div:nth-child(2n+1):not(:first-child) {
+        page-break-before: always;
+        break-before: page;
     }
 }

@@ -1,0 +1,99 @@
+/* Estilos para el editor de plantillas CSS */
+
+/* Estado inicial: ocultamos experto, mostramos asistido */
+.experto {
+    display: none !important;
+}
+
+.asistido {
+    display: block !important;
+}
+
+/* Estado experto: invertimos visibilidad */
+.expert-mode .asistido {
+    display: none !important;
+}
+
+.expert-mode .experto {
+    display: block !important;
+}
+
+.experto textarea {
+    min-height: 100px;
+    font-family: monospace;
+}
+
+/* Indicador de guardado automático */
+form.auto-save.saved {
+    border-left: 2px solid var(--success);
+    transition: border 0.3s ease;
+}
+
+/* Lista de reglas agrupadas */
+.manual.sortable-list li {
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.manual.sortable-list li h4 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.manual.sortable-list li h4 .drag-handle {
+    margin-left: auto;
+}
+
+.manual.sortable-list pre {
+    font-family: monospace;
+    background: #f4f4f4;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 2px 0;
+    color: #333;
+    display: inline-block;
+}
+
+.regla-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+.prop-handle {
+    cursor: grab;
+    color: #999;
+    font-size: 0.9em;
+    user-select: none;
+    padding: 0 5px;
+}
+
+.prop-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #999;
+    font-size: 1.2rem;
+    padding: 0 10px;
+}
+
+/* Ajustes para el modal de edición */
+.reglas-container {
+    margin-top: 1rem;
+}
+
+.regla-row {
+    margin-bottom: 1rem;
+    align-items: flex-end;
+}
+
+.actions-grid {
+    display: grid !important;
+    grid-template-columns: repeat(12, 1fr) !important;
+}

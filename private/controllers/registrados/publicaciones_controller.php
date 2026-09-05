@@ -13,10 +13,25 @@ class PublicacionesController extends RegistradosController
     }
 
     #
+
+
+    #
     public function crear()
     {
         $pub = (new Publicaciones)->crear($_POST);
-		Redirect::to("/publicaciones/$pub->slug");
+        if (Input::isAjax()) {
+            View::select('');
+        } else {
+            if (!empty($_POST['rss_idu'])) {
+                $referer = _url::usarReferer() ?: '/registrados/rss';
+                Redirect::to($referer . '#' . $_POST['rss_idu']);
+            } elseif (!empty($_POST['youtube_idu'])) {
+                $referer = _url::usarReferer() ?: '/registrados/youtube';
+                Redirect::to($referer . '#' . $_POST['youtube_idu']);
+            } else {
+                Redirect::to(_url::usarReferer() ?: "/publicaciones/$pub->slug");
+            }
+        }
     }
 
     #
@@ -71,8 +86,22 @@ class PublicacionesController extends RegistradosController
     #
     public function desde_rss($rss_idu)
     {
+        $ent = (new Rss_entradas)->first('SELECT titulo, url FROM rss_entradas WHERE idu=?', [$rss_idu]);
+        if (!$ent) {
+            Session::setArray('toast', t('Entrada no encontrada.'));
+            View::select('');
+            return;
+        }
+        $ya_publicada = (new Publicaciones)->first('SELECT id FROM publicaciones WHERE titulo=? OR (enlace != "" AND enlace=?)', [$ent->titulo, $ent->url]);
+        if ($ya_publicada) {
+            Session::setArray('toast', t('Esta entrada ya está publicada.'));
+            View::select('');
+            return;
+        }
+
         $entrada = (new Rss_entradas)->prepararEntrada($rss_idu);
         $this->publicacion = (object)$entrada;
+        $this->rss_idu = $rss_idu;
         $this->titulo = $this->publicacion->titulo
             ?? t('Publicación de una entrada RSS');
         $this->confirmar_cierre = true;
@@ -83,8 +112,22 @@ class PublicacionesController extends RegistradosController
     #
     public function desde_youtube($youtube_idu)
     {
+        $ent = (new Rolflix_entradas)->first('SELECT titulo, enlace FROM rolflix_entradas WHERE idu=?', [$youtube_idu]);
+        if (!$ent) {
+            Session::setArray('toast', t('Entrada no encontrada.'));
+            View::select('');
+            return;
+        }
+        $ya_publicada = (new Publicaciones)->first('SELECT id FROM publicaciones WHERE titulo=? OR (enlace != "" AND enlace=?)', [$ent->titulo, $ent->enlace]);
+        if ($ya_publicada) {
+            Session::setArray('toast', t('Esta entrada ya está publicada.'));
+            View::select('');
+            return;
+        }
+
         $entrada = (new Rolflix_entradas)->prepararEntrada($youtube_idu);
         $this->publicacion = (object)$entrada;
+        $this->youtube_idu = $youtube_idu;
         $this->titulo = $this->publicacion->titulo
             ?? t('Publicación de una entrada RSS');
         $this->confirmar_cierre = true;

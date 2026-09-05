@@ -1,11 +1,32 @@
 <?php
-$format_page = $manual->formato . ' portrait';
+$editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor');
+$format_page = $manual->formato . ($manual->orientacion === 'h' ? ' landscape' : ' portrait');
 ?>
-<?php $page='cover'; foreach($reglas as $reg): ?>
-    <div class="<?=$page?>">
-        <?=$reg->descripcion?>
-        <a class="scroll-down-hide" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$manuales_idu?>/<?=$reg->idu?>">
-            <?=Ku::icon('edit')?>
-        </a>
-    </div>
-<?php $page='page'; endforeach; ?>
+<?php $__page_num = 0; foreach ($reglas as $reg): $__page_num++; ?>
+<div
+	id="<?=h($reg->idu)?>"
+	contenteditable="<?= $editable ? 'true' : 'false' ?>"
+	spellcheck="false"
+	data-idu="<?=h($reg->idu)?>"
+	data-page="<?=$__page_num?>">
+	<?php
+		$desc = trim($reg->descripcion);
+		if (preg_match('/^<article[^>]*>(.*)<\/article>$/is', $desc, $m)) {
+			$inner = trim($m[1]);
+			if (strpos($inner, '<article') !== false) {
+				$desc = $inner;
+			}
+		}
+		echo $desc;
+	?>
+	<?php if ($editable): ?>
+	<a class="button-floating scroll-down-hide"
+		contenteditable="false"
+		data-ajax=".ajax.show"
+		href="/ev/manuales/formulario_regla/<?=$manuales_idu?>/<?=h($reg->idu)?>"
+		title="<?=t('Editar en formulario')?>">
+		<?=Ku::icon('edit')?>
+	</a>
+	<?php endif; ?>
+</div>
+<?php endforeach; ?>

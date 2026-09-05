@@ -1,0 +1,393 @@
+/* =========================================================
+   EDITOR — Pinceles HTML & Barra de Contexto
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Layout fijo del editor:
+   Evita que las páginas del manual se deslicen por debajo
+   de las barras de herramientas fijas ("espacio reservado").
+   /* NO usar .editor en este archivo */
+   --------------------------------------------------------- */
+body {
+    background: grey;
+    counter-reset: page;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* barra pegada a la izquierda (48px) + margen */
+main {
+    margin: 45px;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+/* El aside derecho (y general) debe sobreponerse a los controles */
+aside {
+    z-index: 6; 
+}
+
+/* ---------------------------------------------------------
+   Barra lateral de pinceles — pegada a la izquierda
+   --------------------------------------------------------- */
+/* sin bordes redondeados, pegado al borde izquierdo */
+nav[data-toolbar="pinceles"] {
+    background: white;
+    border-radius: 0;
+    box-shadow: 0 0 10px 1px #666;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    left: 0;
+    padding: 6px 4px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    z-index: 3;
+    
+    /* Scroll si hay muchos botones */
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+/* tamaño rebajado a 40x40 */
+nav[data-toolbar="pinceles"] button {
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    height: 40px;
+    line-height: 1.2;
+    padding: 2px;
+    transition: background 0.12s, transform 0.1s;
+    width: 40px;
+}
+
+nav[data-toolbar="pinceles"] button:hover {
+    background: rgba(0, 0, 0, 0.07);
+    transform: scale(1.06);
+}
+
+nav[data-toolbar="pinceles"] button:active {
+    background: rgba(0, 0, 0, 0.14);
+    transform: scale(0.95);
+}
+
+/* Acordeón de grupos */
+.pinceles-grupo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.grupo-contenido {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    align-items: center;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.pinceles-grupo.active .grupo-contenido {
+    display: flex;
+}
+
+/* Botones de trigger */
+nav[data-toolbar="pinceles"] .grupo-trigger {
+    background: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+nav[data-toolbar="pinceles"] .grupo-trigger svg {
+    width: 18px;
+    height: 18px;
+}
+
+nav[data-toolbar="pinceles"] .pinceles-grupo.active .grupo-trigger {
+    background: var(--primary, #6b5000);
+    color: var(--primary-inverse, #fff);
+    border-color: var(--primary, #6b5000);
+}
+
+/* ---------------------------------------------------------
+   Barra de contexto — sin contenedor, cada control flota
+   --------------------------------------------------------- */
+/* margen extra para no solapar el menú izquierdo — 48px nav + 20px gap */
+nav[data-toolbar="contexto"] {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    left: 70px;
+    position: fixed;
+    top: 10px;
+    z-index: 3;
+}
+
+nav[data-toolbar="contexto"] select {
+    /* Mismos estilos que los select del sistema base */
+    background-color: var(--background-card, #fff);
+    color: var(--primary, #6b5000);
+    cursor: pointer;
+    
+    /* Sobrescribir directivas invasivas de 4-form.css */
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin-bottom: 0;
+
+    /* Estilo rectangular redondeado con sombra */
+    box-sizing: border-box;
+    height: 42px;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 1px 1px 0 #666;
+    padding: 0 30px 0 12px;
+
+    /* Ocultar flecha nativa y usar SVG personalizado */
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236b5000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 8px auto;
+}
+
+nav[data-toolbar="contexto"] > span {
+    align-items: center;
+    display: none;
+    font-size: 11px;
+    gap: 4px;
+}
+
+nav[data-toolbar="contexto"] > span:not(:empty) {
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 42px;
+    padding: 0 25px 0 12px;
+    border-radius: 0;
+    box-shadow: none;
+    filter: drop-shadow(1px 1px 0 #666);
+    clip-path: polygon(0% 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 0% 100%);
+}
+
+/* Estilo de botones para las etiquetas de las migas de pan */
+nav[data-toolbar="contexto"] > span button {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    color: #333;
+    padding: 0 2px;
+    transition: color 0.15s;
+    min-width: 0;
+    min-height: 0;
+    box-shadow: none;
+    height: auto;
+}
+
+nav[data-toolbar="contexto"] > span button:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+nav[data-toolbar="contexto"] > span i {
+    color: #aaa;
+    font-style: normal;
+}
+
+/* ---------------------------------------------------------
+   Estado de guardado — flota debajo de la barra de contexto
+   --------------------------------------------------------- */
+/* alineado al nuevo margen del contexto */
+body > output {
+    background: white;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    left: 68px;
+    opacity: 0;
+    padding: 4px 10px;
+    pointer-events: none;
+    position: fixed;
+    top: 56px;
+    transition: opacity 0.3s;
+    z-index: 9;
+}
+
+body > output[data-status] {
+    box-shadow: 0 0 10px 1px #666;
+    opacity: 1;
+}
+
+body > output[data-status="saving"] { color: #b88; }
+body > output[data-status="saved"]  { color: #484; }
+body > output[data-status="error"]  { color: #a33; }
+
+/* ---------------------------------------------------------
+   Contenido editable
+   --------------------------------------------------------- */
+main div[contenteditable] {
+    outline: none;
+    width: fit-content;
+    scroll-margin-top: 75px;
+}
+
+main div[contenteditable] a {
+    cursor: text;
+}
+
+main div[contenteditable]:focus-within > article {
+    box-shadow: 0 0 0 3px rgba(100, 160, 255, 0.5);
+}
+
+main div[contenteditable] ::selection {
+    background: rgba(100, 160, 255, 0.25);
+}
+
+article {
+    scroll-margin-top: 75px;
+}
+
+/* ---------------------------------------------------------
+   Asegurar visibilidad de toolbars siempre (ej: fullscreen)
+   --------------------------------------------------------- */
+nav[data-toolbar="pinceles"] {
+    display: flex;
+}
+nav[data-toolbar="contexto"] {
+    display: flex;
+}
+
+/* ---------------------------------------------------------
+   Etiquetas vacías (outlines y badges dinámicos en editor)
+   --------------------------------------------------------- */
+main div[contenteditable] [data-empty-helper="true"] {
+    min-height: 2.2em;
+    outline: 1px dashed rgba(200, 100, 100, 0.35);
+    background: rgba(255, 100, 100, 0.02);
+    position: relative;
+    border-radius: 4px;
+    padding-right: 62px !important;
+    display: block;
+    box-sizing: border-box;
+}
+
+main div[contenteditable] footer[data-empty-helper="true"] {
+    position: absolute;
+    margin: auto;
+}
+
+/* El badge flotante arriba a la derecha */
+main div[contenteditable] .editor-badge {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    background: #ffe6e6;
+    border: 1px solid #ffb3b3;
+    border-radius: 3px;
+    color: #cc0000;
+    font-family: monospace;
+    font-size: 10px;
+    font-weight: bold;
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    line-height: 1;
+    z-index: 1;
+    user-select: none;
+}
+
+main div[contenteditable] .editor-badge .tag-name {
+    text-transform: uppercase;
+}
+
+main div[contenteditable] .editor-badge .del-btn {
+    cursor: pointer;
+    background: #ffb3b3;
+    color: #800000;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 1;
+    border: 0;
+    padding: 0;
+    transition: background 0.12s, color 0.12s;
+}
+
+main div[contenteditable] .editor-badge .del-btn:hover {
+    background: #cc0000;
+    color: white;
+}
+
+/* Botones extra de contexto (guías, guardado, etc) */
+nav[data-toolbar="contexto"] button[data-toggle="guias"],
+nav[data-toolbar="contexto"] button[data-action="save-page"] {
+    background-color: var(--background-card, #fff);
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 1px 1px 0 #666;
+    color: #aaa; /* Gris por defecto (inactivo/oculto) */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    transition: background 0.15s, color 0.15s;
+    min-width: 40px;
+    min-height: 42px;
+    margin-bottom: 0;
+}
+
+nav[data-toolbar="contexto"] button[data-toggle="guias"].active,
+nav[data-toolbar="contexto"] button[data-action="save-page"].active {
+    background-color: var(--primary, #6b5000);
+    color: var(--primary-inverse, #fff);
+    box-shadow: none;
+}
+
+nav[data-toolbar="contexto"] button[data-toggle="guias"] svg,
+nav[data-toolbar="contexto"] button[data-action="save-page"] svg {
+    width: 18px;
+    height: 18px;
+}
+
+nav[data-toolbar="contexto"] button[data-toggle="guias"]:not(.active):hover,
+nav[data-toolbar="contexto"] button[data-action="save-page"]:not(.active):hover {
+    background-color: #f0f0f0 !important;
+}
+
+/* Mostrar guías para todos los bloques si se activa show-all-outlines */
+main.show-all-outlines div[contenteditable] :is(p, h1, h2, h3, h4, h5, h6, blockquote, div, header, section, footer, article, ul, ol, li, table, th, td) {
+    outline: 1px dashed rgba(100, 150, 250, 0.4) !important;
+}
+
+@media print {
+    [data-editor-helper] {
+        display: none !important;
+    }
+}

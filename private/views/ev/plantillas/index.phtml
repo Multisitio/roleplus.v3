@@ -1,0 +1,34 @@
+
+<div id="grid" data-columns>
+	<article class="cabecera">
+		<header>
+			<h1><?=t('Plantillas CSS')?></h1>
+		</header>
+
+		<section class="grid">
+			<a role="button" href="/ev/plantillas/formulario"><?=t('Crear plantilla')?></a>
+		</section>
+
+		<footer>
+			<input type="text" data-filter="article:not(.cabecera)" placeholder="<?=t('Filtra la lista...')?>">
+		</footer>
+	</article>
+
+	<?php foreach ($plantillas as $pla): ?>
+		<article>
+			<header>
+				<h3><?=$pla->nombre?></h3>
+			</header>
+
+			<?php if (!empty($pla->fotos)): ?>
+				<img alt="<?=$pla->nombre?>" src="/img/usuarios/<?=$pla->usuarios_idu?>/l.<?=$pla->fotos?>">
+			<?php endif; ?>
+
+			<footer class="grid">
+				<?php if (Session::get('idu') == $pla->usuarios_idu): ?>
+					<a role="button" href="/ev/plantillas/formulario/<?=$pla->idu?>"><?=t('Editar')?></a>
+				<?php endif; ?>
+			</footer>
+		</article>
+	<?php endforeach; ?>
+</div>

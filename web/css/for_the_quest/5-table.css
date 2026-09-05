@@ -1,4 +1,4 @@
-.resultado caption {
+.plantilla caption {
     align-items: center;
     background-image:
         url("data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>"), url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>"),
@@ -18,19 +18,19 @@
     width: fit-content;
 }
 
-.resultado caption::before {
+.plantilla caption::before {
     background-position: center left;
     margin-left: -2mm;
     margin-right: .2em;
 }
 
-.resultado caption::after {
+.plantilla caption::after {
     background-position: center right;
     margin-left: .2em;
     margin-right: -2mm;
 }
 
-.resultado table {
+.plantilla table {
     border-collapse: collapse;
     border-spacing: 0;
     margin-block: 15px;
@@ -39,51 +39,51 @@
     width: 100%;
 }
 
-.resultado table:has(caption) {
+.plantilla table:has(caption) {
     margin-block: 65px 20px;
 }
 
-.resultado div>table:first-child {
+.plantilla div>table:first-child {
     margin-top: 0;
 }
 
-.resultado div>table:has(caption):first-child {
+.plantilla div>table:has(caption):first-child {
     margin-top: 45px;
 }
 
-.resultado div>table:last-child {
+.plantilla div>table:last-child {
     margin-bottom: 0;
 }
 
-.resultado th,
-.resultado td {
+.plantilla th,
+.plantilla td {
     font-style: italic;
     padding: 5px;
     vertical-align: top;
 }
 
-.resultado th {
+.plantilla th {
     background: var(--dragonred);
     color: white;
     font-weight: normal;
 }
 
-.resultado tr:nth-child(even) {
+.plantilla tr:nth-child(even) {
     background-color: #ccc;
 }
 
-.resultado tr:nth-child(odd) {
+.plantilla tr:nth-child(odd) {
     background-color: white;
 }
 
-.resultado .white-first tr:nth-child(even) {
+.plantilla .white-first tr:nth-child(even) {
     background-color: white;
 }
 
-.resultado .white-first tr:nth-child(odd) {
+.plantilla .white-first tr:nth-child(odd) {
     background-color: #ccc;
 }
 
-.resultado table:has(+ul) {
+.plantilla table:has(+ul) {
     margin-bottom: 0;
 }

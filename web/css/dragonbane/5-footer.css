@@ -1,12 +1,12 @@
-.page footer {
-    color: var(--demongreen);
+.plantilla > div footer {
+    color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    font: bold 8pt "Colus";
+    font: bold var(--font-size-footer) var(--font-heading);
     margin: auto;
-    min-width: 120px;
+    min-width: var(--footer-counter-width);
     position: absolute;
     bottom: 10px;
     left: 30px;
@@ -16,14 +16,14 @@
     width: fit-content;
 }
 
-.page footer::after {
+.plantilla > div footer::after {
     background-image: url("data:image/svg+xml;utf8,<svg height='30' width='120' xmlns='http://www.w3.org/2000/svg'><path d='M0 0 L0 3   Q40 10, 60 30   Q80 10, 120 3  L 120 0 Z' fill='RGB(0, 96, 77)'/></svg>");
     text-align: center;
-    color: white;
+    color: var(--color-text-inverse);
     content: counter(page);
     display: block;
-    font-size: 11pt;
+    font-size: var(--font-size-footer-num);
     padding: 2px 0 0;
-    width: 120px;
+    width: var(--footer-counter-width);
     height: 30px;
 }

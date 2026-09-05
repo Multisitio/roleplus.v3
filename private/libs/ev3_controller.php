@@ -29,7 +29,7 @@ class Ev3Controller extends Controller
 
         $this->claves = (new Configuracion)->todas();
         $this->usuario = (new Usuarios)->uno();
-		$this->version = '250415';
+		$this->version = '2606081130';
         Input::isAjax() ? View::template('ajax') : View::template('ev3');
     }
 

@@ -54,15 +54,7 @@ class Translator extends LiteRecord
 					continue;
 				}
 
-				/*$json = _link::curl_get_file_contents('https://api.mymemory.translated.net/get?q='.urlencode($traducir)."&langpair=es|$idioma");
-				
-				$traduccion = empty($json)
-					? '' 
-					: json_decode($json)->responseData->translatedText;*/
-
-				$pregunta = "Traduce con solo una respuesta, la más frecuente, con texto plano, sin contexto ni explicaciones, no añadas más si es una palabra lo que hay que traducir, al idioma iso($idioma) lo siguiente: " . trim($traducir);
-				$traduccion = (new Respuestas)->preguntarAOpenAi($pregunta);
-				$traduccion = trim($traduccion);
+				$traduccion = $traducir;
 
 				$matches[1][$i] = "$traducir => $traduccion";
 

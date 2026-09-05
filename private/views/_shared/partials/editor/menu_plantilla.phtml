@@ -1,0 +1,440 @@
+<?php $menu_plantilla = Plantillas::menuPlantilla(); ?>
+<aside class="align-right editor template hide pa10">
+	<button data-hide="aside">
+		<?=t('Contraer')?>
+		<?=Ku::icon('arrow-right')?>
+	</button>
+
+	<form id="form-manual-estilos" action="/ev/manuales/guardar_fondo/<?=$manuales_idu?>" method="post" enctype="multipart/form-data">
+		<details class="template-panel">
+			<summary><?=t('Página')?></summary>
+			<div class="pa10">
+				<?=Kubox::dropimage(label: t('Fondo (Págs. Impares)'), name: 'fondo_pergamino', dir: '', file: $ajustes->fondo_url)?>
+				<input type="hidden" name="fondo_pergamino_actual" value="<?=h($ajustes->fondo_url)?>">
+			</div>
+
+			<div class="pa10 pt0">
+				<?=Kubox::dropimage(label: t('Fondo (Págs. Pares - Opcional)'), name: 'fondo_pergamino_even', dir: '', file: $ajustes->fondo_even_url)?>
+				<input type="hidden" name="fondo_pergamino_even_actual" value="<?=h($ajustes->fondo_even_url)?>">
+			</div>
+
+			<div class="pa10 pt0 pb0">
+				<label>
+					<small><b><?=t('Márgenes asimétricos (Modo Libro)')?>:</b></small>
+					<select name="margin_asymmetric" data-change-ajax>
+						<option value="0" <?= $ajustes->margin_asymmetric == 0 ? 'selected' : '' ?>><?=t('No')?></option>
+						<option value="1" <?= $ajustes->margin_asymmetric == 1 ? 'selected' : '' ?>><?=t('Sí')?></option>
+					</select>
+				</label>
+			</div>
+
+			<table style="text-align:center">
+				<thead>
+					<tr>
+						<th colspan="2"><small><?=t('Arriba')?></small></th>
+						<th colspan="2"><small><?=t('Derecha')?></small></th>
+						<th colspan="2"><small><?=t('Abajo')?></small></th>
+						<th colspan="2"><small><?=t('Izquierda')?></small></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><small><?=t('Margen')?></small></td>
+						<td><small><?=t('Sangre')?></small></td>
+						<td><small><?=t('Margen')?></small></td>
+						<td><small><?=t('Sangre')?></small></td>
+						<td><small><?=t('Margen')?></small></td>
+						<td><small><?=t('Sangre')?></small></td>
+						<td><small><?=t('Margen')?></small></td>
+						<td><small><?=t('Sangre')?></small></td>
+					</tr>
+					<?php foreach ($menu_plantilla['secciones'] as $sec => $label): ?>
+						<tr>
+							<td colspan="8" class="bg-gray-light"><small><b><?=t($label)?></b></small></td>
+						</tr>
+						<tr>
+							<?php foreach ($menu_plantilla['lados'] as $lado):
+								$key_m = "margin_{$sec}_{$lado}";
+								$key_p = "padding_{$sec}_{$lado}";
+							?>
+								<td><input type="number" name="<?=$key_m?>" value="<?=$ajustes->$key_m?>" data-change-ajax title="<?=t('Margen')?>"></td>
+								<td><input type="number" name="<?=$key_p?>" value="<?=$ajustes->$key_p?>" data-change-ajax title="<?=t('Sangria')?>"></td>
+							<?php endforeach; ?>
+						</tr>
+						<?php if ($sec === 'footer'): ?>
+						<tr>
+							<td colspan="8" class="pa10">
+								<div class="mb10">
+									<?=Kubox::dropimage(label: t('Imagen del footer'), name: 'footer_imagen', dir: '', file: $ajustes->footer_url)?>
+									<input type="hidden" name="footer_imagen_actual" value="<?=h($ajustes->footer_url)?>">
+								</div>
+								<div class="grid col-2 mt10">
+									<?php foreach ($menu_plantilla['footer'] as $name => $field): ?>
+										<label style="text-align:left">
+											<small><b><?=t($field['label'])?>:</b></small>
+											<input type="number" name="<?=$name?>" value="<?=$ajustes->$name?>" data-change-ajax>
+										</label>
+									<?php endforeach; ?>
+								</div>
+							</td>
+						</tr>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</details>
+
+		<details class="template-panel">
+			<summary><?=t('Citas')?></summary>
+			<div class="pa10">
+				<div class="grid col-2 gap10">
+					<label>
+						<small><b><?=t('Borde izquierdo')?>:</b></small>
+						<input type="number" name="blockquote_border_left_width" min="0" max="20" value="<?=intval($ajustes->blockquote_border_left_width)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Color borde')?>:</b></small>
+						<div class="web-color-picker" data-target="#blockquote_border_left_color" style="background-color: <?=h($ajustes->blockquote_border_left_color?? '');?>;"></div>
+						<input type="hidden" id="blockquote_border_left_color" name="blockquote_border_left_color" value="<?=h($ajustes->blockquote_border_left_color)?>" data-change-ajax>
+					</label>
+				</div>
+				<table style="text-align:center">
+					<thead>
+						<tr>
+							<th colspan="2"><small><?=t('Arriba')?></small></th>
+							<th colspan="2"><small><?=t('Derecha')?></small></th>
+							<th colspan="2"><small><?=t('Abajo')?></small></th>
+							<th colspan="2"><small><?=t('Izquierda')?></small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+						</tr>
+						<tr>
+							<?php foreach ($menu_plantilla['lados'] as $lado):
+								$key_m = "margin_blockquote_{$lado}";
+								$key_p = "padding_blockquote_{$lado}";
+							?>
+								<td><input type="number" name="<?=$key_m?>" value="<?=$ajustes->$key_m?>" data-change-ajax title="<?=t('Margen')?>"></td>
+								<td><input type="number" name="<?=$key_p?>" value="<?=$ajustes->$key_p?>" data-change-ajax title="<?=t('Sangria')?>"></td>
+							<?php endforeach; ?>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</details>
+
+		<details class="template-panel">
+			<summary><?=t('Enlaces')?></summary>
+			<div class="pa10">
+				<div class="grid col-2 gap10">
+					<label>
+						<small><b><?=t('Color')?>:</b></small>
+						<div class="web-color-picker" data-target="#a_color" style="background-color: <?=h($ajustes->a_color?? '');?>;"></div>
+						<input type="hidden" id="a_color" name="a_color" value="<?=h($ajustes->a_color)?>" data-change-ajax>
+					</label>
+				</div>
+			</div>
+		</details>
+
+		<details class="template-panel">
+			<summary><?=t('Listas')?></summary>
+			<div class="pa10">
+				<div class="grid col-3 gap10 mb10" style="text-align:center">
+					<!-- Fila 1 -->
+					<label>
+						<small><b><?=t('Lista des.')?></b></small>
+						<input type="text" name="bullet_ul" value="<?=h($ajustes->bullet_ul)?>" data-change-ajax style="text-align: center;">
+					</label>
+					<label>
+						<small><b><?=t('Sublista des.')?></b></small>
+						<input type="text" name="bullet_ul_ul" value="<?=h($ajustes->bullet_ul_ul)?>" data-change-ajax style="text-align: center;">
+					</label>
+					<label>
+						<small><b><?=t('Casilla')?></b></small>
+						<input type="text" name="bullet_checkbox" value="<?=h($ajustes->bullet_checkbox)?>" data-change-ajax style="text-align: center;">
+					</label>
+
+					<!-- Fila 2 -->
+					<label>
+						<small><b><?=t('Lista ord.')?></b></small>
+						<select name="bullet_ol" data-change-ajax style="text-align-last: center;">
+							<?php foreach (Plantillas::TIPOS_LISTA_ORDENADA as $val => $lbl): ?>
+								<option value="<?=$val?>" <?=$ajustes->bullet_ol === $val ? 'selected' : ''?>><?=$lbl?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
+					<label>
+						<small><b><?=t('Sublista ord.')?></b></small>
+						<select name="bullet_ol_sub" data-change-ajax style="text-align-last: center;">
+							<?php foreach (Plantillas::TIPOS_LISTA_ORDENADA as $val => $lbl): ?>
+								<option value="<?=$val?>" <?=$ajustes->bullet_ol_sub === $val ? 'selected' : ''?>><?=$lbl?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
+					<label>
+						<small><b><?=t('Opción')?></b></small>
+						<input type="text" name="bullet_radio" value="<?=h($ajustes->bullet_radio)?>" data-change-ajax style="text-align: center;">
+					</label>
+				</div>
+				<table style="text-align:center">
+					<thead>
+						<tr>
+							<th colspan="2"><small><?=t('Arriba')?></small></th>
+							<th colspan="2"><small><?=t('Derecha')?></small></th>
+							<th colspan="2"><small><?=t('Abajo')?></small></th>
+							<th colspan="2"><small><?=t('Izquierda')?></small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+						</tr>
+						<tr>
+							<?php foreach ($menu_plantilla['lados'] as $lado):
+								$key_m = "margin_list_{$lado}";
+								$key_p = "padding_list_{$lado}";
+							?>
+								<td><input type="number" name="<?=$key_m?>" value="<?=$ajustes->$key_m?>" data-change-ajax title="<?=t('Margen')?>"></td>
+								<td><input type="number" name="<?=$key_p?>" value="<?=$ajustes->$key_p?>" data-change-ajax title="<?=t('Sangria')?>"></td>
+							<?php endforeach; ?>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</details>
+
+		<details class="template-panel">
+			<summary><?=t('Parrafos')?></summary>
+			<div class="pa10">
+				<fieldset class="mb15 pa10" style="border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 15px;">
+					<legend><small><b><?=t('Letra Capitular (tras H1)')?></b></small></legend>
+					<?php 
+					$f_dc = $ajustes->tipografia['dropcap']; 
+					$style_dc = [];
+					if ($f_dc['fuente']) $style_dc[] = "font-family: '{$f_dc['fuente']}'";
+					if ($f_dc['size']) $style_dc[] = "font-size: {$f_dc['size']}";
+					if ($f_dc['color']) $style_dc[] = "color: {$f_dc['color']}";
+					$style_dc_attr = $style_dc ? 'style="' . implode('; ', $style_dc) . '"' : '';
+					?>
+					<section data-nivel="dropcap" style="border-top: 0; padding: 0 0 10px 0;">
+						<a data-ajax=".ajax.show" href="/ev/manuales/selector_fuentes/<?=$manuales_idu?>/dropcap" 
+						   <?=$style_dc_attr?>
+						   title="<?=$f_dc['fuente'] ?: t('Sin seleccionar')?>">
+							<?=t('CAPITULAR')?>: <?=$f_dc['fuente'] ?: t('Sin seleccionar')?>
+						</a>
+						
+						<select class="font-size-select" name="size_dropcap" data-change-ajax>
+							<option value="0px" <?=$f_dc['size'] == '0px' ? 'selected' : ''?>><?=t('Desactivado')?></option>
+							<?php for ($i = 10; $i <= 120; $i += 5): $px = "{$i}px"; ?>
+								<option value="<?=$px?>" <?=$f_dc['size'] == $px ? 'selected' : ''?>><?=$px?></option>
+							<?php endfor; ?>
+						</select>
+
+						<div class="web-color-picker" data-nivel="dropcap" onclick="window.PSColorPicker.open(this)" style="background-color: <?=h($f_dc['color'])?>;"></div>
+						<input type="hidden" name="color_dropcap" value="<?=h($f_dc['color'])?>">
+						<input type="hidden" name="fuente_dropcap" value="<?=h($f_dc['fuente'])?>">
+					</section>
+
+					<div style="text-align: right; margin-bottom: 10px;">
+						<label style="display: inline-block; text-align: right;">
+							<small style="margin-right: 5px;"><b><?=t('Distancia entre párrafos (px)')?>:</b></small>
+							<input type="number" name="p_gap" value="<?=intval($ajustes->p_gap ?? 15)?>" data-change-ajax style="text-align: center; width: 80px; display: inline-block;">
+						</label>
+					</div>
+
+					<div class="grid col-4 gap5" style="text-align: center;">
+						<label style="text-align: center; display: block;">
+							<small><b><?=t('Sup.')?> (px)</b></small>
+							<input type="number" name="margin_dropcap_top" value="<?=intval($ajustes->dropcap_margin_top)?>" data-change-ajax style="text-align: center; width: 100%;">
+						</label>
+						<label style="text-align: center; display: block;">
+							<small><b><?=t('Der.')?> (px)</b></small>
+							<input type="number" name="margin_dropcap_right" value="<?=intval($ajustes->dropcap_margin_right)?>" data-change-ajax style="text-align: center; width: 100%;">
+						</label>
+						<label style="text-align: center; display: block;">
+							<small><b><?=t('Inf.')?> (px)</b></small>
+							<input type="number" name="margin_dropcap_bottom" value="<?=intval($ajustes->dropcap_margin_bottom)?>" data-change-ajax style="text-align: center; width: 100%;">
+						</label>
+						<label style="text-align: center; display: block;">
+							<small><b><?=t('Izq.')?> (px)</b></small>
+							<input type="number" name="margin_dropcap_left" value="<?=intval($ajustes->dropcap_margin_left)?>" data-change-ajax style="text-align: center; width: 100%;">
+						</label>
+					</div>
+				</fieldset>
+				
+				<table style="text-align:center">
+					<thead>
+						<tr>
+							<th colspan="2"><small><?=t('Arriba')?></small></th>
+							<th colspan="2"><small><?=t('Derecha')?></small></th>
+							<th colspan="2"><small><?=t('Abajo')?></small></th>
+							<th colspan="2"><small><?=t('Izquierda')?></small></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+							<td><small><?=t('Margen')?></small></td>
+							<td><small><?=t('Sangre')?></small></td>
+						</tr>
+						<tr>
+							<?php foreach ($menu_plantilla['lados'] as $lado):
+								$key_m = "margin_p_{$lado}";
+								$key_p = "padding_p_{$lado}";
+							?>
+								<td><input type="number" name="<?=$key_m?>" value="<?=$ajustes->$key_m?>" data-change-ajax title="<?=t('Margen')?>"></td>
+								<td><input type="number" name="<?=$key_p?>" value="<?=$ajustes->$key_p?>" data-change-ajax title="<?=t('Sangria')?>"></td>
+							<?php endforeach; ?>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</details>
+
+		<details class="template-panel">
+			<summary><?=t('Tablas')?></summary>
+			<div class="pa10">
+				<div class="grid col-4 mb10 gap10">
+					<label>
+						<small><b><?=t('Sangrado V.')?>:</b></small>
+						<input type="number" name="table_td_padding_y" min="0" max="50" value="<?=intval($ajustes->table_td_padding_y)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Sangrado H.')?>:</b></small>
+						<input type="number" name="table_td_padding_x" min="0" max="50" value="<?=intval($ajustes->table_td_padding_x)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Cebreado')?>:</b></small>
+						<input type="number" name="table_zebra_opacity" min="0" max="100" value="<?=intval($ajustes->table_zebra_opacity)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Color cebreado')?>:</b></small>
+						<div class="web-color-picker" data-target="#table_zebra_color" style="background-color: <?=h($ajustes->table_zebra_color)?>;"></div>
+						<input type="hidden" id="table_zebra_color" name="table_zebra_color" value="<?=h($ajustes->table_zebra_color)?>" data-change-ajax>
+					</label>
+				</div>
+
+				<div class="grid col-4 mb10 gap10">
+					<label>
+						<small><b><?=t('Línea inf. Th')?>:</b></small>
+						<input type="number" name="table_th_border_bottom_width" min="0" max="20" value="<?=intval($ajustes->table_th_border_bottom_width)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Color inf.')?>:</b></small>
+						<div class="web-color-picker" data-target="#table_th_border_bottom_color" style="background-color: <?=h($ajustes->table_th_border_bottom_color)?>;"></div>
+						<input type="hidden" id="table_th_border_bottom_color" name="table_th_border_bottom_color" value="<?=h($ajustes->table_th_border_bottom_color)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Línea der. Col 1')?>:</b></small>
+						<input type="number" name="table_col1_border_right_width" min="0" max="20" value="<?=intval($ajustes->table_col1_border_right_width)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Color der.')?>:</b></small>
+						<div class="web-color-picker" data-target="#table_col1_border_right_color" style="background-color: <?=h($ajustes->table_col1_border_right_color)?>;"></div>
+						<input type="hidden" id="table_col1_border_right_color" name="table_col1_border_right_color" value="<?=h($ajustes->table_col1_border_right_color)?>" data-change-ajax>
+					</label>
+				</div>
+
+				<div class="grid col-4 gap10">
+					<label>
+						<small><b><?=t('Margen sup.')?>:</b></small>
+						<input type="number" name="margin_table_top" value="<?=intval($ajustes->margin_table_top)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Margen der.')?>:</b></small>
+						<input type="number" name="margin_table_right" value="<?=intval($ajustes->margin_table_right)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Margen inf.')?>:</b></small>
+						<input type="number" name="margin_table_bottom" value="<?=intval($ajustes->margin_table_bottom)?>" data-change-ajax>
+					</label>
+					<label>
+						<small><b><?=t('Margen izq.')?>:</b></small>
+						<input type="number" name="margin_table_left" value="<?=intval($ajustes->margin_table_left)?>" data-change-ajax>
+					</label>
+				</div>
+			</div>
+		</details>
+
+		<details class="template-panel" open>
+			<summary><?=t('Tipografias')?></summary>
+
+			<div class="template-fonts-grid">
+				<?php foreach ($menu_plantilla['niveles_tipografia'] as $niv):
+					if ($niv === 'dropcap') continue;
+					$f = $ajustes->tipografia[$niv];
+					$variant = ($f['weight'] === 'bold' && $f['style'] === 'italic') ? 'bold-italic' : ($f['weight'] === 'bold' ? 'bold' : ($f['style'] === 'italic' ? 'italic' : ''));
+					
+					$style_a = [];
+					if ($f['fuente']) $style_a[] = "font-family: '{$f['fuente']}'";
+					if ($f['size']) $style_a[] = "font-size: {$f['size']}";
+					if ($f['weight']) $style_a[] = "font-weight: {$f['weight']}";
+					if ($f['style']) $style_a[] = "font-style: {$f['style']}";
+					if ($f['align']) $style_a[] = "text-align: {$f['align']}";
+					$transform = $f['transform'] === 'small-caps' ? 'none' : ($f['transform'] ?: 'none');
+					$var_caps = $f['transform'] === 'small-caps' ? 'small-caps' : 'normal';
+					if ($transform) $style_a[] = "text-transform: {$transform}";
+					if ($var_caps) $style_a[] = "font-variant: {$var_caps}";
+					if ($f['color']) $style_a[] = "color: {$f['color']}";
+					if (!empty($f['decoration']) && $f['decoration'] !== '0') $style_a[] = "text-decoration: underline";
+					$style_attr = $style_a ? 'style="' . implode('; ', $style_a) . '"' : '';
+				?>
+					<section data-nivel="<?=$niv?>">
+						<a data-ajax=".ajax.show" href="/ev/manuales/selector_fuentes/<?=$manuales_idu?>/<?=$niv?>" title="<?=$f['fuente'] ?: t('Sin seleccionar')?>" <?=$style_attr?>>
+							<?=strtoupper($niv)?>: <?=$f['fuente'] ?: t('Sin seleccionar')?>
+						</a>
+
+						<select class="font-size-select" name="size_<?=$niv?>" data-change-ajax>
+							<?php if ($niv === 'small'): ?>
+								<?php for ($i = 50; $i <= 150; $i += 5): $val = "{$i}%"; ?>
+									<option value="<?=$val?>" <?=$f['size'] == $val ? 'selected' : ''?>><?=$i?>%</option>
+								<?php endfor; ?>
+							<?php else: ?>
+								<?php for ($i = 8; $i <= 72; $i += 2): $px = "{$i}px"; ?>
+									<option value="<?=$px?>" <?=$f['size'] == $px ? 'selected' : ''?>><?=$px?></option>
+								<?php endfor; ?>
+							<?php endif; ?>
+						</select>
+
+						<?php foreach (['variant', 'align', 'transform', 'decoration'] as $control):
+							$current = $control === 'variant' ? $variant : $f[$control];
+						?>
+							<select class="<?=$control?>-select" name="<?=$control?>_<?=$niv?>" data-change-ajax>
+								<?php foreach ($menu_plantilla['tipografia_controles'][$control] as $value => $label): ?>
+									<option value="<?=$value?>" <?=$current == $value || ($control === 'decoration' && $value === '0' && $current === 'none') ? 'selected' : ''?>><?=t($label)?></option>
+								<?php endforeach; ?>
+							</select>
+						<?php endforeach; ?>
+
+						<div class="web-color-picker" data-nivel="<?=$niv?>" onclick="window.PSColorPicker.open(this)" style="background-color: <?=h($f['color'])?>;"></div>
+						<input type="hidden" name="color_<?=$niv?>" value="<?=h($f['color'])?>" data-change-ajax>
+						<input type="hidden" name="fuente_<?=$niv?>" value="<?=h($f['fuente'])?>">
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</details>
+
+		<input type="hidden" name="manuales_idu" value="<?=$manuales_idu?>">
+	</form>
+</aside>

@@ -1,0 +1,106 @@
+/* Compilado: 2026-05-11 09:59:16 */
+@font-face {
+    font-family: 'Crimson Pro';
+    src: url('/fonts/crimson_pro.woff2');
+}
+
+@font-face {
+    font-family: 'Alegreya Sans';
+    src: url('/fonts/alegreya_sans.woff2');
+}
+
+@font-face {
+    font-family: 'Uncial Antiqua';
+    src: url('/fonts/uncial_antiqua.woff2');
+}
+
+@font-face {
+    font-family: 'Medievalsharp';
+    src: url('/fonts/medievalsharp.woff2');
+}
+
+@font-face {
+    font-family: 'Vollkorn';
+    src: url('/fonts/vollkorn.woff2');
+}
+
+@font-face {
+    font-family: 'Alegreya SC';
+    src: url('/fonts/alegreya_sc.woff2');
+}
+
+@font-face {
+    font-family: 'Alegreya Sans SC';
+    src: url('/fonts/alegreya_sans_sc.woff2');
+}
+
+.plantilla>div article {
+    color: #000033;
+    font-size: 14px;
+    font-family: 'Crimson Pro';
+    background-image: url('/img/usuarios/3fc4b9f1/l.18861ad057f4_pergamino_gris.webp');
+    background-size: cover;
+}
+
+.plantilla>div article small {
+    font-size: 12px;
+    color: #006600;
+    font-family: 'Alegreya Sans';
+}
+
+.plantilla>div h1 {
+    color: #ff0000;
+    font-size: 36px;
+    text-align: center;
+    font-weight: bold;
+    font-style: normal;
+    text-transform: none;
+    font-variant: small-caps;
+    font-family: 'Uncial Antiqua';
+}
+
+.plantilla>div h2 {
+    color: #cc0000;
+    font-size: 30px;
+    text-transform: none;
+    font-variant: small-caps;
+    font-weight: normal;
+    font-style: normal;
+    font-family: 'Medievalsharp';
+}
+
+.plantilla>div h3 {
+    color: #990000;
+    font-size: 24px;
+    font-family: 'Vollkorn';
+    text-transform: none;
+    font-variant: small-caps;
+    font-weight: normal;
+}
+
+.plantilla>div h4 {
+    color: #660000;
+    font-size: 20px;
+    font-family: 'Alegreya SC';
+    text-transform: none;
+    font-variant: small-caps;
+    font-weight: normal;
+}
+
+.plantilla>div h5 {
+    color: #330000;
+    font-size: 18px;
+    font-family: 'Crimson Pro';
+    text-transform: none;
+    font-variant: small-caps;
+}
+
+.plantilla>div h6 {
+    color: #000000;
+    font-size: 16px;
+    font-family: 'Alegreya Sans SC';
+    font-weight: bold;
+    text-transform: none;
+    font-variant: small-caps;
+}
+

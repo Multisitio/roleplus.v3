@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><?=_view::partial('title')?></title>
+        <link href="https://css.kumbia.app/css/kumbia.min.css?v=<?=$version?>" rel="stylesheet" type="text/css">
+        <?=Css::inc()?>
+    </head>
+    <body>    
+        <main class="container">
+            <?=_view::$content?>
+        </main>
+        <script src="https://js.kumbia.app/js/kumbia.min.js?v=<?=$version?>"></script>
+        <?=Js::inc()?>
+    </body>
+</html>

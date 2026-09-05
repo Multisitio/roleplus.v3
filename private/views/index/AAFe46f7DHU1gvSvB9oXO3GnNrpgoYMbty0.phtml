@@ -88,17 +88,17 @@ else {
                 $u = (new Usuarios)->find($usuarios_idu);
                 $role .= " Estás hablando con {$u->apodo}.";
             }
-            $text = (new Respuestas)->preguntarAOpenAi($message, $role);
+            $text = (new Respuestas)->preguntarAIa($message, $role);
         }
         elseif ($bot == 1) {
             if (preg_match('/.*(Aria).*/mu', $message)) {
                 $role = 'Te llamas Aria (la iA de R+, la hermana menor de Sophia), responde a esto si no se trata de sexo, religión, política o fútbol (está prohibido y has de advertirlo si procede).';
                 #$role = 'Te llamas Aria (la iA de R+, la hermana menor de Sophia).';
-                $text = (new Respuestas)->preguntarAOpenAi($message, $role);
+                $text = (new Respuestas)->preguntarAIa($message, $role);
             }
             elseif (preg_match('/.*(fútbol|política|religión).*/mui', $message)) {
                 $role = 'Te llamas Aria (la iA de R+). Evalúa si el siguiente mensaje es motivo de expulsión del grupo sabiendo que no aceptamos comentarios sobre fútbol, política o religión. Si es motivo de expulsión, avísalo y si no lo es advierte que has analizado el mensaje y que es tolerable.';
-                $text = (new Respuestas)->preguntarAOpenAi($message, $role);
+                $text = (new Respuestas)->preguntarAIa($message, $role);
             }
         }
     }

@@ -2,9 +2,11 @@
     "use strict";
 
     function showToast(message, type) {
-        var container = $(".toast-container");
-        if (container.length === 0) {
-            container = $('<div class="toast-container"></div>').appendTo('main');
+        var container = document.querySelector(".toast-container");
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.querySelector('main').appendChild(container);
         }
         var toastId = "toast-js-" + Math.floor(Math.random() * 1000000);
         var title = (type === "error") ? "ERROR" : "INFO";
@@ -16,13 +18,23 @@
             '<h3>' + title + '</h3>' +
             '<p>' + message + '</p>' +
             '</div>';
-        var $toast = $(html).appendTo(container);
-        $toast.find('[data-remove="parent"]').on('click', function () {
-            $toast.fadeOut('slow', function () { $(this).remove(); });
-        });
+            
+        var wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        var toast = wrapper.firstElementChild;
+        container.appendChild(toast);
+        
+        var btn = toast.querySelector('[data-remove="parent"]');
+        if(btn) {
+            btn.addEventListener('click', function() {
+                if(window.Kumbia && Kumbia.fx) Kumbia.fx.fadeOut(toast);
+                else toast.remove();
+            });
+        }
         setTimeout(function () {
-            if ($toast.parent().length > 0) {
-                $toast.fadeOut('slow', function () { $(this).remove(); });
+            if (toast.parentElement) {
+                if(window.Kumbia && Kumbia.fx) Kumbia.fx.fadeOut(toast);
+                else toast.remove();
             }
         }, 4000);
     }
@@ -56,14 +68,14 @@
         var lastData = takeSnapshot(watched);
         var timer = null;
         var saving = false;
-        var isSubmitting = false; // Flag para evitar el aviso al salvar manualmente
+        var isSubmitting = false;
 
         form.addEventListener("submit", function() {
             isSubmitting = true;
         });
 
         window.addEventListener("beforeunload", function (e) {
-            if (isSubmitting) return; // Si estamos enviando el form, no avisamos
+            if (isSubmitting) return;
 
             var currentSnapshot = takeSnapshot(watched);
             if (timer || currentSnapshot !== lastData) {

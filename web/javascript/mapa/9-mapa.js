@@ -19,8 +19,8 @@ var bounds = [
 ];
 var image = L.imageOverlay(image_selected, bounds).addTo(map);
 
-var window_height = $(window).height();
-var window_width = $(window).width();
+var window_height = window.innerHeight;
+var window_width = window.innerWidth;
 var image_set_top = parseInt(image_height) - window_height + 50;
 map.setView([image_set_top, window_width - 50], -1);
 
@@ -45,24 +45,31 @@ var marcadores = [];
 var popup = L.popup();
 
 function onMapClick(e) {
+    var pContent = document.querySelector('.popup');
     popup
         .setLatLng(e.latlng)
-        .setContent($('.popup').html())
+        .setContent(pContent ? pContent.innerHTML : '')
         .openOn(map);
 
-    $('[name="lat"]').val(e.latlng.lat);
-    $('[name="lng"]').val(e.latlng.lng);
+    var tLat = document.querySelector('[name="lat"]');
+    var tLng = document.querySelector('[name="lng"]');
+    if(tLat) tLat.value = e.latlng.lat;
+    if(tLng) tLng.value = e.latlng.lng;
 }
 map.on('contextmenu', onMapClick);
 
-$('body').on('click', '.toggleMarkers', function() {
-    $('.leaflet-marker-pane, .leaflet-shadow-pane, .leaflet-popup-pane').toggle();
+Kumbia.utils.on('click', '.toggleMarkers', function() {
+    var panes = document.querySelectorAll('.leaflet-marker-pane, .leaflet-shadow-pane, .leaflet-popup-pane');
+    for(var i=0; i<panes.length; i++) {
+        panes[i].style.display = panes[i].style.display === 'none' ? '' : 'none';
+    }
 });
 
-$('body').on('keyup', '.seeker', function() {
-    $('.leaflet-marker-pane, .leaflet-shadow-pane, .leaflet-popup-pane').show();
+Kumbia.utils.on('keyup', '.seeker', function() {
+    var panes = document.querySelectorAll('.leaflet-marker-pane, .leaflet-shadow-pane, .leaflet-popup-pane');
+    for(var i=0; i<panes.length; i++) panes[i].style.display = '';
 
-    var txt = $('.seeker').val();
+    var txt = this.value;
 
     if (txt == '' || txt.length < 3) {
         marcadores.forEach(function(marcador, id) {

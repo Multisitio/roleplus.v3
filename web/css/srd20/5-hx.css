@@ -1,21 +1,22 @@
-.resultado h1,
-.resultado h2,
-.resultado h3,
-.resultado h4 {
+.plantilla h1,
+.plantilla h2,
+.plantilla h3,
+.plantilla h4 {
     font-family: 'MrEaves';
     font-weight: 800;
     color: var(--color-text-header);
 }
 
-.resultado h1 {
+.plantilla h1 {
     font-size: 34px;
     line-height: 1em;
     position: relative;
     z-index: 1;
 }
 
-.resultado :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)::first-letter {
-    color: rgba(0, 0, 0, 0);
+.plantilla :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)::first-letter {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
     float: left;
     font-family: 'SolberaImitation';
     font-size: 132px;
@@ -30,43 +31,43 @@
     -webkit-background-clip: text;
 }
 
-.resultado :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)+* {
+.plantilla :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)+* {
     clear: both;
 }
 
-.resultado h2 {
+.plantilla h2 {
     font-size: 26px;
     line-height: .988em;
 }
 
-.resultado h3 {
+.plantilla h3 {
     font-size: 22px;
     border-bottom: 2px solid var(--color-border-primary);
     line-height: .995em;
 }
 
-/*.resultado *>:is(h1, h2, h3, h4, h5, h6):first-child {
+/*.plantilla *>:is(h1, h2, h3, h4, h5, h6):first-child {
     padding-top: 0;
 }*/
 
-.resultado h4 {
+.plantilla h4 {
     font-size: 16px;
 }
 
-.resultado h3+h4 {
+.plantilla h3+h4 {
     padding-top: 0;
 }
 
-.resultado h5 {
+.plantilla h5 {
     font-family: 'WalterTurncoat';
     font-size: 13px;
 }
 
-.resultado h6 {
+.plantilla h6 {
     font-family: 'WalterTurncoat';
     font-size: 11px;
 }
 
-.resultado hr {
+.plantilla hr {
     border-color: var(--color-accent-gold);
 }

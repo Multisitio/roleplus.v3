@@ -1,6 +1,4 @@
 <?php
-require VENDOR_PATH . 'phpmailer/phpmailer/src/PHPMailer.php';
-use PHPMailer\PHPMailer\PHPMailer;
 
 /********************************************************************
  * UTILIDADES
@@ -24,6 +22,13 @@ function replaceBrokenLinks(string $html): string
     foreach ($links as $a) {
         $href = $a->getAttribute('href');
         if (!$href) continue;
+
+        // Excluir mailto:, tel: y links internos (autenticados o no-HTTP)
+        if (
+            str_starts_with($href, 'mailto:') ||
+            str_starts_with($href, 'tel:')    ||
+            str_contains($href, 'roleplus.app')
+        ) continue;
 
         $ch = curl_init($href);
         curl_setopt_array($ch, [
@@ -139,7 +144,7 @@ ob_start();
 $titulo = t('Boletín de R+') . ' | ' . t('Semana') . ' ' . date('W', strtotime('-1 week')) . ' (' . date('Y') . ')';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=yes">
@@ -152,6 +157,8 @@ $titulo = t('Boletín de R+') . ' | ' . t('Semana') . ' ' . date('W', strtotime(
     </style>
 </head>
 <body>
+<!-- Preheader: visible en la vista previa del cliente de correo, oculto en el cuerpo -->
+<span style="display:none;font-size:1px;color:#ffe;max-height:0;overflow:hidden;opacity:0;">Un resumen de las mejores publicaciones de la semana en ROLEplus &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</span>
 <header id="indice">
     <h1><?= $titulo ?></h1>
     <a href="<?= DOMAIN ?>">
@@ -196,14 +203,12 @@ $titulo = t('Boletín de R+') . ' | ' . t('Semana') . ' ' . date('W', strtotime(
         <br>
         <?php list($foto, $enlace) = getFoto($pub, $vistas_previas); ?>
         <?php if ($foto): ?>
-            <picture>
-                <?php if (str_ends_with($foto, '.mp4')): ?>
-                    <video width="384" controls preload="metadata"><source src="<?= $foto ?>" type="video/mp4"></video>
-                <?php else: ?>
-                    <img alt="<?= htmlspecialchars($foto, ENT_QUOTES) ?>" src="<?= $foto ?>" width="384">
-                <?php endif; ?>
-                <?php if ($enlace): ?><br><figcaption><small><a href="<?= $enlace ?>"><?= $enlace ?></a></small></figcaption><?php endif; ?>
-            </picture>
+            <?php if (str_ends_with($foto, '.mp4')): ?>
+                <video width="384" controls preload="metadata"><source src="<?= $foto ?>" type="video/mp4"></video>
+            <?php else: ?>
+                <img alt="<?= htmlspecialchars($pub->titulo, ENT_QUOTES) ?>" src="<?= $foto ?>" width="384" style="display:block;max-width:100%;height:auto;">
+            <?php endif; ?>
+            <?php if ($enlace): ?><br><small><a href="<?= $enlace ?>"><?= $enlace ?></a></small><?php endif; ?>
         <?php endif; ?>
         <?php if ($pub->comentarios): ?><br><a href="<?= $url ?>"><b><?= t('Comentarios') ?>:</b> <?= $pub->comentarios ?></a><?php endif; ?>
     </blockquote>
@@ -214,6 +219,16 @@ $titulo = t('Boletín de R+') . ' | ' . t('Semana') . ' ' . date('W', strtotime(
 </article>
 <br><hr>
 <?php endforeach; ?>
+
+<!-- CTA Telegram -->
+<div style="text-align:center;margin:32px 0 40px;">
+    <a href="https://t.me/+Kw24CgNrEMFlNjg8"
+       style="background:#cc0000;color:#ffffff;font-family:monospace;font-size:16px;font-weight:bold;text-decoration:none;padding:14px 32px;border-radius:4px;display:inline-block;letter-spacing:0.5px;">
+        Únete al canal de Telegram
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#ffffff" style="vertical-align:middle;position:relative;top:-1px;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+    </a>
+</div>
+
 </main>
 
 <footer>
@@ -236,6 +251,12 @@ if ($accion === 'enviar') {
     $year    = date('y');
     $week    = date('W', strtotime('-1 week'));
     $boletin = "boletin-{$year}-{$week}";
+    $delayMinMicroseconds = 3 * 1000 * 1000;
+    $delayMaxMicroseconds = 5 * 1000 * 1000;
+    $totalRecipients = count($usuarios);
+    $sentCount = 0;
+    $failedCount = 0;
+    $startedAt = microtime(true);
 
     // -----------------------------------------------------------
     // ARRAY DE USUARIOS DE PRUEBA (descomentar para test)
@@ -246,44 +267,43 @@ if ($accion === 'enviar') {
     $usuarios[0]->email = 'distrotuz@gmail.com';
     $usuarios[0]->token = 'token';*/
 
-    foreach ($usuarios as $u) {
-        if (!filter_var($u->email, FILTER_VALIDATE_EMAIL)) {
-            continue; // o registrar error
+    foreach ($usuarios as $index => $u) {
+        if (filter_var($u->email, FILTER_VALIDATE_EMAIL)) {
+            $uns  = DOMAIN . 'usuarios/baja_del_boletin/' . $u->token;
+            $body = replacePlaceholders($html, $uns, $u->email, $boletin);
+
+            $sent = _mail::send($u->email, $titulo, $body, [
+                'List-Unsubscribe' => "<mailto:baja@roleplus.app?subject=baja-del-boletin>, <{$uns}>",
+                'List-Unsubscribe-Post' => 'List-Unsubscribe=One-Click',
+            ]);
+
+            if ($sent) {
+                $sentCount++;
+            } else {
+                $failedCount++;
+            }
+        } else {
+            $failedCount++;
         }
 
-        $uns  = DOMAIN . 'usuarios/baja_del_boletin/' . $u->token;
-        $body = replacePlaceholders($html, $uns, $u->email, $boletin);
-
-        // Dominio interno → usa wrapper _mail
-        if (str_ends_with($u->email, '@roleplus.app')) {
-            _mail::send($u->email, $titulo, $body);
-            continue;
+        $processed = $index + 1;
+        if ($processed % 100 === 0 || $processed === $totalRecipients) {
+            error_log(sprintf(
+                'ROLEplus newsletter %s: %d/%d processed, %d sent, %d failed, %ds elapsed.',
+                $boletin,
+                $processed,
+                $totalRecipients,
+                $sentCount,
+                $failedCount,
+                (int) (microtime(true) - $startedAt)
+            ));
         }
 
-        $mail = new PHPMailer(true);
-        try {
-            $mail->CharSet = 'UTF-8';
-            $mail->setFrom('ia@roleplus.app');
-            $mail->addAddress($u->email);
-            $mail->Subject = $titulo;
-            $mail->Body    = $body;
-            $mail->isHTML(true);
-
-            // DKIM
-            $mail->DKIM_domain   = 'roleplus.app';
-            $mail->DKIM_selector = 'default';
-            $mail->DKIM_private  = '/etc/opendkim/keys/roleplus.app/default.private';
-            $mail->DKIM_identity = $mail->From;
-
-            // List-Unsubscribe
-            $mail->addCustomHeader('List-Unsubscribe', "<{$uns}>");
-
-            $mail->send();
-        } catch (Throwable $e) {
-            error_log('Fallo envío a ' . $u->email . ': ' . $e->getMessage());
+        // The local Postfix queue handles delivery. A small random delay keeps
+        // enqueueing smooth without turning a weekly bulletin into a 13-hour job.
+        if ($processed < $totalRecipients) {
+            usleep(random_int($delayMinMicroseconds, $delayMaxMicroseconds));
         }
-
-        usleep(36 * 1000 * 1000); // 36 s de throttle
     }
 }
 

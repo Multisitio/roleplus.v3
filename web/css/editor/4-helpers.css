@@ -128,7 +128,7 @@
 }
 
 .pa10 {
-    padding: 7.5pt;
+    padding: 10px;
 }
 
 
@@ -188,4 +188,14 @@ table.td2-align-right td:nth-child(2) {
 
 .nowrap {
     white-space: nowrap;
+}
+
+/* WIDTHS */
+
+.w100 {
+    width: 100%;
+}
+
+.w50 {
+    width: 50%;
 }

@@ -1,4 +1,4 @@
-﻿private/config/
+private/config/
 private/temp/
 .vscode/
 *.ini
@@ -9,3 +9,13 @@ __OLD__/
 __OLD__*
 **/__OLD__*
 web/img/
+scratch/
+scratch_*.php
+scratch_*.html
+debug_*.php
+debug_*.html
+test_*.php
+test_*.html
+test_*.js
+*.code-workspace
+upload.py

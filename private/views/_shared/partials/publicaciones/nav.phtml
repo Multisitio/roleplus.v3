@@ -16,7 +16,7 @@ $apodo = (string)(((is_object($usuario) && !empty($usuario->apodo)) ? $usuario->
 
 	<a class="buscar publicaciones xs0" href="/" title="<?=t('Publicaciones')?>">
 		<img alt="<?=t('Publicaciones')?>" loading="lazy" src="/img/icons/home.svg" width="30" height="30">
-		<span data-ch="publicaciones_nuevas"><?php include APP_PATH . 'views/registrados/publicaciones/nuevas.phtml'; ?></span>
+		<span <?= Session::get('idu') ? 'data-ch="publicaciones_nuevas"' : '' ?>><?php include APP_PATH . 'views/registrados/publicaciones/nuevas.phtml'; ?></span>
 	</a>
 
 	<button class="buscar hide transparent" data-toggle=".buscar, nav a:last-child"><img alt="<?=t('No buscar')?>" loading="lazy" src="/img/icons/arrow-left.svg" width="30" height="30"></button>
@@ -63,7 +63,7 @@ $apodo = (string)(((is_object($usuario) && !empty($usuario->apodo)) ? $usuario->
 	<!-- notificaciones: canal estable con idu de sesión (fallback: '0') -->
 	<a class="buscar notificaciones" data-ajax=".ajax.show" data-style="body, overflow:hidden" rel="nofollow" href="/registrados/notificaciones" title="<?=t('Notificaciones')?>">
 		<img alt="<?=t('Notificaciones')?>" loading="lazy" src="/img/icons/bell.svg" width="30" height="30">
-		<span data-ch="notificaciones_<?=($idu !== '') ? $idu : '0'?>"><?php include APP_PATH . 'views/registrados/notificaciones/contar.phtml'; ?></span>
+		<span <?= Session::get('idu') ? 'data-ch="notificaciones_' . Session::get('idu') . '"' : '' ?>><?php include APP_PATH . 'views/registrados/notificaciones/contar.phtml'; ?></span>
 	</a>
 
 	<!-- perfil: si no hay apodo, cae a /usuarios para evitar 404 -->

@@ -104,4 +104,36 @@ class IndexController extends AppController
 
     public function prueba_google() {
     }
+
+    public function test_font_download()
+    {
+        View::select(null, null);
+        $fuente = Input::get('fuente') ?: 'Creepster';
+        echo "Intentando descargar: $fuente\n";
+        $res = Plantillas::descargarFuente($fuente);
+        echo "Resultado: " . ($res ? "OK" : "FALLO") . "\n";
+        print_r(Session::get('toast'));
+    }
+
+    public function test_manual()
+    {
+        View::select(null, null);
+        $manuales_idu = '95eabe075659';
+        $manual = (new Manuales)->uno($manuales_idu);
+        if (!$manual->idu) {
+            echo "Manual no encontrado.\n";
+            return;
+        }
+        echo "Manual: " . $manual->nombre . "\n";
+        echo "Plantilla: " . $manual->plantilla . "\n";
+        $plantilla = (new Plantillas)->obtenerOCrearPorNombre($manual->plantilla, $manual->usuarios_idu, $manual->plantilla);
+        echo "Plantilla IDU: " . $plantilla->idu . "\n";
+        $ajustes = $plantilla->getSettings();
+        echo "Ajustes Dropcap:\n";
+        print_r($ajustes->tipografia['dropcap'] ?? null);
+        echo "\nDropcap family: " . $ajustes->dropcap_family . "\n";
+        echo "Dropcap size: " . $ajustes->dropcap_size . "\n";
+        echo "CSS Fuentes:\n" . $ajustes->css_fuentes . "\n";
+        echo "CSS URL: " . $plantilla->getCssUrl() . "\n";
+    }
 }

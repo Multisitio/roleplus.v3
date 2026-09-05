@@ -1,0 +1,25 @@
+.plantilla :is(ol, ul) {
+    padding-left: 15px;
+}
+
+.plantilla ul {
+    list-style: none;
+}
+
+.plantilla ul>li::before {
+    content: "✦ ";
+    margin-left: -15px;
+}
+
+.plantilla ul>li li::before {
+    content: "⮞ ";
+    margin-left: -15px;
+}
+
+.plantilla ul.checkbox li::before {
+    content: "❑ ";
+}
+
+.plantilla ul.radio li::before {
+    content: "🔾 ";
+}

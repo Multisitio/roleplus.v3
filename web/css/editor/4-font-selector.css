@@ -1,0 +1,332 @@
+aside.template .template-panel {
+    border-top: 1px solid var(--primary-filter);
+    text-align: right;
+}
+
+aside.template .template-panel input {
+    text-align: right;
+}
+
+aside.template .template-panel::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 0.2s ease, content-visibility 0.2s ease allow-discrete;
+}
+
+aside.template .template-panel[open]::details-content {
+    block-size: auto;
+}
+
+aside.template .template-panel summary {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    font-weight: 700;
+    gap: 5px;
+    justify-content: flex-end;
+    list-style: none;
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+aside.template .template-panel summary::-webkit-details-marker {
+    display: none;
+}
+
+aside.template .template-panel summary::after {
+    content: '+';
+    display: inline-flex;
+    justify-content: center;
+    width: 8px;
+}
+
+aside.template .template-panel[open] summary::after {
+    content: '–';
+}
+
+aside.template .template-fonts>label {
+    display: block;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+aside.template .template-fonts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+aside.template .grid-header {
+    display: none;
+}
+
+aside.template section[data-nivel] {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 15px 10px;
+    border-top: 1px solid var(--primary-filter);
+}
+
+aside.template section[data-nivel]>a {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    font-size: 0.95em;
+    border: 1px solid var(--primary-filter) !important;
+    border-radius: 4px;
+    padding: 0 10px !important;
+    background: var(--primary-filter) !important;
+    height: 42px;
+    box-sizing: border-box;
+    position: relative;
+    text-decoration: none !important;
+    margin: 0 !important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    /* Previsualización dinámica usando las variables de la plantilla */
+    font-family: var(--font-family, inherit);
+    color: var(--font-color, inherit);
+    font-weight: var(--font-weight, normal);
+    font-style: var(--font-style, normal);
+    text-transform: var(--font-transform, none);
+    font-variant: var(--font-variant, normal);
+}
+
+aside.template section[data-nivel] .font-size-select {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+aside.template section[data-nivel] .web-color-picker {
+    grid-column: 4;
+    grid-row: 1;
+}
+
+aside.template section[data-nivel] .font-variant-select {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+aside.template section[data-nivel] .text-transform-select {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+aside.template section[data-nivel] .text-align-select {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+aside.template section[data-nivel] .text-decoration-select {
+    grid-column: 4;
+    grid-row: 2;
+}
+
+/* Aplicar variables específicas por nivel */
+aside.template section[data-nivel="h1"]>a {
+    --font-family: var(--h1-family);
+    --font-color: var(--h1-color);
+    --font-weight: var(--h1-weight);
+    --font-style: var(--h1-style);
+    --font-transform: var(--h1-transform);
+    --font-variant: var(--h1-variant);
+}
+
+aside.template section[data-nivel="h2"]>a {
+    --font-family: var(--h2-family);
+    --font-color: var(--h2-color);
+    --font-weight: var(--h2-weight);
+    --font-style: var(--h2-style);
+    --font-transform: var(--h2-transform);
+    --font-variant: var(--h2-variant);
+}
+
+aside.template section[data-nivel="h3"]>a {
+    --font-family: var(--h3-family);
+    --font-color: var(--h3-color);
+    --font-weight: var(--h3-weight);
+    --font-style: var(--h3-style);
+    --font-transform: var(--h3-transform);
+    --font-variant: var(--h3-variant);
+}
+
+aside.template section[data-nivel="h4"]>a {
+    --font-family: var(--h4-family);
+    --font-color: var(--h4-color);
+    --font-weight: var(--h4-weight);
+    --font-style: var(--h4-style);
+    --font-transform: var(--h4-transform);
+    --font-variant: var(--h4-variant);
+}
+
+aside.template section[data-nivel="h5"]>a {
+    --font-family: var(--h5-family);
+    --font-color: var(--h5-color);
+    --font-weight: var(--h5-weight);
+    --font-style: var(--h5-style);
+    --font-transform: var(--h5-transform);
+    --font-variant: var(--h5-variant);
+}
+
+aside.template section[data-nivel="h6"]>a {
+    --font-family: var(--h6-family);
+    --font-color: var(--h6-color);
+    --font-weight: var(--h6-weight);
+    --font-style: var(--h6-style);
+    --font-transform: var(--h6-transform);
+    --font-variant: var(--h6-variant);
+}
+
+aside.template section[data-nivel="body"]>a {
+    --font-family: var(--body-family);
+    --font-color: var(--body-color);
+    --font-weight: var(--body-weight);
+    --font-style: var(--body-style);
+    --font-transform: var(--body-transform);
+    --font-variant: var(--body-variant);
+}
+
+aside.template section[data-nivel="small"]>a {
+    --font-family: var(--small-family);
+    --font-color: var(--small-color);
+    --font-weight: var(--small-weight);
+    --font-style: var(--small-style);
+    --font-transform: var(--small-transform);
+    --font-variant: var(--small-variant);
+}
+
+/* Subrayado de previsualización */
+aside.template section[data-nivel]>a::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-top: 0 solid currentColor;
+    /* Por defecto sin grosor */
+}
+
+aside.template section[data-nivel="h1"]>a::after {
+    border-top-width: var(--h1-decoration, 0);
+}
+
+aside.template section[data-nivel="h2"]>a::after {
+    border-top-width: var(--h2-decoration, 0);
+}
+
+aside.template section[data-nivel="h3"]>a::after {
+    border-top-width: var(--h3-decoration, 0);
+}
+
+aside.template section[data-nivel="h4"]>a::after {
+    border-top-width: var(--h4-decoration, 0);
+}
+
+aside.template section[data-nivel="h5"]>a::after {
+    border-top-width: var(--h5-decoration, 0);
+}
+
+aside.template section[data-nivel="h6"]>a::after {
+    border-top-width: var(--h6-decoration, 0);
+}
+
+/* Cuadradito de color */
+aside.template .web-color-picker {
+    border-radius: 4px;
+    border: 1px solid var(--primary-filter);
+    cursor: pointer;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
+    width: 100%;
+    height: 42px;
+}
+
+aside.template section[data-nivel="h1"] .web-color-picker {
+    background-color: var(--h1-color, transparent);
+}
+
+aside.template section[data-nivel="h2"] .web-color-picker {
+    background-color: var(--h2-color, transparent);
+}
+
+aside.template section[data-nivel="h3"] .web-color-picker {
+    background-color: var(--h3-color, transparent);
+}
+
+aside.template section[data-nivel="h4"] .web-color-picker {
+    background-color: var(--h4-color, transparent);
+}
+
+aside.template section[data-nivel="h5"] .web-color-picker {
+    background-color: var(--h5-color, transparent);
+}
+
+aside.template section[data-nivel="h6"] .web-color-picker {
+    background-color: var(--h6-color, transparent);
+}
+
+aside.template section[data-nivel="body"] .web-color-picker {
+    background-color: var(--body-color, transparent);
+}
+
+aside.template section[data-nivel="small"] .web-color-picker {
+    background-color: var(--small-color, transparent);
+}
+
+aside.template section[data-nivel]>a:hover {
+    background: var(--primary-filter, #fffbe8);
+    border-color: var(--primary, #8a6a15);
+}
+
+aside.template section[data-nivel] select {
+    background: var(--primary-filter, #fffbe8);
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: var(--primary, #6b5000);
+    display: block;
+    height: 42px;
+    line-height: 42px;
+    margin-bottom: 0;
+    min-height: 42px;
+    padding: 0 8px;
+}
+
+body.modal-open,
+body.aside-open {
+    overflow: hidden !important;
+}
+
+.font-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+}
+
+.font-item {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 12px;
+    transition: 0.2s;
+}
+
+.font-item:hover {
+    background: var(--primary-filter);
+    border-color: var(--primary);
+}
+
+.font-item.active {
+    background: var(--primary-filter);
+    border-color: var(--primary);
+    font-weight: bold;
+}

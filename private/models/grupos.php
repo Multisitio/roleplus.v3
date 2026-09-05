@@ -82,21 +82,17 @@ class Grupos extends LiteRecord
 			return ['error' => $file['error']];
 		}
 
-		$idu = _str::uid();
-
-		$ext = explode('/', $file['type'], 2)[1];
-
-		$name = empty($new_name) ? $key . "_$idu.$ext" : $new_name;
-
-		$bool = move_uploaded_file($file['tmp_name'], "$dir/$name");
-
-		#_var::die([$_FILES[$key], "$dir/$name", $r]);
-		
-		if ( ! $bool) {
-			return ['error' => $bool];
+		$name = empty($new_name) ? $key . '_' . _str::uid() : pathinfo($new_name, PATHINFO_FILENAME);
+		try {
+			$result = MediaProcessor::processUpload($file, $dir, [
+				'basename' => $name,
+				'animated_gif' => 'webp',
+			]);
+			return $result['name'];
+		} catch (Throwable $e) {
+			error_log('Group media upload failed: ' . $e->getMessage());
+			return ['error' => $e->getMessage()];
 		}
-
-		return $name;
 	}
 
     #

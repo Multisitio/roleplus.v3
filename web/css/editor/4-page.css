@@ -5,41 +5,46 @@ html {
 body {
     background: grey;
     counter-reset: page;
-    padding: 18.75pt 18.75pt 0;
-    width: fit-content;
+    padding: 25px 25px 0;
 }
-
-/*main {
-    width: min-content;
-}*/
 
 :where(a) {
     color: var(--link);
     text-decoration: none;
 }
 
-.resultado>div {
-    margin-bottom: 18.75pt;
+main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px 0;
 }
 
-article {
-    overflow: hidden;
+main>div {
     position: relative;
+}
+
+header {
+    padding: 0;
 }
 
 section {
     clear: both;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
-.editor ul {
-    border-left: 3pt solid lightgrey;
+body> :not(main) ul {
+    border-left: 4px solid lightgrey;
     list-style: none;
-    padding-left: 3.75pt;
+    padding-left: 5px;
 }
 
-/* 8,5" (816px) x 11" (1056px) -> 8,75" x 11,25" */
+/* Page Sizes */
+
+article {
+    overflow: hidden;
+}
+
 
 .a4.landscape article {
     height: 21cm;
@@ -71,38 +76,26 @@ section {
     width: 8.5in;
 }
 
-/*.letter.portrait.bleed article {
-    height: 11.25in;
-    width: 8.75in;
-    padding: 0.551181in 0.748031in 0.433071in;
-}*/
-
-.letter.portrait>div {
+.editor.letter.portrait main>div {
     background-color: white;
 }
 
-/* BUTTON EDIT RULE */
-
-.resultado>div {
-    position: relative;
-}
-
-.resultado>div a[data-ajax=".ajax.show"] {
+/*a[data-ajax=".ajax.show"] {
     background: white;
     border: 0;
     border-radius: 50%;
-    box-shadow: 0 0 7.5pt 0.75pt #666;
+    box-shadow: 0 0 10px 1px #666;
     cursor: pointer;
-    padding: 7.5pt;
+    padding: 10px;
     position: absolute;
-    right: -7.5pt;
-    top: -7.5pt;
+    right: -10px;
+    top: -10px;
     z-index: 2;
-}
+}*/
 
 /* Booklet mode for screen preview */
 
-.booklet-mode .resultado {
+.booklet-mode main {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -112,7 +105,13 @@ section {
     margin: 0 auto;
 }
 
-.booklet-mode .blank-page article {
+.booklet-mode main .blank-page article {
     background: white !important;
     box-shadow: none !important;
+}
+
+@media (display-mode: fullscreen) {
+    nav, .scroll-down-hide {
+        display: none !important;
+    }
 }

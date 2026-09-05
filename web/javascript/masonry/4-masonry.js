@@ -15,10 +15,10 @@
 
 	// Calcula y aplica el span de filas de un item en un container (usa row-gap real)
 	function applyRowSpan(container, item) {
-		if (!container || !item) return; 
+		if (!container || !item) return;
 
 		// Fuerza layout antes de medir
-		void item.offsetHeight; 
+		void item.offsetHeight;
 
 		const cs = window.getComputedStyle(container);
 		let row = parseFloat(cs.gridAutoRows);
@@ -46,6 +46,16 @@
 	function layoutContainer(container) {
 		if (!container) return;
 		const items = container.querySelectorAll(":scope > *");
+
+		// En una sola columna Masonry no aporta nada. Evitamos decenas de
+		// mediciones sincronas y relayouts durante la carga de imagenes.
+		const columns = window.getComputedStyle(container).gridTemplateColumns;
+		if (!columns || columns.trim().split(/\s+/).length < 2) {
+			for (let i = 0; i < items.length; i++) {
+				items[i].style.removeProperty("--row-span");
+			}
+			return;
+		}
 		for (let i = 0; i < items.length; i++) {
 			applyRowSpan(container, items[i]);
 		}
@@ -76,6 +86,8 @@
 	// Recorre y engancha todos los items actuales del container
 	function attachItems(container) {
 		if (!container) return;
+		const columns = window.getComputedStyle(container).gridTemplateColumns;
+		if (!columns || columns.trim().split(/\s+/).length < 2) return;
 		const items = container.querySelectorAll(":scope > *");
 		for (let i = 0; i < items.length; i++) {
 			observeItem(container, items[i]);
@@ -169,6 +181,7 @@
 	// Resize de ventana: sin timers; el propio ResizeObserver por item cubre la mayoría de casos.
 	// Aun así, un relayout global garantiza coherencia cuando cambian breakpoints/columnas.
 	window.addEventListener("resize", function () {
+		containers.forEach(function (c) { attachItems(c); });
 		layoutAll();
 	});
 
@@ -185,4 +198,4 @@
 	window.MasonryGrid = {
 		update: function () { scan(); layoutAll(); }
 	};
-})();
+})(); 

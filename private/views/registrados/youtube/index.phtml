@@ -70,7 +70,7 @@ Css::add('rss.min');
     <?php foreach ($entradas as $ent): ?>
         <article>
             <header class="grid">
-                <h2 class="xs10">
+                <h2 class="xs10" id="<?=$ent->idu?>">
                     <a href="<?=$ent->enlace?>" rel="noopener noreferrer" target="_blank"><?=$ent->titulo?></a>
                 </h2>
                 <small class="xs2 align-right mt10">
@@ -102,11 +102,11 @@ Css::add('rss.min');
 
             <div class="youtube-player" data-id="<?=_var::getUrlVar($ent->enlace)?>"></div>
 
-            <footer class="grid auto">
+            <footer id="youtube-footer-<?=$ent->idu?>" class="grid auto">
                 <?php if ($ent->entrada_publicada): ?>
                     <p><?=t('Esta entrada ya está publicada.')?></p>
                 <?php else: ?>
-                    <a role="button" data-ajax=".ajax.show" href="/registrados/youtube/publicar/<?=$ent->idu?>" rel="nofollow"><?=t('Publicar')?></a>
+                    <a role="button" data-ajax="#youtube-footer-<?=$ent->idu?>" onclick="this.style.pointerEvents='none'; this.innerText='<?=t('Publicando…')?>';" href="/registrados/youtube/publicar/<?=$ent->idu?>" rel="nofollow"><?=t('Publicar')?></a>
 
                     <a role="button" data-ajax=".ajax.show" data-bg_color href="/registrados/publicaciones/desde_youtube/<?=$ent->idu?>" rel="nofollow"><?=t('Editando')?></a>
                 <?php endif; ?>

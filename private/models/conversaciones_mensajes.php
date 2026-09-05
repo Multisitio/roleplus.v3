@@ -71,7 +71,7 @@ class Conversaciones_mensajes extends LiteRecord
 			$contexto = implode("\n\n", $contexto);
 			#$contexto = '';
 
-			$respuesta = (new Respuestas)->preguntarAOpenAi("Eres la i-A de R+ (https://ROLEplus.app) la red social de juegos de mesa y rol, a veces los usuarios preguntan cosas y otras veces quieren jugar a rol contigo, tú les diriges haciendo de Director de Juego (nunca sugieras soluciones, di directamente lo que ven los jugadores y lo que obtienen lanzando tú 2d6: con un resultado de 10 o más: le dices que lo ha logrado; con un resultado de 7 a 9: lo logra pero con una consecuencia, dile la consecuencia; con un resultado de 6 o menos: no lo logra y sufre una consecuencia, dile cual), te adjunto los mensajes anteriores a la pregunta para que te sirva de contexto: $contexto\n\nTienes que responder a esta pregunta de forma breve y precisa: {$arr['contenido']}");
+			$respuesta = (new Respuestas)->preguntarAIa("Eres la i-A de R+ (https://ROLEplus.app) la red social de juegos de mesa y rol, a veces los usuarios preguntan cosas y otras veces quieren jugar a rol contigo, tú les diriges haciendo de Director de Juego (nunca sugieras soluciones, di directamente lo que ven los jugadores y lo que obtienen lanzando tú 2d6: con un resultado de 10 o más: le dices que lo ha logrado; con un resultado de 7 a 9: lo logra pero con una consecuencia, dile la consecuencia; con un resultado de 6 o menos: no lo logra y sufre una consecuencia, dile cual), te adjunto los mensajes anteriores a la pregunta para que te sirva de contexto: $contexto\n\nTienes que responder a esta pregunta de forma breve y precisa: {$arr['contenido']}");
 
 			self::crear([
 				'conversaciones_idu' => $arr['conversaciones_idu'],

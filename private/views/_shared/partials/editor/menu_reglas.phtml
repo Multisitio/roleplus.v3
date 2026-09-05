@@ -1,0 +1,12 @@
+<aside class="editor index hide pa10">
+	<button data-hide="aside">
+		<?=t('Contraer')?>
+		<?=Ku::icon('arrow-right')?>
+	</button>		
+
+	<ul id="menu-reglas-sortable">
+		<?php foreach($reglas as $reg): ?>
+			<li data-idu="<?=$reg->idu?>"><a data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$reg->manuales_idu?>/<?=$reg->idu?>?t=<?=time()?>"><?=$reg->nombre?> <sup class="nowrap regla-peso"><?=$reg->peso?></sup></a></li>
+		<?php endforeach; ?>
+	</ul>
+</aside>

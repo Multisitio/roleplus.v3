@@ -104,6 +104,7 @@ trait UsuariosAdmin
     public function paraBoletin() : array
     {
         $usuarios_sin_boletin = (new Configuracion)->usuariosPorClave('no_al_boletin');
+        $emails_incluidos = [];
 
         $usuarios = $this->todos([
             'cols' => 'idu, token, email',
@@ -114,6 +115,13 @@ trait UsuariosAdmin
             if ( ! empty($usuarios_sin_boletin[$usu->idu])) {
                 continue;
             }
+
+            $usu->email = strtolower(trim((string) $usu->email));
+            if (!filter_var($usu->email, FILTER_VALIDATE_EMAIL) || isset($emails_incluidos[$usu->email])) {
+                continue;
+            }
+
+            $emails_incluidos[$usu->email] = true;
             $usuarios_con_boletin[] = $usu;
         }
 

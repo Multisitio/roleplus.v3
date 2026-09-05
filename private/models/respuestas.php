@@ -12,7 +12,7 @@ class Respuestas extends LiteRecord
 			return '';
 		}
 
-		if ( ! stristr($arr['pregunta'], 'openai')) {
+		if ( ! stristr($arr['pregunta'], 'ia')) {
 			$respuestas = self::responderConLike($pregunta);
 			if (is_array($respuestas) && count($respuestas) == 1) {
 				Session::setArray('toast', t('Respuesta rápida.'));
@@ -26,7 +26,7 @@ class Respuestas extends LiteRecord
 			}
 		}
 
-		$respuesta = self::responderConOpenAi($pregunta);
+		$respuesta = self::responderConIa($pregunta);
 		Session::setArray('toast', t('Respuesta elaborada.'));
 
 		return $respuesta;
@@ -54,9 +54,9 @@ class Respuestas extends LiteRecord
 	}
 	
 	# 1.3
-	public function responderConOpenAi($pregunta)
+	public function responderConIa($pregunta)
 	{
-		$respuesta = self::preguntarAOpenAi($pregunta);
+		$respuesta = self::preguntarAIa($pregunta);
 
 		$vals[] = Session::get('idu');
 		$vals[] = $pregunta;
@@ -75,13 +75,13 @@ class Respuestas extends LiteRecord
 	}
 
 	# 1.3.1
-	public function preguntarAOpenAi($pregunta, $rol = '', $nombre = '')
+	public function preguntarAIa($pregunta, $rol = '', $nombre = '')
 	{
 		$time_beg = microtime(1);
-		$respuestas = _openai::ask($pregunta, $rol, $nombre);
+		$respuestas = _ia::ask($pregunta, $rol, $nombre);
 		$time_end = microtime(1) - $time_beg;
 
-		_mail::toAdmin('OpenAi responde', '<pre>' . print_r($respuestas, 1));
+		_mail::toAdmin('IA responde', '<pre>' . print_r($respuestas, 1));
 
 		$respuesta_txt = '';
 
@@ -132,7 +132,7 @@ class Respuestas extends LiteRecord
 		/*$body = $pregunta;
 		$body .= "\n\nhttps://roleplus.app/atalaya/ia/aprender/$idu";*/
 
-		_mail::toAdmin('OpenAi responde a un usuario', '<pre>'.print_r($vals, 1));
+		_mail::toAdmin('IA responde a un usuario', '<pre>'.print_r($vals, 1));
 	}
 
 	# 2

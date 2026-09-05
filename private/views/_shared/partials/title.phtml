@@ -1,0 +1,9 @@
+<?php
+ob_start();
+View::content();
+$content = ob_get_clean();
+
+$title = '';
+if (preg_match('/<h[1-6][^>]*>(.*?)<\/h[1-6]>/is', $content, $matches)) {
+    $title = trim(strip_tags($matches[1]));
+}

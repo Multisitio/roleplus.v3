@@ -1,0 +1,47 @@
+.toast-container {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 100;
+    width: 280px;
+}
+
+@media (max-width: 575.98px) {
+    .toast-container {
+        right: 0;
+        top: 0;
+        width: 100%;
+    }
+}
+
+.toast-container>div {
+    background: var(--background-card);
+    border: 2px dashed var(--primary);
+    border-left: 4px solid var(--primary);
+    margin-bottom: 15px;
+    padding: 10px;
+    position: relative;
+}
+
+.toast-container [data-remove="parent"] {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.toast-container p {
+    margin-bottom: 0;
+}
+
+.toast-container>div.removing {
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+}

@@ -1,61 +1,63 @@
-/*function buscador(on) {
+function buscador(on) {
     if (window.matchMedia('(max-width:992px)').matches) {
         if (on == 1) {
-            $('.configurar, .enlaces, .filtros, .logo, .mostrar-buscador').hide();
-            $('.buscador').show();
+            hideElements('.configurar, .enlaces, .filtros, .logo, .mostrar-buscador');
+            showElements('.buscador');
         } else {
-            $('.buscador, .enlaces').hide();
-            $('.configurar, .filtros, .logo, .mostrar-buscador').show();
+            hideElements('.buscador, .enlaces');
+            showElements('.configurar, .filtros, .logo, .mostrar-buscador');
         }
     } else {
         if (on == 1) {
-            $('.configurar, .enlaces, .filtros, .logo, .mostrar-buscador').hide();
-            $('.buscador').show();
+            hideElements('.configurar, .enlaces, .filtros, .logo, .mostrar-buscador');
+            showElements('.buscador');
         } else {
-            $('.buscador').hide();
-            $('.configurar, .enlaces, .filtros, .logo, .mostrar-buscador').show();
+            hideElements('.buscador');
+            showElements('.configurar, .enlaces, .filtros, .logo, .mostrar-buscador');
         }
     }
-}*/
+}
+
+function hideElements(selector) {
+    var els = document.querySelectorAll(selector);
+    for(var i=0; i<els.length; i++) {
+        if(Kumbia && Kumbia.fx) Kumbia.fx.hide(els[i]);
+        else els[i].style.display = 'none';
+    }
+}
+function showElements(selector) {
+    var els = document.querySelectorAll(selector);
+    for(var i=0; i<els.length; i++) {
+        if(Kumbia && Kumbia.fx) Kumbia.fx.show(els[i]);
+        else els[i].style.display = '';
+    }
+}
 
 function copiarAlPortapapeles(link) {
-    // Crea un campo de texto "oculto"
     var aux = document.createElement("input");
-
-    // Asigna el contenido del elemento especificado al valor del campo
     aux.setAttribute("value", link);
-
-    // Añade el campo a la página
     document.body.appendChild(aux);
-
-    // Selecciona el contenido del campo
     aux.select();
-
-    // Copia el texto seleccionado
     document.execCommand("copy");
-
-    // Elimina el campo de la página
     document.body.removeChild(aux);
 }
 
-/* Cosas que se ocultan o muestras si se hace scroll hacia abajo o hacia arriba */
 var prevScrollpos = window.pageYOffset;
 window.onscroll = function() {
     var currentScrollPos = window.pageYOffset;
     if (prevScrollpos > currentScrollPos) {
-        $(".scroll-down-hide, nav").fadeIn();
+        showElements(".scroll-down-hide, nav");
     } else {
-        $(".scroll-down-hide, aside.left, nav, .overlay").fadeOut();
+        hideElements(".scroll-down-hide, aside.left, nav, .overlay");
     }
     prevScrollpos = currentScrollPos;
 }
 
-$(window).resize(function() {
-    ($('.buscador').css('display') == 'none') ? buscador(0): buscador(1);
-
-    if (window.matchMedia('(max-width:600px)').matches) {} else if (window.matchMedia('(min-width:601px)').matches && window.matchMedia('(max-width:992px)').matches) {} else if (window.matchMedia('(min-width:993px)').matches && window.matchMedia('(max-width:1200px)').matches) {} else {}
+window.addEventListener('resize', function() {
+    var b = document.querySelector('.buscador');
+    (b && b.style.display == 'none') ? buscador(0): buscador(1);
 });
 
-$(function() {
+document.addEventListener("DOMContentLoaded", function() {
     buscador(0);
-});
+}); 

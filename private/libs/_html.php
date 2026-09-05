@@ -4,6 +4,27 @@
  */
 class _html
 {
+    public const EMAIL_REGEX = '/(?:mailto:)?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\?[\w\-\.\/%?=&~;!+]*)*)/i';
+    public const TEL_REGEX = '/(?<!\w)(?:\+?34\s*|0034\s*)?[6789](?:[\s-]?\d){8}(?!\w)/';
+
+    # Extrae el enlace mailto si existe en el texto
+    static public function mailto($str)
+    {
+        if (preg_match(self::EMAIL_REGEX, $str, $m)) {
+            return 'mailto:' . $m[1];
+        }
+        return null;
+    }
+
+    # Extrae el enlace de teléfono si existe en el texto
+    static public function tel($str)
+    {
+        if (preg_match(self::TEL_REGEX, $str, $m)) {
+            return 'tel:' . preg_replace('/[^\d+]/', '', $m[0]);
+        }
+        return null;
+    }
+
     # De bbcode a html
     static function bbcode($str)
     {
@@ -52,6 +73,32 @@ class _html
     # Enlaces y formatos
 	static public function links($s, $css='w3css')
 	{
+        # Enlaces mailto / correos electrónicos
+        $mailto_placeholders = [];
+        $s = preg_replace_callback(
+            self::EMAIL_REGEX,
+            function ($m) use (&$mailto_placeholders) {
+                $placeholder = '___MAILTO_PLACEHOLDER_' . count($mailto_placeholders) . '___';
+                $email_part = $m[1];
+                $mailto_placeholders[$placeholder] = '<a href="mailto:' . $email_part . '">' . $email_part . '</a>';
+                return $placeholder;
+            },
+            $s
+        );
+
+        # Enlaces de teléfono (tel:)
+        $tel_placeholders = [];
+        $s = preg_replace_callback(
+            self::TEL_REGEX,
+            function ($m) use (&$tel_placeholders) {
+                $placeholder = '___TEL_PLACEHOLDER_' . count($tel_placeholders) . '___';
+                $tel_digits = preg_replace('/[^\d+]/', '', $m[0]);
+                $tel_placeholders[$placeholder] = '<a href="tel:' . $tel_digits . '">' . $m[0] . '</a>';
+                return $placeholder;
+            },
+            $s
+        );
+
         # Dados
         $s = preg_replace_callback(
             '/\{D([^\d]*)([^:]*):([^\}]+)\}/i',
@@ -93,7 +140,7 @@ class _html
 
         # Enlaces a páginas
         $s = preg_replace_callback(
-            '/[\w\-:\/;]+(?:\.(?!\.))[^\d<\s][\w\-\.\/#?=&%~;]*/mi',
+            '/[\w\-:\/;]+(?:\.(?!\.))[a-zA-Z][\w\-\.\/#?=&%~;]*/mi',
             function ($m)
             {
                 # No tocamos las menciones (No se cumple nunca)
@@ -119,6 +166,17 @@ class _html
             },
             $s
         );
+
+        # Restaurar enlaces mailto / correos electrónicos
+        foreach ($mailto_placeholders as $placeholder => $html_link) {
+            $s = str_replace($placeholder, $html_link, $s);
+        }
+
+        # Restaurar enlaces de teléfono
+        foreach ($tel_placeholders as $placeholder => $html_link) {
+            $s = str_replace($placeholder, $html_link, $s);
+        }
+
         return $s;
     }
 

@@ -26,6 +26,11 @@ class _url
 	 * ------------------------------------------------------------ */
 	private static function normalize(string $s): string
 	{
+		$s = str_replace(
+			['ä', 'Ä', 'ª', 'á', 'Á', '@', 'ç', 'Ç', 'ë', 'Ë', 'é', 'É', 'ï', 'Ï', 'í', 'Í', 'ñ', 'Ñ', 'ö', 'Ö', 'º', 'ó', 'Ó', 'ü', 'Ü', 'ú', 'Ú'],
+			['a', 'A', 'a', 'a', 'A', 'a', 'c', 'C', 'e', 'E', 'e', 'E', 'i', 'I', 'i', 'I', 'ny', 'NY', 'o', 'O', 'o', 'o', 'O', 'u', 'U', 'u', 'U'],
+			$s
+		);
 		$orig = $s;
 		if (function_exists('iconv')) {
 			$tmp = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $s);

@@ -9,6 +9,7 @@ class FichasController extends EvController
             unset($_POST['action']);
             if (method_exists($this, $action)) {
                 $this->$action();
+                return false;
             }
         }
     }

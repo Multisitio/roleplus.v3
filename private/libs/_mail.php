@@ -1,75 +1,90 @@
 <?php
 require_once VENDOR_PATH . 'autoload.php';
+
+use PHPMailer\PHPMailer\Exception as MailerException;
 use PHPMailer\PHPMailer\PHPMailer;
+
 /**
+ * Transactional email sent through the local, DKIM-enabled mail server.
  */
 class _mail
 {
-	# 1
-	static public function toAdmin($subject = 'Problems in ROLEplus', $body = '')
-	{
-		if (!$body) {
-			$body = print_r([$_GET, $_POST, $_SERVER], 1);
-		}
-		self::send('dj@roleplus.app', $subject, $body);
-	}
+    private const FROM_ADDRESS = 'ia@roleplus.app';
+    private const FROM_NAME = 'ROLEplus';
+    private const REPLY_TO_ADDRESS = 'dj@roleplus.app';
 
-	# 1.1
-	static public function send($to, $subject, $body, $headers = [])
-	{
-		$mail = new PHPMailer();
-		$mail->isSMTP();
-		$mail->setLanguage('es');
-		$mail->CharSet = 'UTF-8';
-		$mail->Host = 'smtp.gmail.com';
-		$mail->SMTPAuth = true;
-		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-		$mail->Username = 'distrotuz@gmail.com';
-		$mail->Password = 'fgrhrzowigkyjtyw';
-		$mail->Port = 587;
+    static public function toAdmin($subject = 'Problems in ROLEplus', $body = '')
+    {
+        if (!$body) {
+            $body = print_r([$_GET, $_POST, $_SERVER], true);
+        }
 
-		$mail->setFrom('distrotuz@gmail.com', 'Inteligencia Artificial de R+');
-		$mail->Sender = 'distrotuz@gmail.com';
-		$mail->Subject = $subject;
-		$mail->addAddress($to);
+        return self::send(self::REPLY_TO_ADDRESS, $subject, $body);
+    }
 
-		if (empty($headers['IsText'])) {
-			$mail->isHTML(true);
-			$mail->Body = "<!DOCTYPE html>\n<html>\n<body>\n" . $body . "\n</body>\n</html>";
-			$mail->AltBody = strip_tags($body);
-		} else {
-			$mail->isHTML(false);
-			$mail->Body = is_array($body) ? print_r($body, 1) : (string)$body;
-		}
+    static public function send($to, $subject, $body, $headers = [])
+    {
+        if (self::isLocalRequest()) {
+            return true;
+        }
 
-		if (!$mail->send()) {
-			error_log('Mailer Error: ' . $mail->ErrorInfo);
-		}
-		unset($mail);
-	}
+        if (!PHPMailer::validateAddress($to)) {
+            error_log('ROLEplus mail rejected an invalid recipient address.');
+            return false;
+        }
 
-	# 1.1
-	/*static public function send($to, $subject, $body, $headers=[])
-	{
-		if (_server::isLocal()) {
-			return;
-		}
+        $mail = new PHPMailer(true);
 
-		$body = is_array($body) ? print_r($body, 1) : $body;
+        try {
+            $mail->isMail();
+            $mail->setLanguage('es');
+            $mail->CharSet = PHPMailer::CHARSET_UTF8;
+            $mail->Encoding = PHPMailer::ENCODING_QUOTED_PRINTABLE;
+            $mail->setFrom(self::FROM_ADDRESS, self::FROM_NAME);
+            $mail->Sender = self::FROM_ADDRESS;
+            $mail->addReplyTo(self::REPLY_TO_ADDRESS, self::FROM_NAME);
+            $mail->Subject = self::singleLine($subject);
+            $mail->addAddress($to);
 
-		if (empty($headers['IsText'])) {
-			$cabeceras  = 'MIME-Version: 1.0' . "\r\n";
-			$cabeceras .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-			mail($to, $subject, $body, $cabeceras);
-			return;
-		}
+            foreach (['List-Unsubscribe', 'List-Unsubscribe-Post'] as $headerName) {
+                if (!empty($headers[$headerName])) {
+                    $mail->addCustomHeader($headerName, self::singleLine($headers[$headerName]));
+                }
+            }
 
-		mail($to, $subject, $body);
-	}*/
+            if (empty($headers['IsText'])) {
+                $htmlBody = is_array($body)
+                    ? '<pre>' . htmlspecialchars(print_r($body, true), ENT_QUOTES, 'UTF-8') . '</pre>'
+                    : (string) $body;
 
-	# 2
-	static public function sendText($to, $subject, $body)
-	{
-		self::send($to, $subject, $body, ['IsText' => true]);
-	}
+                $mail->isHTML(true);
+                $mail->Body = "<!DOCTYPE html>\n<html lang=\"es\">\n<body>\n" . $htmlBody . "\n</body>\n</html>";
+                $mail->AltBody = trim(html_entity_decode(strip_tags($htmlBody), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            } else {
+                $mail->isHTML(false);
+                $mail->Body = is_array($body) ? print_r($body, true) : (string) $body;
+            }
+
+            return $mail->send();
+        } catch (MailerException $exception) {
+            error_log('ROLEplus mail delivery failed: ' . $exception->getMessage());
+            return false;
+        }
+    }
+
+    static public function sendText($to, $subject, $body)
+    {
+        return self::send($to, $subject, $body, ['IsText' => true]);
+    }
+
+    private static function isLocalRequest()
+    {
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        return (bool) preg_match('/^(?:localhost|roleplus\.v(?:h)?)(?::\d+)?$/i', $host);
+    }
+
+    private static function singleLine($value)
+    {
+        return trim((string) preg_replace('/[\r\n]+/', ' ', (string) $value));
+    }
 }

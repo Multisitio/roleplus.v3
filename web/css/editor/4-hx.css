@@ -1,12 +1,12 @@
-.editor h1,
-.editor h2,
-.editor h3,
-.editor h4,
-.editor h5,
-.editor h6 {
+body > :not(main) h1,
+body > :not(main) h2,
+body > :not(main) h3,
+body > :not(main) h4,
+body > :not(main) h5,
+body > :not(main) h6 {
     color: #333;
 }
 
-.editor hr {
+body > :not(main) hr {
     margin: 15px 0;
 }

@@ -1,0 +1,23 @@
+:is(h1, h2, h3, h4, h5, h6, p, table) {
+    margin-block: var(--spacing-block-heading);
+}
+
+:is(ol, ul) {
+    margin-block: var(--spacing-block-list);
+}
+
+:is(h1, h2, h3, h4, h5, h6)+* {
+    margin-top: var(--spacing-after-heading);
+}
+
+:not(blockquote h5):first-child {
+    margin-top: 0;
+}
+
+:last-child {
+    margin-bottom: 0;
+}
+
+li {
+    margin-bottom: var(--spacing-li);
+}

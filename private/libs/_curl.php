@@ -25,7 +25,7 @@ class _curl
             CURLOPT_TIMEOUT        => 60,
             CURLOPT_ENCODING       => '', // Soporta gzip/deflate automáticamente
             CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4, // Forzado por estabilidad en el servidor
-            CURLOPT_USERAGENT      => $_SERVER['HTTP_USER_AGENT'] ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            CURLOPT_USERAGENT      => (empty($_SERVER['HTTP_USER_AGENT']) || $_SERVER['HTTP_USER_AGENT'] === 'Chrome X') ? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' : $_SERVER['HTTP_USER_AGENT'],
         ];
 
         // Manejo especial de cabeceras
@@ -98,7 +98,7 @@ class _curl
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_ENCODING       => '',
                 CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4,
-                CURLOPT_USERAGENT      => $_SERVER['HTTP_USER_AGENT'] ?? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+                CURLOPT_USERAGENT      => (empty($_SERVER['HTTP_USER_AGENT']) || $_SERVER['HTTP_USER_AGENT'] === 'Chrome X') ? 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' : $_SERVER['HTTP_USER_AGENT'],
             ];
             
             if (isset($options['headers'])) {

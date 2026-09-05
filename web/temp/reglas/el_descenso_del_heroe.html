@@ -1,0 +1,319 @@
+<meta charset="UTF-8">
+<h1>El descenso del héroe</h1>
+<p>Una adaptación para jugar a HeroQuest con los dados y la intensidad de Descent, uniendo la exploración clásica con un
+    combate táctico y dinámico.</p>
+
+<h2>Dados de ataque</h2>
+<p>Obligatorios en cada asalto, definen la naturaleza y el tipo del ataque realizado.</p>
+<ul>
+    <li><b>Rojo:</b> Para el choque del acero en el combate cuerpo a cuerpo.</li>
+    <li><b>Azul:</b> Para la tensión del arco o proyectiles en el combate a distancia.</li>
+    <li><b>Blanco:</b> Para el canalizar arcano en el combate mágico.</li>
+</ul>
+
+<h2>Dados adicionales</h2>
+<p>Modificadores que alteran y potencian el impacto del ataque.</p>
+<ul>
+    <li><b>Amarillos (Equipo):</b> Dados otorgados por la calidad de las armas, escudos y equipo táctico. Destacan por su abundancia de incrementos, facilitando la activación de efectos especiales.</li>
+    <li><b>Negros (Esfuerzo):</b> Dados de potencia destructiva y fuerza bruta. Están reservados exclusivamente para la mecánica de esfuerzo.</li>
+</ul>
+
+<h2>El Dado Verde: Destreza, Apoyo y Defensa</h2>
+<p>El dado verde queda descartado de las armas y se utiliza para las siguientes mecánicas especiales:</p>
+<ul>
+    <li><b>Apoyo y Flanqueo (Sinergia):</b> Si un héroe ataca a un enemigo que está adyacente a otro héroe aliado (que no esté incapacitado), añade un dado verde a su tirada de ataque por la distracción táctica generada.</li>
+    <li><b>Destreza y Exploración:</b> Se lanza para resolver pruebas físicas del escenario ajenas al combate directo (saltar fosos, esquivar trampas que se activan repentinamente, forzar cerraduras o moverse en sigilo).</li>
+    <li><b>Defensa Ligera (Esquiva):</b> Los héroes que no vistan armadura pesada pueden añadir un dado verde a su reserva de defensa. Un incremento en este dado permite esquivar completamente el ataque o realizar un contraataque inmediato si el héroe posee esa habilidad.</li>
+</ul>
+
+<h2>Caras de los dados</h2>
+<ul>
+    <li><b>N:</b> Suma al alcance máximo. Fundamental para impactar a distancia.</li>
+    <li><b>C:</b> Suma al daño infligido. Son las heridas que sufre el enemigo.</li>
+    <li><b>I:</b> Suma a los incrementos. Poder puro para activar habilidades o potenciar ataques.</li>
+    <li><b>V:</b> Cara vacía. Sin efecto adicional, pero segura frente a maldiciones.</li>
+    <li><b>X:</b> Fracaso absoluto. El ataque se pierde sin remedio.</li>
+</ul>
+
+<h2>Fracaso y Defensa</h2>
+<p><b>Fracaso:</b> Todo ataque falla de inmediato si un dado muestra la temida X, o si la suma del alcance no llega
+    hasta la miniatura objetivo en ataques a distancia.</p>
+<p><b>Defensa:</b> La resistencia se mide con los dados blancos originales de HeroQuest. Cada escudo obtenido (blanco
+    para héroes, negro para monstruos) bloquea y anula un daño del ataque enemigo.</p>
+
+<h2>Armería y Equipo</h2>
+<p>La conversión de las armas de HeroQuest sigue un patrón directo y universal, eliminando la necesidad de traducir cada pieza una a una:</p>
+<ul>
+    <li><b>Ataque Base (1 Dado):</b> Determinado por el tipo de ataque (Rojo para cuerpo a cuerpo, Azul para distancia, Blanco para magia).</li>
+    <li><b>Modificador de Equipo (Dados Amarillos):</b> Se añaden dados amarillos equivalentes al número de dados de combate del arma original de HeroQuest menos uno ($N-1$).</li>
+</ul>
+<table>
+    <tr>
+        <th>Arma original (HQ)</th>
+        <th>Dados en el Descenso</th>
+        <th>Explicación</th>
+    </tr>
+    <tr>
+        <td>Espada corta (2 dados)</td>
+        <td>1 Dado rojo + 1 Dado amarillo</td>
+        <td>Cuerpo a cuerpo base + 1 dado de equipo</td>
+    </tr>
+    <tr>
+        <td>Espada ancha (3 dados)</td>
+        <td>1 Dado rojo + 2 Dados amarillos</td>
+        <td>Cuerpo a cuerpo base + 2 dados de equipo</td>
+    </tr>
+    <tr>
+        <td>Ballesta (3 dados)</td>
+        <td>1 Dado azul + 2 Dados amarillos</td>
+        <td>A distancia base + 2 dados de equipo (los números del dado azul determinan el alcance)</td>
+    </tr>
+    <tr>
+        <td>Hacha de batalla (4 dados)</td>
+        <td>1 Dado rojo + 3 Dados amarillos</td>
+        <td>Cuerpo a cuerpo base + 3 dados de equipo</td>
+    </tr>
+</table>
+
+<h2>Incrementos y Esfuerzo</h2>
+<p><b>Esfuerzo:</b> Los héroes pueden agotar su vitalidad bajo presión. Por cada punto de Mente o Cuerpo sacrificado voluntariamente antes de realizar la tirada, el héroe añade un <b>Dado Negro</b> al ataque. Este es el único método para obtener dados negros en juego.</p>
+<p><b>Héroes:</b> Pueden gastar los incrementos obtenidos para sumar daño extra (1 incremento = +1 Daño), aumentar el
+    alcance (1 incremento = +1 Alcance) o activar capacidades únicas de sus armas y hechizos.</p>
+<p><b>El Guardián:</b> Por cada 2 incrementos obtenidos por un monstruo, o desperdiciados por un héroe, el Guardián gana
+    una ficha de amenaza para activar trampas o potenciar futuras emboscadas.</p>
+
+<h2>Estadísticas y Probabilidades</h2>
+<p>Probabilidades <b>exactas</b> calculadas enumerando exhaustivamente todos los resultados posibles de cada combinación de dados (Descent 1.ª Edición). Cada celda muestra el <b>% de sacar exactamente ese valor</b> en la tirada completa. Si el dado base saca X, toda la tirada falla.</p>
+
+<h3>Probabilidad de Daño</h3>
+<table>
+    <tr>
+        <th>Combinación</th>
+        <th>Fallo</th>
+        <th>0D</th><th>1D</th><th>2D</th><th>3D</th><th>4D</th><th>5D</th><th>6D</th>
+    </tr>
+    <tr>
+        <td><b>Rojo</b></td>
+        <td>16.7%</td>
+        <td>-</td><td>16.7%</td><td>33.3%</td><td>33.3%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>-</td><td>11.1%</td><td>27.8%</td><td>33.3%</td><td>11.1%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>-</td><td>7.4%</td><td>22.2%</td><td>31.5%</td><td>18.5%</td><td>3.7%</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + 3 Amarillos</td>
+        <td>16.7%</td>
+        <td>-</td><td>4.9%</td><td>17.3%</td><td>28.4%</td><td>22.8%</td><td>8.6%</td><td>1.2%</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b></td>
+        <td>16.7%</td>
+        <td>-</td><td>66.7%</td><td>16.7%</td><td>-</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>-</td><td>44.4%</td><td>33.3%</td><td>5.6%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>-</td><td>29.6%</td><td>37.0%</td><td>14.8%</td><td>1.9%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b></td>
+        <td>16.7%</td>
+        <td>-</td><td>33.3%</td><td>50.0%</td><td>-</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>-</td><td>22.2%</td><td>44.4%</td><td>16.7%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>-</td><td>14.8%</td><td>37.0%</td><td>25.9%</td><td>5.6%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Negro</td>
+        <td>16.7%</td>
+        <td>-</td><td>8.3%</td><td>25.0%</td><td>33.3%</td><td>16.7%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Verde</td>
+        <td>16.7%</td>
+        <td>-</td><td>2.8%</td><td>16.7%</td><td>30.6%</td><td>27.8%</td><td>5.6%</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Negro</td>
+        <td>16.7%</td>
+        <td>-</td><td>16.7%</td><td>41.7%</td><td>25.0%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Verde</td>
+        <td>16.7%</td>
+        <td>-</td><td>5.6%</td><td>30.6%</td><td>38.9%</td><td>8.3%</td><td>-</td><td>-</td>
+    </tr>
+</table>
+
+<h3>Probabilidad de Alcance</h3>
+<table>
+    <tr>
+        <th>Combinación</th>
+        <th>Fallo</th>
+        <th>0A</th><th>1A</th><th>2A</th><th>3A</th><th>4A</th><th>5A</th><th>6A</th><th>7A</th>
+    </tr>
+    <tr>
+        <td><b>Rojo</b></td>
+        <td>16.7%</td>
+        <td>16.7%</td><td>33.3%</td><td>33.3%</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>-</td><td>2.8%</td><td>13.9%</td><td>27.8%</td><td>27.8%</td><td>11.1%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>-</td><td>-</td><td>0.5%</td><td>3.7%</td><td>12.5%</td><td>23.1%</td><td>25.0%</td><td>14.8%</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b></td>
+        <td>16.7%</td>
+        <td>-</td><td>16.7%</td><td>16.7%</td><td>33.3%</td><td>16.7%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>-</td><td>-</td><td>2.8%</td><td>11.1%</td><td>19.4%</td><td>25.0%</td><td>19.4%</td><td>5.6%</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>-</td><td>-</td><td>-</td><td>0.5%</td><td>3.2%</td><td>9.7%</td><td>17.6%</td><td>22.2%</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b></td>
+        <td>16.7%</td>
+        <td>-</td><td>33.3%</td><td>16.7%</td><td>33.3%</td><td>-</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>-</td><td>-</td><td>5.6%</td><td>19.4%</td><td>25.0%</td><td>22.2%</td><td>11.1%</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>-</td><td>-</td><td>-</td><td>0.9%</td><td>6.0%</td><td>15.7%</td><td>22.7%</td><td>21.3%</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Negro</td>
+        <td>16.7%</td>
+        <td>8.3%</td><td>25.0%</td><td>33.3%</td><td>16.7%</td><td>-</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Verde</td>
+        <td>16.7%</td>
+        <td>8.3%</td><td>25.0%</td><td>33.3%</td><td>16.7%</td><td>-</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Negro</td>
+        <td>16.7%</td>
+        <td>-</td><td>16.7%</td><td>25.0%</td><td>25.0%</td><td>16.7%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Verde</td>
+        <td>16.7%</td>
+        <td>-</td><td>16.7%</td><td>25.0%</td><td>25.0%</td><td>16.7%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+</table>
+
+<h3>Probabilidad de Incrementos</h3>
+<table>
+    <tr>
+        <th>Combinación</th>
+        <th>Fallo</th>
+        <th>0I</th><th>1I</th><th>2I</th><th>3I</th><th>4I</th>
+    </tr>
+    <tr>
+        <td><b>Rojo</b></td>
+        <td>16.7%</td>
+        <td>50.0%</td><td>33.3%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>25.0%</td><td>41.7%</td><td>16.7%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>12.5%</td><td>33.3%</td><td>29.2%</td><td>8.3%</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + 3 Amarillos</td>
+        <td>16.7%</td>
+        <td>6.3%</td><td>22.9%</td><td>31.3%</td><td>18.8%</td><td>4.2%</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b></td>
+        <td>16.7%</td>
+        <td>33.3%</td><td>50.0%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>16.7%</td><td>41.7%</td><td>25.0%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Azul</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>8.3%</td><td>29.2%</td><td>33.3%</td><td>12.5%</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b></td>
+        <td>16.7%</td>
+        <td>33.3%</td><td>50.0%</td><td>-</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Amarillo</td>
+        <td>16.7%</td>
+        <td>16.7%</td><td>41.7%</td><td>25.0%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + 2 Amarillos</td>
+        <td>16.7%</td>
+        <td>8.3%</td><td>29.2%</td><td>33.3%</td><td>12.5%</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Negro</td>
+        <td>16.7%</td>
+        <td>33.3%</td><td>38.9%</td><td>11.1%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Rojo</b> + Verde</td>
+        <td>16.7%</td>
+        <td>25.0%</td><td>41.7%</td><td>16.7%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Negro</td>
+        <td>16.7%</td>
+        <td>22.2%</td><td>44.4%</td><td>16.7%</td><td>-</td><td>-</td>
+    </tr>
+    <tr>
+        <td><b>Blanco</b> + Verde</td>
+        <td>16.7%</td>
+        <td>16.7%</td><td>41.7%</td><td>25.0%</td><td>-</td><td>-</td>
+    </tr>
+</table>
+<p><small><i>Probabilidades calculadas enumerando las 6<sup>n</sup> combinaciones posibles (36 para 2 dados, 216 para 3, 1296 para 4). El fallo del dado base (X) anula toda la tirada.</i></small></p>

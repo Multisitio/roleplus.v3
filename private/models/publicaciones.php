@@ -40,8 +40,15 @@ class Publicaciones extends LiteRecord
 	/*public function compartirDesdeFuera($request) { ... } */
 
 	#
-	public function comprobarSiExiste($titulo, $contenido)
+	public function comprobarSiExiste($titulo, $contenido, $enlace = '')
 	{
+		if (!empty($enlace)) {
+			$sql = 'SELECT id FROM publicaciones WHERE titulo=? AND enlace=?';
+			$existe = self::first($sql, [$titulo, $enlace]);
+			if ($existe) {
+				return $existe;
+			}
+		}
 		$sql = 'SELECT id FROM publicaciones WHERE titulo=? AND contenido=?';
 		return self::first($sql, [$titulo, $contenido]);
 	}
@@ -55,6 +62,7 @@ class Publicaciones extends LiteRecord
 
 		$a['action'] = empty($a['action']) ? 'crear' : $a['action'];
 		$idu = ($a['action'] == 'crear') ? _str::uid() : $a['idu'];
+		$a['idu'] = $idu;
 
 		$pub_anterior = parent::where('idu=?', [$idu])->row();
 
@@ -122,16 +130,36 @@ class Publicaciones extends LiteRecord
 		/* ⮞ Fix: asignación correcta de enlace al guardar preview.
 		 * Antes: $arr['enlace'] = '' (typo). Ahora: $a['enlace'] = ''.
 		 */
-		if (!empty($a['preview'])) {
-			if (stristr($a['preview']['url'], 'youtu')) {
-				$a['enlace'] = $a['preview']['url'];
+		// Prioritizing mailto links over other links
+		$enlace = '';
+		$has_submitted_link = !empty($a['enlace']) || !empty($a['preview']);
+
+		if ($has_submitted_link) {
+			if ($email_link = _html::mailto($contenido)) {
+				$enlace = $email_link;
+				if (!empty($a['preview'])) {
+					(new Vistas_previas)->eliminarVistasPrevias($idu);
+				}
+			} elseif (!empty($a['enlace']) && $email_link = _html::mailto($a['enlace'])) {
+				$enlace = $email_link;
+				if (!empty($a['preview'])) {
+					(new Vistas_previas)->eliminarVistasPrevias($idu);
+				}
 			} else {
-				(new Vistas_previas)->guardarVistas($idu, $a['preview']);
-				$a['enlace'] = '';
+				if (!empty($a['preview'])) {
+					if (stristr($a['preview']['url'], 'youtu')) {
+						$a['enlace'] = $a['preview']['url'];
+					} else {
+						(new Vistas_previas)->guardarVistas($idu, $a['preview']);
+						$a['enlace'] = '';
+					}
+				}
+				if (!empty($a['enlace']) && preg_match('#https?://[^\s]+#', trim($a['enlace']), $m)) {
+					$enlace = $m[0];
+				} else {
+					$enlace = '';
+				}
 			}
-		}
-		if (!empty($a['enlace']) && preg_match('#https?://[^\s]+#', trim($a['enlace']), $m)) {
-			$enlace = $m[0];
 		} else {
 			$enlace = '';
 		}
@@ -182,7 +210,7 @@ class Publicaciones extends LiteRecord
 			self::query($sql, [$idioma, $etiquetas, $etiquetas_formateadas, $titulo, $slug, $contenido, $contenido_formateado, $enlace, $fotos, $evento_aforo, $evento_aforo_minimo, $evento_desde, $evento_hasta, $encuesta, $anclado, Session::get('idu'), $idu]);
 			Session::setArray('toast', 'Publicación editada.');
 		} else {
-			if ($this->comprobarSiExiste($titulo, $contenido)) {
+			if ($this->comprobarSiExiste($titulo, $contenido, $enlace)) {
 				return Session::setArray('toast', t('Ya existe una publicación con el mismo título y contenido.'));
 			}
 
@@ -251,7 +279,7 @@ class Publicaciones extends LiteRecord
 			}
 		}
 		if (!empty($_FILES['fotos'])) {
-			$fotos .= _file::saveFiles($_FILES['fotos'], 'img/usuarios/' . Session::get('idu'));
+			$fotos .= _file::saveFiles($_FILES['fotos'], 'img/usuarios/' . Session::get('idu'), '', false, 'mp4');
 		}
 
 		$fotos = trim($fotos, ', ');
@@ -280,6 +308,29 @@ class Publicaciones extends LiteRecord
 		self::query($sql, $vals);
 
 		Session::setArray('toast', 'Enlace eliminado.');
+	}
+
+	# Filtra los usuarios bloqueados
+	public function filtroBloqueados($alias = '')
+	{
+		if (!Session::get('idu')) {
+			return ['sql' => '', 'vals' => []];
+		}
+		$bloqueados = (new Acciones)->registros('bloqueado');
+		if (empty($bloqueados)) {
+			return ['sql' => '', 'vals' => []];
+		}
+		$keys = [];
+		$vals = [];
+		foreach ($bloqueados as $blo) {
+			$keys[] = '?';
+			$vals[] = $blo->idu;
+		}
+		$prefix = $alias ? "$alias." : '';
+		return [
+			'sql' => " AND {$prefix}usuarios_idu NOT IN (" . implode(', ', $keys) . ")",
+			'vals' => $vals
+		];
 	}
 
 	#
@@ -441,10 +492,13 @@ class Publicaciones extends LiteRecord
 		$filtro = $this->filtroPorEtiquetas();
 		$sql .= $filtro['sql'];
 
+		$bloqueados = $this->filtroBloqueados();
+		$sql .= $bloqueados['sql'];
+
 		$anclado = date('Y-m-d H:i:s', strtotime('-24 hours'));
 		$sql .= " ORDER BY anclado>'$anclado' DESC, publicado DESC LIMIT 0,50";
 
-		$values = array_merge([$ts], $filtro['vals']);
+		$values = array_merge([$ts], $filtro['vals'], $bloqueados['vals']);
 
 		$publicaciones = self::all($sql, $values);
 
@@ -460,10 +514,14 @@ class Publicaciones extends LiteRecord
 			WHERE pub.usuarios_idu=usu.idu
 				AND acc.elemento='usuarios'
 				AND acc.accion='notificar'
-				AND acc.usuarios_idu=?
-			ORDER BY pub.publicado DESC LIMIT 50";
+				AND acc.usuarios_idu=?";
 
-		return self::all($sql, [Session::get('idu')]);
+		$bloqueados = $this->filtroBloqueados('pub');
+		$sql .= $bloqueados['sql'];
+
+		$sql .= " ORDER BY pub.publicado DESC LIMIT 50";
+
+		return self::all($sql, array_merge([Session::get('idu')], $bloqueados['vals']));
 	}
 
 	#
@@ -476,8 +534,13 @@ class Publicaciones extends LiteRecord
 	#
 	public function porEtiquetas($etiquetas)
 	{
-		$sql = "SELECT pub.*, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.rol, usu.socio, usu.ultima_pub FROM publicaciones pub, usuarios usu WHERE pub.usuarios_idu=usu.idu AND (pub.etiquetas LIKE ? OR pub.contenido LIKE ?) ORDER BY pub.publicado DESC LIMIT 75";
-		return self::all($sql, ["%$etiquetas%", "%#$etiquetas%"]);
+		$sql = "SELECT pub.*, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.rol, usu.socio, usu.ultima_pub FROM publicaciones pub, usuarios usu WHERE pub.usuarios_idu=usu.idu AND (pub.etiquetas LIKE ? OR pub.contenido LIKE ?)";
+
+		$bloqueados = $this->filtroBloqueados('pub');
+		$sql .= $bloqueados['sql'];
+
+		$sql .= " ORDER BY pub.publicado DESC LIMIT 75";
+		return self::all($sql, array_merge(["%$etiquetas%", "%#$etiquetas%"], $bloqueados['vals']));
 	}
 
 	#
@@ -493,11 +556,16 @@ class Publicaciones extends LiteRecord
 	#
 	public function semanaAnterior()
 	{
-		$sql = "SELECT pub.*, usu.apodo, usu.idu AS usu_idu FROM publicaciones pub, usuarios usu WHERE pub.usuarios_idu=usu.idu AND pub.publicado > ? ORDER BY pub.publicado";
+		$sql = "SELECT pub.*, usu.apodo, usu.idu AS usu_idu FROM publicaciones pub, usuarios usu WHERE pub.usuarios_idu=usu.idu AND pub.publicado > ?";
+
+		$bloqueados = $this->filtroBloqueados('pub');
+		$sql .= $bloqueados['sql'];
+
+		$sql .= " ORDER BY pub.publicado";
 
 		$desde = date('Y-m-d H:i:s', strtotime('-1 week'));
 
-		return parent::all($sql, [$desde]) ?: [];
+		return parent::all($sql, array_merge([$desde], $bloqueados['vals'])) ?: [];
 	}
 
 	#
@@ -513,8 +581,10 @@ class Publicaciones extends LiteRecord
 		$sql = "SELECT * FROM publicaciones_view WHERE id IS NOT NULL";
 
 		$filtro = $this->filtroPorEtiquetas();
-
 		$sql .= $filtro['sql'];
+
+		$bloqueados = $this->filtroBloqueados();
+		$sql .= $bloqueados['sql'];
 
 		$anclado = date('Y-m-d H:i:s', strtotime('-24 hours'));
 		$sql .= " ORDER BY anclado>'$anclado' DESC, publicado DESC";
@@ -525,7 +595,7 @@ class Publicaciones extends LiteRecord
 
 		$sql .= " LIMIT " . ($pagina - 1) * 50 . ',50';
 
-		$publicaciones = self::all($sql, $filtro['vals'] ?? []);
+		$publicaciones = self::all($sql, array_merge($filtro['vals'] ?? [], $bloqueados['vals']));
 
 		return self::arrayBy($publicaciones);
 	}
@@ -535,6 +605,12 @@ class Publicaciones extends LiteRecord
 	{
 		if (!$usuarios_idu) {
 			$usuarios_idu = Session::get('idu');
+		}
+		if (Session::get('idu') && Session::get('idu') <> $usuarios_idu) {
+			$bloqueados = (new Acciones)->registros('bloqueado');
+			if (isset($bloqueados[$usuarios_idu])) {
+				return [];
+			}
 		}
 		$sql = 'SELECT pub.*, usu.apodo, usu.hashtag, usu.avatar, usu.email, usu.rol, usu.socio, usu.ultima_pub FROM publicaciones pub, usuarios usu WHERE pub.usuarios_idu=usu.idu AND pub.usuarios_idu=? ORDER BY publicado DESC LIMIT 75';
 		$publicaciones = self::all($sql, [$usuarios_idu]);

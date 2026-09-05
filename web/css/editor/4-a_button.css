@@ -1,0 +1,47 @@
+body > :not(main) a {
+    text-decoration: none;
+}
+
+body > :not(main) a:not(.avatar):not(.tag):not(.button-floating),
+body > :not(main) button:not(.button-floating),
+body > :not(main) .button:not(.button-floating),
+body > :not(main) select,
+body > :not(main) summary,
+body > :not(main) textarea,
+body > :not(main) [type="email"],
+body > :not(main) [type="password"],
+body > :not(main) [type="number"],
+body > :not(main) [type="search"],
+body > :not(main) [type="text"] {
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 1px 1px 0 #666;
+    color: inherit;
+    /* inline-flex deja un margen de 5px al pie */
+    /* flex sin inline crea un bloque */
+    display: inline-flex;
+    gap: 8px;
+    /* height: fit-content estira el elemento por todo el alto */
+    height: fit-content;
+    justify-content: center;
+    /*margin-bottom: 5px; se aplicaba solo a los a y no a los button*/
+    min-height: 42px;
+    min-width: 42px;
+    outline: none;
+    padding: 5px;
+    word-break: break-word;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+body > :not(main) a.active,
+body > :not(main) button.active,
+aside.settings button.active {
+    background-color: var(--primary, #6b5000);
+    color: white;
+}

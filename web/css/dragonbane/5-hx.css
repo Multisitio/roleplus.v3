@@ -1,92 +1,95 @@
-.resultado h1,
-.resultado h2,
-.resultado h3,
-.resultado h4,
-.resultado h5,
-.resultado caption,
-.resultado th {
-    font-family: 'Colus';
+.plantilla h1,
+.plantilla h2,
+.plantilla h3,
+.plantilla h4,
+.plantilla h5,
+.plantilla caption,
+.plantilla th {
+    font-family: var(--font-heading);
     font-variant: small-caps;
     font-weight: normal;
     line-height: 100%;
 }
 
-.resultado h1,
-.resultado h2,
-.resultado h4 {
-    margin-bottom: 5px;
+.plantilla h1,
+.plantilla h2,
+.plantilla h4 {
+    margin-bottom: var(--spacing-heading-bottom);
 }
 
-.resultado h1 {
-    color: var(--dragonred);
-    font-size: 48pt;
+.plantilla h1 {
+    color: var(--color-accent);
+    font-size: var(--font-size-h1);
     position: relative;
     text-align: center;
     width: 100%;
     z-index: 1;
 }
 
-.resultado h1+hr {
+.plantilla h1+hr {
     border-image: url("data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(238, 61, 60)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(238, 61, 60)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(238, 61, 60)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(238, 61, 60)'/></svg>") 16 8;
     border-style: solid;
     border-width: 0 32px 16px;
+    margin: 0 auto;
     width: 50%;
 }
 
-.resultado :is(:is(h1, h2):first-child + p, section:has(:is(h1, h2)) + section > div:first-child > p:first-child)::first-letter {
+.plantilla :is(h1:first-child + p, section:has(h1) + section > div:first-child > p:first-child)::first-letter {
     color: transparent;
+    -webkit-text-fill-color: transparent;
     background-clip: text;
-    background-image: linear-gradient(-45deg, #322814, #006600, #322814);
+    -webkit-background-clip: text;
+    background-image: var(--gradient-forest);
     float: left;
-    font-family: 'Colus';
-    font-size: 43pt;
-    line-height: 1.2;
-    margin: -6px 0 -16px 0;
-    padding: 0 10px 0 0;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-drop-cap);
+    line-height: 1;
+    margin: -16px 0 -26px 0;
+    padding: 10px 10px 10px 0;
 }
 
-.resultado section:has(h1)+section p:first-child {
-    color: var(--leatherbrown);
+.plantilla section:has(h1)+section p:first-child {
+    color: var(--color-secondary);
 }
 
-.resultado h2 {
-    background-image: linear-gradient(-45deg, #322814, #006600, #322814);
+.plantilla h2 {
+    background-image: var(--gradient-forest);
     background-clip: text;
-    color: var(--demongreen);
+    color: var(--color-primary);
     /*display: flex; -> conflicto con text-align:center del padre */
-    font-size: 18pt;
-    padding-top: 10px;
+    font-size: var(--font-size-h2);
+    padding-top: 15px;
 }
 
-.resultado h2~p {
-    color: var(--demongreen);
+.plantilla h2~p {
+    color: var(--color-primary);
 }
 
-.resultado h3 {
-    border-bottom: 2px solid var(--leatherbrown);
-    color: var(--leatherbrown);
-    font-size: 12pt;
+.plantilla h3 {
+    border-bottom: var(--border-h3);
+    color: var(--color-secondary);
+    font-size: var(--font-size-h3);
 }
 
-.resultado h3+p {
-    color: var(--leatherbrown);
+.plantilla h3+p {
+    color: var(--color-secondary);
 }
 
-.resultado div>:is(h1, h2, h3, h4, h5, h6):first-child {
+.plantilla div> :is(h1, h2, h3, h4, h5, h6):first-child {
     padding-top: 0;
 }
 
-.resultado h4 {
-    font-size: 11pt;
-    padding-top: 10px;
+.plantilla h4 {
+    font-size: var(--font-size-h4);
+    padding-top: 15px;
     text-transform: uppercase;
 }
 
-.resultado h3+h4 {
+.plantilla h3+h4 {
     padding-top: 0;
 }
 
-.resultado h5 {
+.plantilla h5 {
     background-image:
         url("data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>"),
         url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>"),
@@ -94,8 +97,8 @@
     background-position: center, left center, right;
     background-repeat: no-repeat;
     background-size: calc(100% - 40px) 100%, 30px 40px, 30px 40px;
-    color: white;
-    font-size: 14pt;
+    color: var(--color-text-inverse);
+    font-size: var(--font-size-h5);
     height: 40px;
     inset: -28px 0 auto;
     margin-inline: auto;
@@ -104,67 +107,68 @@
     width: fit-content;
 }
 
-.page h5 {
+.plantilla>div h5 {
     filter: var(--tone, none);
 }
 
-.page .magic,
-.page .magic h5 {
+.plantilla>div .magic,
+.plantilla>div .magic h5 {
     --tone: hue-rotate(110deg);
 }
 
-.page .event,
-.page .event h5 {
+.plantilla>div .event,
+.plantilla>div .event h5 {
     --tone: hue-rotate(42deg);
 }
 
-.page .plant,
-.page .plant h5 {
+.plantilla>div .plant,
+.plantilla>div .plant h5 {
     --tone: hue-rotate(312deg);
 }
 
-.page .pnj,
-.page .pnj h5 {
+.plantilla>div .pnj,
+.plantilla>div .pnj h5 {
     --tone: hue-rotate(282deg) brightness(1.25);
 }
 
-.page .gold-item,
-.page .gold-item h5 {
+.plantilla>div .gold-item,
+.plantilla>div .gold-item h5 {
     --tone: hue-rotate(242deg) brightness(2);
 }
 
-.page .condition,
-.page .condition h5 {
+.plantilla>div .condition,
+.plantilla>div .condition h5 {
     --tone: hue-rotate(170deg);
 }
 
-.page .monster,
-.page .monster h5 {
+.plantilla>div .monster,
+.plantilla>div .monster h5 {
     --tone: hue-rotate(192deg) saturate(1.25);
 }
 
-.page .silver-item,
-.page .silver-item h5 {
+.plantilla>div .silver-item,
+.plantilla>div .silver-item h5 {
     --tone: saturate(0) brightness(1.25);
 }
 
-.page .bronze-item,
-.page .bronze-item h5 {
+.plantilla>div .bronze-item,
+.plantilla>div .bronze-item h5 {
     --tone: hue-rotate(212deg) brightness(1.25);
 }
 
-.resultado h5+p {
-    color: var(--demongreen);
+.plantilla h5+p {
+    color: var(--color-primary);
 }
 
-.resultado h6 {
-    font-family: 'WalterTurncoat';
-    font-size: 12px;
+.plantilla h6 {
+    font-family: var(--font-annotation);
+    font-size: var(--font-size-h6);
 }
 
-.resultado hr:not(h1+hr) {
+.plantilla hr:not(h1+hr) {
     border-image: url("data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(0, 96, 77)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(0, 96, 77)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(0, 96, 77)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(0, 96, 77)'/></svg>") 16 8;
     border-style: solid;
     border-width: 0 32px 16px;
+    margin: 0 auto;
     width: 50%;
 }

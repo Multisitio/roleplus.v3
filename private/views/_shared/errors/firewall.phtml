@@ -12,10 +12,19 @@ if (preg_match('/(provisioning|yealink|wp_|wp\-)/i', $url)) {
     exit('<a href="/">https://' . $host . '</a>');
 }
 
-// 2) URLs que suelen ser intentos automáticos de búsqueda vieja / scrap basura
-if (preg_match('/buscador\?q/i', $url)) {
-    header('HTTP/1.1 404 Not Found');
-    exit('<a href="/">https://' . $host . '</a>');
+// 2) Redirección del buscador legacy (/buscador) al buscador de publicaciones
+if (preg_match('#^/buscador#i', $url)) {
+    if ( ! Session::get('idu')) {
+        header('Location: /usuarios/formularios');
+        exit;
+    }
+    $q = $_GET['q'] ?? '';
+    if ($q !== '') {
+        header('Location: /publicaciones/buscar/' . urlencode($q));
+    } else {
+        header('Location: /publicaciones');
+    }
+    exit;
 }
 
 // 3) Etiquetas legacy tipo /etiquetas/publicaciones/LOQUESEA

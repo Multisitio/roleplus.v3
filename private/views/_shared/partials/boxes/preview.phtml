@@ -13,6 +13,7 @@
     $mini = "/img/vistas_previas/$v_p->idu/l.$v_p->image";
 
     if (file_exists($file)): ?>
-        <a data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/imagenes/vistas_previas/<?=$v_p->idu?>/<?=$v_p->image?>"><img alt="<?=$v_p->image?>" loading="lazy" src="<?=stristr($v_p->image, '.svg')?"/$file":$mini?>"></a>
+        <?php $src = stristr($v_p->image, '.svg') ? "/$file" : $mini; ?>
+        <a data-ajax=".ajax.show" data-style="body, overflow:hidden" href="/imagenes/vistas_previas/<?=$v_p->idu?>/<?=$v_p->image?>"><img alt="<?=$v_p->image?>" decoding="async" loading="lazy" src="<?=$src?>"<?=Article::imageSizeAttributes($src)?>></a>
     <?php endif; ?>
 <?php endif; ?>

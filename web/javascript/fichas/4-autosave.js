@@ -1,21 +1,15 @@
 (function () {
     "use strict";
 
-    /**
-     * Muestra una notificación usando el sistema nativo de KumbiaPHP/RolePlus.
-     * Utiliza el contenedor .toast-container definido en toast_paper.phtml.
-     */
     function showToast(message, type) {
-        console.log("[Autosave] Notificación:", message);
-
-        var container = $(".toast-container");
-        if (container.length === 0) {
-            container = $('<div class="toast-container"></div>').appendTo('main');
+        var container = document.querySelector(".toast-container");
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.querySelector('main').appendChild(container);
         }
-
         var toastId = "toast-js-" + Math.floor(Math.random() * 1000000);
         var title = (type === "error") ? "ERROR" : "INFO";
-
         var html =
             '<div class="mb15 ' + toastId + '">' +
             '<button type="button" class="btn-small" data-remove="parent">' +
@@ -24,18 +18,23 @@
             '<h3>' + title + '</h3>' +
             '<p>' + message + '</p>' +
             '</div>';
-
-        var $toast = $(html).appendTo(container);
-
-        // Manejo del cierre manual (por si el delegado global no está activo)
-        $toast.find('[data-remove="parent"]').on('click', function () {
-            $toast.fadeOut('slow', function () { $(this).remove(); });
-        });
-
-        // Autocierre a los 4 segundos
+            
+        var wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        var toast = wrapper.firstElementChild;
+        container.appendChild(toast);
+        
+        var btn = toast.querySelector('[data-remove="parent"]');
+        if(btn) {
+            btn.addEventListener('click', function() {
+                if(window.Kumbia && Kumbia.fx) Kumbia.fx.fadeOut(toast);
+                else toast.remove();
+            });
+        }
         setTimeout(function () {
-            if ($toast.parent().length > 0) {
-                $toast.fadeOut('slow', function () { $(this).remove(); });
+            if (toast.parentElement) {
+                if(window.Kumbia && Kumbia.fx) Kumbia.fx.fadeOut(toast);
+                else toast.remove();
             }
         }, 4000);
     }
@@ -48,7 +47,6 @@
 
     function initAll() {
         var forms = document.querySelectorAll("form[data-autosave]");
-        console.log("[Autosave] Iniciando en " + forms.length + " formularios");
         for (var f = 0; f < forms.length; f++) {
             initForm(forms[f]);
         }
@@ -56,58 +54,53 @@
 
     function initForm(form) {
         if (!form) return;
-
         var actionVal = (form.getAttribute("data-autosave") || "").trim();
         if (!actionVal) return;
-
         var saveBtnSel = 'button[name="action"][value="' + actionVal + '"]';
         var saveBtn = form.querySelector(saveBtnSel);
+        if (!saveBtn) return;
 
-        // Si no hay botón, no hay permisos de edición.
-        if (!saveBtn) {
-            console.warn("[Autosave] Botón '" + actionVal + "' no encontrado. Permisos insuficientes?");
-            return;
-        }
-
-        // ASEGURAR VISIBILIDAD: Quitamos cualquier rastro de display:none
         saveBtn.style.display = "inline-block";
 
         var watched = form.querySelectorAll(
             'textarea, input[type="text"], input[type="checkbox"], input[type="file"]'
         );
-
         var lastData = takeSnapshot(watched);
         var timer = null;
         var saving = false;
-        var isSubmitting = false; // Flag para evitar el aviso al salvar manualmente
+        var isSubmitting = false;
 
-        form.addEventListener("submit", function () {
+        form.addEventListener("submit", function() {
             isSubmitting = true;
+        });
+
+        window.addEventListener("beforeunload", function (e) {
+            if (isSubmitting) return;
+
+            var currentSnapshot = takeSnapshot(watched);
+            if (timer || currentSnapshot !== lastData) {
+                if (timer) doSave();
+                var msg = "¿Guardar cambios antes de salir?";
+                e.preventDefault();
+                e.returnValue = msg;
+                return msg;
+            }
         });
 
         function scheduleSave() {
             if (timer) clearTimeout(timer);
-            timer = setTimeout(function () {
-                doSave();
-            }, 3000);
+            timer = setTimeout(function () { doSave(); }, 3000);
         }
 
         function doSave() {
             timer = null;
             if (saving) return;
-
             var currentData = takeSnapshot(watched);
             if (currentData === lastData) return;
-
             var fd = new FormData(form);
             fd.set("action", actionVal);
-
-            var url = (form.getAttribute("action") || "").trim();
-            if (!url) url = window.location.href;
-
+            var url = (form.getAttribute("action") || "").trim() || window.location.href;
             saving = true;
-            console.log("[Autosave] Guardando...");
-
             fetch(url, {
                 method: "POST",
                 cache: "no-store",
@@ -120,38 +113,16 @@
                     if (res.ok) {
                         lastData = currentData;
                         showToast("Cambios guardados automáticamente", "success");
-                    } else {
-                        showToast("Error el autoguardado (" + res.status + ")", "error");
                     }
                 })
-                .catch(function (err) {
-                    console.error("[Autosave] Fallo de red:", err);
-                })
-                .finally(function () {
-                    saving = false;
-                });
+                .finally(function () { saving = false; });
         }
 
-        // Asignar eventos
         for (var i = 0; i < watched.length; i++) {
             var el = watched[i];
             var evt = (el.type === "checkbox" || el.type === "file") ? "change" : "input";
             el.addEventListener(evt, scheduleSave);
         }
-
-        // Salida de página
-        window.addEventListener("beforeunload", function (e) {
-            if (isSubmitting) return; // Si estamos enviando el form, no avisamos
-
-            var currentSnapshot = takeSnapshot(watched);
-            if (timer || currentSnapshot !== lastData) {
-                if (timer) doSave();
-                var msg = "¿Guardar cambios antes de salir?";
-                e.preventDefault();
-                e.returnValue = msg;
-                return msg;
-            }
-        });
     }
 
     function takeSnapshot(nodeList) {

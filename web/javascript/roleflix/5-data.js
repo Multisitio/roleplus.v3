@@ -1,201 +1,183 @@
-$(function() {
-    /* COPIA EL VALOR DEL ATRIBUTO A UN CONTENEDOR */
-    $('body').on('click', '[data-add]', function() {
-        var data = $(this).data('add');
-        var to = $(this).data('add_to');
-        var val = $(to).val();
-        $(to).val(val + data);
-    });
+/* 5-data.js - Vanilla JS version – USA 4-masonry.js */
 
-    /* MUESTRA UN MENSAJE W3CSS */
-    $('body').on('click', '[data-alert]', function() {
-        var alert = $(this).data('alert');
-        $('<div class="alert n0 w3-panel w3-blue-grey w3-round"><h3>INFO</h3><p>' + alert + '</p></div>').appendTo('.alert-container');
-        setTimeout("$('.alert.n0').fadeOut('slow', function(){ $(this).remove() })", 8000);
-    });
-
-    /* ALTERNA MARCADO */
-    $('body').on('click', '[data-checked]', function() {
-        var checked = $(this).data('checked');
-        $(this).toggleClass(checked);
-    });
-
-    /* CLICK */
-    $('body').on('click', '[data-click]', function() {
-        var to = $(this).data('click');
-        $(to).click();
-    });
-
-    /* CLON */
-    $('body').on('click', '[data-clone]', function() {
-        var el = $(this).data('clone');
-        var to = $(this).data('to');
-        $(el).clone().appendTo(to);
-    });
-
-    /* CONFIRMAR ANTES DESDE EL NAVEGADOR, SOLO PARA AJAX */
-    $('body').on('click', '[data-confirm]', function(e) {
-        var mensaje = $(this).data('confirm');
-        if (!confirm(mensaje)) {
-            e.stopImmediatePropagation();
-            return false;
-        }
-    });
-
-    /* SE DA OPACIDAD AL ELEMENTO ACTIVO */
-    $('body').on('click', '[data-disabled]', function() {
-        var disabled = $(this).data('disabled');
-        var enabled = $(this).data('enabled');
-        $(enabled).css('opacity', '1');
-        $(disabled).css('opacity', '.15');
-    });
-
-    /* OCUTA ALGO CON EFECTO FADE OUT */
-    $('body').on('click', '[data-fade_out]', function() {
-        var to = $(this).data('fade_out');
-        $(to).fadeOut();
-    });
-
-    /* EFECTO CHINCHETA */
-    $('body').on('click', '[data-fixed]', function() {
-        var to = $(this).data('fixed');
-        $(to).toggleClass('fixed').find('.fixed-icon').toggle();
-    });
-
-    /* FOCUS */
-    $('body').on('click', '[data-focus]', function() {
-        var to = $(this).data('focus');
-        $(to).focus();
-    });
-
-    /* CAMBIA EL HASH */
-    $('body').on('click', '[data-hash]', function() {
-        var hash = $(this).data('hash');
-        location.hash = hash;
-    });
-
-    /* OCULTA ALGO */
-    $('body').on('click', '[data-hide]', function() {
-        var to = $(this).data('hide');
-        $(to).hide();
-    });
-
-    /* COPIA UN HTML A UN ELEMENTO DE FORMULARIO */
-    $('body').on('click', '[data-html2val]', function() {
-        var from = $(this).data('html2val');
-        var to = $(this).data('html2val_to');
-        $(to).val($(from).html());
-    });
-
-    /* LOOP */
-    $('body').on('click', '[data-loop]', function() {
-        var div = $(this).data('loop');
-        var img = $(this).data('next');
-        var val = $(this).data('keep');
-        var src;
-
-        $(div).css('display', 'none');
-
-        if ($(div + img).length == 0) {
-            img = 0;
-        }
-
-        $(div + img).css('display', 'block');
-        src = $(div + img).attr('src');
-        $(val).val(src);
-
-        $(this).data('next', ++img);
-    });
-
-    /* MUEVE UNA CLASE */
-    $('body').on('click', '[data-move_class]', function() {
-        var item = $(this).data('move_class');
-        var from = $(this).data('move_class_from');
-        var to = $(this).data('move_class_to');
-        $(from).removeClass(item);
-        $(to).addClass(item);
-    });
-
-    /* ELIMINA ALGO */
-    $('body').on('click', '[data-remove]', function() {
-        var to = $(this).data('remove');
-        if (to == 'parent') {
-            $(this).parent().remove();
-        } else {
-            $(to).remove();
-        }
-    });
-
-    /* BORRA EL VALOR DE UN ELEMENTO */
-    $('body').on('click', '[data-reset]', function() {
-        var to = $(this).data('reset');
-        $(to).text('').val('');
-    });
-
-    /* HACE SCROLL HASTA EL ELEMENTO ACTIVO INDICADO */
-    $('[data-scroll]').each(function() {
-        var to = $(this).data('scroll');
-        if ($(to).length) $(this).animate({ scrollTop: $(to).offset().top }, 500);
-    });
-
-    /* SCROLL HACIA ABAJO AL PULSAR UN BOTON */
-    $('body').on('click', '[data-scroll_bottom]', function() {
-        var to = $(this).data('scroll_bottom');
-        var div = document.querySelector(to);
-        div.scrollTo(0, div.scrollHeight);
-    });
-
-    /* ALTERNA AL SELECCIONAR */
-    $('body').on('change', '[data-change_toggle]', function() {
-        var to = $(this).data('change_toggle');
-        var if_val = $(this).data('change_if_value');
-        var val = $(this).val();
-        console.log([if_val, val]);
-        if (if_val == val) {
-            $(to).toggle();
-        }
-    });
-
-    /* MUESTRA ALGO */
-    $('body').on('click', '[data-show]', function() {
-        var to = $(this).data('show');
-        $(to).show();
-    });
-
-    /* OCUTA ALGO CON EFECTO SLIDE DOWN */
-    $('body').on('click', '[data-slide_down]', function() {
-        var to = $(this).data('slide_down');
-        console.log(to);
-        $(to).slideDown();
-    });
-
-    /* MUESTRA Y OCULTA ALGO */
-    $('body').on('click', '[data-toggle]', function() {
-        var to = $(this).data('toggle');
-        $(to).toggle();
-        /*if (window.M) {
-            M.textareaAutoResize($('textarea'))
-        }*/
-    });
-
-    /* MUESTRA Y OCULTA ALGO CON DOBLE CLICK */
-    $('body').on('dblclick', '[data-toggle2]', function() {
-        var to = $(this).data('toggle2');
-        $(to).toggle();
-        $(this).find('input, textarea').focus();
-    });
-
-    /* MUESTRA Y OCULTA ALGO */
-    $('body').on('click', '[data-toggle_class]', function() {
-        var to = $(this).data('toggle_class');
-        var _class = $(this).data('class');
-        $(to).toggleClass(_class);
-    });
-
-    /* ABRE LA VENTANA DE USUARIOS PARA BUSCAR UNO */
-    $('body').on('click', '[data-usuarios]', function() {
-        var to = $(this).data('usuarios');
-        var load = $(this).data('load');
-        $('.ajax.show').load('/usuarios/ventana', { 'to': to, 'load': load });
-    });
+// Ocultar/mostrar UI al scroll
+let prevScrollY = window.pageYOffset;
+let ticking = false;
+function onScrollCompute(y) {
+    if (y === 0) {
+        showElements('nav, .scroll-down-hide');
+        return;
+    }
+    if (y < prevScrollY) {
+        showElements('nav, .scroll-down-hide');
+    } else {
+        hideElements('aside.left, nav, .scroll-down-hide');
+    }
+    prevScrollY = y;
+}
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+            onScrollCompute(window.pageYOffset);
+            ticking = false;
+        });
+    }
 });
+
+function showElements(selector) {
+    document.querySelectorAll(selector).forEach(el => el.style.display = '');
+}
+function hideElements(selector) {
+    document.querySelectorAll(selector).forEach(el => el.style.display = 'none');
+}
+
+// data-change: hide/show based on value
+document.body.addEventListener('change', e => {
+    const el = e.target;
+    const hide = el.getAttribute('data-change');
+    if (!hide) return;
+    const show = el.value;
+    document.querySelectorAll(hide).forEach(n => n.style.display = 'none');
+    document.querySelectorAll('.' + show).forEach(n => n.style.display = '');
+});
+
+// data-change_load: AJAX load + recalcular masonry
+document.body.addEventListener('change', async e => {
+    const el = e.target;
+    const url = el.value;
+    const to = el.getAttribute('data-change_load');
+    if (!to || !url) return;
+
+    const container = document.querySelector(to);
+    if (!container) return;
+
+    const html = await fetch(url).then(res => res.text());
+    container.innerHTML = html;
+
+    if (container.hasAttribute('data-columns') && window.MasonryGrid) {
+        requestAnimationFrame(() => window.MasonryGrid.recalculate(container));
+    }
+});
+
+// data-enviar: AJAX load + recalcular
+document.body.addEventListener('click', async e => {
+    const el = e.target.closest('[data-enviar]');
+    if (!el) return;
+    e.preventDefault();
+    const url = el.getAttribute('data-enviar');
+    const hideAjax = document.querySelector('.ajax.hide');
+    if (!hideAjax) return;
+
+    const html = await fetch(url).then(res => res.text());
+    hideAjax.innerHTML = html;
+
+    if (hideAjax.hasAttribute('data-columns') && window.MasonryGrid) {
+        requestAnimationFrame(() => window.MasonryGrid.recalculate(hideAjax));
+    }
+});
+
+// data-remove: remove parent or selector
+document.body.addEventListener('click', e => {
+    const el = e.target.closest('[data-remove]');
+    if (!el) return;
+    e.preventDefault();
+    const to = el.getAttribute('data-remove');
+    let target = null;
+    if (to === 'parent') target = el.parentElement;
+    else target = document.querySelector(to);
+    if (target) target.remove();
+});
+
+// data-show_pass: toggle password
+document.body.addEventListener('click', e => {
+    const el = e.target.closest('[data-show_pass]');
+    if (!el) return;
+    e.preventDefault();
+    const inputSel = el.getAttribute('data-show_pass');
+    const input = document.querySelector(inputSel);
+    if (!input) return;
+    const img = el.parentElement.querySelector('[src*="eye"]');
+    if (input.type === 'text') {
+        input.type = 'password';
+        if (img) img.src = '/img/icons/eye-s.svg';
+    } else {
+        input.type = 'text';
+        if (img) img.src = '/img/icons/eye-off-s.svg';
+    }
+});
+
+// data-add: append text
+document.body.addEventListener('click', e => {
+    const el = e.target.closest('[data-add]');
+    if (!el) return;
+    e.preventDefault();
+    const t = el.getAttribute('data-add');
+    const n = el.parentElement.getAttribute('data-add_to');
+    const target = document.querySelector(n);
+    if (!target) return;
+    target.value += t;
+});
+
+// data-toast: load toast
+document.body.addEventListener('click', async e => {
+    const el = e.target.closest('[data-toast]');
+    if (!el) return;
+    const toast = el.getAttribute('data-toast');
+    const showAjax = document.querySelector('.ajax.show');
+    if (!showAjax) return;
+    const url = '/index/toast?toast=' + encodeURIComponent(toast);
+    const html = await fetch(url).then(res => res.text());
+    showAjax.innerHTML = html;
+});
+
+// Textarea auto-height
+function textareaAutoHeight() {
+    document.querySelectorAll('textarea').forEach(el => {
+        let height = el.scrollTop + el.scrollHeight;
+        if (height < 99) height = 99;
+        el.style.height = height + 'px';
+    });
+}
+textareaAutoHeight();
+
+document.body.addEventListener('click', e => {
+    if (e.target.tagName === 'TEXTAREA') textareaAutoHeight();
+});
+document.body.addEventListener('keyup', e => {
+    if (e.target.tagName === 'TEXTAREA') textareaAutoHeight();
+});
+
+// Tab y Shift+Tab en textarea
+document.body.addEventListener('keydown', e => {
+    if (e.target.tagName === 'TEXTAREA' && e.keyCode === 9) {
+        const v = e.target.value;
+        const s = e.target.selectionStart;
+        const eEnd = e.target.selectionEnd;
+        const linesStart = v.lastIndexOf('\n', s - 1) + 1;
+
+        if (e.shiftKey) {
+            const selectedText = v.substring(linesStart, eEnd);
+            const lines = selectedText.split('\n');
+            const removed = lines.map(l => l.charAt(0) === '\t' ? 1 : 0);
+            const newText = lines.map(l => l.charAt(0) === '\t' ? l.substring(1) : l).join('\n');
+            e.target.value = v.substring(0, linesStart) + newText + v.substring(eEnd);
+            e.target.selectionStart = Math.max(linesStart, s - removed[0]);
+            e.target.selectionEnd = eEnd - removed.reduce((a, b) => a + b, 0);
+        } else {
+            if (s === eEnd) {
+                e.target.value = v.substring(0, s) + '\t' + v.substring(eEnd);
+                e.target.selectionStart = e.target.selectionEnd = s + 1;
+            } else {
+                const selectedText = v.substring(linesStart, eEnd);
+                const lines = selectedText.split('\n');
+                const newText = lines.map(line => '\t' + line).join('\n');
+                e.target.value = v.substring(0, linesStart) + newText + v.substring(eEnd);
+                e.target.selectionStart = s + 1;
+                e.target.selectionEnd = eEnd + lines.length;
+            }
+        }
+        e.preventDefault();
+    }
+});
+

@@ -1,14 +1,41 @@
-.resultado ul li:has(> :is(em, strong))::before,
-.resultado ul li:has(> b)~li:has(> :is(em, strong))::before {
-    color: var(--dragonred);
+.plantilla :is(ol, ul) {
+    padding-left: var(--list-padding);
 }
 
-.resultado ul li:has(> :is(em, strong)):has(~ li > b:first-child)::before {
-    color: var(--demongreen);
+.plantilla ul {
+    list-style: none;
 }
 
-.resultado ul li:has(> :is(em, strong)):has(~ li > b:first-child)>:is(em, strong) {
-    color: var(--demongreen);
+.plantilla ul>li::before {
+    content: var(--list-bullet);
+    margin-left: calc(-1 * var(--list-padding));
+    color: var(--color-text);
+}
+
+.plantilla ul>li li::before {
+    content: var(--list-sub-bullet);
+    margin-left: calc(-1 * var(--list-padding));
+}
+
+.plantilla ul.checkbox li::before {
+    content: var(--list-checkbox);
+}
+
+.plantilla ul.radio li::before {
+    content: var(--list-radio);
+}
+
+.plantilla ul li:has(> :is(em, strong))::before,
+.plantilla ul li:has(> b)~li:has(> :is(em, strong))::before {
+    color: var(--color-text);
+}
+
+.plantilla ul li:has(> :is(em, strong)):has(~ li > b:first-child)::before {
+    color: var(--color-primary);
+}
+
+.plantilla ul li:has(> :is(em, strong)):has(~ li > b:first-child)>:is(em, strong) {
+    color: var(--color-primary);
 }
 
 ol li::marker {

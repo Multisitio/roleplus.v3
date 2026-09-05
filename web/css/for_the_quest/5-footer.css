@@ -1,4 +1,4 @@
-.page footer {
+.plantilla > div footer {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +8,7 @@
     right: 30px;
 }
 
-.page footer::after {
+.plantilla > div footer::after {
     text-align: center;
     color: #48000c;
     content: counter(page);

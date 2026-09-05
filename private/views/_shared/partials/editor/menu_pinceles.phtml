@@ -1,0 +1,99 @@
+<?php
+/**
+ * Partial: Barra lateral de pinceles HTML
+ */
+?>
+<nav data-toolbar="pinceles" aria-label="<?=t('Pinceles HTML')?>">
+
+	<div class="pinceles-grupo" data-grupo="estructura">
+		<button type="button" class="grupo-trigger" title="<?=t('Estructura')?>">
+			<?=Ku::icon('layout')?>
+		</button>
+		<div class="grupo-contenido">
+			<button type="button" data-tag="article" title="Contenedor &lt;article&gt;">ART<br>PAGE</button>
+			<button type="button" data-tag="div" title="Bloque genérico &lt;div&gt;">DIV<br>COL</button>
+			<button type="button" data-tag="header" title="Cabecera &lt;header&gt;">HEADER</button>
+			<button type="button" data-tag="section" title="Sección &lt;section&gt;">SECTION</button>
+			<button type="button" data-tag="footer" title="Pie &lt;footer&gt;">FOOTER</button>
+		</div>
+	</div>
+
+	<div class="pinceles-grupo" data-grupo="basicos">
+		<button type="button" class="grupo-trigger" title="<?=t('Básicos')?>">
+			<?=Ku::icon('type')?>
+		</button>
+		<div class="grupo-contenido">
+			<button type="button" data-tag="clear" title="Limpiar formato" style="font-size:18px;">🧹</button>
+			<button type="button" data-tag="h1" title="Encabezado &lt;h1&gt;">H1</button>
+			<button type="button" data-tag="h2" title="Encabezado &lt;h2&gt;">H2</button>
+			<button type="button" data-tag="h3" title="Encabezado &lt;h3&gt;">H3</button>
+			<button type="button" data-tag="h4" title="Encabezado &lt;h4&gt;">H4</button>
+			<button type="button" data-tag="h5" title="Encabezado &lt;h5&gt;">H5</button>
+			<button type="button" data-tag="h6" title="Encabezado &lt;h6&gt;">H6</button>
+			<button type="button" data-tag="p" title="Párrafo &lt;p&gt;">P</button>
+		</div>
+	</div>
+
+	<div class="pinceles-grupo" data-grupo="formato">
+		<button type="button" class="grupo-trigger" title="<?=t('Formato')?>">
+			<?=Ku::icon('edit-2')?>
+		</button>
+		<div class="grupo-contenido">
+			<button type="button" data-tag="clear" title="Limpiar Formato" style="background-color: var(--rojo); color: white;">🧹</button>
+			<button type="button" data-tag="a" title="Enlace &lt;a&gt;">A</button>
+			<button type="button" data-tag="b" title="Negrita &lt;b&gt;">B</button>
+			<button type="button" data-tag="strong" title="Negrita a color &lt;strong&gt;">STRONG</button>
+			<button type="button" data-tag="i" title="Cursiva &lt;i&gt;">I</button>
+			<button type="button" data-tag="em" title="Cursiva a color &lt;em&gt;">EM</button>
+			<button type="button" data-tag="img" title="Imagen &lt;img&gt;">IMG</button>
+			<button type="button" data-tag="mark" title="marcado &lt;mark&gt;">MARK</button>
+			<button type="button" data-tag="s" title="tachado &lt;s&gt;">S</button>
+			<button type="button" data-tag="small" title="Texto pequeño &lt;small&gt;">SMALL</button>
+			<button type="button" data-tag="span" title="Contenedor en línea &lt;span&gt;">SPAN</button>
+			<button type="button" data-tag="sub" title="sub &lt;sub&gt;">SUB</button>
+			<button type="button" data-tag="sup" title="sup &lt;sup&gt;">SUP</button>
+			<button type="button" data-tag="u" title="Subrayado &lt;u&gt;">U</button>
+		</div>
+	</div>
+
+	<div class="pinceles-grupo" data-grupo="citas">
+		<button type="button" class="grupo-trigger" title="<?=t('Citas')?>">
+			<?=Ku::icon('message-square')?>
+		</button>
+		<div class="grupo-contenido">
+			<button type="button" data-tag="blockquote" title="Cita &lt;blockquote&gt;">BLOCKQUOTE</button>
+			<button type="button" data-tag="q" title="Cita &lt;q&gt;">Q</button>
+		</div>
+	</div>
+
+	<div class="pinceles-grupo" data-grupo="listas">
+		<button type="button" class="grupo-trigger" title="<?=t('Listas')?>">
+			<?=Ku::icon('list')?>
+		</button>
+		<div class="grupo-contenido">
+			<button type="button" data-tag="ol" title="Lista ordenada &lt;ol&gt;">OL</button>
+			<button type="button" data-tag="ul" title="Lista desordenada &lt;ul&gt;">UL</button>
+			<button type="button" data-tag="ul.checkbox" title="Lista desordenada multiopción &lt;ul&gt;">CHECKBOX</button>
+			<button type="button" data-tag="ul.radio" title="Lista desordenada opción única &lt;ul&gt;">RADIO</button>
+			<button type="button" data-tag="li" title="Elemento de lista &lt;li&gt;">LI</button>
+		</div>
+	</div>
+
+	<div class="pinceles-grupo" data-grupo="tablas">
+		<button type="button" class="grupo-trigger" title="<?=t('Tablas')?>">
+			<?=Ku::icon('grid')?>
+		</button>
+		<div class="grupo-contenido">
+			<button type="button" data-tag="table" title="Tabla &lt;table&gt;">TABLE</button>
+			<button type="button" data-tag="table.w100" title="Tabla 100% &lt;table style=&quot;width: 100%;&quot;&gt;">TABLE<br>100%</button>
+			<button type="button" data-tag="caption" title="Subtítulo de tabla &lt;caption&gt;">CAPTION</button>
+			<button type="button" data-tag="thead" title="Cabecera de tabla &lt;thead&gt;">THEAD</button>
+			<button type="button" data-tag="tbody" title="Cuerpo de tabla &lt;tbody&gt;">TBODY</button>
+			<button type="button" data-tag="tfoot" title="Pie de tabla &lt;tfoot&gt;">TFOOT</button>
+			<button type="button" data-tag="tr" title="Fila &lt;tr&gt;">TR</button>
+			<button type="button" data-tag="th" title="Celda de encabezado &lt;th&gt;">TH</button>
+			<button type="button" data-tag="td" title="Celda &lt;td&gt;">TD</button>
+		</div>
+	</div>
+
+</nav>

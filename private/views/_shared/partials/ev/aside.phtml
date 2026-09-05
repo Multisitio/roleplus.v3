@@ -49,6 +49,19 @@ $usuario = View::getVar('usuario');
 		<?php endforeach; ?>		
 	<?php endif; ?>
 
+    <a href="/ev/plantillas"><img alt="<?=t('Plantillas')?>" loading="lazy" src="/img/icons/monitor.svg"> <?=t('Plantillas')?></a>
+
+	<?php if ($controller_name == 'plantillas'): ?>
+		<?php foreach ((new Plantillas)->todas() as $pla): ?>
+            <?php if (Session::get('idu') == $pla->usuarios_idu): ?>
+                <a class="sub" href="/ev/plantillas/formulario/<?=$pla->idu?>">
+                    <img alt="<?=$pla->nombre?>" src="/img/icons/s.corner-down-right.svg">
+                    <small><?=$pla->nombre?></small>
+                </a>
+            <?php endif; ?>
+		<?php endforeach; ?>		
+	<?php endif; ?>
+
 	<?php /*<a href="#"><img alt="<?=t('Personajes')?>" loading="lazy" src="/img/icons/user-plus.svg"> <?=t('Personajes')?></a>>*/ ?>
 
 	<?php /*<a href="#"><img alt="<?=t('Manual')?>" loading="lazy" src="/img/icons/database.svg"> <?=t('Manual')?></a>*/ ?>

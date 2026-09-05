@@ -24,12 +24,12 @@
     padding: 5px;
 }
 
-.modal header [data-hide] {
-    float: right;
+.modal header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-
-/*.modal li a img:not([src*='svg']) {
-    height: 60px;
-    width: 60px;
-}*/
+.modal header h3 {
+    display: inline-block;
+}

@@ -1,37 +1,15 @@
 function copiarAlPortapapeles(link) {
-    // Crea un campo de texto "oculto"
     var aux = document.createElement("input");
-
-    // Asigna el contenido del elemento especificado al valor del campo
     aux.setAttribute("value", link);
-
-    // Añade el campo a la página
     document.body.appendChild(aux);
-
-    // Selecciona el contenido del campo
     aux.select();
-
-    // Copia el texto seleccionado
     document.execCommand("copy");
-
-    // Elimina el campo de la página
     document.body.removeChild(aux);
 }
 
-$('body').on('click', '[data-remove]', function(eve) {
+Kumbia.utils.on('click', '.share', function(eve) {
     eve.preventDefault();
-    var to = $(this).data('remove');
-    console.log(to);
-    if (to == 'parent') {
-        $(this).parent().remove();
-    } else {
-        $(to).remove();
-    }
-});
-
-$('body').on('click', '.share', function(eve) {
-    eve.preventDefault();
-    var url = $(this).attr('href');
+    var url = this.getAttribute('href');
     if (navigator.share) {
         navigator.share({
             title: '',
@@ -43,7 +21,14 @@ $('body').on('click', '.share', function(eve) {
     }
 });
 
-$('body').on('click', '[data-toast]', function() {
-    var toast = $(this).data('toast');
-    $('.ajax.show').load('/index/toast', { 'toast': toast });
+Kumbia.utils.on('click', '[data-toast]', function() {
+    var toast = Kumbia.utils.getData(this, 'toast');
+    var ajaxDiv = document.querySelector('.ajax.show');
+    if(ajaxDiv) {
+        var fd = new FormData();
+        fd.append('toast', toast);
+        Kumbia.utils.fetch('/index/toast', { method: 'POST', body: fd }).then(function(html) {
+            ajaxDiv.innerHTML = html;
+        });
+    }
 });

@@ -1,28 +1,16 @@
-/* 5-jugadores.js - Vanilla JS version */
+var partidas_idu_node = document.querySelector('[data-partidas_idu]');
+var partidas_idu = partidas_idu_node ? partidas_idu_node.dataset.partidas_idu : null;
 
-const dataPartidasIdu = document.querySelector('[data-partidas_idu]');
+if (partidas_idu && partidas_idu.length) {
+    console.log('Escuchando nuevos jugadores...');
 
-if (dataPartidasIdu) {
-	const partidasIdu = dataPartidasIdu.getAttribute('data-partidas_idu');
-	const PING_MS = 540000; // 9 minutos
+    document.addEventListener("DOMContentLoaded", function() {
+        Kumbia.utils.fetch('/ev/panel/conectado/' + partidas_idu);
+        console.log('Connected onload!');
+    });
 
-	function ping(url) {
-		fetch(url).catch(() => {});
-	}
-
-	document.addEventListener('DOMContentLoaded', () => {
-		const url = '/ev/panel/conectado/' + partidasIdu;
-		ping(url);
-		setInterval(() => ping(url), PING_MS);
-
-		const sendFinal = () => {
-			if (navigator.sendBeacon) {
-				navigator.sendBeacon(url);
-			} else {
-				fetch(url, { method: 'GET', keepalive: true, cache: 'no-store' }).catch(() => {});
-			}
-		};
-		window.addEventListener('pagehide', sendFinal);
-		window.addEventListener('beforeunload', sendFinal);
-	});
+    setInterval(function() {
+        Kumbia.utils.fetch('/ev/panel/conectado/' + partidas_idu);
+        console.log('Connected oninterval!');
+    }, 540000);
 }

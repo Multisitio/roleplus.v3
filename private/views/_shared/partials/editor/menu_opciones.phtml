@@ -1,0 +1,49 @@
+<aside class="align-right editor settings hide pa10">
+	<button data-hide="aside">
+		<?=t('Contraer')?>
+		<?=Ku::icon('arrow-right')?>
+	</button>
+
+	<h4><b>Pages:</b> <span></span></h4> 
+	<div class="pages">
+		<input type="text" name="pages_filter" placeholder="<?=t('Ej: 1-4 o 1,3,5')?>">
+	</div>
+
+<?php
+$format_print = strtoupper($manual->formato ?? 'A4') . (($manual->orientacion ?? 'v') === 'h' ? ' landscape' : '');
+$format_kdp = Manuales::getKdpFormat($manual);
+$format_booklet = strtoupper($manual->formato === 'a5' ? 'a4' : ($manual->formato === 'a4' ? 'a3' : 'ledger')) . ' landscape';
+?>
+	<style id="page-style" media="print">
+		@page { size: <?=$format_print?>; margin: 0; }
+	</style>
+	<button type="button" class="booklet-toggle" data-print="<?=$format_print?>" data-booklet="<?=$format_booklet?>">
+		<?=t('Modo imprenta (libreto)')?>
+		<?=Ku::icon('book')?>
+	</button>
+	<button type="button" class="kdp-toggle" data-print="<?=$format_print?>" data-kdp="<?=$format_kdp?>">
+		<?=t('Sangría KDP')?>
+		<?=Ku::icon('scissors')?>
+	</button>
+
+	<button class="print">
+		<?=t('Imprimir')?>
+		<?=Ku::icon('printer')?>
+	</button>
+	<hr>
+	<label for="start_page">
+		<b><?=t('Empezar a contar (Pág. 1) en:')?></b>
+		<input type="number" id="start_page" name="start_page" min="1" placeholder="<?=t('Ej: 5')?>" data-manual-id="<?=$manuales_idu?>">
+	</label>
+
+	<?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>
+	<a role="button" href="/ev/manuales/formulario/<?=$manuales_idu?>">
+		<?= $editable ? t('Editar en texto') : t('Ver en texto') ?>
+		<?= $editable ? Ku::icon('edit') : Ku::icon('book') ?>
+	</a>
+
+	<a role="button" href="/ev/manuales">
+		<?=t('Ver manuales')?>
+		<?=Ku::icon('book')?>
+	</a>
+</aside>

@@ -79,10 +79,9 @@ button.chat {
 }
 
 .mensajes {
-    height: 100%;
-    overflow: auto;
-    position: absolute;
-    width: calc(100% - 26px);
+    flex-grow: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .mensaje {
@@ -114,3 +113,12 @@ button.chat {
     text-align: right;
     width: 70px;
 }
+
+.chat header .space-between {
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+}
+.mensaje .rows { flex: 1; min-width: 0; word-break: break-word; }
+.modal.chat header { flex-direction: column; }
+

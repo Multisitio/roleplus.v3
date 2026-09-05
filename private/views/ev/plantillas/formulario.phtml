@@ -1,0 +1,101 @@
+<article>
+	<header>
+		<h1>
+			<?=empty($plantilla->nombre)?t('Plantilla'):$plantilla->nombre?>
+            <a data-ajax=".ajax.show" href="/ev/plantillas/formulario_plantilla/<?=$plantilla->idu?>" title="<?=t('Editar plantilla')?>"><sup><img src="/img/icons/edit-2s.svg"></sup></a>
+		</h1>
+        <h2>
+            <?=t('Reglas')?>
+        </h2>
+	</header>
+
+    <section>
+        <?php
+            // Agrupar reglas por selector y recopilar fuentes
+            $agrupadas = [];
+            $fuentes_usadas = [];
+            foreach ($reglas as $reg) {
+                $agrupadas[$reg->selector][] = $reg;
+                if ($reg->propiedad === 'font-family') {
+                    $nombre_fuente = trim($reg->valor, "'\" ");
+                    if ($nombre_fuente && !in_array(strtolower($nombre_fuente), ['inherit', 'initial', 'none'])) {
+                        // Guardamos el primer ID de regla donde aparece para poder borrar o editar
+                        if (!isset($fuentes_usadas[$nombre_fuente])) {
+                            $fuentes_usadas[$nombre_fuente] = $reg->idu;
+                        }
+                    }
+                }
+            }
+        ?>
+
+        <div style="margin-bottom: 2rem; padding: 1rem; background: rgba(0,0,0,0.05); border-radius: 8px;">
+            <h4 style="margin-top: 0; display: flex; align-items: center; gap: 10px;">
+                <?=t('Fuentes Google Cargadas')?>
+                <a role="button" class="small outline" data-ajax=".ajax.show" href="/ev/plantillas/formulario_regla/<?=$plantilla->idu?>" title="<?=t('Añadir nueva fuente')?>" style="padding: 2px 8px; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; line-height: 1;">+</a>
+            </h4>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <?php if (empty($fuentes_usadas)): ?>
+                    <span style="font-size: 0.9em; opacity: 0.7;"><?=t('No se han detectado fuentes. Añade una regla con la propiedad font-family.')?></span>
+                <?php else: ?>
+                    <?php foreach ($fuentes_usadas as $fuente => $regla_idu): ?>
+                        <span style="background: var(--primary, #333); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.85em; display: inline-flex; align-items: center; gap: 8px;">
+                            <?=$fuente?>
+                            <a data-ajax=".ajax.show" href="/ev/plantillas/formulario_regla/<?=$plantilla->idu?>/<?=$regla_idu?>" style="color: #ffaaaa; text-decoration: none; font-weight: bold; font-size: 1.2em; line-height: 1;" title="<?=t('Editar regla asociada')?>">✎</a>
+                        </span>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+            <small style="display: block; margin-top: 8px; opacity: 0.7;">Las fuentes detectadas se descargarán localmente de forma automática y se compilarán en el CSS final.</small>
+        </div>
+        <ul class="manual sortable-list">
+            <?php foreach ($agrupadas as $selector => $grupo):
+                $primera = $grupo[0];
+                $clase = 'grp_' . substr(md5($selector), 0, 8);
+            ?>
+                <li data-selector="<?=$selector?>">
+                    <h4>
+                        <button type="button" class="transparent" data-toggle=".<?=$clase?>">
+                            <img src="/img/icons/plus.svg" class="<?=$clase?>">
+                            <img src="/img/icons/minus.svg" class="<?=$clase?>" style="display:none">
+                            <?=$selector?>
+                        </button>
+                        
+                        <a data-ajax=".ajax.show" href="/ev/plantillas/formulario_regla/<?=$plantilla->idu?>/<?=$primera->idu?>" title="<?=t('Editar regla')?>"><sup><img src="/img/icons/edit-2s.svg"></sup></a>
+
+                        <span class="drag-handle" title="<?=t('Arrastrar para reordenar')?>">☰</span>
+                    </h4>
+
+                    <article class="<?=$clase?> reglas-grupo" style="display:none">
+                        <?php foreach ($grupo as $reg): ?>
+                            <div class="regla-line" data-idu="<?=$reg->idu?>">
+                                <span class="prop-handle" title="<?=t('Arrastrar para reordenar propiedad')?>">⋮⋮</span>
+                                <pre><?=$reg->propiedad?>: <?=$reg->valor?>;</pre>
+                            </div>
+                        <?php endforeach; ?>
+                    </article>
+                    <hr>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </section>
+
+	<footer class="grid">
+        <a role="button" class="outline" href="/ev/plantillas"><?=t('Volver')?></a>
+
+		<a role="button" id="btn_compilar" 
+		<?=(!empty($plantilla->requiere_compilacion) ? 'href="/ev/plantillas/compilar_plantilla/'.$plantilla->idu.'"' : '')?>
+		class="small <?=(!empty($plantilla->requiere_compilacion) ? 'error' : 'success')?>" 
+		style="<?=(!empty($plantilla->requiere_compilacion) ? 'background:darkred; color:white; border-color:red' : 'background:green; color:white; border-color:green; cursor:default')?>">
+			<?=(!empty($plantilla->requiere_compilacion) ? t('Publicar cambios pendientes') : t('Web actualizada'))?>
+		</a>
+
+		<?php if (!empty($plantilla->idu)): ?>
+			<a role="button" class="outline" data-ajax=".ajax.show" href="/ev/plantillas/importar_css/<?=$plantilla->idu?>" title="<?=t('Importar CSS')?>"><?=t('Importar CSS')?></a>
+			<a role="button" data-ajax=".ajax.show" href="/ev/plantillas/formulario_regla/<?=$plantilla->idu?>" title="<?=t('Nueva regla')?>"><?=t('Regla nueva')?></a>
+        <?php endif; ?>
+	</footer>
+</article>
+
+<a role="button" class="flotante abajo derecha ma20 scroll-down-hide" data-ajax=".ajax.show" href="/ev/plantillas/formulario_regla/<?=$plantilla->idu?>" title="<?=t('Nueva regla')?>">
+	<img alt="<?=t('Nueva regla')?>" loading="lazy" src="/img/icons/plus.svg" width="30" height="30">
+</a>

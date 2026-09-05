@@ -1,11 +1,11 @@
 console.log('Escuchando nuevos conectados...');
 
-$(function() {
-    $.get('/usuarios/conectado');
+document.addEventListener("DOMContentLoaded", function() {
+    Kumbia.utils.fetch('/usuarios/conectado');
     console.log('Connected!');
 });
 
 setInterval(function() {
-    $.get('/usuarios/conectado');
+    Kumbia.utils.fetch('/usuarios/conectado');
     console.log('Connected!');
 }, 540000);

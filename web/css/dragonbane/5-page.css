@@ -1,22 +1,22 @@
-.page article {
+.plantilla>div article {
     background: url('/img/editor/dragonbane/96/pergamino.webp');
     background-size: cover;
     counter-increment: page;
-    font: 11pt 'Crimson Pro Regular';
-    color: #333;
+    font: var(--font-size-body) var(--font-body);
+    color: var(--color-text);
 }
 
-:is(.cover, .page) article>section {
-    padding-inline: 1cm;
+.plantilla>div article>section {
+    padding-inline: var(--spacing-page-inline);
     /*margin-bottom: 20px;*/
 }
 
-:is(.cover, .page) article>section:first-child {
-    padding-top: 0.6cm;
+.plantilla>div article>section:first-child {
+    padding-top: var(--spacing-page-top);
 }
 
-:is(.cover, .page) article>section:last-child {
-    padding-bottom: 2.4cm;
+.plantilla>div article>section:last-child {
+    padding-bottom: var(--spacing-page-bottom);
     /*margin-bottom: 0;*/
 }
 
