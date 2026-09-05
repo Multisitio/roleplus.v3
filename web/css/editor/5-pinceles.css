@@ -128,6 +128,7 @@ nav[data-toolbar="pinceles"] .pinceles-grupo.active .grupo-trigger {
 nav[data-toolbar="contexto"] {
     align-items: center;
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     left: 70px;
     position: fixed;
@@ -176,10 +177,11 @@ nav[data-toolbar="contexto"] > span {
 nav[data-toolbar="contexto"] > span:not(:empty) {
     background: white;
     display: inline-flex;
+    flex-wrap: wrap;
     align-items: center;
     box-sizing: border-box;
-    height: 42px;
-    padding: 0 25px 0 12px;
+    min-height: 42px;
+    padding: 10px 25px 10px 12px;
     border-radius: 0;
     box-shadow: none;
     filter: drop-shadow(1px 1px 0 #666);
