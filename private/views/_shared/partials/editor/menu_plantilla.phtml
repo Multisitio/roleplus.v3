@@ -315,6 +315,12 @@
 		<details class="template-panel">
 			<summary><?=t('Tablas')?></summary>
 			<div class="pa10">
+				<div style="text-align: right; margin-bottom: 10px;">
+					<label style="display: inline-block; text-align: right;">
+						<small style="margin-right: 5px;"><b><?=t('Distancia entre tablas (px)')?>:</b></small>
+						<input type="number" name="table_gap" value="<?=intval($ajustes->table_gap ?? 15)?>" data-change-ajax style="text-align: center; width: 80px; display: inline-block;">
+					</label>
+				</div>
 				<div class="grid col-4 mb10 gap10">
 					<label>
 						<small><b><?=t('Sangrado V.')?>:</b></small>

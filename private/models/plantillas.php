@@ -482,6 +482,13 @@ class Plantillas extends LiteRecord
             }
         }
 
+        // Distancia entre tablas
+        if (isset($post['table_gap'])) {
+            $val = intval($post['table_gap']) . 'px';
+            $Reglas->guardar($this->idu, '--table-gap', $val);
+            $debe_compilar = true;
+        }
+
         // 4. Listas
         foreach (self::MENU_LISTAS as $p => $field) {
             if (isset($post[$p])) {
@@ -801,6 +808,7 @@ class Plantillas extends LiteRecord
         $css .= $this->cssEspaciado('main section', 'section');
         $css .= $this->cssEspaciado('main p', 'p');
         $css .= "main p + p { margin-top: var(--p-gap); }\n";
+        $css .= "main table + table { margin-top: var(--table-gap); }\n";
         $css .= $this->cssEspaciado('main blockquote', 'blockquote');
         $css .= $this->cssEspaciado('main :is(ul, ol)', 'list', "    list-style: none !important;\n");
         $css .= "main :not(main):has(+ :is(ul, ol)) {\n";
