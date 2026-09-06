@@ -35,7 +35,7 @@ class RegistradosController extends GeneralController
 
 		$this->claves	= (new Configuracion)->todas();
 		$this->usuario	= (new Usuarios)->uno();
-        $this->version = '2608231201';
+        $this->version = '2609061132';
 
 		# CRÍTICO rendimiento:
 		# liberamos el lock de la sesión aquí para que esta petición
