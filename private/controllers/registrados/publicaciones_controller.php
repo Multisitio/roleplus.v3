@@ -19,6 +19,21 @@ class PublicacionesController extends RegistradosController
     public function crear()
     {
         $pub = (new Publicaciones)->crear($_POST);
+        
+        if (!$pub) {
+            $this->publicacion = (object) $_POST;
+            $this->titulo = $this->publicacion->titulo ?? t('Publicación');
+            $this->youtube_idu = $_POST['youtube_idu'] ?? null;
+            $this->rss_idu = $_POST['rss_idu'] ?? null;
+            $this->confirmar_cierre = true;
+            $this->grupos = (new Grupos)->todosLosHashtags();
+            $this->vistas_previas = []; // Fallback for views
+            
+            $layout = Input::isAjax() ? 'ventana' : 'default';
+            View::select('formulario', $layout);
+            return;
+        }
+
         if (Input::isAjax()) {
             View::select('');
         } else {
@@ -92,11 +107,19 @@ class PublicacionesController extends RegistradosController
             View::select('');
             return;
         }
-        $ya_publicada = (new Publicaciones)->first('SELECT id FROM publicaciones WHERE titulo=? OR (enlace != "" AND enlace=?)', [$ent->titulo, $ent->url]);
-        if ($ya_publicada) {
-            Session::setArray('toast', t('Esta entrada ya está publicada.'));
-            View::select('');
-            return;
+
+        $cond = []; $params = [];
+        if (!empty($ent->titulo)) { $cond[] = 'titulo=?'; $params[] = $ent->titulo; }
+        if (!empty($ent->url)) { $cond[] = 'enlace=?'; $params[] = $ent->url; }
+        
+        if ($cond) {
+            $sql = 'SELECT id FROM publicaciones WHERE ' . implode(' OR ', $cond);
+            $ya_publicada = (new Publicaciones)->first($sql, $params);
+            if ($ya_publicada) {
+                Session::setArray('toast', t('Esta entrada ya está publicada.'));
+                View::select('');
+                return;
+            }
         }
 
         $entrada = (new Rss_entradas)->prepararEntrada($rss_idu);
@@ -118,11 +141,19 @@ class PublicacionesController extends RegistradosController
             View::select('');
             return;
         }
-        $ya_publicada = (new Publicaciones)->first('SELECT id FROM publicaciones WHERE titulo=? OR (enlace != "" AND enlace=?)', [$ent->titulo, $ent->enlace]);
-        if ($ya_publicada) {
-            Session::setArray('toast', t('Esta entrada ya está publicada.'));
-            View::select('');
-            return;
+
+        $cond = []; $params = [];
+        if (!empty($ent->titulo)) { $cond[] = 'titulo=?'; $params[] = $ent->titulo; }
+        if (!empty($ent->enlace)) { $cond[] = 'enlace=?'; $params[] = $ent->enlace; }
+        
+        if ($cond) {
+            $sql = 'SELECT id FROM publicaciones WHERE ' . implode(' OR ', $cond);
+            $ya_publicada = (new Publicaciones)->first($sql, $params);
+            if ($ya_publicada) {
+                Session::setArray('toast', t('Esta entrada ya está publicada.'));
+                View::select('');
+                return;
+            }
         }
 
         $entrada = (new Rolflix_entradas)->prepararEntrada($youtube_idu);

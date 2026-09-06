@@ -2,8 +2,9 @@
     position: fixed;
     right: 20px;
     top: 20px;
-    z-index: 100;
-    width: 280px;
+    z-index: 9;
+    width: 100%;
+    max-width: 280px;
 }
 
 .toast-container>div {
@@ -13,6 +14,8 @@
     margin-bottom: 15px;
     padding: 10px;
     position: relative;
+    width: 100%;
+    max-width: 280px;
 }
 
 .toast-container [data-remove="parent"] {
