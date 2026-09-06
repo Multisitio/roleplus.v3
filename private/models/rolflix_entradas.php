@@ -360,10 +360,17 @@ class Rolflix_entradas extends LiteRecord
 			return false;
 		}
 
-		$ya_publicada = (new Publicaciones)->first('SELECT id FROM publicaciones WHERE titulo=? OR (enlace != "" AND enlace=?)', [$ent->titulo, $ent->enlace]);
-		if ($ya_publicada) {
-			Session::setArray('toast', t('Esta entrada ya está publicada.'));
-			return false;
+		$cond = []; $params = [];
+		if (!empty($ent->titulo)) { $cond[] = 'titulo=?'; $params[] = $ent->titulo; }
+		if (!empty($ent->enlace)) { $cond[] = 'enlace=?'; $params[] = $ent->enlace; }
+		
+		if ($cond) {
+			$sql = 'SELECT id FROM publicaciones WHERE ' . implode(' OR ', $cond);
+			$ya_publicada = (new Publicaciones)->first($sql, $params);
+			if ($ya_publicada) {
+				Session::setArray('toast', t('Esta entrada ya está publicada.'));
+				return false;
+			}
 		}
 
 		$entrada = $this->prepararEntrada($idu);

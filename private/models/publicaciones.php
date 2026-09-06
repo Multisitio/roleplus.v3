@@ -119,10 +119,7 @@ class Publicaciones extends LiteRecord
 
 		$a['slug'] = $slug;
 
-		$contenido = $contenido_formateado = trim($a['contenido']);
-		if (!$contenido) {
-			return Session::setArray('toast', t('Se requiere texto de contenido.'));
-		}
+		$contenido = $contenido_formateado = trim($a['contenido'] ?? '');
 
 		$contenido_formateado = _html::bbcode($contenido_formateado);
 		$contenido_formateado = _html::links($contenido_formateado);

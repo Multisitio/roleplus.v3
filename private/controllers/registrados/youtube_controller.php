@@ -31,7 +31,16 @@ class YoutubeController extends RegistradosController
     #
     public function publicar($idu)
     {
-        (new Rolflix_entradas)->publicarEntrada($idu);
+        $pub = (new Rolflix_entradas)->publicarEntrada($idu);
+        if (!$pub) {
+            // Return nothing to leave the footer alone? 
+            // Or return script to reload so they see the Toast?
+            // Since it's AJAX replacing the footer, if we return JS it might execute.
+            // But let's just return nothing so the footer is cleared? 
+            // Wait, if it fails, we don't want to show "Publicado".
+            View::select('');
+            return;
+        }
         View::select('publicado');
     }
 
