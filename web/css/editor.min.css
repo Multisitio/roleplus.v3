@@ -3119,12 +3119,12 @@ main :not(main):has(+ :is(ul, ol)) {
     padding-bottom: 0;
 }
 
-main :is(header, section) :last-child:not(table) {
+main :is(header, section) :last-child:not(table, table *) {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
 }
 
-main :is(section, footer) :first-child:not(table) {
+main :is(section, footer) :first-child:not(table, table *) {
     margin-top: 0 !important;
     padding-top: 0 !important;
 }
