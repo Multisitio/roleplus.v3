@@ -1,4 +1,4 @@
-﻿(function (window, document) {
+(function (window, document) {
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -500,7 +500,7 @@
             } else if (name.indexOf('table_') === 0) {
                 var prop = '--' + name.replace(/_/g, '-');
                 var suffix = '';
-                if (name.endsWith('_width') || name.endsWith('_padding') || name.endsWith('_x') || name.endsWith('_y')) {
+                if (name.endsWith('_width') || name.endsWith('_padding') || name.endsWith('_x') || name.endsWith('_y') || name.endsWith('_gap')) {
                     suffix = isNaN(val) || val === '' ? '' : 'px';
                 }
                 preview.style.setProperty(prop, val + suffix);
