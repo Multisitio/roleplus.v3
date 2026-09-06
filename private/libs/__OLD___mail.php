@@ -74,8 +74,7 @@ class _mail
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 		//$mail->SMTPSecure = 'ssl'; // Puedes cambiar a 'tls' o 'ssl' si es necesario
 		$mail->Username = "ia@roleplus.app";
-		$keys = include __DIR__ . '/../config/keys.php';
-		$mail->Password = $keys['smtp']['ia'] ?? '';
+		$mail->Password = Config::get('keys.smtp.ia');
 		$mail->Port = 587;
 		//$mail->Port = 25;
 		//$mail->Port = 465;

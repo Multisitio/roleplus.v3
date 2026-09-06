@@ -11,3 +11,4 @@
   concluir que RolePlus no redimensiona basándose únicamente en el uploader.
 - Mantener las URLs históricas de imágenes y el generador dinámico de
   miniaturas mientras exista contenido antiguo que dependa de ellos.
+- Todos los cambios deben incluir su propio commit y push ejecutados por el agente. No delegar esta tarea al usuario.
