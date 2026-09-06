@@ -108,9 +108,10 @@ Css::add('rss.min');
                 <?php else: ?>
                     <a role="button" data-ajax="#youtube-footer-<?=$ent->idu?>" onclick="this.style.pointerEvents='none'; this.innerText='<?=t('Publicando…')?>';" href="/registrados/youtube/publicar/<?=$ent->idu?>" rel="nofollow"><?=t('Publicar')?></a>
 
-                    <a role="button" data-ajax=".ajax.show" data-bg_color href="/registrados/publicaciones/desde_youtube/<?=$ent->idu?>" rel="nofollow"><?=t('Editando')?></a>
+                    <a role="button" data-ajax=".ajax.show" data-bg_color href="/registrados/publicaciones/formulario/<?=$ent->publicacion_idu?>" rel="nofollow"><?=t('Editando')?></a>
                 <?php endif; ?>
             </footer>
         </article>
     <?php endforeach; ?>
 </div>
+

@@ -214,7 +214,7 @@ class Rolflix_entradas extends LiteRecord
 		if (empty($in)) {
 			return [];
 		}
-		$sql = "SELECT titulo FROM publicaciones WHERE titulo IN ($in)";
+		$sql = "SELECT idu, titulo FROM publicaciones WHERE titulo IN ($in)";
 		$entradas_publicadas = self::all($sql, $values);
 		#_var::die([$sql, $values, $entradas_publicadas]);
 		foreach ($entradas_publicadas as $ent) {
@@ -223,6 +223,9 @@ class Rolflix_entradas extends LiteRecord
 
 		foreach ($entradas_por_titulo as $titulo=>$ent) {
 			$ent->entrada_publicada = empty($entradas_publicadas_por_titulo[$titulo]) ? 0 : 1;
+			if ($ent->entrada_publicada) {
+				$ent->publicacion_idu = $entradas_publicadas_por_titulo[$titulo]->idu;
+			}
 		}
 		return $entradas_por_titulo;
 	}
@@ -315,13 +318,18 @@ class Rolflix_entradas extends LiteRecord
 		$ent = self::first($sql, [$idu]);
 		$entrada['titulo'] = html_entity_decode($ent->titulo, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-        $entrada['contenido'] = (new Respuestas)->preguntarAIa("Mantén intacto el texto original limitándolo a uno o dos párrafos. Traduce si es necesario y elimina toda la basura de enlaces a otras redes, etiquetas y formato extra. No uses ningún emoji: " . h($ent->descripcion));
+		$desc = trim($ent->descripcion ?? '');
+		if ($desc === '') {
+			$entrada['contenido'] = '';
+		} else {
+			$entrada['contenido'] = (new Respuestas)->preguntarAIa("Mantén intacto el texto original limitándolo a uno o dos párrafos. Traduce si es necesario y elimina toda la basura de enlaces a otras redes, etiquetas y formato extra. No uses ningún emoji: " . h($desc));
+		}
 
 		$entrada['idioma'] = 'ES';
 		$entrada['etiquetas'] = $ent->hashtag;
 		$entrada['enlace'] = $ent->enlace;
 		$entrada['usuarios_idu'] = $usuarios_idu = Session::get('idu');
-		if ($ent->fotos) {
+		if (isset($ent->fotos) && $ent->fotos) {
 			copy("img/rss/$ent->rss_sitios_idu/$ent->fotos", "img/usuarios/$usuarios_idu/$ent->fotos");
 			$entrada['fotos'][] = $ent->fotos;
 		}
@@ -354,3 +362,4 @@ class Rolflix_entradas extends LiteRecord
 		self::query($sql, [$rolflix_sitios_idu]);
 	}
 }
+
