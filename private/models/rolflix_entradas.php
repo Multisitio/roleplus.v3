@@ -205,27 +205,42 @@ class Rolflix_entradas extends LiteRecord
 			$entradas_por_titulo[$ent->titulo] = $ent;
 		}
 
-		$keys = $values = [];
+		$keys_t = $values = [];
+		$keys_e = [];
 		foreach ($entradas as $ent) {
-			$keys[] = '?';
+			$keys_t[] = '?';
 			$values[] = $ent->titulo;
 		}
-		$in = implode(', ', $keys);
-		if (empty($in)) {
+		foreach ($entradas as $ent) {
+			if (!empty($ent->enlace)) {
+				$keys_e[] = '?';
+				$values[] = $ent->enlace;
+			}
+		}
+		$in_t = implode(', ', $keys_t);
+		$in_e = implode(', ', $keys_e);
+		if (empty($in_t)) {
 			return [];
 		}
-		$sql = "SELECT idu, titulo FROM publicaciones WHERE titulo IN ($in)";
+		
+		$sql = "SELECT idu, titulo, enlace FROM publicaciones WHERE titulo IN ($in_t)";
+		if (!empty($in_e)) {
+			$sql .= " OR (enlace != '' AND enlace IN ($in_e))";
+		}
 		$entradas_publicadas = self::all($sql, $values);
-		#_var::die([$sql, $values, $entradas_publicadas]);
+		
 		foreach ($entradas_publicadas as $ent) {
-			$entradas_publicadas_por_titulo[$ent->titulo] = $ent;
+			if (!empty($ent->enlace)) {
+				$entradas_publicadas_por_enlace[$ent->enlace] = 1;
+			}
+			$entradas_publicadas_por_titulo[$ent->titulo] = 1;
 		}
 
 		foreach ($entradas_por_titulo as $titulo=>$ent) {
-			$ent->entrada_publicada = empty($entradas_publicadas_por_titulo[$titulo]) ? 0 : 1;
-			if ($ent->entrada_publicada) {
-				$ent->publicacion_idu = $entradas_publicadas_por_titulo[$titulo]->idu;
-			}
+			$por_titulo = !empty($entradas_publicadas_por_titulo[$titulo]);
+			$por_enlace = (!empty($ent->enlace) && !empty($entradas_publicadas_por_enlace[$ent->enlace]));
+			
+			$ent->entrada_publicada = ($por_titulo || $por_enlace) ? 1 : 0;
 		}
 		return $entradas_por_titulo;
 	}
