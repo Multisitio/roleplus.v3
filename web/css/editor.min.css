@@ -2062,12 +2062,7 @@ article {
     width: 280px;
 }
 
-@media (max-width: 575.98px) {
-    .toast-container {
-        right: 0;
-        top: 0;
-        width: 100%;
-    }
+@media (max-width: 575.98px) { .toast-container { right: 0; top: 0; width: 100%; max-width: 280px; }
 }
 
 .toast-container>div {
@@ -3248,3 +3243,4 @@ main footer:after {
         break-before: page;
     }
 }
+
