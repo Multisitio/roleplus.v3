@@ -303,6 +303,13 @@ main div[contenteditable] [data-empty-helper="true"] {
     box-sizing: border-box;
 }
 
+main div[contenteditable] td[data-empty-helper="true"],
+main div[contenteditable] th[data-empty-helper="true"] {
+    min-height: 0;
+    padding-right: 0 !important;
+    display: table-cell;
+}
+
 main div[contenteditable] footer[data-empty-helper="true"] {
     position: absolute;
     margin: auto;
