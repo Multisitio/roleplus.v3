@@ -860,7 +860,7 @@ class Plantillas extends LiteRecord
 
         $css .= "main table {\n";
         foreach (self::MENU_LADOS as $lado) {
-            $css .= '    margin-' . $lado . ': calc(var(--table-margin-' . $lado . ') + (var(--table-gap) / 2));' . "\n";
+            $css .= '    margin-' . $lado . ': calc(var(--table-margin-' . $lado . ', 0px) + (var(--table-gap, 0px) / 2));' . "\n";
         }
         $css .= "    border-collapse: collapse;\n";
         $css .= "}\n\n";
