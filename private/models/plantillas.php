@@ -808,6 +808,7 @@ class Plantillas extends LiteRecord
         $css .= $this->cssEspaciado('main section', 'section');
         $css .= $this->cssEspaciado('main p', 'p');
         $css .= "main p + p { margin-top: var(--p-gap); }\n";
+        $css .= "main table + table { margin-top: var(--table-gap); margin-left: var(--table-gap); }\n";
         $css .= $this->cssEspaciado('main blockquote', 'blockquote');
         $css .= $this->cssEspaciado('main :is(ul, ol)', 'list', "    list-style: none !important;\n");
         $css .= "main :not(main):has(+ :is(ul, ol)) {\n";
@@ -860,7 +861,7 @@ class Plantillas extends LiteRecord
 
         $css .= "main table {\n";
         foreach (self::MENU_LADOS as $lado) {
-            $css .= '    margin-' . $lado . ': calc(var(--table-margin-' . $lado . ', 0px) + (var(--table-gap, 0px) / 2));' . "\n";
+            $css .= '    margin-' . $lado . ': var(--table-margin-' . $lado . ");\n";
         }
         $css .= "    border-collapse: collapse;\n";
         $css .= "}\n\n";
