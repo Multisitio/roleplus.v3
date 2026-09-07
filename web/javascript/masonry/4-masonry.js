@@ -25,11 +25,12 @@
 		let gap = 0;
 
 		// row-gap estándar; si no existe, intenta 'gap'
-		if (cs.rowGap && cs.rowGap !== "normal") {
+		if (cs.rowGap && cs.rowGap !== "normal" && cs.rowGap !== "normal normal") {
 			gap = parseFloat(cs.rowGap);
-		} else if (cs.gap && cs.gap !== "normal") {
+		} else if (cs.gap && cs.gap !== "normal" && cs.gap !== "normal normal") {
 			gap = parseFloat(cs.gap);
 		}
+		if (isNaN(gap)) gap = 0;
 
 		// Altura real del item
 		const h = item.getBoundingClientRect().height;
