@@ -51,3 +51,4 @@ abstract class AppController extends GeneralController
         // la propia API Session la reabre de forma perezosa.
     }
 }
+

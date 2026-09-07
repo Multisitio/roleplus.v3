@@ -134,7 +134,8 @@ document.body.addEventListener('click', async e => {
 // Textarea auto-height
 function textareaAutoHeight() {
     document.querySelectorAll('textarea').forEach(el => {
-        let height = el.scrollTop + el.scrollHeight;
+        el.style.height = 'auto';
+        let height = el.scrollHeight;
         if (height < 99) height = 99;
         el.style.height = height + 'px';
     });
