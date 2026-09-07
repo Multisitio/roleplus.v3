@@ -208,7 +208,7 @@
                     }
                     // Forzar el número de página original mediante counter-reset
                     var orig = parseInt(page.getAttribute('data-original-index'), 10);
-                    page.style.setProperty('counter-reset', 'page ' + (baseOffset + orig));
+                    page.style.setProperty('counter-reset', 'page ' + (orig - baseOffset));
                 });
 
                 var N = pages.length;
@@ -763,4 +763,5 @@
     });
 
 })(window, document);
+
 
