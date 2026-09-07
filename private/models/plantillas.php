@@ -53,7 +53,7 @@ class Plantillas extends LiteRecord
         '--h2-color' => '#000000',
         '--h2-decoration' => '0',
         '--h2-family' => 'inherit',
-        '--h2-size' => '30',
+        '--h2-size' => '30px',
         '--h2-style' => 'normal',
         '--h2-transform' => 'none',
         '--h2-variant' => 'small-caps',
@@ -69,7 +69,7 @@ class Plantillas extends LiteRecord
         '--h4-color' => '#000000',
         '--h4-decoration' => '0',
         '--h4-family' => 'inherit',
-        '--h4-size' => '20',
+        '--h4-size' => '20px',
         '--h4-style' => 'normal',
         '--h4-transform' => 'none',
         '--h4-variant' => 'small-caps',
@@ -482,12 +482,6 @@ class Plantillas extends LiteRecord
             }
         }
 
-        // Distancia entre tablas
-        if (isset($post['table_gap'])) {
-            $val = intval($post['table_gap']) . 'px';
-            $Reglas->guardar($this->idu, '--table-gap', $val);
-            $debe_compilar = true;
-        }
 
         // 4. Listas
         foreach (self::MENU_LISTAS as $p => $field) {
