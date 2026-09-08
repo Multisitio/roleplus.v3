@@ -802,7 +802,8 @@ class Plantillas extends LiteRecord
         $css .= $this->cssEspaciado('main section', 'section');
         $css .= $this->cssEspaciado('main p', 'p');
         $css .= "main p + p { margin-top: var(--p-gap); }\n";
-        $css .= "main table + table { margin-top: var(--table-gap); margin-left: var(--table-gap); }\n";
+        $css .= "main table:not([style*=\"width: 100%\"]):not([style*=\"width:100%\"]) { margin-right: calc(var(--table-margin-right, 0px) + var(--table-gap, 0px)); }\n";
+        $css .= "main table + table { margin-top: calc(var(--table-margin-top, 0px) + var(--table-gap, 0px)); }\n";
         $css .= $this->cssEspaciado('main blockquote', 'blockquote');
         $css .= $this->cssEspaciado('main :is(ul, ol)', 'list', "    list-style: none !important;\n");
         $css .= "main :not(main):has(+ :is(ul, ol)) {\n";
