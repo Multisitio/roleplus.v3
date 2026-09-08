@@ -802,8 +802,14 @@ class Plantillas extends LiteRecord
         $css .= $this->cssEspaciado('main section', 'section');
         $css .= $this->cssEspaciado('main p', 'p');
         $css .= "main p + p { margin-top: var(--p-gap); }\n";
-        $css .= "main table:not([style*=\"width: 100%\"]):not([style*=\"width:100%\"]) { margin-right: calc(var(--table-margin-right, 0px) + var(--table-gap, 0px)); }\n";
-        $css .= "main table + table { margin-top: calc(var(--table-margin-top, 0px) + var(--table-gap, 0px)); }\n";
+        $css .= "main table:has(+ table) {\n";
+        $css .= "    margin-right: calc(var(--table-margin-right, 0px) + (var(--table-gap, 0px) / 2));\n";
+        $css .= "    margin-bottom: calc(var(--table-margin-bottom, 0px) + (var(--table-gap, 0px) / 2));\n";
+        $css .= "}\n";
+        $css .= "main table + table {\n";
+        $css .= "    margin-left: calc(var(--table-margin-left, 0px) + (var(--table-gap, 0px) / 2));\n";
+        $css .= "    margin-top: calc(var(--table-margin-top, 0px) + (var(--table-gap, 0px) / 2));\n";
+        $css .= "}\n";
         $css .= $this->cssEspaciado('main blockquote', 'blockquote');
         $css .= $this->cssEspaciado('main :is(ul, ol)', 'list', "    list-style: none !important;\n");
         $css .= "main :not(main):has(+ :is(ul, ol)) {\n";
