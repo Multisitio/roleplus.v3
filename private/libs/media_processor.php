@@ -91,6 +91,29 @@ class MediaProcessor
         if ($mime === 'image/svg+xml') {
             return self::processSvg($source, $dir, $stem);
         }
+        // Profile images are used by <img> and CSS backgrounds. Keep GIF bytes
+        // instead of decoding and encoding every frame at seven sizes in a POST.
+        if ($mime === 'image/gif' && ($options['animated_gif'] ?? '') === 'original') {
+            $dimensions = @getimagesize($source);
+            if (!$dimensions || $dimensions[0] < 1 || $dimensions[1] < 1
+                || $dimensions[0] * $dimensions[1] > self::MAX_PIXELS) {
+                throw new RuntimeException('Las dimensiones del GIF no son válidas o exceden los límites permitidos.');
+            }
+            $target = $dir . DIRECTORY_SEPARATOR . $stem . '.gif';
+            self::atomicWrite($target, (string) file_get_contents($source));
+            $variants = [];
+            foreach (self::requestedSizes($options) as $prefix => $width) {
+                // Compatibility aliases, not resized thumbnails: preserve animation.
+                $alias = $prefix . '.' . basename($target);
+                self::linkOrCopy($target, $dir . DIRECTORY_SEPARATOR . $alias);
+                $variants[$prefix] = $alias;
+            }
+            return [
+                'name' => basename($target), 'format' => 'gif', 'mime' => 'image/gif',
+                'width' => $dimensions[0], 'height' => $dimensions[1],
+                'animated' => true, 'poster' => null, 'variants' => $variants,
+            ];
+        }
         if (!class_exists('Imagick')) {
             throw new RuntimeException('ImageMagick es necesario para procesar imágenes.');
         }

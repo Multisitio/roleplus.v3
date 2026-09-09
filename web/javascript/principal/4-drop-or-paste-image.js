@@ -16,6 +16,7 @@ Kumbia.utils.on('paste', 'textarea', function(eve) {
     const data = clipboard.items[0].getAsFile();
     const reader = new FileReader();
     reader.onloadend = function() {
+        img_box.querySelectorAll(':scope > img').forEach(img => img.remove());
         img_box.style.backgroundImage = 'url(' + reader.result + ')';
         img_box.style.backgroundRepeat = 'no-repeat';
         img_box.style.backgroundSize = 'cover';
@@ -44,6 +45,7 @@ Kumbia.utils.on('change', '.dropimage [type="file"]', function(eve) {
     var reader = new FileReader();
 
     reader.onloadend = function() {
+        img_box.querySelectorAll(':scope > img').forEach(img => img.remove());
         img_box.style.backgroundImage = 'url(' + reader.result + ')';
         img_box.style.backgroundRepeat = 'no-repeat';
         img_box.style.backgroundSize = 'cover';
@@ -97,10 +99,9 @@ Kumbia.utils.on('click', '.dropimage button', function(eve) {
         img_box.removeAttribute('style');
         img_box.classList.remove('dropimagehover');
         img_box.classList.remove('dropnocontent');
-        var imgs = img_box.querySelectorAll('>img');
+        var imgs = img_box.querySelectorAll(':scope > img');
         for(var i=0; i<imgs.length; i++) imgs[i].remove();
-        var inp = img_box.querySelector('input');
-        if(inp) inp.value = '';
+        img_box.querySelectorAll('input[type="file"], input[type="hidden"]').forEach(inp => inp.value = '');
     }
 });
 
@@ -142,7 +143,7 @@ Kumbia.utils.on('drop', '.dropimage', function(eve) {
     var reader = new FileReader();
     reader.onloadend = function() {
         console.log('File read completed');
-        var imgs = img_box.querySelectorAll('img');
+        var imgs = img_box.querySelectorAll(':scope > img');
         for (var i = 0; i < imgs.length; i++) imgs[i].remove();
         img_box.style.backgroundImage = 'url(' + reader.result + ')';
         img_box.style.backgroundRepeat = 'no-repeat';

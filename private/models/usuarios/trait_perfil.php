@@ -40,35 +40,36 @@ trait UsuariosPerfil
 
         $perfil_anterior = $usuario = self::uno();
 
+        // Complete all uploads before changing references. Keep historical files
+        // available to existing URLs, including when one of the uploads fails.
+        try {
+            $images = [];
+            foreach ([
+                'avatar' => 'avatar_anterior',
+                'fondo_cabecera' => 'cabecera_anterior',
+                'fondo_general' => 'fondo_anterior',
+            ] as $field => $previous) {
+                $file = $_FILES[$field] ?? null;
+                $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+                if ($error !== UPLOAD_ERR_NO_FILE && $error !== UPLOAD_ERR_OK) {
+                    throw new RuntimeException('La subida no se completó (código ' . $error . ').');
+                }
+                $images[$field] = $error === UPLOAD_ERR_OK
+                    ? _file::save($file, "img/usuarios/$usuario->idu", '', false, 'original')
+                    : (empty($post[$previous]) ? '' : $perfil_anterior->$field);
+            }
+        } catch (Throwable $e) {
+            error_log('Profile image upload failed: ' . $e->getMessage());
+            Session::setArray('toast', t('No se guardaron los cambios. No se pudo subir alguna imagen; comprueba que sea válida y no supere 16 MB.'));
+            return false;
+        }
+
+        $avatar = $images['avatar'];
+        $fondo_cabecera = $images['fondo_cabecera'];
+        $fondo_general = $images['fondo_general'];
+
         if ($post['apodo'] <> $perfil_anterior->apodo) {
             (new Historico)->add('apodos', $perfil_anterior->apodo, $post['apodo']);
-        }
-
-        $avatar = empty($_FILES['avatar']['name']) 
-            ? $post['avatar_anterior']
-            : _file::save($_FILES['avatar'], "img/usuarios/$usuario->idu", 's');
-
-        if ($post['avatar_anterior'] <> $perfil_anterior->avatar) {
-            unlink("img/usuarios/$usuario->idu/s.$perfil_anterior->avatar");
-            unlink("img/usuarios/$usuario->idu/xs.$perfil_anterior->avatar");
-            unlink("img/usuarios/$usuario->idu/xxs.$perfil_anterior->avatar");
-        }
-
-        $fondo_cabecera = empty($_FILES['fondo_cabecera']['name'])
-            ? $post['cabecera_anterior']
-            : _file::save($_FILES['fondo_cabecera'], "img/usuarios/$usuario->idu", 'l', true);
-
-        if ($post['cabecera_anterior'] <> $perfil_anterior->fondo_cabecera) {
-            unlink("img/usuarios/$usuario->idu/l.$perfil_anterior->fondo_cabecera");
-            unlink("img/usuarios/$usuario->idu/l.$perfil_anterior->fondo_cabecera");
-        }
-
-        $fondo_general = empty($_FILES['fondo_general']['name'])
-            ? $post['fondo_anterior']
-            : _file::save($_FILES['fondo_general'], "img/usuarios/$usuario->idu", 'xxl', true);
-
-        if ($post['fondo_anterior'] <> $perfil_anterior->fondo_general) {
-            unlink("img/usuarios/$usuario->idu/xxl.$perfil_anterior->fondo_general");
         }
 
         $vals[] = self::establecerIdioma($post['idioma']);
