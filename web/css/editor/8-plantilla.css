@@ -16,7 +16,6 @@ main :not(li)>a[href^="#"] {
     display: grid;
     grid-template-columns: auto 1fr auto;
     text-decoration: none;
-    white-space: nowrap;
 }
 
 main :not(li)>a[href^="#"]:has(span) span:first-child {
