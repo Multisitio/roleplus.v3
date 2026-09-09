@@ -36,7 +36,7 @@ abstract class AppController extends GeneralController
         // 4) Datos comunes de vistas
         $this->claves  = (new Configuracion)->todas();
         $this->usuario = (new Usuarios)->uno();
-        $this->version = '2609091200';
+        $this->version = '2609092220';
 
         // 5) CRÍTICO: liberar el lock de sesión antes de renderizar
         Session::close(); // equivale a session_write_close() si está abierta
