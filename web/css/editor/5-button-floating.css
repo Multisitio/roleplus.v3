@@ -39,10 +39,10 @@
     top: 70px;
 }
 
-main .button-floating {
+.editor main > div > .button-floating {
     position: absolute;
-    right: -15px;
-    top: -15px;
+    right: 0;
+    top: 0;
 }
 
 .button-floating:hover {

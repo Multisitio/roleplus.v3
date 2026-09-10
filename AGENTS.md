@@ -26,3 +26,6 @@
   y sin ampliar nunca por encima del tamano original (`scale-down`). Aplicar
   la misma regla a imagenes guardadas, seleccionadas, pegadas y arrastradas.
   Este encaje de previsualizacion es independiente del manual.
+- El boton de editar de cada pagina del manual debe quedar anclado a su
+  esquina superior derecha y desplazarse con ella, sin heredar la posicion
+  fija de los botones globales. Verificar varias paginas y el desplazamiento.
