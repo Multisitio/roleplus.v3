@@ -19,7 +19,7 @@ class UploaderController extends AppController
         $dir = $public_fs . '/img/usuarios/' . $idu;
 
         try {
-            $hash = substr(hash_file('sha256', $_FILES['file']['tmp_name']), 0, 20);
+            $hash = substr(hash('sha256', $_FILES['file']['name']), 0, 20);
             $result = MediaProcessor::processUpload($_FILES['file'], $dir, [
                 'basename' => $idu . '-' . $hash,
                 'max_width' => (int) ($_POST['max_width'] ?? MediaProcessor::MAX_WIDTH),
