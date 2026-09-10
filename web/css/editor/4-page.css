@@ -27,6 +27,10 @@ header {
     padding: 0;
 }
 
+header+section {
+    padding-top: 0;
+}
+
 section {
     clear: both;
     position: relative;
@@ -80,7 +84,9 @@ article {
     background-color: white;
 }
 
-/*a[data-ajax=".ajax.show"] {
+/* BUTTON EDIT RULE */
+
+main>div a[data-ajax=".ajax.show"] {
     background: white;
     border: 0;
     border-radius: 50%;
@@ -91,7 +97,7 @@ article {
     right: -10px;
     top: -10px;
     z-index: 2;
-}*/
+}
 
 /* Booklet mode for screen preview */
 
