@@ -155,7 +155,7 @@ nav[data-toolbar="contexto"] select {
     height: 42px;
     border: 0;
     border-radius: 5px;
-    box-shadow: 1px 1px 0 #666;
+    box-shadow: 2px 2px 2px #666;
     padding: 0 30px 0 12px;
 
     /* Ocultar flecha nativa y usar SVG personalizado */
@@ -183,8 +183,7 @@ nav[data-toolbar="contexto"] > span:not(:empty) {
     min-height: 42px;
     padding: 10px 25px 10px 12px;
     border-radius: 0;
-    box-shadow: none;
-    filter: drop-shadow(2px 2px 2px #666);
+    box-shadow: 2px 2px 2px #666;
     position: relative;
 }
 
@@ -369,7 +368,7 @@ nav[data-toolbar="contexto"] button[data-action="save-page"] {
     background-color: var(--background-card, #fff);
     border: 0;
     border-radius: 5px;
-    box-shadow: 1px 1px 0 #666;
+    box-shadow: 2px 2px 2px #666;
     color: #aaa; /* Gris por defecto (inactivo/oculto) */
     cursor: pointer;
     display: inline-flex;

@@ -73,8 +73,9 @@ aside.template section[data-nivel]>a {
     grid-row: 1;
     display: flex !important;
     align-items: center;
+    justify-content: flex-start;
     width: 100%;
-    text-align: left;
+    text-align: left !important;
     font-size: 0.95em;
     border: 1px solid var(--primary-filter) !important;
     border-radius: 4px;
@@ -113,22 +114,22 @@ aside.template section[data-nivel] .web-color-picker {
     grid-row: 1;
 }
 
-aside.template section[data-nivel] .font-variant-select {
+aside.template section[data-nivel] .variant-select {
     grid-column: 1;
     grid-row: 2;
 }
 
-aside.template section[data-nivel] .text-transform-select {
+aside.template section[data-nivel] .transform-select {
     grid-column: 2;
     grid-row: 2;
 }
 
-aside.template section[data-nivel] .text-align-select {
+aside.template section[data-nivel] .align-select {
     grid-column: 3;
     grid-row: 2;
 }
 
-aside.template section[data-nivel] .text-decoration-select {
+aside.template section[data-nivel] .decoration-select {
     grid-column: 4;
     grid-row: 2;
 }
