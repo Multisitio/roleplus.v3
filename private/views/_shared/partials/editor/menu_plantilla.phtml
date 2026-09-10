@@ -428,6 +428,13 @@
 							<?php endif; ?>
 						</select>
 
+						<select class="margin-top-select" name="margin_top_<?=$niv?>" data-change-ajax>
+							<option value="0px" <?=($f['margin_top'] ?? '0px') == '0px' ? 'selected' : ''?>><?=t('Margen: 0')?></option>
+							<?php for ($i = 5; $i <= 100; $i += 5): $px = "{$i}px"; ?>
+								<option value="<?=$px?>" <?=($f['margin_top'] ?? '0px') == $px ? 'selected' : ''?>><?=t('Margen')?>: <?=$px?></option>
+							<?php endfor; ?>
+						</select>
+
 						<?php foreach (['variant', 'align', 'transform', 'decoration'] as $control):
 							$current = $control === 'variant' ? $variant : $f[$control];
 						?>

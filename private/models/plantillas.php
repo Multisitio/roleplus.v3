@@ -28,6 +28,7 @@ class Plantillas extends LiteRecord
         '--body-style' => 'normal',
         '--body-transform' => 'none',
         '--body-variant' => 'normal',
+        '--body-margin-top' => '0px',
         '--footer-height' => '0',
         '--footer-imagen' => 'none',
         '--footer-margin-bottom' => '0',
@@ -49,6 +50,7 @@ class Plantillas extends LiteRecord
         '--h1-style' => 'normal',
         '--h1-transform' => 'none',
         '--h1-variant' => 'small-caps',
+        '--h1-margin-top' => '0px',
         '--h2-align' => 'left',
         '--h2-color' => '#000000',
         '--h2-decoration' => '0',
@@ -57,6 +59,7 @@ class Plantillas extends LiteRecord
         '--h2-style' => 'normal',
         '--h2-transform' => 'none',
         '--h2-variant' => 'small-caps',
+        '--h2-margin-top' => '0px',
         '--h3-align' => 'left',
         '--h3-color' => '#000000',
         '--h3-decoration' => '0',
@@ -65,6 +68,7 @@ class Plantillas extends LiteRecord
         '--h3-style' => 'normal',
         '--h3-transform' => 'none',
         '--h3-variant' => 'small-caps',
+        '--h3-margin-top' => '0px',
         '--h4-align' => 'left',
         '--h4-color' => '#000000',
         '--h4-decoration' => '0',
@@ -73,6 +77,7 @@ class Plantillas extends LiteRecord
         '--h4-style' => 'normal',
         '--h4-transform' => 'none',
         '--h4-variant' => 'small-caps',
+        '--h4-margin-top' => '0px',
         '--h5-align' => 'left',
         '--h5-color' => '#000000',
         '--h5-decoration' => '0',
@@ -81,6 +86,7 @@ class Plantillas extends LiteRecord
         '--h5-style' => 'normal',
         '--h5-transform' => 'none',
         '--h5-variant' => 'small-caps',
+        '--h5-margin-top' => '0px',
         '--h6-align' => 'left',
         '--h6-color' => '#000000',
         '--h6-decoration' => '0',
@@ -89,6 +95,7 @@ class Plantillas extends LiteRecord
         '--h6-style' => 'normal',
         '--h6-transform' => 'none',
         '--h6-variant' => 'small-caps',
+        '--h6-margin-top' => '0px',
         '--header-margin-bottom' => '0',
         '--header-margin-left' => '0',
         '--header-margin-right' => '0',
@@ -136,6 +143,7 @@ class Plantillas extends LiteRecord
         '--small-style' => 'normal',
         '--small-transform' => 'none',
         '--small-variant' => 'normal',
+        '--small-margin-top' => '0px',
         '--table-th-border-bottom-width' => '0',
         '--table-th-border-bottom-color' => 'transparent',
         '--table-col1-border-right-width' => '0',
@@ -351,6 +359,7 @@ class Plantillas extends LiteRecord
                 'style'      => $vars["--{$niv}-style"],
                 'transform'  => ($vars["--{$niv}-variant"] === 'small-caps' ? 'small-caps' : $vars["--{$niv}-transform"]),
                 'variant'    => $vars["--{$niv}-variant"],
+                'margin_top' => $vars["--{$niv}-margin-top"] ?? '0px',
             ];
         }
 
@@ -414,13 +423,16 @@ class Plantillas extends LiteRecord
             }
 
             // Atributos numéricos y selects
-            $props = ['size', 'color', 'align', 'variant', 'transform', 'decoration'];
+            $props = ['size', 'color', 'align', 'variant', 'transform', 'decoration', 'margin_top'];
             foreach ($props as $p) {
                 $key = "{$p}_{$niv}";
                 if (isset($post[$key])) {
                     $val = trim($post[$key]);
                     if ($p === 'size' && is_numeric($val)) {
                         $val .= ($niv === 'small') ? '%' : 'px';
+                    }
+                    if ($p === 'margin_top' && is_numeric($val)) {
+                        $val .= 'px';
                     }
                     
                     if ($p === 'variant') {
@@ -430,7 +442,8 @@ class Plantillas extends LiteRecord
                         $Reglas->guardar_una($this->idu, '.plantilla', "--{$niv}-transform", ($val === 'small-caps' ? 'none' : $val));
                         $Reglas->guardar_una($this->idu, '.plantilla', "--{$niv}-variant", ($val === 'small-caps' ? 'small-caps' : 'normal'));
                     } else {
-                        $Reglas->guardar_una($this->idu, '.plantilla', "--{$niv}-{$p}", $val);
+                        $prop_css = str_replace('_', '-', $p);
+                        $Reglas->guardar_una($this->idu, '.plantilla', "--{$niv}-{$prop_css}", $val);
                     }
                     $debe_compilar = true;
                 }
@@ -709,6 +722,7 @@ class Plantillas extends LiteRecord
             $css .= '    font-variant: var(--' . $niv . "-variant);\n";
             $css .= "    text-decoration: none !important;\n";
             $css .= '    color: var(--' . $niv . "-color);\n";
+            $css .= '    margin-top: var(--' . $niv . "-margin-top);\n";
             $css .= "}\n\n";
 
             if ($niv !== 'body' && $niv !== 'small') {

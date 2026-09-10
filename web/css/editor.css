@@ -1724,7 +1724,7 @@ aside.template section[data-nivel] {
 }
 
 aside.template section[data-nivel]>a {
-    grid-column: 1 / span 2;
+    grid-column: 1;
     grid-row: 1;
     display: flex !important;
     align-items: center;
@@ -1754,6 +1754,11 @@ aside.template section[data-nivel]>a {
 }
 
 aside.template section[data-nivel] .font-size-select {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+aside.template section[data-nivel] .margin-top-select {
     grid-column: 3;
     grid-row: 1;
 }
