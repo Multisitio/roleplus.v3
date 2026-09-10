@@ -578,31 +578,9 @@
         window.guardarPlantillaAJAX(form, null, function (data) {
             var url = name === 'footer_imagen' ? (data.url_footer || '') : (name === 'fondo_pergamino_even' ? (data.url_even || '') : (data.url_imagen || data.url || ''));
             if (url && drop) {
-                // 1. Forzamos fondo en el contenedor
-                drop.style.setProperty('background-image', 'url(' + url + '?t=' + Date.now() + ')', 'important');
-                drop.style.setProperty('background-repeat', 'no-repeat', 'important');
-                drop.style.setProperty('background-size', 'cover', 'important');
-                drop.style.setProperty('background-position', 'center center', 'important');
-
-                // 2. Si hay etiquetas <img> de previsualización (que no sean del botón de borrar), las actualizamos
-                var imgs = drop.querySelectorAll('img:not(button img)');
-                if (imgs.length > 0) {
-                    imgs.forEach(function (img) {
-                        img.src = url + '?t=' + Date.now();
-                        img.style.setProperty('width', '100%', 'important');
-                        img.style.setProperty('height', '100%', 'important');
-                        img.style.setProperty('object-fit', 'cover', 'important');
-                        img.style.setProperty('object-position', 'center', 'important');
-                    });
-                } else {
-                    // Si no hay img, creamos una para previsualización
-                    var newImg = document.createElement('img');
-                    newImg.src = url + '?t=' + Date.now();
-                    newImg.style.setProperty('width', '100%', 'important');
-                    newImg.style.setProperty('height', '100%', 'important');
-                    newImg.style.setProperty('object-fit', 'cover', 'important');
-                    drop.appendChild(newImg);
-                }
+                // One preview layer preserves alpha without compositing the image twice.
+                drop.querySelectorAll(':scope > img').forEach(function (img) { img.remove(); });
+                drop.style.backgroundImage = 'url(' + url + '?t=' + Date.now() + ')';
 
                 drop.classList.add('dropnocontent');
 

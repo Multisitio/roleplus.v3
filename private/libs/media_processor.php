@@ -209,7 +209,7 @@ class MediaProcessor
         }
         $image->stripImage();
         $maxWidth = self::boundedMaxWidth($options);
-        if ($image->getImageWidth() > $maxWidth) {
+        if (empty($options['preserve_dimensions']) && $image->getImageWidth() > $maxWidth) {
             self::resizeToWidth($image, $maxWidth);
         }
         self::prepareWebpFrame($image, self::quality($options));
@@ -237,7 +237,7 @@ class MediaProcessor
         $sequence = $image->coalesceImages();
         $maxWidth = self::boundedMaxWidth($options);
         foreach ($sequence as $frame) {
-            if ($frame->getImageWidth() > $maxWidth) {
+            if (empty($options['preserve_dimensions']) && $frame->getImageWidth() > $maxWidth) {
                 self::resizeToWidth($frame, $maxWidth);
             }
             $frame->setImagePage(0, 0, 0, 0);

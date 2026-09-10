@@ -862,7 +862,7 @@ class Plantillas extends LiteRecord
 
         $css .= "main footer::before {\n";
         $css .= "    content: ''; display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;\n";
-        $css .= "    background-image: var(--footer-imagen); background-size: cover; background-repeat: no-repeat; background-position: center bottom; z-index: -1;\n";
+        $css .= "    background-image: var(--footer-imagen); background-size: auto; background-repeat: no-repeat; background-position: center bottom; z-index: -1;\n";
         $css .= "}\n";
         $css .= "main > div:nth-child(odd) footer::before {\n";
         $css .= "    transform: scaleX(-1);\n";
@@ -1247,8 +1247,9 @@ class Plantillas extends LiteRecord
                 'basename' => pathinfo($nombre, PATHINFO_FILENAME),
                 // CSS backgrounds cannot display MP4; animated WebP keeps motion.
                 'animated_gif' => 'webp',
+                'preserve_dimensions' => $key === 'footer_imagen',
             ]);
-            $served = $result['variants']['l'] ?? $result['name'];
+            $served = $key === 'footer_imagen' ? $result['name'] : ($result['variants']['l'] ?? $result['name']);
             return "/img/usuarios/$idu_folder/$served";
         } catch (Throwable $e) {
             error_log('Template media upload failed: ' . $e->getMessage());
