@@ -1435,9 +1435,15 @@ function initPSColorPicker() {
     const renderPreview = (img_box, result) => {
         const imgs = img_box.querySelectorAll(':scope > img');
         for (let i = 0; i < imgs.length; i++) imgs[i].remove();
-        img_box.style.backgroundImage = 'url(' + result + ')';
+        img_box.style.backgroundImage = 'none';
+        const preview = document.createElement('img');
+        preview.alt = '';
+        preview.src = result;
+        img_box.appendChild(preview);
         img_box.classList.add('dropnocontent');
     };
+
+    Kumbia.utils.renderDropImagePreview = renderPreview;
 
     const cloneIfNeeded = (container) => {
         if (!container || !container.classList.contains('multiple')) return;
@@ -1449,6 +1455,7 @@ function initPSColorPicker() {
             if (otherDrop) {
                 otherDrop.classList.remove('dropimagehover', 'dropnocontent');
                 otherDrop.removeAttribute('style');
+                otherDrop.querySelectorAll(':scope > img').forEach(img => img.remove());
                 const otherInput = otherDrop.querySelector('[type="file"]');
                 if (otherInput) otherInput.value = '';
             }
@@ -1511,6 +1518,7 @@ function initPSColorPicker() {
                 const new_img_box = new_box.querySelector('.dropimage') || (new_box.classList.contains('dropimage') ? new_box : null);
                 if (new_img_box) {
                     new_img_box.removeAttribute('style');
+                    new_img_box.querySelectorAll(':scope > img').forEach(img => img.remove());
                     new_img_box.classList.remove('dropimagehover', 'dropnocontent');
                     const inp = new_img_box.querySelector('input');
                     if (inp) inp.value = '';
@@ -7567,11 +7575,7 @@ selection.addRange(newRange);*/
         window.guardarPlantillaAJAX(form, null, function (data) {
             var url = name === 'footer_imagen' ? (data.url_footer || '') : (name === 'fondo_pergamino_even' ? (data.url_even || '') : (data.url_imagen || data.url || ''));
             if (url && drop) {
-                // One preview layer preserves alpha without compositing the image twice.
-                drop.querySelectorAll(':scope > img').forEach(function (img) { img.remove(); });
-                drop.style.backgroundImage = 'url(' + url + '?t=' + Date.now() + ')';
-
-                drop.classList.add('dropnocontent');
+                Kumbia.utils.renderDropImagePreview(drop, url + '?t=' + Date.now());
 
                 // Actualizar documento al vuelo
                 var preview = document.querySelector('main.plantilla');

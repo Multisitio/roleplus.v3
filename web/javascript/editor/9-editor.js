@@ -588,11 +588,7 @@
         window.guardarPlantillaAJAX(form, null, function (data) {
             var url = name === 'footer_imagen' ? (data.url_footer || '') : (name === 'fondo_pergamino_even' ? (data.url_even || '') : (data.url_imagen || data.url || ''));
             if (url && drop) {
-                // One preview layer preserves alpha without compositing the image twice.
-                drop.querySelectorAll(':scope > img').forEach(function (img) { img.remove(); });
-                drop.style.backgroundImage = 'url(' + url + '?t=' + Date.now() + ')';
-
-                drop.classList.add('dropnocontent');
+                Kumbia.utils.renderDropImagePreview(drop, url + '?t=' + Date.now());
 
                 // Actualizar documento al vuelo
                 var preview = document.querySelector('main.plantilla');

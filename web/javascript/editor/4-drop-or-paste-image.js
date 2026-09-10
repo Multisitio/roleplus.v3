@@ -2,9 +2,15 @@
     const renderPreview = (img_box, result) => {
         const imgs = img_box.querySelectorAll(':scope > img');
         for (let i = 0; i < imgs.length; i++) imgs[i].remove();
-        img_box.style.backgroundImage = 'url(' + result + ')';
+        img_box.style.backgroundImage = 'none';
+        const preview = document.createElement('img');
+        preview.alt = '';
+        preview.src = result;
+        img_box.appendChild(preview);
         img_box.classList.add('dropnocontent');
     };
+
+    Kumbia.utils.renderDropImagePreview = renderPreview;
 
     const cloneIfNeeded = (container) => {
         if (!container || !container.classList.contains('multiple')) return;
@@ -16,6 +22,7 @@
             if (otherDrop) {
                 otherDrop.classList.remove('dropimagehover', 'dropnocontent');
                 otherDrop.removeAttribute('style');
+                otherDrop.querySelectorAll(':scope > img').forEach(img => img.remove());
                 const otherInput = otherDrop.querySelector('[type="file"]');
                 if (otherInput) otherInput.value = '';
             }
@@ -78,6 +85,7 @@
                 const new_img_box = new_box.querySelector('.dropimage') || (new_box.classList.contains('dropimage') ? new_box : null);
                 if (new_img_box) {
                     new_img_box.removeAttribute('style');
+                    new_img_box.querySelectorAll(':scope > img').forEach(img => img.remove());
                     new_img_box.classList.remove('dropimagehover', 'dropnocontent');
                     const inp = new_img_box.querySelector('input');
                     if (inp) inp.value = '';

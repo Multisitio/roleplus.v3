@@ -23,4 +23,6 @@
   la asignacion, sin reinterpretarla como una decision de usarla como fondo.
 - En las cajas drop, mostrar la imagen completa ajustada al ancho o al alto
   disponible, conservando proporciones y sin recortes ni desbordamiento
-  (`contain`). Este encaje de previsualizacion es independiente del manual.
+  y sin ampliar nunca por encima del tamano original (`scale-down`). Aplicar
+  la misma regla a imagenes guardadas, seleccionadas, pegadas y arrastradas.
+  Este encaje de previsualizacion es independiente del manual.
