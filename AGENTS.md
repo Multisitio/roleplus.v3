@@ -29,3 +29,5 @@
 - El boton de editar de cada pagina del manual debe quedar anclado a su
   esquina superior derecha y desplazarse con ella, sin heredar la posicion
   fija de los botones globales. Verificar varias paginas y el desplazamiento.
+- Conservar el desplazamiento historico del boton de editar de pagina:
+  `top: -15px; right: -15px`, relativo a su pagina.

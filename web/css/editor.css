@@ -2763,8 +2763,8 @@ article {
 
 .editor main > div > .button-floating {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: -15px;
+    top: -15px;
 }
 
 .button-floating:hover {
