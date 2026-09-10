@@ -402,7 +402,6 @@
 					if ($f['size']) $style_a[] = "font-size: {$f['size']}";
 					if ($f['weight']) $style_a[] = "font-weight: {$f['weight']}";
 					if ($f['style']) $style_a[] = "font-style: {$f['style']}";
-					if ($f['align']) $style_a[] = "text-align: {$f['align']}";
 					$transform = $f['transform'] === 'small-caps' ? 'none' : ($f['transform'] ?: 'none');
 					$var_caps = $f['transform'] === 'small-caps' ? 'small-caps' : 'normal';
 					if ($transform) $style_a[] = "text-transform: {$transform}";
