@@ -21,3 +21,6 @@
 - Respetar el destino indicado por el usuario para una imagen (por ejemplo,
   footer); si aparece guardada en otro campo, investigar el guardado y corregir
   la asignacion, sin reinterpretarla como una decision de usarla como fondo.
+- En las cajas drop, mostrar la imagen completa ajustada al ancho o al alto
+  disponible, conservando proporciones y sin recortes ni desbordamiento
+  (`contain`). Este encaje de previsualizacion es independiente del manual.
