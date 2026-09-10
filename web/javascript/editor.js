@@ -7291,11 +7291,19 @@ selection.addRange(newRange);*/
     /**
      * Función genérica para guardar ajustes de plantilla vía AJAX
      */
-    window.guardarPlantillaAJAX = function (form, data_extra, callback) {
+    window.guardarPlantillaAJAX = function (form, data_extra, callback, imageInput) {
         if (!form) form = document.getElementById('form-manual-estilos');
         if (!form) return;
 
         var fd = new FormData(form);
+        // Each image box saves only its own file. Other saves must not resend
+        // pending files or interpret empty hidden image fields as removals.
+        ['fondo_pergamino', 'fondo_pergamino_even', 'footer_imagen'].forEach(function (name) {
+            fd.delete(name);
+        });
+        var uploadedFile = imageInput && imageInput.files && imageInput.files[0];
+        if (uploadedFile) fd.set(imageInput.name, uploadedFile);
+
         if (data_extra) {
             for (var key in data_extra) {
                 fd.set(key, data_extra[key]);
@@ -7380,6 +7388,7 @@ selection.addRange(newRange);*/
                 window.spawnToasts(data.toast);
             }
 
+            if (imageInput && imageInput.files[0] === uploadedFile) imageInput.value = '';
             if (typeof callback === 'function') callback(data);
         }).catch(function (err) {
             console.error('Error AJAX:', err);
@@ -7553,7 +7562,8 @@ selection.addRange(newRange);*/
     });
 
     Kumbia.utils.on('change', 'aside.template .dropimage [type="file"]', function (e) {
-        var form = this.closest('form'), drop = this.closest('.dropimage'), name = this.name;
+        var form = this.closest('form'), drop = this.closest('.dropimage'), name = this.name, imageInput = this;
+        if (!this.files || !this.files[0]) return;
         window.guardarPlantillaAJAX(form, null, function (data) {
             var url = name === 'footer_imagen' ? (data.url_footer || '') : (name === 'fondo_pergamino_even' ? (data.url_even || '') : (data.url_imagen || data.url || ''));
             if (url && drop) {
@@ -7572,7 +7582,9 @@ selection.addRange(newRange);*/
             }
             var act = form.querySelector('[name="' + name + '_actual"]');
             if (act) act.value = url;
-        });
+            var saved = drop && drop.querySelector('input[type=hidden]');
+            if (saved) saved.value = url;
+        }, imageInput);
     });
 
     Kumbia.utils.on('click', 'aside.template .dropimage button', function (e) {

@@ -12,3 +12,12 @@
 - Mantener las URLs históricas de imágenes y el generador dinámico de
   miniaturas mientras exista contenido antiguo que dependa de ellos.
 - Todos los cambios deben incluir su propio commit y push ejecutados por el agente. No delegar esta tarea al usuario.
+
+- Ante un fallo visual en un manual, inspeccionar el elemento real y sus estilos
+  efectivos en el manual afectado antes y despues del cambio. Una prueba del
+  selector de subida o de una maqueta aislada no valida el resultado del manual.
+- No cambiar el encaje de las previsualizaciones del drop como sustituto de
+  corregir el tamano de las imagenes en el documento.
+- Respetar el destino indicado por el usuario para una imagen (por ejemplo,
+  footer); si aparece guardada en otro campo, investigar el guardado y corregir
+  la asignacion, sin reinterpretarla como una decision de usarla como fondo.

@@ -358,6 +358,7 @@ class ManualesController extends EvController
                 'css_url' => $plantilla->getCssUrl(),
                 'url' => $ajustes->fondo_url,
                 'url_footer' => $ajustes->footer_url,
+                'url_even' => $ajustes->fondo_even_url,
                 'toast' => $toasts_html,
                 'fuentes' => $ajustes->tipografia,
                 'css_inline' => $plantilla->cssPersonalizado()
