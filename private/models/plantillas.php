@@ -304,6 +304,9 @@ class Plantillas extends LiteRecord
 
         $ajustes->margin_asymmetric = intval($vars['--margin-asymmetric'] ?? 0);
 
+        $bg_col = $vars['--background-color'] ?? '#ffffff';
+        $ajustes->background_color = ($bg_col === 'white') ? '#ffffff' : $bg_col;
+
         $ajustes->footer_url = '';
         if (isset($vars['--footer-imagen']) && preg_match('/url\([\'"]?(.*?)[\'"]?\)/', $vars['--footer-imagen'], $m)) {
             $ajustes->footer_url = $m[1];
@@ -553,6 +556,12 @@ class Plantillas extends LiteRecord
         // 4.9. Márgenes Asimétricos
         if (isset($post['margin_asymmetric'])) {
             $Reglas->guardar($this->idu, '--margin-asymmetric', intval($post['margin_asymmetric']) ? '1' : '0');
+            $debe_compilar = true;
+        }
+
+        // Color de Fondo
+        if (isset($post['background_color'])) {
+            $Reglas->guardar($this->idu, '--background-color', trim($post['background_color']));
             $debe_compilar = true;
         }
 

@@ -18,13 +18,18 @@
 				<input type="hidden" name="fondo_pergamino_even_actual" value="<?=h($ajustes->fondo_even_url)?>">
 			</div>
 
-			<div class="pa10 pt0 pb0">
+			<div class="grid col-2 gap10 pa10 pt0 pb0">
 				<label>
 					<small><b><?=t('Márgenes asimétricos (Modo Libro)')?>:</b></small>
 					<select name="margin_asymmetric" data-change-ajax>
 						<option value="0" <?= $ajustes->margin_asymmetric == 0 ? 'selected' : '' ?>><?=t('No')?></option>
 						<option value="1" <?= $ajustes->margin_asymmetric == 1 ? 'selected' : '' ?>><?=t('Sí')?></option>
 					</select>
+				</label>
+				<label>
+					<small><b><?=t('Color de fondo')?>:</b></small>
+					<div class="web-color-picker" data-target="#background_color" style="background-color: <?=h($ajustes->background_color ?? '#ffffff');?>;"></div>
+					<input type="hidden" id="background_color" name="background_color" value="<?=h($ajustes->background_color ?? '#ffffff')?>" data-change-ajax>
 				</label>
 			</div>
 

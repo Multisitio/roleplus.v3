@@ -1,4 +1,4 @@
-﻿/* 0-dom-bus.js - Vanilla JS (ya era vanilla) */
+/* 0-dom-bus.js - Vanilla JS (ya era vanilla) */
 
 (() => {
 	"use strict";
@@ -5106,12 +5106,12 @@ document.addEventListener('click', function (eve) {
 	// ==========================================
 	// Endpoint genérico temporal para la subida
 	var UPLOAD_URL = '/uploader/upload';
-	// Nivel de compresión (0-100). 100 = sin pérdida
-	var COMPRESSION_LOSS = 100;
+	// Calidad WebP (0-100). El backend la limita a un rango seguro.
+	var COMPRESSION_LOSS = 82;
 	// Límite de tamaño por archivo en Megabytes
-	var MAX_FILE_SIZE_MB = 20;
+	var MAX_FILE_SIZE_MB = 16;
 	// Extensiones válidas
-	var ALLOWED_EXTENSIONS = ['avif', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'svg', 'webp'];
+	var ALLOWED_EXTENSIONS = ['avif', 'bmp', 'gif', 'heic', 'heif', 'jpeg', 'jpg', 'png', 'svg', 'tif', 'tiff', 'webp'];
 	// Ancho máximo al que se debería redimensionar
 	var MAX_IMAGE_WIDTH = 1920;
 	// Formato de auto-conversión para el backend (ej: 'webp', false)
@@ -5677,17 +5677,16 @@ selection.addRange(newRange);*/
 
         currentCrumbs = elements;
 
-        // Generar botones para cada etiqueta de migas de pan (ocultar article)
+        // Generar botones para cada etiqueta de migas de pan
         var html = '';
-        var startIndex = (elements.length > 0 && elements[0].tagName.toLowerCase() === 'article') ? 1 : 0;
         
-        for (var i = startIndex; i < elements.length; i++) {
+        for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
-            if (i > startIndex) html += '<i>›</i>';
+            if (i > 0) html += '<i> &gt; </i>';
             
             var name = el.tagName.toLowerCase();
-            if (el.id) {
-                name += '#' + el.id;
+            if (el.id && name !== 'article') {
+                name += '>' + el.id;
             }
             
             html += '<button type="button" data-index="' + i + '">' + name + '</button>';
@@ -7187,7 +7186,8 @@ selection.addRange(newRange);*/
                         page.setAttribute('data-original-index', i);
                     }
                     // Forzar el número de página original mediante counter-reset
-                    page.style.setProperty('counter-reset', 'page ' + (baseOffset + i));
+                    var orig = parseInt(page.getAttribute('data-original-index'), 10);
+                    page.style.setProperty('counter-reset', 'page ' + (orig - baseOffset));
                 });
 
                 var N = pages.length;
@@ -7450,7 +7450,11 @@ selection.addRange(newRange);*/
             if (name.indexOf('footer_') === 0) {
                 var prop = '--' + name.replace(/_/g, '-');
                 preview.style.setProperty(prop, val + (isNaN(val) ? '' : 'px'));
-            } else if (name.indexOf('margin_') === 0 || name.indexOf('padding_') === 0) {
+            } else if (name === 'background_color') {
+                preview.style.setProperty('--background-color', val);
+            } else if (name === 'a_color') {
+                preview.style.setProperty('--a-color', val);
+            } else if (name !== 'margin_asymmetric' && (name.indexOf('margin_') === 0 || name.indexOf('padding_') === 0)) {
                 var parts = name.split('_');
                 var prop = '--' + parts[1] + '-' + parts[0] + '-' + parts[2];
                 preview.style.setProperty(prop, val + 'px');
@@ -7480,7 +7484,7 @@ selection.addRange(newRange);*/
             } else if (name.indexOf('table_') === 0) {
                 var prop = '--' + name.replace(/_/g, '-');
                 var suffix = '';
-                if (name.endsWith('_width') || name.endsWith('_padding') || name.endsWith('_x') || name.endsWith('_y')) {
+                if (name.endsWith('_width') || name.endsWith('_padding') || name.endsWith('_x') || name.endsWith('_y') || name.endsWith('_gap')) {
                     suffix = isNaN(val) || val === '' ? '' : 'px';
                 }
                 preview.style.setProperty(prop, val + suffix);

@@ -471,7 +471,11 @@
             if (name.indexOf('footer_') === 0) {
                 var prop = '--' + name.replace(/_/g, '-');
                 preview.style.setProperty(prop, val + (isNaN(val) ? '' : 'px'));
-            } else if (name.indexOf('margin_') === 0 || name.indexOf('padding_') === 0) {
+            } else if (name === 'background_color') {
+                preview.style.setProperty('--background-color', val);
+            } else if (name === 'a_color') {
+                preview.style.setProperty('--a-color', val);
+            } else if (name !== 'margin_asymmetric' && (name.indexOf('margin_') === 0 || name.indexOf('padding_') === 0)) {
                 var parts = name.split('_');
                 var prop = '--' + parts[1] + '-' + parts[0] + '-' + parts[2];
                 preview.style.setProperty(prop, val + 'px');
