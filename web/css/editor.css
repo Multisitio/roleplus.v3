@@ -1523,7 +1523,7 @@ aside.settings button.active {
 
 .dropimage:not(.dropnocontent) button,
 .dropimage:not(.dropnocontent) .quitar {
-    display: none;
+    display: none !important;
 }
 
 .dropimage input {
