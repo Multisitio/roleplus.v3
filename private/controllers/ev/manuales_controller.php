@@ -502,7 +502,17 @@ class ManualesController extends EvController
     {
         $hash = '';
         if (!empty($_POST['descripcion'])) {
-            if (preg_match('/<article\b[^>]*\bid=["\']([^"\']+)["\']/i', $_POST['descripcion'], $matches)) {
+            // Predecir el ID dinámico que generará balancearHtml a partir del primer H1-H6
+            if (preg_match('/<h[1-6][^>]*>(.*?)<\/h[1-6]>/is', $_POST['descripcion'], $matchesH)) {
+                $titulo_limpio = trim(strip_tags($matchesH[1]));
+                $slug = _url::slug($titulo_limpio);
+                if ($slug !== '' && $slug !== 'n-a') {
+                    $hash = $slug;
+                }
+            }
+
+            // Si no hay encabezado, intentar rescatar el ID existente en el article
+            if ($hash === '' && preg_match('/<article\b[^>]*\bid=["\']([^"\']+)["\']/i', $_POST['descripcion'], $matches)) {
                 $hash = $matches[1];
             }
         }
