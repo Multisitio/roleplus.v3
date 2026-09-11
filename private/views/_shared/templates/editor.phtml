@@ -42,7 +42,7 @@
 			<?php View::content(); ?>
 		</main>
 
-		<a href="#index" class="button-floating <?= $editable ? 'bottom-third' : 'bottom-second' ?> right" style="<?= $editable ? 'bottom: 130px;' : 'bottom: 70px;' ?>" title="<?=t('Subir al índice')?>">
+		<a href="#first-page" class="button-floating <?= $editable ? 'bottom-third' : 'bottom-second' ?> right" style="<?= $editable ? 'bottom: 130px;' : 'bottom: 70px;' ?>" onclick="var p=document.querySelectorAll('main article[id], main div[data-idu], main div[data-page]'); if(p.length){p[0].scrollIntoView({behavior:'smooth', block:'start'});} else {window.scrollTo({top:0, behavior:'smooth'});} return false;" title="<?=t('Subir a la primera página')?>">
 			<?=Ku::icon('arrow-up')?>
 		</a>
 
