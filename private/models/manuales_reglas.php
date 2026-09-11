@@ -6,12 +6,22 @@ class Manuales_reglas extends LiteRecord
 	#
 	public function actualizar($matriz)
 	{
+		$nombre = empty($matriz['nombre']) ? t('Pon un nombre') : (string)$matriz['nombre'];
+		if (!empty($matriz['descripcion'])) {
+			if (preg_match('/<h[1-6][^>]*>(.*?)<\/h[1-6]>/is', $matriz['descripcion'], $matchesH)) {
+				$titulo_limpio = trim(strip_tags($matchesH[1]));
+				if ($titulo_limpio !== '') {
+					$nombre = $titulo_limpio;
+				}
+			}
+		}
+
 		$values[] = (string)$matriz['manuales_idu'];
 		$values[] = (string)$matriz['manuales_reglas_idu'] ?: 'Ninguno';
 		$values[] = empty($matriz['pagina_nueva']) ? 0 : 1;
 		$values[] = (string)$matriz['idioma'] ?? 'ES';
 		$values[] = (string)$matriz['peso'];
-		$values[] = empty($matriz['nombre']) ? t('Pon un nombre') : (string)$matriz['nombre'];
+		$values[] = $nombre;
 		$values[] = empty($matriz['valor']) ? '' : $matriz['valor'];
 		
 		$desc = self::normalizarDescripcion($matriz['descripcion'] ?? '', $idu);
@@ -62,12 +72,22 @@ class Manuales_reglas extends LiteRecord
 			$peso = $max_peso + 1;
 		}
 
+		$nombre = empty($matriz['nombre']) ? t('Pon un nombre') : (string)$matriz['nombre'];
+		if (!empty($matriz['descripcion'])) {
+			if (preg_match('/<h[1-6][^>]*>(.*?)<\/h[1-6]>/is', $matriz['descripcion'], $matchesH)) {
+				$titulo_limpio = trim(strip_tags($matchesH[1]));
+				if ($titulo_limpio !== '') {
+					$nombre = $titulo_limpio;
+				}
+			}
+		}
+
 		$values[] = (string)$manuales_idu;
 		$values[] = (string)$matriz['manuales_reglas_idu'];
 		$values[] = empty($matriz['pagina_nueva']) ? 0 : 1;
 		$values[] = $idioma;
 		$values[] = (string)$peso;
-		$values[] = empty($matriz['nombre']) ? t('Pon un nombre') : (string)$matriz['nombre'];
+		$values[] = $nombre;
 		$values[] = $idu = _str::uid();
 		$values[] = empty($matriz['valor']) ? '' : $matriz['valor'];
 

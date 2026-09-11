@@ -152,11 +152,18 @@ class ManualesController extends EvController
                 }
                 $descripcion = $_POST['descripcion'] ?? null;
                 if ($descripcion !== null) {
+                    $nombre = $regla->nombre;
+                    if (preg_match('/<h[1-6][^>]*>(.*?)<\/h[1-6]>/is', $descripcion, $matchesH)) {
+                        $titulo_limpio = trim(strip_tags($matchesH[1]));
+                        if ($titulo_limpio !== '') {
+                            $nombre = $titulo_limpio;
+                        }
+                    }
                     $desc = Manuales_reglas::normalizarDescripcion($descripcion, $idu);
                     $desc = Manuales_reglas::balancearHtml($desc);
                     Manuales_reglas::query(
-                        'UPDATE manuales_reglas SET descripcion=?, descripcion_md=? WHERE idu=?',
-                        [$desc, _html::bbcode($desc), $idu]
+                        'UPDATE manuales_reglas SET descripcion=?, descripcion_md=?, nombre=? WHERE idu=?',
+                        [$desc, _html::bbcode($desc), $nombre, $idu]
                     );
                     echo json_encode(['success' => true]);
                     return;
