@@ -14,7 +14,7 @@
 				$hash = _url::slug($reg->nombre);
 			}
 		?>
-			<li data-idu="<?=$reg->idu?>"><a href="#<?=$hash?>"><?=$reg->nombre?> <sup class="nowrap regla-peso"><?=$reg->peso?></sup></a></li>
+			<li data-idu="<?=$reg->idu?>"><a data-hide="aside" href="#<?=$hash?>"><?=$reg->nombre?> <sup class="nowrap regla-peso"><?=$reg->peso?></sup></a></li>
 		<?php endforeach; ?>
 	</ul>
 </aside>
