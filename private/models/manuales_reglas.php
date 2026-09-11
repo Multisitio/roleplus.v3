@@ -226,6 +226,23 @@ class Manuales_reglas extends LiteRecord
 				}
 			}
 
+			// Asignar ID al article basado en el primer h1-h6
+			$xpath = new DOMXPath($dom);
+			$firstHeading = $xpath->query('//h1 | //h2 | //h3 | //h4 | //h5 | //h6')->item(0);
+			if ($firstHeading) {
+				$slug = _url::slug(trim($firstHeading->textContent));
+				if ($slug !== '' && $slug !== 'n-a') {
+					if (strtolower($dom->documentElement->nodeName) === 'article') {
+						$dom->documentElement->setAttribute('id', $slug);
+					} else {
+						$articles = $dom->getElementsByTagName('article');
+						if ($articles->length > 0) {
+							$articles->item(0)->setAttribute('id', $slug);
+						}
+					}
+				}
+			}
+
 			$html = self::nodeToHtml($dom->documentElement, "");
 		}
 
