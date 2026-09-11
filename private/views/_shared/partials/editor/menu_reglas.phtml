@@ -5,8 +5,16 @@
 	</button>		
 
 	<ul id="menu-reglas-sortable">
-		<?php foreach($reglas as $reg): ?>
-			<li data-idu="<?=$reg->idu?>"><a data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=$reg->manuales_idu?>/<?=$reg->idu?>?t=<?=time()?>"><?=$reg->nombre?> <sup class="nowrap regla-peso"><?=$reg->peso?></sup></a></li>
+		<?php foreach($reglas as $reg): 
+			$hash = '';
+			if (preg_match('/<article\b[^>]*\bid=["\']([^"\']+)["\']/i', $reg->descripcion, $matches)) {
+				$hash = $matches[1];
+			}
+			if ($hash === '') {
+				$hash = _url::slug($reg->nombre);
+			}
+		?>
+			<li data-idu="<?=$reg->idu?>"><a href="#<?=$hash?>"><?=$reg->nombre?> <sup class="nowrap regla-peso"><?=$reg->peso?></sup></a></li>
 		<?php endforeach; ?>
 	</ul>
 </aside>
