@@ -1636,6 +1636,14 @@ document.addEventListener('click', function (eve) {
     }
 });
 
+document.addEventListener('click', function (eve) {
+    var btn = eve.target && eve.target.closest ? eve.target.closest('.scroll-top, [href="#first-page"]') : null;
+    if (btn) {
+        eve.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+});
+
 /* Scroll to body: On */
 document.addEventListener('click', function (eve) {
     var btn = eve.target && eve.target.closest ? eve.target.closest('[data-ajax]:not([data-style]), [data-hide*="overlay"], .overlay') : null;

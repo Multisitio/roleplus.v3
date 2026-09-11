@@ -33,7 +33,7 @@
 		</button>
 
         <?php if ($editable): ?>
-            <button class="button-floating right" style="top: 130px;" data-show=".template">
+            <button class="button-floating top-third right" data-show=".template">
                 <?=Ku::icon('image')?>
             </button>
         <?php endif; ?>
@@ -42,17 +42,17 @@
 			<?php View::content(); ?>
 		</main>
 
-		<a href="#first-page" class="button-floating <?= $editable ? 'bottom-third' : 'bottom-second' ?> right" style="<?= $editable ? 'bottom: 130px;' : 'bottom: 70px;' ?>" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;" title="<?=t('Subir a la primera página')?>">
+		<a href="#first-page" class="button-floating <?= $editable ? 'bottom-third' : 'bottom-second' ?> right scroll-top" title="<?=t('Subir a la primera página')?>">
 			<?=Ku::icon('arrow-up')?>
 		</a>
 
         <?php if ($editable): ?>
-            <a class="button-floating bottom-second right" style="bottom: 70px;" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=h($manuales_idu)?>" title="<?=t('Nueva regla')?>">
+            <a class="button-floating bottom-second right" data-ajax=".ajax.show" href="/ev/manuales/formulario_regla/<?=h($manuales_idu)?>" title="<?=t('Nueva regla')?>">
                 <?=Ku::icon('plus')?>
             </a>
         <?php endif; ?>
 
-		<a href="#last-page" class="button-floating bottom right scroll-bottom" style="bottom: 10px;" onclick="var p=document.querySelectorAll('main article[id], main div[data-idu], main div[data-page]'); if(p.length){p[p.length-1].scrollIntoView({behavior:'smooth', block:'start'});} else {window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});} return false;" title="<?=t('Ir a la última página')?>">
+		<a href="#last-page" class="button-floating bottom right scroll-bottom" title="<?=t('Ir a la última página')?>">
 			<?=Ku::icon('arrow-down')?>
 		</a>
 
@@ -76,10 +76,6 @@
 		<div class="ajax show"></div>
 
 		<?php View::partial('color_picker_ps'); ?>
-
-		<?php /*<div class="overlay hide" data-confirm="<?=t("Sure?")?>" data-hide=".overlay, .modal"></div>*/ ?>
-
-		<?php #View::partial('wysiwyg'); ?>
 
 		<script src="/javascript/editor.min.js?v=<?=time()?>"></script>
 	</body>
