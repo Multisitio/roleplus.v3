@@ -2158,6 +2158,10 @@ main>div a[data-ajax=".ajax.show"] {
     top: 70px;
 }
 
+.button-floating.top-third {
+    top: 130px;
+}
+
 .editor main > div > .button-floating {
     position: absolute;
     right: -15px;
