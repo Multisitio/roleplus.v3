@@ -31,3 +31,5 @@
   fija de los botones globales. Verificar varias paginas y el desplazamiento.
 - Conservar el desplazamiento historico del boton de editar de pagina:
   `top: -15px; right: -15px`, relativo a su pagina.
+
+- **REGLA ESTRICTA DE PROCEDIMIENTO:** Antes de modificar un archivo de código fuente, es **OBLIGATORIO** usar la herramienta `view_file` para leer el archivo `SKILL.md` asociado a su tecnología (ej. `kumbiaphp` para MVC, `z_index_hierarchy` para capas). No se asume el conocimiento de memoria.
