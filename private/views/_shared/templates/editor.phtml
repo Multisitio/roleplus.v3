@@ -6,7 +6,7 @@
 
 		<title><?=h($manual->nombre)?></title>
 
-        <link href="/css/editor.min.css?v=<?=time()?>" rel="stylesheet">
+        <link href="/css/editor.min.css?v=<?=$version?>" rel="stylesheet">
 
         <?php 
         $plantilla_css = "css/" . h($manual->plantilla) . ".min.css";
@@ -77,6 +77,6 @@
 
 		<?php View::partial('color_picker_ps'); ?>
 
-		<script src="/javascript/editor.min.js?v=<?=time()?>"></script>
+		<script src="/javascript/editor.min.js?v=<?=$version?>"></script>
 	</body>
 </html>
