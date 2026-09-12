@@ -22,16 +22,17 @@
     body,
     main,
     body > div,
-    main > div {
+    article {
         margin: 0 !important;
         padding: 0 !important;
         background-color: transparent !important;
         box-shadow: none !important;
     }
 
-    article {
+    main > div {
         margin: 0 !important;
         padding: 0 !important;
+        background-color: var(--background-color, white) !important;
         box-shadow: none !important;
     }
 
