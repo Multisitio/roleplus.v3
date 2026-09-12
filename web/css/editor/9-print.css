@@ -10,8 +10,13 @@
     }
 
     /* ========================================= */
-    /* 1. LIMPIEZA DE IMPRESIÓN                  */
+    /* 1. LIMPIEZA DE IMPRESIÓN Y COLOR          */
     /* ========================================= */
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
 
     html,
     body,
