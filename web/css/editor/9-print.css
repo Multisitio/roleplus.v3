@@ -18,11 +18,6 @@
         print-color-adjust: exact !important;
     }
 
-    /* En impresión Chrome a veces colapsa color-mix con alpha a blanco puro */
-    main.plantilla {
-        --table-zebra-bg: var(--table-zebra-color, #ffcccc) !important;
-    }
-
     html,
     body,
     main,
