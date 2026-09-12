@@ -21,14 +21,14 @@
     html,
     body,
     main,
-    body > div {
+    body > div,
+    main > div {
         margin: 0 !important;
         padding: 0 !important;
         background-color: transparent !important;
         box-shadow: none !important;
     }
 
-    main > div,
     article {
         margin: 0 !important;
         padding: 0 !important;
