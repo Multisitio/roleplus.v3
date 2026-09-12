@@ -20,7 +20,15 @@
 
     html,
     body,
-    main,
+    main {
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
     body > div,
     article {
         margin: 0 !important;
@@ -72,12 +80,14 @@
     /* ========================================= */
 
     /* Solo aplicamos la transformación y el forzado de contenedor si el documento es A5 */
-    .a5 main > div {
+    main.a5 > div,
+    .a5 > div {
         width: 210mm !important;
-        height: 297mm !important;
+        height: 296mm !important; /* Evita bug de redondeo subpíxel de Chromium (1123px vs 1122.5px) */
     }
 
-    .a5 main > div article {
+    main.a5 > div article,
+    .a5 > div article {
         transform: scale(1.4189, 1.4142) !important;
         transform-origin: top left !important;
     }
@@ -99,14 +109,18 @@
     }
 
     /* Restaurar dimensiones originales para que cabalguen dos A5 sobre el A4 apaisado */
-    .booklet-mode .a5 main > div,
-    body.booklet-mode.a5 main > div {
+    .booklet-mode main.a5 > div,
+    .booklet-mode .a5 > div,
+    body.booklet-mode main.a5 > div,
+    body.booklet-mode .a5 > div {
         width: 148mm !important;
         height: 210mm !important;
     }
 
-    .booklet-mode .a5 main > div article,
-    body.booklet-mode.a5 main > div article {
+    .booklet-mode main.a5 > div article,
+    .booklet-mode .a5 > div article,
+    body.booklet-mode main.a5 > div article,
+    body.booklet-mode .a5 > div article {
         transform: none !important;
     }
 
