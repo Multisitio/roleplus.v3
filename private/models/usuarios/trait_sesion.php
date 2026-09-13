@@ -148,8 +148,15 @@ trait UsuariosSesion
     # Sesion
     public function marcarAcceso($contenedor='.usuarios.conectados', $contenido='/usuarios/conectados')
     {
+        $ahora = time();
+        $ultimo = (int) Session::get('ultimo_acceso_actualizado', '__meta');
+        if ($ultimo > $ahora - 300) {
+            return;
+        }
+
         $sql = 'UPDATE usuarios SET tocado=?, ip=?, browser=? WHERE idu=?';
         self::query($sql, [date('Y-m-d H:i:s'), $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_USER_AGENT'], Session::get('idu')]);
+        Session::set('ultimo_acceso_actualizado', $ahora, '__meta');
 
         /*_url::enviarAlCanal('conectados', [
             'url' => '/usuarios/conectados',

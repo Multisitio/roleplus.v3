@@ -23,9 +23,13 @@ class EvController extends GeneralController
 
 		# IF NOT session THEN login form
 		if ( ! Session::get('idu')) {
-			Input::isAjax()
-				? View::select('', 'login')
-				: Redirect::to('/usuarios/formularios');
+			if (Input::isAjax()) {
+				http_response_code(401);
+				header('X-RolePlus-Session: expired');
+				View::select('', 'login');
+			} else {
+				Redirect::to('/usuarios/formularios');
+			}
 			return false;
 		}
 

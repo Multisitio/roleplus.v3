@@ -13,6 +13,13 @@
   miniaturas mientras exista contenido antiguo que dependa de ellos.
 - Todos los cambios deben incluir su propio commit y push ejecutados por el agente. No delegar esta tarea al usuario.
 
+- La sesión de un usuario activo debe renovarse de forma deslizante dentro de
+  sus peticiones normales, con una frecuencia limitada. No añadir pings,
+  polling ni peticiones keep-alive desde JavaScript para conservarla.
+- Las acciones largas y AJAX no deben retener el bloqueo de la sesión después
+  de escribir en ella. Una sesión ausente en AJAX debe responder como error de
+  autenticación, nunca devolver silenciosamente un formulario con estado 200.
+
 - Ante un fallo visual en un manual, inspeccionar el elemento real y sus estilos
   efectivos en el manual afectado antes y despues del cambio. Una prueba del
   selector de subida o de una maqueta aislada no valida el resultado del manual.
