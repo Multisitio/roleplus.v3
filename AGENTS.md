@@ -32,4 +32,8 @@
 - Conservar el desplazamiento historico del boton de editar de pagina:
   `top: -15px; right: -15px`, relativo a su pagina.
 
-- **REGLA ESTRICTA DE PROCEDIMIENTO:** Antes de modificar un archivo de código fuente, es **OBLIGATORIO** usar la herramienta `view_file` para leer el archivo `SKILL.md` asociado a su tecnología (ej. `kumbiaphp` para MVC, `z_index_hierarchy` para capas). No se asume el conocimiento de memoria.
+- **Lectura de instrucciones técnicas:** Antes de modificar código fuente, leer el `SKILL.md` asociado a su tecnología (ej. `kumbiaphp` para MVC, `z_index_hierarchy` para capas). Si `view_file` no está disponible, usar directamente un lector equivalente, sin pedir permiso ni detener el trabajo por el nombre de una herramienta. No se asume el conocimiento de memoria.
+- **Diagnóstico de estilos:** Distinguir una variable CSS ausente de un conflicto entre reglas. Comprobar los estilos efectivos y el bundle publicado antes de atribuir la causa; usar las variables del tema existente en lugar de introducir una paleta duplicada.
+
+- **Impresión CSS (Chrome Bug):** Para que Chrome imprima los colores de fondo es necesario usar `-webkit-print-color-adjust: exact`. Sin embargo, si un contenedor con imagen de fondo (`background-image`) tiene `background-color: transparent`, Chrome descartará el canal alfa (transparencias) de todos sus elementos hijos al imprimir en PDF. Asegúrate siempre de que el contenedor padre mantenga un color de fondo sólido.
+- **Caché CSS:** Tras cualquier modificación de un archivo `.min.css`, es obligatorio incrementar la variable `$version` en `ev_controller.php` o similar, y realizar el despliegue al servidor, de lo contrario los cambios no se reflejarán. No intentes sobrescribir CSS personalizados del usuario sin consultarlo (ej. variables como `--table-zebra-bg`).

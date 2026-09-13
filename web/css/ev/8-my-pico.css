@@ -24,9 +24,13 @@ input[type=submit][disabled] {
 /* Cajas */
 
 article {
+    background: var(--input-background);
+    border: 1px solid var(--primary-border, #ccc);
+    border-radius: 15px;
     margin: 0 auto 25px;
     max-width: 800px;
     padding: 0;
+    overflow: hidden;
 }
 
 article header {
