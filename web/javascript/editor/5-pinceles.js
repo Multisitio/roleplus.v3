@@ -74,6 +74,8 @@
     var countdownTimers = {};
     var savePromises   = {};
     var isDirty        = {};
+    var saveRevisions  = {};
+    var retryCounts    = {};
     var currentCrumbs  = [];
 
     /* -----------------------------------------------------------------
@@ -1015,12 +1017,10 @@
         }
     });
 
-    window.addEventListener('beforeunload', function () {
-        if (activeArticle) {
-            var idu = activeArticle.getAttribute('data-idu');
-            if (idu && debounceTimers[idu]) {
-                saveArticle(activeArticle);
-            }
+    window.addEventListener('beforeunload', function (e) {
+        if (Object.keys(isDirty).length || Object.keys(savePromises).length) {
+            e.preventDefault();
+            e.returnValue = '';
         }
     });
 
@@ -1065,6 +1065,8 @@
         var idu = articleEl.getAttribute('data-idu');
         if (!idu) return;
         isDirty[idu] = true;
+        saveRevisions[idu] = (saveRevisions[idu] || 0) + 1;
+        retryCounts[idu] = 0;
         clearTimeout(debounceTimers[idu]);
         clearInterval(countdownTimers[idu]);
         
@@ -1104,10 +1106,12 @@
         if (!idu) return Promise.resolve();
 
         if (savePromises[idu]) {
+            saveRevisions[idu] = (saveRevisions[idu] || 0) + 1;
             return savePromises[idu];
         }
 
-        delete isDirty[idu];
+        isDirty[idu] = true;
+        var revision = saveRevisions[idu] || 0;
 
         if (debounceTimers[idu]) {
             clearTimeout(debounceTimers[idu]);
@@ -1157,21 +1161,50 @@
         fd.append('action',      'regla_actualizar_ajax');
         if (manualesIdu) fd.append('manuales_idu', manualesIdu);
 
+        var confirmed = false;
+        var retryable = false;
+        var abort = new AbortController();
+        var timeout = setTimeout(function () { abort.abort(); }, 30000);
         var p = fetch(window.location.pathname, {
             method: 'POST',
             body:   fd,
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            keepalive: true
+            signal: abort.signal
         }).then(function (r) {
-            if (r.ok || r.status === 302) {
-                setSaveStatus('saved', '✓ guardado');
-            } else {
-                setSaveStatus('error', '✗ error ' + r.status);
+            if (r.status === 401 || r.redirected) {
+                throw new Error('Tu sesión ha caducado. Inicia sesión en otra pestaña y reintenta desde aquí. No recargues este editor.');
             }
-        }).catch(function () {
-            setSaveStatus('error', '✗ sin conexión');
+            if (!r.ok) {
+                retryable = r.status >= 500 || r.status === 429;
+                throw new Error(r.status === 403 ? '403' : 'El servidor rechazó los cambios (' + r.status + '). Siguen pendientes en esta pestaña.');
+            }
+            return r.json().then(function (data) {
+                if (!data || data.success !== true) {
+                    throw new Error('El servidor no confirmó los cambios. Siguen pendientes en esta pestaña.');
+                }
+                confirmed = true;
+                retryCounts[idu] = 0;
+                if ((saveRevisions[idu] || 0) === revision) delete isDirty[idu];
+                if (!Object.keys(isDirty).length) setSaveStatus('saved', '✓ guardado');
+            });
+        }).catch(function (error) {
+            if (error.name === 'TypeError' || error.name === 'AbortError') retryable = true;
+            setSaveStatus('error', '✗ ' + (retryable
+                ? 'No se ha recibido confirmación del servidor. Los cambios siguen pendientes en esta pestaña.'
+                : error.name === 'SyntaxError' ? 'Respuesta inesperada del servidor. Los cambios siguen pendientes en esta pestaña.' : error.message));
         }).finally(function () {
+            clearTimeout(timeout);
             delete savePromises[idu];
+        }).then(function () {
+            if (confirmed && isDirty[idu]) return saveArticle(articleEl);
+            if (!confirmed && retryable && (retryCounts[idu] || 0) < 3) {
+                retryCounts[idu] = (retryCounts[idu] || 0) + 1;
+                clearTimeout(debounceTimers[idu]);
+                debounceTimers[idu] = setTimeout(function () {
+                    saveArticle(articleEl);
+                }, 5000 * Math.pow(2, retryCounts[idu] - 1));
+            }
+            return confirmed;
         });
 
         savePromises[idu] = p;
@@ -1418,6 +1451,12 @@
 
         return Promise.all(promises);
     };
+
+    // Reanudar únicamente escrituras pendientes al recuperar la conexión.
+    window.addEventListener('online', function () {
+        retryCounts = {};
+        window.flushPendingSaves();
+    });
 
     // Interceptar el mousedown en el botón de edición para forzar guardado antes del focusout
     document.addEventListener('mousedown', function (e) {

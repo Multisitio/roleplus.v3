@@ -414,7 +414,8 @@
 			if (!target) return;
 
 			if (typeof window.flushPendingSaves === 'function') {
-				await window.flushPendingSaves();
+				var saved = await window.flushPendingSaves();
+				if (saved && saved.some(function (ok) { return ok === false; })) return;
 			}
 
 			log("AJAX GET", Utils.selectorOf(target, sel), "→", href);

@@ -1,5 +1,9 @@
 # Instrucciones del proyecto RolePlus
 
+- Las bases de datos no comparten necesariamente fuente de verdad. Identificar
+  la fuente correspondiente a cada conjunto de datos antes de modificarlo o
+  sincronizarlo; la regla de copia local del código no determina la de los datos.
+
 - La copia local de `X:\htdocs\roleplus.app` es la fuente de verdad. Aplicar
   primero aquí los cambios, verificarlos y solo después replicarlos en
   producción.
