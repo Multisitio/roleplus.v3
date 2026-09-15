@@ -7,8 +7,7 @@
    Evita que las páginas del manual se deslicen por debajo
    de las barras de herramientas fijas ("espacio reservado").
    /* NO usar .editor en este archivo */
-   --------------------------------------------------------- */
-body {
+--------------------------------------------------------- */ body {
     background: grey;
     counter-reset: page;
     padding: 0 !important;
@@ -24,7 +23,7 @@ main {
 
 /* El aside derecho (y general) debe sobreponerse a los controles */
 aside {
-    z-index: 6; 
+    z-index: 6;
 }
 
 /* ---------------------------------------------------------
@@ -45,7 +44,7 @@ nav[data-toolbar="pinceles"] {
     bottom: 0;
     height: 100vh;
     z-index: 3;
-    
+
     /* Scroll si hay muchos botones */
     overflow-y: auto;
     scrollbar-width: thin;
@@ -141,7 +140,7 @@ nav[data-toolbar="contexto"] select {
     background-color: var(--background-card, #fff);
     color: var(--primary, #6b5000);
     cursor: pointer;
-    
+
     /* Sobrescribir directivas invasivas de 4-form.css */
     display: inline-flex;
     align-items: center;
@@ -167,14 +166,14 @@ nav[data-toolbar="contexto"] select {
     background-size: 8px auto;
 }
 
-nav[data-toolbar="contexto"] > span {
+nav[data-toolbar="contexto"]>span {
     align-items: center;
     display: none;
     font-size: 11px;
     gap: 4px;
 }
 
-nav[data-toolbar="contexto"] > span:not(:empty) {
+nav[data-toolbar="contexto"]>span:not(:empty) {
     background: transparent;
     display: inline-flex;
     flex-wrap: wrap;
@@ -183,11 +182,11 @@ nav[data-toolbar="contexto"] > span:not(:empty) {
     min-height: 42px;
     padding: 10px 25px 10px 12px;
     border-radius: 0;
-    box-shadow: 2px 2px 2px #666;
+    filter: drop-shadow(2px 2px 2px #666);
     position: relative;
 }
 
-nav[data-toolbar="contexto"] > span:not(:empty)::before {
+nav[data-toolbar="contexto"]>span:not(:empty)::before {
     content: '';
     position: absolute;
     top: 0;
@@ -200,7 +199,7 @@ nav[data-toolbar="contexto"] > span:not(:empty)::before {
 }
 
 /* Estilo de botones para las etiquetas de las migas de pan */
-nav[data-toolbar="contexto"] > span button {
+nav[data-toolbar="contexto"]>span button {
     background: transparent;
     border: 0;
     cursor: pointer;
@@ -215,12 +214,12 @@ nav[data-toolbar="contexto"] > span button {
     height: auto;
 }
 
-nav[data-toolbar="contexto"] > span button:hover {
+nav[data-toolbar="contexto"]>span button:hover {
     color: #007bff;
     text-decoration: underline;
 }
 
-nav[data-toolbar="contexto"] > span i {
+nav[data-toolbar="contexto"]>span i {
     color: #aaa;
     font-style: normal;
 }
@@ -229,7 +228,7 @@ nav[data-toolbar="contexto"] > span i {
    Estado de guardado — flota debajo de la barra de contexto
    --------------------------------------------------------- */
 /* alineado al nuevo margen del contexto */
-body > output {
+body>output {
     background: white;
     border-radius: 8px;
     font-family: 'Courier New', monospace;
@@ -244,14 +243,22 @@ body > output {
     z-index: 9;
 }
 
-body > output[data-status] {
+body>output[data-status] {
     box-shadow: 0 0 10px 1px #666;
     opacity: 1;
 }
 
-body > output[data-status="saving"] { color: #b88; }
-body > output[data-status="saved"]  { color: #484; }
-body > output[data-status="error"]  { color: #a33; }
+body>output[data-status="saving"] {
+    color: #b88;
+}
+
+body>output[data-status="saved"] {
+    color: #484;
+}
+
+body>output[data-status="error"] {
+    color: #a33;
+}
 
 /* ---------------------------------------------------------
    Contenido editable
@@ -266,7 +273,7 @@ main div[contenteditable] a {
     cursor: text;
 }
 
-main div[contenteditable]:focus-within > article {
+main div[contenteditable]:focus-within>article {
     box-shadow: 0 0 0 3px rgba(100, 160, 255, 0.5);
 }
 
@@ -284,6 +291,7 @@ article {
 nav[data-toolbar="pinceles"] {
     display: flex;
 }
+
 nav[data-toolbar="contexto"] {
     display: flex;
 }
@@ -292,14 +300,19 @@ nav[data-toolbar="contexto"] {
    Etiquetas vacías (outlines y badges dinámicos en editor)
    --------------------------------------------------------- */
 main div[contenteditable] [data-empty-helper="true"] {
-    min-height: 2.2em;
-    outline: 1px dashed rgba(200, 100, 100, 0.35);
-    background: rgba(255, 100, 100, 0.02);
     position: relative;
     border-radius: 4px;
     padding-right: 62px !important;
     display: block;
     box-sizing: border-box;
+    outline: none;
+    background: transparent;
+}
+
+main div[contenteditable] [data-empty-helper="true"]:hover,
+main div[contenteditable] [data-empty-helper="true"].is-active-helper {
+    outline: 1px dashed rgba(200, 100, 100, 0.35);
+    background: rgba(255, 100, 100, 0.02);
 }
 
 main div[contenteditable] td[data-empty-helper="true"],
@@ -316,9 +329,10 @@ main div[contenteditable] footer[data-empty-helper="true"] {
 
 /* El badge flotante arriba a la derecha */
 main div[contenteditable] .editor-badge {
+    display: none;
     position: absolute;
-    right: 4px;
-    top: 4px;
+    right: 2px;
+    top: 2px;
     background: #ffe6e6;
     border: 1px solid #ffb3b3;
     border-radius: 3px;
@@ -326,7 +340,6 @@ main div[contenteditable] .editor-badge {
     font-family: monospace;
     font-size: 10px;
     font-weight: bold;
-    display: inline-flex;
     flex-direction: row-reverse;
     align-items: center;
     gap: 4px;
@@ -334,6 +347,11 @@ main div[contenteditable] .editor-badge {
     line-height: 1;
     z-index: 1;
     user-select: none;
+}
+
+main div[contenteditable] [data-empty-helper="true"]:hover>.editor-badge,
+main div[contenteditable] [data-empty-helper="true"].is-active-helper>.editor-badge {
+    display: inline-flex;
 }
 
 main div[contenteditable] .editor-badge .tag-name {
@@ -369,7 +387,8 @@ nav[data-toolbar="contexto"] button[data-action="save-page"] {
     border: 0;
     border-radius: 5px;
     box-shadow: 2px 2px 2px #666;
-    color: #aaa; /* Gris por defecto (inactivo/oculto) */
+    color: #aaa;
+    /* Gris por defecto (inactivo/oculto) */
     cursor: pointer;
     display: inline-flex;
     align-items: center;
