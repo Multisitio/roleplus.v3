@@ -1906,6 +1906,10 @@ body > :not(main) hr {
     margin: 15px 0;
 }
 
+﻿img {
+    max-width: 100%;
+}
+
 .faded {
     display: block;
     height: auto;
@@ -1913,19 +1917,6 @@ body > :not(main) hr {
     max-width: 100%;
 }
 
-main article img {
-    max-width: 100%;
-    object-fit: scale-down;
-}
-
-main.a4.portrait article img { max-height: 29.6cm; }
-main.a4.landscape article img { max-height: 20.9cm; }
-
-main.a5.portrait article img { max-height: 20.9cm; }
-main.a5.landscape article img { max-height: 14.7cm; }
-
-main.letter.portrait article img { max-height: 10.9in; }
-main.letter.landscape article img { max-height: 8.4in; }
 
 body > :not(main) input[type="checkbox"] {
     vertical-align: text-bottom;
@@ -3299,7 +3290,6 @@ main footer:after {
         page-break-inside: avoid;
         break-inside: avoid;
         overflow: hidden;
-        width: auto !important;
     }
 
     main > div ~ div {

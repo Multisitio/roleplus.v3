@@ -68,7 +68,6 @@
         page-break-inside: avoid;
         break-inside: avoid;
         overflow: hidden;
-        width: auto !important;
     }
 
     main > div ~ div {

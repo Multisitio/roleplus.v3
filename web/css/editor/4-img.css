@@ -1,20 +1,10 @@
+﻿img {
+    max-width: 100%;
+}
+
 .faded {
     display: block;
     height: auto;
     mask-image: radial-gradient(ellipse farthest-side, black 40%, transparent 100%);
     max-width: 100%;
 }
-
-main article img {
-    max-width: 100%;
-    object-fit: scale-down;
-}
-
-main.a4.portrait article img { max-height: 29.6cm; }
-main.a4.landscape article img { max-height: 20.9cm; }
-
-main.a5.portrait article img { max-height: 20.9cm; }
-main.a5.landscape article img { max-height: 14.7cm; }
-
-main.letter.portrait article img { max-height: 10.9in; }
-main.letter.landscape article img { max-height: 8.4in; }
