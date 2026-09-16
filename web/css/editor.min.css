@@ -1913,6 +1913,12 @@ body > :not(main) hr {
     max-width: 100%;
 }
 
+main article img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: scale-down;
+}
+
 body > :not(main) input[type="checkbox"] {
     vertical-align: text-bottom;
 }
