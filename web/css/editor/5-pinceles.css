@@ -71,6 +71,17 @@ nav[data-toolbar="pinceles"] button:hover {
     transform: scale(1.06);
 }
 
+nav[data-toolbar="pinceles"] button[data-tag="delete_parent"],
+nav[data-toolbar="pinceles"] button[data-tag="delete_node"] {
+    color: #cc0000;
+}
+
+nav[data-toolbar="pinceles"] button[data-tag="delete_parent"]:hover,
+nav[data-toolbar="pinceles"] button[data-tag="delete_node"]:hover {
+    background: #ffe6e6;
+    color: #990000;
+}
+
 nav[data-toolbar="pinceles"] button:active {
     background: rgba(0, 0, 0, 0.14);
     transform: scale(0.95);

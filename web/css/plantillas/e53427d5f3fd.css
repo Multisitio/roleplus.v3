@@ -34,7 +34,7 @@
     src: url('/fonts/alegreya_sans_sc.woff2');
 }
 
-.plantilla>div article {
+main>div article {
     color: #000033;
     font-size: 14px;
     font-family: 'Crimson Pro';
@@ -42,13 +42,13 @@
     background-size: cover;
 }
 
-.plantilla>div article small {
+main>div article small {
     font-size: 12px;
     color: #006600;
     font-family: 'Alegreya Sans';
 }
 
-.plantilla>div h1 {
+main>div h1 {
     color: #ff0000;
     font-size: 36px;
     text-align: center;
@@ -59,7 +59,7 @@
     font-family: 'Uncial Antiqua';
 }
 
-.plantilla>div h2 {
+main>div h2 {
     color: #cc0000;
     font-size: 30px;
     text-transform: none;
@@ -69,7 +69,7 @@
     font-family: 'Medievalsharp';
 }
 
-.plantilla>div h3 {
+main>div h3 {
     color: #990000;
     font-size: 24px;
     font-family: 'Vollkorn';
@@ -78,7 +78,7 @@
     font-weight: normal;
 }
 
-.plantilla>div h4 {
+main>div h4 {
     color: #660000;
     font-size: 20px;
     font-family: 'Alegreya SC';
@@ -87,7 +87,7 @@
     font-weight: normal;
 }
 
-.plantilla>div h5 {
+main>div h5 {
     color: #330000;
     font-size: 18px;
     font-family: 'Crimson Pro';
@@ -95,7 +95,7 @@
     font-variant: small-caps;
 }
 
-.plantilla>div h6 {
+main>div h6 {
     color: #000000;
     font-size: 16px;
     font-family: 'Alegreya Sans SC';

@@ -1,4 +1,4 @@
-.plantilla caption {
+main caption {
     align-items: center;
     background-image: var(--bg-band);
     background-position: center, left center, right;
@@ -16,19 +16,19 @@
     width: fit-content;
 }
 
-.plantilla caption::before {
+main caption::before {
     background-position: center left;
     margin-left: -2mm;
     margin-right: 0.2em;
 }
 
-.plantilla caption::after {
+main caption::after {
     background-position: center right;
     margin-left: 0.2em;
     margin-right: -2mm;
 }
 
-.plantilla table {
+main table {
     border-collapse: collapse;
     border-spacing: 0;
     position: relative;
@@ -36,41 +36,41 @@
     width: 100%;
 }
 
-.plantilla table:has(caption) {
+main table:has(caption) {
     margin-block: 100px 5px;
 }
 
-.plantilla div>table:first-child {
+main div>table:first-child {
     margin-top: 0;
 }
 
-.plantilla div>table:has(caption):first-child {
+main div>table:has(caption):first-child {
     margin-top: 45px;
 }
 
-.plantilla div>table:last-child {
+main div>table:last-child {
     margin-bottom: 0;
 }
 
-.plantilla th,
-.plantilla td {
+main th,
+main td {
     padding: var(--spacing-cell);
     vertical-align: top;
 }
 
-.plantilla th {
+main th {
     border-bottom: var(--border-th);
     color: var(--color-secondary);
 }
 
-.plantilla td {
+main td {
     border-bottom: var(--border-td);
 }
 
-.plantilla tr:nth-child(even) {
+main tr:nth-child(even) {
     background-color: var(--color-bg-even-row);
 }
 
-.plantilla table:has(+ul) {
+main table:has(+ul) {
     margin-bottom: 0;
 }

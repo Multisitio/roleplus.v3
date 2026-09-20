@@ -1,4 +1,4 @@
-.plantilla caption {
+main caption {
     align-items: center;
     background-image:
         url("data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>"), url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>"),
@@ -18,19 +18,19 @@
     width: fit-content;
 }
 
-.plantilla caption::before {
+main caption::before {
     background-position: center left;
     margin-left: -2mm;
     margin-right: .2em;
 }
 
-.plantilla caption::after {
+main caption::after {
     background-position: center right;
     margin-left: .2em;
     margin-right: -2mm;
 }
 
-.plantilla table {
+main table {
     border-collapse: collapse;
     border-spacing: 0;
     margin-block: 15px;
@@ -39,51 +39,51 @@
     width: 100%;
 }
 
-.plantilla table:has(caption) {
+main table:has(caption) {
     margin-block: 65px 20px;
 }
 
-.plantilla div>table:first-child {
+main div>table:first-child {
     margin-top: 0;
 }
 
-.plantilla div>table:has(caption):first-child {
+main div>table:has(caption):first-child {
     margin-top: 45px;
 }
 
-.plantilla div>table:last-child {
+main div>table:last-child {
     margin-bottom: 0;
 }
 
-.plantilla th,
-.plantilla td {
+main th,
+main td {
     font-style: italic;
     padding: 5px;
     vertical-align: top;
 }
 
-.plantilla th {
+main th {
     background: var(--dragonred);
     color: white;
     font-weight: normal;
 }
 
-.plantilla tr:nth-child(even) {
+main tr:nth-child(even) {
     background-color: #ccc;
 }
 
-.plantilla tr:nth-child(odd) {
+main tr:nth-child(odd) {
     background-color: white;
 }
 
-.plantilla .white-first tr:nth-child(even) {
+main .white-first tr:nth-child(even) {
     background-color: white;
 }
 
-.plantilla .white-first tr:nth-child(odd) {
+main .white-first tr:nth-child(odd) {
     background-color: #ccc;
 }
 
-.plantilla table:has(+ul) {
+main table:has(+ul) {
     margin-bottom: 0;
 }

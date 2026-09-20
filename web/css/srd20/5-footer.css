@@ -1,4 +1,4 @@
-.plantilla article footer:before {
+main article footer:before {
     background-image: var(--bg-footer);
     background-size: 100% auto;
     content: "";
@@ -10,20 +10,20 @@
     transform: scaleX(-1);
 }
 
-.a5.plantilla article footer:before {
+.a5main article footer:before {
     filter: contrast(0.5);
     height: 43px;
 }
 
-/*#important .bleed .plantilla > div article footer:before {
+/*#important .bleed main > div article footer:before {
     height: 62px;
 }*/
 
-.plantilla>div:nth-child(even) footer:before {
+main>div:nth-child(even) footer:before {
     transform: scaleX(1);
 }
 
-.plantilla article footer {
+main article footer {
     color: var(--color-text-footnote);
     font-size: .8em;
     height: 43px;
@@ -34,7 +34,7 @@
     z-index: 1;
 }
 
-/*#important .bleed .plantilla > div article footer {
+/*#important .bleed main > div article footer {
     height: 55px;
 }*/
 
@@ -42,29 +42,29 @@
     color: var(--color-accent-gold);
 }
 
-.plantilla>div:nth-child(odd) footer {
+main>div:nth-child(odd) footer {
     padding-inline: 70px;
     text-align: left;
 }
 
-.a5.plantilla>div:nth-child(odd) footer {
+.a5main>div:nth-child(odd) footer {
     padding-inline: 44px;
 }
 
-.plantilla>div:nth-child(2n) footer {
+main>div:nth-child(2n) footer {
     padding-inline: 70px;
     text-align: right;
 }
 
-.a5.plantilla>div:nth-child(2n) footer {
+.a5main>div:nth-child(2n) footer {
     padding-inline: 44px;
 }
 
-.plantilla>div {
+main>div {
     counter-increment: page;
 }
 
-.plantilla article footer:after {
+main article footer:after {
     content: counter(page);
     position: absolute;
     bottom: 16px;
@@ -72,23 +72,23 @@
     width: 55px;
 }
 
-.a5.plantilla article footer:after {
+.a5main article footer:after {
     bottom: 17px;
     width: 36px;
 }
 
-/*#important .bleed .plantilla > div article footer:after {
+/*#important .bleed main > div article footer:after {
     bottom: 27px;
 }*/
 
-.plantilla>div:nth-child(odd) footer:after {
+main>div:nth-child(odd) footer:after {
     left: 0;
 }
 
-.plantilla>div:nth-child(even) footer:after {
+main>div:nth-child(even) footer:after {
     right: 0;
 }
 
-.plantilla footer {
+main footer {
     text-transform: uppercase;
 }

@@ -44,3 +44,11 @@ document.addEventListener('click', function (eve) {
         document.body.style.overflow = 'auto';
     }
 });
+
+document.addEventListener('click', function (eve) {
+    var btn = eve.target && eve.target.closest ? eve.target.closest('.scroll-top') : null;
+    if (btn) {
+        eve.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+});

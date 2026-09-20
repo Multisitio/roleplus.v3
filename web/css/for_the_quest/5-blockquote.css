@@ -14,7 +14,7 @@ blockquote {
     position: relative;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) blockquote {
+main > div article:has(>section:first-child>h1+blockquote) blockquote {
     background: none;   
     border: none;
     color: #000;

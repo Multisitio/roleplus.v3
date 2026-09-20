@@ -88,7 +88,7 @@
 
     main.a5 > div article,
     .a5 > div article {
-        transform: scale(1.4189, 1.4142) !important;
+        transform: scale(1.4189, 1.4095) !important;
         transform-origin: top left !important;
     }
 

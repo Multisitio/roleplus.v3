@@ -1,10 +1,10 @@
-.plantilla fieldset {
+main fieldset {
     border: 2px solid var(--color-border-primary);
     margin: 0;
     padding: 10px;
 }
 
-.plantilla legend {
+main legend {
     border: 2px solid var(--color-border-primary);
     padding: 0 5px;
 }

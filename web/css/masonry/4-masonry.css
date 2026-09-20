@@ -15,6 +15,7 @@
 	box-sizing: border-box;
 	min-width: 0;           /* permite encajar en columnas estrechas */
 	width: 100%;            /* usa todo el ancho disponible de la pista */
+	max-width: 640px;       /* maximo de ancho por publicacion */
 	justify-self: stretch;  /* por si alguna regla lo había cambiado */
 	margin: 0 auto;         /* sin margen vertical; centrar items con max-width */
 }

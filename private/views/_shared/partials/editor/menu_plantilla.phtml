@@ -251,6 +251,15 @@
 							<?php endfor; ?>
 						</select>
 
+						<?php
+						$variant_dc = ($f_dc['weight'] === 'bold' && $f_dc['style'] === 'italic') ? 'bold-italic' : ($f_dc['weight'] === 'bold' ? 'bold' : ($f_dc['style'] === 'italic' ? 'italic' : ''));
+						?>
+						<select class="variant-select" name="variant_dropcap" data-change-ajax>
+							<?php foreach ($menu_plantilla['tipografia_controles']['variant'] as $value => $label): ?>
+								<option value="<?=$value?>" <?=$variant_dc == $value ? 'selected' : ''?>><?=t($label)?></option>
+							<?php endforeach; ?>
+						</select>
+
 						<div class="web-color-picker" data-nivel="dropcap" onclick="window.PSColorPicker.open(this)" style="background-color: <?=h($f_dc['color'])?>;"></div>
 						<input type="hidden" name="color_dropcap" value="<?=h($f_dc['color'])?>">
 						<input type="hidden" name="fuente_dropcap" value="<?=h($f_dc['fuente'])?>">

@@ -1,27 +1,27 @@
 
-.plantilla ul {
+main ul {
     list-style: none;
     margin: 0 0 20px;
     padding: 0;
 }
   
-.plantilla :is(blockquote, small) ul {
+main :is(blockquote, small) ul {
     margin-bottom: 0;
 }
   
-.plantilla ul > li {
+main ul > li {
     position: relative;
     padding-left: 40px;
     margin-bottom: 0.5em;
 }
   
-.plantilla :is(blockquote, small) ul > li {
+main :is(blockquote, small) ul > li {
     position: relative;
     padding-left: 15px;
     margin-bottom: 0;
 }
   
-.plantilla ul > li::before {
+main ul > li::before {
     content: "";
     position: absolute;
     top: 5px;
@@ -32,12 +32,12 @@
     background-size: contain;
 }  
   
-.plantilla ul > li:has(> i:first-child > b)::before {
+main ul > li:has(> i:first-child > b)::before {
     background: url(/img/editor/for_the_quest/punta_de_flecha.svg?v3) no-repeat center;
     top: 0; 
 }  
 
-.plantilla :is(blockquote, small) ul > li::before {
+main :is(blockquote, small) ul > li::before {
     width: 12px;
     height: 12px;
     top: 4px;
@@ -47,32 +47,32 @@
     mask-size: contain;
 }
 
-.plantilla blockquote ul > li::before {
+main blockquote ul > li::before {
     top: 7px;
 }
 
-/*.plantilla ul>li::before {
+/*main ul>li::before {
     content: "✦ ";
     margin-left: -15px;
 }*/
 
-.plantilla ul.checkbox li::before {
+main ul.checkbox li::before {
     content: "❑ ";
 }
 
-.plantilla ul.radio li::before {
+main ul.radio li::before {
     content: "🔾 ";
 }
 
-.plantilla ul li:has(> :is(em, strong))::before,
-.plantilla ul li:has(> b)~li:has(> :is(em, strong))::before {
+main ul li:has(> :is(em, strong))::before,
+main ul li:has(> b)~li:has(> :is(em, strong))::before {
     color: var(--dragonred);
 }
 
-.plantilla ul li:has(> :is(em, strong)):has(~ li > b)::before {
+main ul li:has(> :is(em, strong)):has(~ li > b)::before {
     color: var(--demongreen);
 }
 
-.plantilla ul li:has(> :is(em, strong)):has(~ li > b)>:is(em, strong) {
+main ul li:has(> :is(em, strong)):has(~ li > b)>:is(em, strong) {
     color: var(--demongreen);
 }

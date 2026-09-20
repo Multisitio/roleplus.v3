@@ -463,7 +463,7 @@ main a, main em, main strong {
     color: var(--a-color);
 }
 
-main :is(h1 + p, :is(header, section, div:not(.plantilla > div)):has(h1) + p, :is(header, section, div:not(.plantilla > div)):has(h1) + :is(section, div:not(.plantilla > div)) > p, .big-letter)::first-letter {
+main :is(h1 + p, :is(header, section, div:not(main > div)):has(h1) + p, :is(header, section, div:not(main > div)):has(h1) + :is(section, div:not(main > div)) > p, .big-letter)::first-letter {
     float: left;
     font-family: var(--dropcap-family);
     font-size: var(--dropcap-size);

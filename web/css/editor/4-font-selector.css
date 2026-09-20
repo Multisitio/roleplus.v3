@@ -105,8 +105,8 @@ aside.template section[data-nivel] .font-size-select {
 }
 
 aside.template section[data-nivel] .margin-top-select {
-    grid-column: 3;
-    grid-row: 1;
+    grid-column: 1;
+    grid-row: 2;
 }
 
 aside.template section[data-nivel] .web-color-picker {
@@ -115,8 +115,8 @@ aside.template section[data-nivel] .web-color-picker {
 }
 
 aside.template section[data-nivel] .variant-select {
-    grid-column: 1;
-    grid-row: 2;
+    grid-column: 3;
+    grid-row: 1;
 }
 
 aside.template section[data-nivel] .transform-select {

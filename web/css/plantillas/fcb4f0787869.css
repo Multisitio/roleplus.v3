@@ -165,7 +165,7 @@ main {
     --table-zebra-bg: transparent;
 }
 
-main.plantilla h1 {
+main h1 {
     font-family: var(--h1-family);
     font-size: var(--h1-size);
     font-weight: var(--h1-weight);
@@ -177,7 +177,7 @@ main.plantilla h1 {
     color: var(--h1-color);
 }
 
-main.plantilla h1::after {
+main h1::after {
     content: '';
     display: block;
     width: 100%;
@@ -186,7 +186,7 @@ main.plantilla h1::after {
     margin-block: -8px 8px;
 }
 
-main.plantilla h2 {
+main h2 {
     font-family: var(--h2-family);
     font-size: var(--h2-size);
     font-weight: var(--h2-weight);
@@ -198,7 +198,7 @@ main.plantilla h2 {
     color: var(--h2-color);
 }
 
-main.plantilla h2::after {
+main h2::after {
     content: '';
     display: block;
     width: 100%;
@@ -207,7 +207,7 @@ main.plantilla h2::after {
     margin-block: -8px 8px;
 }
 
-main.plantilla h3 {
+main h3 {
     font-family: var(--h3-family);
     font-size: var(--h3-size);
     font-weight: var(--h3-weight);
@@ -219,7 +219,7 @@ main.plantilla h3 {
     color: var(--h3-color);
 }
 
-main.plantilla h3::after {
+main h3::after {
     content: '';
     display: block;
     width: 100%;
@@ -228,7 +228,7 @@ main.plantilla h3::after {
     margin-block: -8px 8px;
 }
 
-main.plantilla h4 {
+main h4 {
     font-family: var(--h4-family);
     font-size: var(--h4-size);
     font-weight: var(--h4-weight);
@@ -240,7 +240,7 @@ main.plantilla h4 {
     color: var(--h4-color);
 }
 
-main.plantilla h4::after {
+main h4::after {
     content: '';
     display: block;
     width: 100%;
@@ -249,7 +249,7 @@ main.plantilla h4::after {
     margin-block: -8px 8px;
 }
 
-main.plantilla h5 {
+main h5 {
     font-family: var(--h5-family);
     font-size: var(--h5-size);
     font-weight: var(--h5-weight);
@@ -261,7 +261,7 @@ main.plantilla h5 {
     color: var(--h5-color);
 }
 
-main.plantilla h5::after {
+main h5::after {
     content: '';
     display: block;
     width: 100%;
@@ -270,7 +270,7 @@ main.plantilla h5::after {
     margin-block: -8px 8px;
 }
 
-main.plantilla h6 {
+main h6 {
     font-family: var(--h6-family);
     font-size: var(--h6-size);
     font-weight: var(--h6-weight);
@@ -282,7 +282,7 @@ main.plantilla h6 {
     color: var(--h6-color);
 }
 
-main.plantilla h6::after {
+main h6::after {
     content: '';
     display: block;
     width: 100%;
@@ -291,7 +291,7 @@ main.plantilla h6::after {
     margin-block: -8px 8px;
 }
 
-main.plantilla {
+main {
     font-family: var(--body-family);
     font-size: var(--body-size);
     font-weight: var(--body-weight);
@@ -303,7 +303,7 @@ main.plantilla {
     color: var(--body-color);
 }
 
-main.plantilla small {
+main small {
     font-family: var(--small-family);
     font-size: var(--small-size);
     font-weight: var(--small-weight);
@@ -315,7 +315,7 @@ main.plantilla small {
     color: var(--small-color);
 }
 
-main.plantilla div article footer, main.plantilla > div footer, main.plantilla footer {
+main div article footer, main > div footer, main footer {
     font-family: var(--h6-family);
     font-size: var(--h6-size);
     font-weight: var(--h6-weight);
@@ -325,7 +325,7 @@ main.plantilla div article footer, main.plantilla > div footer, main.plantilla f
     color: var(--h6-color);
 }
 
-main.plantilla caption {
+main caption {
     font-family: var(--h5-family);
     font-size: var(--h5-size);
     font-weight: var(--h5-weight);

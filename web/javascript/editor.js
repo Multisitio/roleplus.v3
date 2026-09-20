@@ -454,7 +454,8 @@
 			if (!target) return;
 
 			if (typeof window.flushPendingSaves === 'function') {
-				await window.flushPendingSaves();
+				var saved = await window.flushPendingSaves();
+				if (saved && saved.some(function (ok) { return ok === false; })) return;
 			}
 
 			log("AJAX GET", Utils.selectorOf(target, sel), "→", href);
@@ -1636,19 +1637,19 @@ document.addEventListener('click', function (eve) {
     }
 });
 
-document.addEventListener('click', function (eve) {
-    var btn = eve.target && eve.target.closest ? eve.target.closest('.scroll-top, [href="#first-page"]') : null;
-    if (btn) {
-        eve.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-});
-
 /* Scroll to body: On */
 document.addEventListener('click', function (eve) {
     var btn = eve.target && eve.target.closest ? eve.target.closest('[data-ajax]:not([data-style]), [data-hide*="overlay"], .overlay') : null;
     if (btn && document.body) {
         document.body.style.overflow = 'auto';
+    }
+});
+
+document.addEventListener('click', function (eve) {
+    var btn = eve.target && eve.target.closest ? eve.target.closest('.scroll-top') : null;
+    if (btn) {
+        eve.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 });
 
@@ -5630,6 +5631,8 @@ selection.addRange(newRange);*/
     var countdownTimers = {};
     var savePromises   = {};
     var isDirty        = {};
+    var saveRevisions  = {};
+    var retryCounts    = {};
     var currentCrumbs  = [];
 
     /* -----------------------------------------------------------------
@@ -5654,6 +5657,7 @@ selection.addRange(newRange);*/
 
         var sel = window.getSelection();
         if (!sel || sel.rangeCount === 0 || !activeArticle) {
+            document.querySelectorAll('.is-active-helper').forEach(function(el) { el.classList.remove('is-active-helper'); });
             bc.innerHTML = '';
             currentCrumbs = [];
             return;
@@ -5664,6 +5668,7 @@ selection.addRange(newRange);*/
 
         // Asegurar que el nodo seleccionado pertenece al artículo activo y está dentro de su <article>
         if (!activeArticle.contains(node)) {
+            document.querySelectorAll('.is-active-helper').forEach(function(el) { el.classList.remove('is-active-helper'); });
             bc.innerHTML = '';
             currentCrumbs = [];
             return;
@@ -5671,6 +5676,7 @@ selection.addRange(newRange);*/
 
         var targetArticle = activeArticle.querySelector('article');
         if (!targetArticle || !targetArticle.contains(node)) {
+            document.querySelectorAll('.is-active-helper').forEach(function(el) { el.classList.remove('is-active-helper'); });
             bc.innerHTML = '';
             currentCrumbs = [];
             return;
@@ -5692,6 +5698,13 @@ selection.addRange(newRange);*/
         if (!changed) return;
 
         currentCrumbs = elements;
+
+        document.querySelectorAll('.is-active-helper').forEach(function(el) { el.classList.remove('is-active-helper'); });
+        if (elements.length > 0) {
+            var activeNode = elements[elements.length - 1];
+            var helperNode = activeNode.closest('[data-empty-helper="true"]');
+            if (helperNode) helperNode.classList.add('is-active-helper');
+        }
 
         // Generar botones para cada etiqueta de migas de pan
         var html = '';
@@ -5796,19 +5809,26 @@ selection.addRange(newRange);*/
             if (!parent || !parent.tagName) return;
             // Solo actuar si el padre es un contenedor de bloque
             if (!BLOCK_TAGS_SET[parent.tagName.toLowerCase()]) return;
-            // Comprobar si tiene al menos un hermano elemento de bloque
+            // Comprobar si tiene al menos un hermano elemento de bloque o si es el único contenido visible
             var hasBlockSibling = false;
+            var visibleSiblings = 0;
             for (var i = 0; i < parent.childNodes.length; i++) {
                 var sib = parent.childNodes[i];
                 if (sib === br) continue;
-                if (sib.nodeType === 1 &&
-                    !sib.hasAttribute('data-editor-helper') &&
-                    BLOCK_TAGS_SET[sib.tagName.toLowerCase()]) {
+                
+                // Ignorar nodos de texto vacíos o con espacios/zwsp
+                if (sib.nodeType === 3 && sib.textContent.replace(/[\u200B\s]/g, '') === '') continue;
+                // Ignorar badges del editor
+                if (sib.nodeType === 1 && sib.hasAttribute('data-editor-helper')) continue;
+                
+                visibleSiblings++;
+                
+                if (sib.nodeType === 1 && BLOCK_TAGS_SET[sib.tagName.toLowerCase()]) {
                     hasBlockSibling = true;
-                    break;
                 }
             }
-            if (hasBlockSibling) br.remove();
+            // Si el <br> tiene un bloque hermano (ej: entre dos div), O si el <br> está completamente solo (el navegador lo inyectó al vaciar la celda)
+            if (hasBlockSibling || visibleSiblings === 0) br.remove();
         });
     }
 
@@ -5870,7 +5890,7 @@ selection.addRange(newRange);*/
     function restoreRange() {
         if (!savedRange || !activeArticle) return false;
         try {
-            activeArticle.focus();
+            activeArticle.focus({preventScroll: true});
             var sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(savedRange);
@@ -5886,7 +5906,7 @@ selection.addRange(newRange);*/
         // Foco explícito en el contenedor editable primero
         var art = el.closest('div[contenteditable]');
         if (art) {
-            art.focus();
+            art.focus({preventScroll: true});
         }
 
         var target = el;
@@ -6153,7 +6173,7 @@ selection.addRange(newRange);*/
         
         var newPage = document.getElementById(newIdu);
         if (newPage) {
-            newPage.focus();
+            newPage.focus({preventScroll: true});
             activeArticle = newPage;
             window.location.hash = newIdu;
         }
@@ -6162,6 +6182,24 @@ selection.addRange(newRange);*/
     /* -----------------------------------------------------------------
        CLICK EN BOTÓN PINCEL / MIGAS DE PAN
     ----------------------------------------------------------------- */
+    function nativeDelete(nodeToDelete) {
+        if (!nodeToDelete || !nodeToDelete.parentNode) return;
+        var sel = window.getSelection();
+        var range = document.createRange();
+        range.selectNode(nodeToDelete);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        
+        // Ejecutar borrado nativo para que entre en la pila de Deshacer (Ctrl+Z)
+        document.execCommand('delete', false, null);
+        
+        // En algunos navegadores execCommand('delete') sobre bloques pesados 
+        // a veces vacía el nodo en lugar de borrarlo entero. Limpiamos si quedó algo.
+        if (nodeToDelete.parentNode) {
+            nodeToDelete.remove();
+        }
+    }
+
     document.addEventListener('click', function (e) {
         var toggleBtn = e.target.closest('[data-toggle="guias"]');
         if (toggleBtn) {
@@ -6211,73 +6249,37 @@ selection.addRange(newRange);*/
                 if (parent) {
                     var art = parent.closest('div[contenteditable]');
                     
-                    // CASO ESPECIAL: Si es el tag principal 'article', eliminar toda la página (ajax)
+                    // CASO ESPECIAL: Si es el tag principal 'article', eliminar toda la página
                     if (parent.tagName.toLowerCase() === 'article') {
                         if (art) {
                             var idu = art.getAttribute('data-idu');
                             if (idu) {
                                 if (confirm('¿De verdad quieres eliminar esta página?')) {
-                                    var fd = new FormData();
-                                    fd.append('idu', idu);
-                                    fd.append('action', 'regla_eliminar');
+                                    var f = document.createElement('form');
+                                    f.method = 'POST';
+                                    f.action = window.location.pathname;
                                     
-                                    setSaveStatus('saving', '● eliminando página…');
+                                    var inputIdu = document.createElement('input');
+                                    inputIdu.type = 'hidden';
+                                    inputIdu.name = 'idu';
+                                    inputIdu.value = idu;
+                                    f.appendChild(inputIdu);
                                     
-                                    fetch(window.location.pathname, {
-                                        method: 'POST',
-                                        body: fd,
-                                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                                    })
-                                    .then(function (r) {
-                                        if (!r.ok) throw new Error('HTTP ' + r.status);
-                                        return r.json();
-                                    })
-                                    .then(function (res) {
-                                        if (res.success) {
-                                            setSaveStatus('saved', '✓ página eliminada');
-                                            
-                                            // Eliminar del select de páginas
-                                            var pageSelect = document.querySelector(SEL_PAGE_SELECT);
-                                            if (pageSelect) {
-                                                var opt = pageSelect.querySelector('option[value="' + idu + '"]');
-                                                if (opt) opt.remove();
-                                            }
-                                            
-                                            art.remove();
-                                            
-                                            // Seleccionar otra página activa
-                                            var remainingPages = document.querySelectorAll(SEL_ARTICLE);
-                                            if (remainingPages.length > 0) {
-                                                activeArticle = remainingPages[0];
-                                                if (pageSelect) pageSelect.value = activeArticle.getAttribute('data-idu');
-                                                window.location.hash = activeArticle.getAttribute('data-idu');
-                                                placeCursorInside(activeArticle);
-                                            } else {
-                                                activeArticle = null;
-                                                if (pageSelect) pageSelect.value = '';
-                                                window.location.hash = '';
-                                            }
-                                            
-                                            // Recalcular los números de página de las que quedan
-                                            var pages = document.querySelectorAll(SEL_ARTICLE);
-                                            pages.forEach(function (page, idx) {
-                                                page.setAttribute('data-page', idx + 1);
-                                            });
-                                            updateBreadcrumb();
-                                        } else {
-                                            setSaveStatus('error', '✗ error: ' + (res.error || 'al eliminar página'));
-                                        }
-                                    })
-                                    .catch(function (error) {
-                                        setSaveStatus('error', '✗ ' + (error && error.message ? error.message : 'sin conexión'));
-                                    });
+                                    var inputAction = document.createElement('input');
+                                    inputAction.type = 'hidden';
+                                    inputAction.name = 'action';
+                                    inputAction.value = 'regla_eliminar';
+                                    f.appendChild(inputAction);
+                                    
+                                    document.body.appendChild(f);
+                                    f.submit();
                                 }
                             }
                         }
                         return;
                     }
                     
-                    parent.remove();
+                    nativeDelete(parent);
                     if (art) {
                         syncHelpers(art);
                         scheduleSave(art);
@@ -6316,8 +6318,184 @@ selection.addRange(newRange);*/
 
             e.preventDefault();
 
+            if (tag === 'delete_node' || tag === 'delete_parent') {
+                if (activeArticle && currentCrumbs && currentCrumbs.length > 0) {
+                    var targetArticle = activeArticle.querySelector('article');
+                    var node = currentCrumbs[currentCrumbs.length - 1];
+                    
+                    if (tag === 'delete_parent' && node !== targetArticle && node.parentNode && targetArticle.contains(node.parentNode)) {
+                        node = node.parentNode;
+                    }
+                    
+                    if (node && targetArticle && targetArticle.contains(node)) {
+                        if (node === targetArticle) {
+                            if (confirm('¿Estás seguro de que deseas eliminar esta página por completo?')) {
+                                var idu = activeArticle.getAttribute('data-idu');
+                                var f = document.createElement('form');
+                                f.method = 'POST';
+                                f.action = window.location.pathname;
+                                
+                                var inputIdu = document.createElement('input');
+                                inputIdu.type = 'hidden';
+                                inputIdu.name = 'idu';
+                                inputIdu.value = idu;
+                                f.appendChild(inputIdu);
+                                
+                                var inputAction = document.createElement('input');
+                                inputAction.type = 'hidden';
+                                inputAction.name = 'action';
+                                inputAction.value = 'regla_eliminar';
+                                f.appendChild(inputAction);
+                                
+                                document.body.appendChild(f);
+                                f.submit();
+                            }
+                        } else {
+                            var tagName = node.tagName ? node.tagName.toLowerCase() : 'texto';
+                            var msg = (tag === 'delete_parent') ? '¿Seguro que deseas borrar el contenedor <' + tagName + '> y todo su contenido?' : '¿Seguro que deseas borrar la etiqueta <' + tagName + '>?';
+                            if (confirm(msg)) {
+                                var parent = node.parentNode;
+                                nativeDelete(node);
+                                placeCursorInside(parent || targetArticle);
+                                syncHelpers(activeArticle);
+                                scheduleSave(activeArticle);
+                                updateBreadcrumb();
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+
+            if (tag === 'clone_node' || tag === 'clone_parent') {
+                if (activeArticle && currentCrumbs && currentCrumbs.length > 0) {
+                    var targetArticle = activeArticle.querySelector('article');
+                    var node = currentCrumbs[currentCrumbs.length - 1];
+                    if (tag === 'clone_parent' && node && node.parentNode && node.parentNode !== targetArticle) {
+                        node = node.parentNode;
+                    }
+                    if (node && targetArticle && targetArticle.contains(node) && node !== targetArticle) {
+                        var clone = node.cloneNode(true);
+                        node.parentNode.insertBefore(clone, node.nextSibling);
+                        placeCursorInside(clone);
+                        syncHelpers(activeArticle);
+                        scheduleSave(activeArticle);
+                        updateBreadcrumb();
+                    }
+                }
+                return;
+            }
+
+            if (tag === 'copy_node' || tag === 'copy_parent') {
+                if (activeArticle && currentCrumbs && currentCrumbs.length > 0) {
+                    var targetArticle = activeArticle.querySelector('article');
+                    var node = currentCrumbs[currentCrumbs.length - 1];
+                    if (tag === 'copy_parent' && node && node.parentNode && node.parentNode !== targetArticle) {
+                        node = node.parentNode;
+                    }
+                    if (node && targetArticle && targetArticle.contains(node) && node !== targetArticle) {
+                        var clone = node.cloneNode(true);
+                        clone.querySelectorAll('[data-editor-helper]').forEach(function(el) { el.remove(); });
+                        clone.removeAttribute('data-empty-helper');
+                        var tmp = document.createElement('template');
+                        tmp.content.appendChild(clone);
+                        localStorage.setItem('roleplus-clipboard', tmp.innerHTML);
+                        setSaveStatus('saved', 'Copiado al portapapeles');
+                    }
+                }
+                return;
+            }
+
+            if (tag === 'paste_before' || tag === 'paste_after') {
+                var clip = localStorage.getItem('roleplus-clipboard');
+                if (!clip) {
+                    setSaveStatus('error', 'El portapapeles está vacío');
+                    return;
+                }
+                if (activeArticle && currentCrumbs && currentCrumbs.length > 0) {
+                    var targetArticle = activeArticle.querySelector('article');
+                    var node = currentCrumbs[currentCrumbs.length - 1];
+                    if (node && targetArticle && targetArticle.contains(node) && node !== targetArticle) {
+                        var tmp = document.createElement('template');
+                        tmp.innerHTML = clip;
+                        var frag = document.createDocumentFragment();
+                        while (tmp.content.firstChild) {
+                            frag.appendChild(tmp.content.firstChild);
+                        }
+                        
+                        var firstEl = frag.firstElementChild;
+                        var targetTagName = firstEl ? firstEl.tagName.toUpperCase() : null;
+                        
+                        if (targetTagName) {
+                            var validParents = {
+                                'TR': ['TBODY', 'THEAD', 'TFOOT', 'TABLE'],
+                                'TD': ['TR'],
+                                'TH': ['TR'],
+                                'LI': ['UL', 'OL']
+                            };
+                            var allowed = validParents[targetTagName];
+                            if (allowed) {
+                                while (node && node !== targetArticle && node.parentNode) {
+                                    if (allowed.indexOf(node.parentNode.tagName.toUpperCase()) > -1) {
+                                        break;
+                                    }
+                                    node = node.parentNode;
+                                }
+                            }
+                        }
+
+                        var lastChild = frag.lastChild;
+                        if (lastChild) {
+                            if (tag === 'paste_before') {
+                                node.parentNode.insertBefore(frag, node);
+                            } else {
+                                node.parentNode.insertBefore(frag, node.nextSibling);
+                            }
+                            placeCursorInside(lastChild);
+                            syncHelpers(activeArticle);
+                            scheduleSave(activeArticle);
+                            updateBreadcrumb();
+                        }
+                    }
+                }
+                return;
+            }
+
             if (tag === 'clear') {
-                document.execCommand('removeFormat', false, null);
+                restoreRange();
+                var sel = window.getSelection();
+                if (sel && !sel.isCollapsed) {
+                    document.execCommand('removeFormat', false, null);
+                } else if (activeArticle && currentCrumbs && currentCrumbs.length > 0) {
+                    var inlineTags = ['a', 'b', 'strong', 'i', 'em', 'mark', 's', 'span', 'sub', 'sup', 'u', 'small', 'q'];
+                    var unwrapped = false;
+                    var targetNodeForCursor = null;
+                    for (var j = currentCrumbs.length - 1; j >= 0; j--) {
+                        var node = currentCrumbs[j];
+                        if (node && node.tagName && inlineTags.indexOf(node.tagName.toLowerCase()) !== -1) {
+                            var parent = node.parentNode;
+                            if (!targetNodeForCursor) {
+                                targetNodeForCursor = node.firstChild || parent;
+                            }
+                            var frag = document.createDocumentFragment();
+                            while (node.firstChild) {
+                                frag.appendChild(node.firstChild);
+                            }
+                            parent.replaceChild(frag, node);
+                            unwrapped = true;
+                        }
+                    }
+                    if (unwrapped) {
+                        if (targetNodeForCursor) placeCursorInside(targetNodeForCursor);
+                        syncHelpers(activeArticle);
+                        scheduleSave(activeArticle);
+                        updateBreadcrumb();
+                    } else {
+                        document.execCommand('removeFormat', false, null);
+                    }
+                } else {
+                    document.execCommand('removeFormat', false, null);
+                }
                 return;
             }
 
@@ -6445,7 +6623,7 @@ selection.addRange(newRange);*/
 
             if (activeArticle) {
                 var art = targetEl.closest('div[contenteditable]');
-                if (art) art.focus();
+                if (art) art.focus({preventScroll: true});
 
                 var txt = document.createTextNode('\u200B');
                 targetEl.appendChild(txt);
@@ -6556,7 +6734,7 @@ selection.addRange(newRange);*/
                 
                 // Asegurarnos de que el contenteditable mantenga el foco para la caja-sombra
                 var ce = target.closest('div[contenteditable]');
-                if (ce) ce.focus();
+                if (ce) ce.focus({preventScroll: true});
             }
             return;
         }
@@ -6571,12 +6749,10 @@ selection.addRange(newRange);*/
         }
     });
 
-    window.addEventListener('beforeunload', function () {
-        if (activeArticle) {
-            var idu = activeArticle.getAttribute('data-idu');
-            if (idu && debounceTimers[idu]) {
-                saveArticle(activeArticle);
-            }
+    window.addEventListener('beforeunload', function (e) {
+        if (Object.keys(isDirty).length || Object.keys(savePromises).length) {
+            e.preventDefault();
+            e.returnValue = '';
         }
     });
 
@@ -6621,6 +6797,8 @@ selection.addRange(newRange);*/
         var idu = articleEl.getAttribute('data-idu');
         if (!idu) return;
         isDirty[idu] = true;
+        saveRevisions[idu] = (saveRevisions[idu] || 0) + 1;
+        retryCounts[idu] = 0;
         clearTimeout(debounceTimers[idu]);
         clearInterval(countdownTimers[idu]);
         
@@ -6660,10 +6838,12 @@ selection.addRange(newRange);*/
         if (!idu) return Promise.resolve();
 
         if (savePromises[idu]) {
+            saveRevisions[idu] = (saveRevisions[idu] || 0) + 1;
             return savePromises[idu];
         }
 
-        delete isDirty[idu];
+        isDirty[idu] = true;
+        var revision = saveRevisions[idu] || 0;
 
         if (debounceTimers[idu]) {
             clearTimeout(debounceTimers[idu]);
@@ -6713,21 +6893,50 @@ selection.addRange(newRange);*/
         fd.append('action',      'regla_actualizar_ajax');
         if (manualesIdu) fd.append('manuales_idu', manualesIdu);
 
+        var confirmed = false;
+        var retryable = false;
+        var abort = new AbortController();
+        var timeout = setTimeout(function () { abort.abort(); }, 30000);
         var p = fetch(window.location.pathname, {
             method: 'POST',
             body:   fd,
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            keepalive: true
+            signal: abort.signal
         }).then(function (r) {
-            if (r.ok || r.status === 302) {
-                setSaveStatus('saved', '✓ guardado');
-            } else {
-                setSaveStatus('error', '✗ error ' + r.status);
+            if (r.status === 401 || r.redirected) {
+                throw new Error('Tu sesión ha caducado. Inicia sesión en otra pestaña y reintenta desde aquí. No recargues este editor.');
             }
-        }).catch(function () {
-            setSaveStatus('error', '✗ sin conexión');
+            if (!r.ok) {
+                retryable = r.status >= 500 || r.status === 429;
+                throw new Error(r.status === 403 ? '403' : 'El servidor rechazó los cambios (' + r.status + '). Siguen pendientes en esta pestaña.');
+            }
+            return r.json().then(function (data) {
+                if (!data || data.success !== true) {
+                    throw new Error('El servidor no confirmó los cambios. Siguen pendientes en esta pestaña.');
+                }
+                confirmed = true;
+                retryCounts[idu] = 0;
+                if ((saveRevisions[idu] || 0) === revision) delete isDirty[idu];
+                if (!Object.keys(isDirty).length) setSaveStatus('saved', '✓ guardado');
+            });
+        }).catch(function (error) {
+            if (error.name === 'TypeError' || error.name === 'AbortError') retryable = true;
+            setSaveStatus('error', '✗ ' + (retryable
+                ? 'No se ha recibido confirmación del servidor. Los cambios siguen pendientes en esta pestaña.'
+                : error.name === 'SyntaxError' ? 'Respuesta inesperada del servidor. Los cambios siguen pendientes en esta pestaña.' : error.message));
         }).finally(function () {
+            clearTimeout(timeout);
             delete savePromises[idu];
+        }).then(function () {
+            if (confirmed && isDirty[idu]) return saveArticle(articleEl);
+            if (!confirmed && retryable && (retryCounts[idu] || 0) < 3) {
+                retryCounts[idu] = (retryCounts[idu] || 0) + 1;
+                clearTimeout(debounceTimers[idu]);
+                debounceTimers[idu] = setTimeout(function () {
+                    saveArticle(articleEl);
+                }, 5000 * Math.pow(2, retryCounts[idu] - 1));
+            }
+            return confirmed;
         });
 
         savePromises[idu] = p;
@@ -6942,12 +7151,6 @@ selection.addRange(newRange);*/
                 if (toggleBtn) toggleBtn.classList.remove('active');
             }
         } catch (e) {}
-
-        // Abrir el primer grupo de pinceles por defecto
-        var primerGrupo = document.querySelector('.pinceles-grupo');
-        if (primerGrupo) {
-            primerGrupo.classList.add('active');
-        }
     });
 
     /* -----------------------------------------------------------------
@@ -6974,6 +7177,12 @@ selection.addRange(newRange);*/
 
         return Promise.all(promises);
     };
+
+    // Reanudar únicamente escrituras pendientes al recuperar la conexión.
+    window.addEventListener('online', function () {
+        retryCounts = {};
+        window.flushPendingSaves();
+    });
 
     // Interceptar el mousedown en el botón de edición para forzar guardado antes del focusout
     document.addEventListener('mousedown', function (e) {
@@ -7048,7 +7257,7 @@ selection.addRange(newRange);*/
                         });
 
                     // Reordenar dinámicamente los divs de la plantilla principal
-                    var main = document.querySelector('main.plantilla');
+                    var main = document.querySelector('main');
                     if (main) {
                         order.forEach(function (idu) {
                             var link = main.querySelector('a[href$="/' + idu + '"]');
@@ -7185,7 +7394,7 @@ selection.addRange(newRange);*/
             var bookletFmt = bookletBtn.getAttribute('data-booklet') || 'A4 landscape';
             if (styleEl) { styleEl.innerHTML = isBooklet ? '@page { size: ' + bookletFmt + '; margin: 0; }' : '@page { size: ' + printFmt + '; margin: 0; }'; }
 
-            var container = document.querySelector('.plantilla');
+            var container = document.querySelector('main');
             if (!container) return;
 
             if (isBooklet) {
@@ -7425,7 +7634,7 @@ selection.addRange(newRange);*/
             var niv = section.dataset.nivel;
 
             // Actualización al vuelo
-            var preview = document.querySelector('main.plantilla');
+            var preview = document.querySelector('main');
             if (preview) {
                 preview.style.setProperty('--' + niv + '-color', hex);
             }
@@ -7469,7 +7678,7 @@ selection.addRange(newRange);*/
             var $el = this, name = $el.name, val = $el.value;
 
             // 1. Actualización visual inmediata (sin esperar a BD)
-            var preview = document.querySelector('main.plantilla');
+            var preview = document.querySelector('main');
             if (!preview) return;
 
             if (name.indexOf('footer_') === 0) {
@@ -7586,7 +7795,7 @@ selection.addRange(newRange);*/
                 Kumbia.utils.renderDropImagePreview(drop, url + '?t=' + Date.now());
 
                 // Actualizar documento al vuelo
-                var preview = document.querySelector('main.plantilla');
+                var preview = document.querySelector('main');
                 if (preview) {
                     var prop = name === 'footer_imagen' ? '--footer-imagen' : (name === 'fondo_pergamino_even' ? '--background-image-even' : '--background-image');
                     preview.style.setProperty(prop, "url('" + url + "')");
@@ -7625,7 +7834,7 @@ selection.addRange(newRange);*/
                 if (inp) inp.value = f;
 
                 // Actualización al vuelo
-                var preview = document.querySelector('main.plantilla');
+                var preview = document.querySelector('main');
                 if (preview) {
                     preview.style.setProperty('--' + niv + '-family', "'" + f + "'");
                 }
@@ -7660,7 +7869,7 @@ selection.addRange(newRange);*/
                 if (h) h.value = f;
 
                 // Actualización al vuelo
-                var preview = document.querySelector('main.plantilla');
+                var preview = document.querySelector('main');
                 if (preview) {
                     preview.style.setProperty('--' + niv + '-family', "'" + f + "'");
                 }
@@ -7748,5 +7957,6 @@ selection.addRange(newRange);*/
     });
 
 })(window, document);
+
 
 

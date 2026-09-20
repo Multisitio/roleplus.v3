@@ -9,7 +9,7 @@
     src: url('/fonts/rajdhani.woff2');
 }
 
-.plantilla>div h1 {
+main>div h1 {
     text-align: center;
     color: #990000;
     font-weight: normal;
@@ -17,7 +17,7 @@
     font-family: 'Orbitron';
 }
 
-.plantilla>div h2 {
+main>div h2 {
     color: #003366;
     font-family: 'Rajdhani';
 }

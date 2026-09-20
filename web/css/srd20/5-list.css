@@ -1,15 +1,15 @@
-.plantilla :is(ol, ul) {
+main :is(ol, ul) {
     margin: 5px 0 10px 0;
 }
 
-.plantilla ol.upper-roman {
+main ol.upper-roman {
     list-style: upper-roman;
 }
 
-.plantilla ol.lower-latin {
+main ol.lower-latin {
     list-style: lower-latin;
 }
 
-.plantilla ul>li::before {
+main ul>li::before {
     color: var(--color-text-header);
 }

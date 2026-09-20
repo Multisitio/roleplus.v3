@@ -11,9 +11,7 @@
         <link href="/manifest.json?v=<?= $version ?>" rel="manifest">
         <link href="/css/ev.min.css?v=<?= $version ?>" rel="stylesheet">
 
-		<?php if (empty($claves['quitar_masonry'])): ?>
 		<link rel="stylesheet" href="/css/masonry.min.css?v=<?= $version ?>">
-		<?php endif; ?>
 
 		<?= Css::inc($version) ?>
 	</head>
@@ -36,9 +34,7 @@
 		<?php endif; ?>
 		<script src="/javascript/ev.min.js?v=<?= $version ?>" data-idu="<?= Session::get('idu') ?>"></script>
 
-		<?php if (empty($claves['quitar_masonry'])): ?>
 		<script src="/javascript/masonry.min.js?v=<?= $version ?>"></script>
-		<?php endif; ?>
 		
 		<?= Js::inc($version) ?>
 	</body>

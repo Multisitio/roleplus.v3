@@ -1,40 +1,40 @@
-.plantilla :is(ol, ul) {
+main :is(ol, ul) {
     padding-left: var(--list-padding);
 }
 
-.plantilla ul {
+main ul {
     list-style: none;
 }
 
-.plantilla ul>li::before {
+main ul>li::before {
     content: var(--list-bullet);
     margin-left: calc(-1 * var(--list-padding));
     color: var(--color-text);
 }
 
-.plantilla ul>li li::before {
+main ul>li li::before {
     content: var(--list-sub-bullet);
     margin-left: calc(-1 * var(--list-padding));
 }
 
-.plantilla ul.checkbox li::before {
+main ul.checkbox li::before {
     content: var(--list-checkbox);
 }
 
-.plantilla ul.radio li::before {
+main ul.radio li::before {
     content: var(--list-radio);
 }
 
-.plantilla ul li:has(> :is(em, strong))::before,
-.plantilla ul li:has(> b)~li:has(> :is(em, strong))::before {
+main ul li:has(> :is(em, strong))::before,
+main ul li:has(> b)~li:has(> :is(em, strong))::before {
     color: var(--color-text);
 }
 
-.plantilla ul li:has(> :is(em, strong)):has(~ li > b:first-child)::before {
+main ul li:has(> :is(em, strong)):has(~ li > b:first-child)::before {
     color: var(--color-primary);
 }
 
-.plantilla ul li:has(> :is(em, strong)):has(~ li > b:first-child)>:is(em, strong) {
+main ul li:has(> :is(em, strong)):has(~ li > b:first-child)>:is(em, strong) {
     color: var(--color-primary);
 }
 

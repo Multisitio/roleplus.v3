@@ -1,48 +1,48 @@
-.plantilla table {
+main table {
     border-collapse: collapse;
     border-spacing: 0;
     font: 11px/1.18 var(--font-table);
     text-align: left;
 }
 
-.plantilla :is(th, td) {
+main :is(th, td) {
     padding: 3px;
     vertical-align: top;
 }
 
-.plantilla table:has(th) :is(th, td) {
+main table:has(th) :is(th, td) {
     border-left: 1px solid var(--color-border-primary);
 }
 
-/*.plantilla :is(th, td):first-child {
+/*main :is(th, td):first-child {
     width: 1%;
     white-space: nowrap;
 } esto no mola */
 
-.plantilla table:has(th) :is(th, td):first-child {
+main table:has(th) :is(th, td):first-child {
     border-left: none;
 }
 
-.plantilla table:has(th) th {
+main table:has(th) th {
     border-bottom: 2px solid var(--color-border-primary);
 }
 
-.plantilla table:has(th) :is(th, td):nth-child(2) {
+main table:has(th) :is(th, td):nth-child(2) {
     border-left: 2px solid var(--color-border-primary);
 }
 
-.plantilla tr:nth-child(even) {
+main tr:nth-child(even) {
     background-color: var(--bg-table-stripe);
 }
 
-.plantilla table:has(th) tr:last-child th {
+main table:has(th) tr:last-child th {
     border-bottom: 2px solid var(--color-border-primary);
 }
 
-.plantilla table:has(th) :is(.big-tr:last-child th:first-child, .vertical-line td:first-child) {
+main table:has(th) :is(.big-tr:last-child th:first-child, .vertical-line td:first-child) {
     border-right: 2px solid var(--color-border-primary);
 }
 
-.plantilla table:has(th) tfoot tr:first-child {
+main table:has(th) tfoot tr:first-child {
     border-top: 2px solid var(--color-border-primary);
 }

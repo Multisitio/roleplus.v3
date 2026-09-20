@@ -23,7 +23,7 @@ figcaption {
     text-align: center;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) figcaption {
+main > div article:has(>section:first-child>h1+blockquote) figcaption {
     background: black;
     border-radius: 5px;
     color: white;

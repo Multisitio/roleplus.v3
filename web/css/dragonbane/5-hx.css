@@ -1,23 +1,23 @@
-.plantilla h1,
-.plantilla h2,
-.plantilla h3,
-.plantilla h4,
-.plantilla h5,
-.plantilla caption,
-.plantilla th {
+main h1,
+main h2,
+main h3,
+main h4,
+main h5,
+main caption,
+main th {
     font-family: var(--font-heading);
     font-variant: small-caps;
     font-weight: normal;
     line-height: 100%;
 }
 
-.plantilla h1,
-.plantilla h2,
-.plantilla h4 {
+main h1,
+main h2,
+main h4 {
     margin-bottom: var(--spacing-heading-bottom);
 }
 
-.plantilla h1 {
+main h1 {
     color: var(--color-accent);
     font-size: var(--font-size-h1);
     position: relative;
@@ -26,7 +26,7 @@
     z-index: 1;
 }
 
-.plantilla h1+hr {
+main h1+hr {
     border-image: url("data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(238, 61, 60)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(238, 61, 60)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(238, 61, 60)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(238, 61, 60)'/></svg>") 16 8;
     border-style: solid;
     border-width: 0 32px 16px;
@@ -34,7 +34,7 @@
     width: 50%;
 }
 
-.plantilla :is(h1:first-child + p, section:has(h1) + section > div:first-child > p:first-child)::first-letter {
+main :is(h1:first-child + p, section:has(h1) + section > div:first-child > p:first-child)::first-letter {
     color: transparent;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -48,11 +48,11 @@
     padding: 10px 10px 10px 0;
 }
 
-.plantilla section:has(h1)+section p:first-child {
+main section:has(h1)+section p:first-child {
     color: var(--color-secondary);
 }
 
-.plantilla h2 {
+main h2 {
     background-image: var(--gradient-forest);
     background-clip: text;
     color: var(--color-primary);
@@ -61,35 +61,35 @@
     padding-top: 15px;
 }
 
-.plantilla h2~p {
+main h2~p {
     color: var(--color-primary);
 }
 
-.plantilla h3 {
+main h3 {
     border-bottom: var(--border-h3);
     color: var(--color-secondary);
     font-size: var(--font-size-h3);
 }
 
-.plantilla h3+p {
+main h3+p {
     color: var(--color-secondary);
 }
 
-.plantilla div> :is(h1, h2, h3, h4, h5, h6):first-child {
+main div> :is(h1, h2, h3, h4, h5, h6):first-child {
     padding-top: 0;
 }
 
-.plantilla h4 {
+main h4 {
     font-size: var(--font-size-h4);
     padding-top: 15px;
     text-transform: uppercase;
 }
 
-.plantilla h3+h4 {
+main h3+h4 {
     padding-top: 0;
 }
 
-.plantilla h5 {
+main h5 {
     background-image:
         url("data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>"),
         url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>"),
@@ -107,65 +107,65 @@
     width: fit-content;
 }
 
-.plantilla>div h5 {
+main>div h5 {
     filter: var(--tone, none);
 }
 
-.plantilla>div .magic,
-.plantilla>div .magic h5 {
+main>div .magic,
+main>div .magic h5 {
     --tone: hue-rotate(110deg);
 }
 
-.plantilla>div .event,
-.plantilla>div .event h5 {
+main>div .event,
+main>div .event h5 {
     --tone: hue-rotate(42deg);
 }
 
-.plantilla>div .plant,
-.plantilla>div .plant h5 {
+main>div .plant,
+main>div .plant h5 {
     --tone: hue-rotate(312deg);
 }
 
-.plantilla>div .pnj,
-.plantilla>div .pnj h5 {
+main>div .pnj,
+main>div .pnj h5 {
     --tone: hue-rotate(282deg) brightness(1.25);
 }
 
-.plantilla>div .gold-item,
-.plantilla>div .gold-item h5 {
+main>div .gold-item,
+main>div .gold-item h5 {
     --tone: hue-rotate(242deg) brightness(2);
 }
 
-.plantilla>div .condition,
-.plantilla>div .condition h5 {
+main>div .condition,
+main>div .condition h5 {
     --tone: hue-rotate(170deg);
 }
 
-.plantilla>div .monster,
-.plantilla>div .monster h5 {
+main>div .monster,
+main>div .monster h5 {
     --tone: hue-rotate(192deg) saturate(1.25);
 }
 
-.plantilla>div .silver-item,
-.plantilla>div .silver-item h5 {
+main>div .silver-item,
+main>div .silver-item h5 {
     --tone: saturate(0) brightness(1.25);
 }
 
-.plantilla>div .bronze-item,
-.plantilla>div .bronze-item h5 {
+main>div .bronze-item,
+main>div .bronze-item h5 {
     --tone: hue-rotate(212deg) brightness(1.25);
 }
 
-.plantilla h5+p {
+main h5+p {
     color: var(--color-primary);
 }
 
-.plantilla h6 {
+main h6 {
     font-family: var(--font-annotation);
     font-size: var(--font-size-h6);
 }
 
-.plantilla hr:not(h1+hr) {
+main hr:not(h1+hr) {
     border-image: url("data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(0, 96, 77)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(0, 96, 77)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(0, 96, 77)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(0, 96, 77)'/></svg>") 16 8;
     border-style: solid;
     border-width: 0 32px 16px;

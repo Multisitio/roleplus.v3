@@ -4,7 +4,7 @@
     src: url('../../fonts/grenze_gotisch.woff2');
 }
 
-body.editor main.plantilla h1 {
+body.editor main h1 {
     font-family: 'grenze gotisch';
 }
 

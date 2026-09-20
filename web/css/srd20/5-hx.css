@@ -1,20 +1,20 @@
-.plantilla h1,
-.plantilla h2,
-.plantilla h3,
-.plantilla h4 {
+main h1,
+main h2,
+main h3,
+main h4 {
     font-family: 'MrEaves';
     font-weight: 800;
     color: var(--color-text-header);
 }
 
-.plantilla h1 {
+main h1 {
     font-size: 34px;
     line-height: 1em;
     position: relative;
     z-index: 1;
 }
 
-.plantilla :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)::first-letter {
+main :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)::first-letter {
     color: transparent;
     -webkit-text-fill-color: transparent;
     float: left;
@@ -31,43 +31,43 @@
     -webkit-background-clip: text;
 }
 
-.plantilla :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)+* {
+main :is(h1 + p, :is(header, section):has(h1) + section > div:first-child > p:first-child)+* {
     clear: both;
 }
 
-.plantilla h2 {
+main h2 {
     font-size: 26px;
     line-height: .988em;
 }
 
-.plantilla h3 {
+main h3 {
     font-size: 22px;
     border-bottom: 2px solid var(--color-border-primary);
     line-height: .995em;
 }
 
-/*.plantilla *>:is(h1, h2, h3, h4, h5, h6):first-child {
+/*main *>:is(h1, h2, h3, h4, h5, h6):first-child {
     padding-top: 0;
 }*/
 
-.plantilla h4 {
+main h4 {
     font-size: 16px;
 }
 
-.plantilla h3+h4 {
+main h3+h4 {
     padding-top: 0;
 }
 
-.plantilla h5 {
+main h5 {
     font-family: 'WalterTurncoat';
     font-size: 13px;
 }
 
-.plantilla h6 {
+main h6 {
     font-family: 'WalterTurncoat';
     font-size: 11px;
 }
 
-.plantilla hr {
+main hr {
     border-color: var(--color-accent-gold);
 }

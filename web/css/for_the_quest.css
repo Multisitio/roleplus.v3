@@ -195,11 +195,11 @@ blockquote p:last-child {
     left: 50%;
     transform: translate(-50%, 0);
     z-index: -1;
-}.plantilla > div article {
+}main > div article {
     background: white;
 }
 
-.plantilla > div article [src*="portada"] {
+main > div article [src*="portada"] {
     display: block;
     width: 100%;
     height: 100%;
@@ -228,8 +228,8 @@ blockquote p:last-child {
     padding: 2px 0 0;
     width: 120px;
     height: 30px;
-}.plantilla :is(h1, h5, h6),
-.plantilla .medieval-sharp {
+}main :is(h1, h5, h6),
+main .medieval-sharp {
     color: var(--dragonred);
     font-family: 'Medieval Sharp';
     font-size: 16pt;
@@ -237,31 +237,31 @@ blockquote p:last-child {
     text-align: center;
 }
 
-.plantilla blockquote h1 {
+main blockquote h1 {
     color: white;
 }
 
-.plantilla h1 {
+main h1 {
     font-size: 22pt;
     line-height: 1;
     margin-bottom: 5px;
     width: 100%;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) h1 {
+main > div article:has(>section:first-child>h1+blockquote) h1 {
     color: #000;
     font-size: xxx-large;
     margin: -20px 0 20px;
 }
 
-.plantilla h1+cite {
+main h1+cite {
     display: block;
     font-family: 'Medieval Sharp';
     font-size: 13pt;
     text-align: right;
 }
 
-.plantilla .big-letter::first-letter {
+main .big-letter::first-letter {
     float: left;
     font-family: Pamela;
     font-size: 43pt;
@@ -275,7 +275,7 @@ blockquote p:last-child {
     -webkit-text-fill-color: transparent;
 }
 
-.plantilla h2 {
+main h2 {
     background: var(--dragonred);;
     color: white;
     font-size: 16pt;
@@ -301,7 +301,7 @@ h2::before {
     height: 60px;
 }
 
-.plantilla h2.to-right {
+main h2.to-right {
     margin: 15px 0 20px -75px;
     padding: 8px 10px 0 0;
     text-align: right;
@@ -314,7 +314,7 @@ h2.to-right::before {
     transform: translateY(-50%) rotate(180deg);
 }
 
-.plantilla h3 {
+main h3 {
     display: table;
     margin: 20px auto;
     position: relative;
@@ -324,13 +324,13 @@ h2.to-right::before {
     padding: 0 60px;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) h3 {
+main > div article:has(>section:first-child>h1+blockquote) h3 {
     color: black;
     font-style: italic;
 }
   
-.plantilla h3::before,
-.plantilla h3::after {
+main h3::before,
+main h3::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -340,41 +340,41 @@ h2.to-right::before {
     transform: translateY(-50%);
 }
 
-.plantilla > div article:has(>section:first-child>h1 + blockquote) h3::after,
-.plantilla > div article:has(>section:first-child>h1 + blockquote) h3::before {
+main > div article:has(>section:first-child>h1 + blockquote) h3::after,
+main > div article:has(>section:first-child>h1 + blockquote) h3::before {
     background: url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center/contain;
     color: black;
 }
 
-.plantilla h3::before {
+main h3::before {
     left: 0;
 }
   
-.plantilla h3::after {
+main h3::after {
     right: 0;
     transform: translateY(-50%) rotate(180deg);
 }  
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) h3::before {
+main > div article:has(>section:first-child>h1+blockquote) h3::before {
     left: 0;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) h3::after {
+main > div article:has(>section:first-child>h1+blockquote) h3::after {
     right: 0;
     transform: translateY(-50%) rotate(180deg);
 }
 
-.plantilla :is(h3, h4) {
+main :is(h3, h4) {
     text-align: center;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) h4 {
+main > div article:has(>section:first-child>h1+blockquote) h4 {
     padding-left: 55px;
     position: relative;
     text-align: left;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) h4:before {
+main > div article:has(>section:first-child>h1+blockquote) h4:before {
     background: url(/img/editor/for_the_quest/punta_de_flecha_negra.svg?v2) no-repeat center/contain;
     content: "";
     position: absolute;
@@ -385,17 +385,17 @@ h2.to-right::before {
     height: 20px;
 }
 
-.plantilla h5 {
+main h5 {
     color: white;
     font-size: 15pt;
 }
 
-/*.plantilla h6 {
+/*main h6 {
     color: #333;
     font-size: 10pt;
 }*/
 
-.plantilla h6 {
+main h6 {
     color: #000;
     display: inline-block;
     font-size: xxx-large;
@@ -405,8 +405,8 @@ h2.to-right::before {
     transform: translate(-50%, 0);
 }
   
-.plantilla h6::before,
-.plantilla h6::after {
+main h6::before,
+main h6::after {
     background: url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center / contain;
     content: "";
     position: absolute;
@@ -416,20 +416,20 @@ h2.to-right::before {
     height: 40px;
 }
 
-.plantilla h6::before {
+main h6::before {
     left: 0;
 }
   
-.plantilla h6::after {
+main h6::after {
     right: 0;
     transform: translateY(-50%) rotate(180deg);
 }  
 
-.plantilla :is(div, section)>:is(h1, h2, h3, h4, h5, h6):first-child {
+main :is(div, section)>:is(h1, h2, h3, h4, h5, h6):first-child {
     margin-top: 0;
 }
 
-.plantilla hr {
+main hr {
     background: url(/img/editor/for_the_quest/96/lanza_dos_puntas.webp?v2) no-repeat center/contain;
     border: 0;
     margin: 0 auto;
@@ -437,7 +437,7 @@ h2.to-right::before {
     height: 17px;
 }
 
-.plantilla > div article:has(>section:first-child>h1+blockquote) hr {
+main > div article:has(>section:first-child>h1+blockquote) hr {
     background: url(/img/editor/for_the_quest/lanza_negra.svg) no-repeat center/contain;
     width: unset;
 }

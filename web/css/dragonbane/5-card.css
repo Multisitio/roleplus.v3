@@ -1,4 +1,4 @@
-.plantilla > div .cards {
+main > div .cards {
     border: var(--border-card);
     box-sizing: border-box;
     display: flex;
@@ -6,7 +6,7 @@
     flex: 0 0 696px;
 }
 
-.plantilla > div .cards picture {
+main > div .cards picture {
     background: url(/img/editor/dragonbane/96/pergamino_carta.webp) no-repeat;
     background-size: cover;
     border: var(--border-card);
@@ -17,15 +17,15 @@
     height: var(--card-height);
 }
 
-.plantilla > div .cards:has(> picture:only-child) {
+main > div .cards:has(> picture:only-child) {
     flex: 0 0 236px;
 }
 
-.plantilla > div .cards:has(> picture:nth-child(2):last-child) {
+main > div .cards:has(> picture:nth-child(2):last-child) {
     flex: 0 0 466px;
 }
 
-.plantilla > div .cards picture h5 {
+main > div .cards picture h5 {
     background-image:
         url("data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>"),
         url("data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>"),
@@ -38,7 +38,7 @@
     width: 98%;
 }
 
-.plantilla > div .cards picture h6 {
+main > div .cards picture h6 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +51,7 @@
     height: var(--card-title-height);
 }
 
-.plantilla > div .cards picture h6::before {
+main > div .cards picture h6::before {
     background: url('/img/editor/dragonbane/96/pergamino_para_titulos.webp?v=250415') no-repeat;
     background-size: cover;
     content: "";
@@ -64,11 +64,11 @@
     height: var(--card-title-height);
 }
 
-.plantilla > div .cards picture>*:not(h5, h6, hr, img) {
+main > div .cards picture>*:not(h5, h6, hr, img) {
     margin: 0 10px;
 }
 
-.plantilla > div .cards picture hr {
+main > div .cards picture hr {
     position: absolute;
     bottom: -5px;
     width: 170px;
@@ -76,7 +76,7 @@
     transform: translate(-50%, 0);
 }
 
-.plantilla > div .cards picture img {
+main > div .cards picture img {
     opacity: var(--img-watermark-opacity);
     position: absolute;
     bottom: 0;

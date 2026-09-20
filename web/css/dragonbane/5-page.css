@@ -1,4 +1,4 @@
-.plantilla>div article {
+main>div article {
     background: url('/img/editor/dragonbane/96/pergamino.webp');
     background-size: cover;
     counter-increment: page;
@@ -6,16 +6,16 @@
     color: var(--color-text);
 }
 
-.plantilla>div article>section {
+main>div article>section {
     padding-inline: var(--spacing-page-inline);
     /*margin-bottom: 20px;*/
 }
 
-.plantilla>div article>section:first-child {
+main>div article>section:first-child {
     padding-top: var(--spacing-page-top);
 }
 
-.plantilla>div article>section:last-child {
+main>div article>section:last-child {
     padding-bottom: var(--spacing-page-bottom);
     /*margin-bottom: 0;*/
 }

@@ -1,8 +1,8 @@
-.plantilla > div article {
+main > div article {
     background: white;
 }
 
-.plantilla > div article [src*="portada"] {
+main > div article [src*="portada"] {
     display: block;
     width: 100%;
     height: 100%;
