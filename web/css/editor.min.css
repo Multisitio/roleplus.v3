@@ -3003,7 +3003,6 @@ nav[data-toolbar="contexto"] {
 main div[contenteditable] [data-empty-helper="true"] {
     position: relative;
     border-radius: 4px;
-    padding-right: 62px !important;
     display: block;
     box-sizing: border-box;
     outline: none;
