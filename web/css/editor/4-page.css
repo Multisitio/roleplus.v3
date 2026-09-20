@@ -5,7 +5,7 @@ html {
 body {
     background: grey;
     counter-reset: page;
-    padding: 25px 25px 0;
+    padding: 60px 25px 0;
 }
 
 :where(a) {
@@ -26,10 +26,6 @@ main>div {
 header {
     padding: 0;
 }
-
-header+section {
-    padding-top: 0;
-} 
 
 section {
     clear: both;
@@ -96,7 +92,7 @@ main>div a[data-ajax=".ajax.show"] {
     position: absolute;
     right: -10px;
     top: -10px;
-    z-index: 2;
+    z-index: 4;
 }
 
 /* Booklet mode for screen preview */
@@ -117,7 +113,9 @@ main>div a[data-ajax=".ajax.show"] {
 }
 
 @media (display-mode: fullscreen) {
-    nav, .scroll-down-hide {
+
+    nav,
+    .scroll-down-hide {
         display: none !important;
     }
 }
