@@ -66,7 +66,7 @@ main :is(header, section) :last-child {
     padding-bottom: 0 !important;
 }
 
-main header+section {
+main :is(header, section)+section {
     margin-top: 0 !important;
 }
 
