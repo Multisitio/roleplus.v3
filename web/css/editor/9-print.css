@@ -102,7 +102,7 @@
         max-width: none;
     }
 
-    .booklet-mode.editor::after {
+    .booklet-mode::after {
         content: "";
         display: table;
         clear: both;

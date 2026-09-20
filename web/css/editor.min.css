@@ -2048,7 +2048,7 @@ article {
     width: 8.5in;
 }
 
-.editor.letter.portrait main>div {
+main.letter.portrait > div {
     background-color: white;
 }
 
@@ -2192,7 +2192,7 @@ main>div a[data-ajax=".ajax.show"] {
     top: 130px;
 }
 
-.editor main > div > .button-floating {
+main > div > .button-floating {
     position: absolute;
     right: -15px;
     top: -15px;
@@ -3325,7 +3325,7 @@ main footer:after {
         max-width: none;
     }
 
-    .booklet-mode.editor::after {
+    .booklet-mode::after {
         content: "";
         display: table;
         clear: both;

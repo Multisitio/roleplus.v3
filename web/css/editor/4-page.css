@@ -77,7 +77,7 @@ article {
     width: 8.5in;
 }
 
-.editor.letter.portrait main>div {
+main.letter.portrait > div {
     background-color: white;
 }
 
