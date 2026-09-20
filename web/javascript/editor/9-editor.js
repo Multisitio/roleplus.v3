@@ -53,7 +53,7 @@
                         });
 
                     // Reordenar dinámicamente los divs de la plantilla principal
-                    var main = document.querySelector('main.plantilla');
+                    var main = document.querySelector('main');
                     if (main) {
                         order.forEach(function (idu) {
                             var link = main.querySelector('a[href$="/' + idu + '"]');
@@ -190,7 +190,7 @@
             var bookletFmt = bookletBtn.getAttribute('data-booklet') || 'A4 landscape';
             if (styleEl) { styleEl.innerHTML = isBooklet ? '@page { size: ' + bookletFmt + '; margin: 0; }' : '@page { size: ' + printFmt + '; margin: 0; }'; }
 
-            var container = document.querySelector('.plantilla');
+            var container = document.querySelector('main');
             if (!container) return;
 
             if (isBooklet) {
@@ -430,7 +430,7 @@
             var niv = section.dataset.nivel;
 
             // Actualización al vuelo
-            var preview = document.querySelector('main.plantilla');
+            var preview = document.querySelector('main');
             if (preview) {
                 preview.style.setProperty('--' + niv + '-color', hex);
             }
@@ -474,7 +474,7 @@
             var $el = this, name = $el.name, val = $el.value;
 
             // 1. Actualización visual inmediata (sin esperar a BD)
-            var preview = document.querySelector('main.plantilla');
+            var preview = document.querySelector('main');
             if (!preview) return;
 
             if (name.indexOf('footer_') === 0) {
@@ -591,7 +591,7 @@
                 Kumbia.utils.renderDropImagePreview(drop, url + '?t=' + Date.now());
 
                 // Actualizar documento al vuelo
-                var preview = document.querySelector('main.plantilla');
+                var preview = document.querySelector('main');
                 if (preview) {
                     var prop = name === 'footer_imagen' ? '--footer-imagen' : (name === 'fondo_pergamino_even' ? '--background-image-even' : '--background-image');
                     preview.style.setProperty(prop, "url('" + url + "')");
@@ -630,7 +630,7 @@
                 if (inp) inp.value = f;
 
                 // Actualización al vuelo
-                var preview = document.querySelector('main.plantilla');
+                var preview = document.querySelector('main');
                 if (preview) {
                     preview.style.setProperty('--' + niv + '-family', "'" + f + "'");
                 }
@@ -665,7 +665,7 @@
                 if (h) h.value = f;
 
                 // Actualización al vuelo
-                var preview = document.querySelector('main.plantilla');
+                var preview = document.querySelector('main');
                 if (preview) {
                     preview.style.setProperty('--' + niv + '-family', "'" + f + "'");
                 }

@@ -738,7 +738,7 @@ class Plantillas extends LiteRecord
         }
 
         // Vincular footer con h6
-        $css .= "main.plantilla div article footer, main.plantilla > div footer, main.plantilla footer {\n";
+        $css .= "main div article footer, main > div footer, main footer {\n";
         $css .= "    font-family: var(--h6-family);\n";
         $css .= "    font-size: var(--h6-size);\n";
         $css .= "    font-weight: var(--h6-weight);\n";
@@ -749,7 +749,7 @@ class Plantillas extends LiteRecord
         $css .= "}\n\n";
 
         // Vincular caption con h5
-        $css .= "main.plantilla caption {\n";
+        $css .= "main caption {\n";
         $css .= "    font-family: var(--h5-family);\n";
         $css .= "    font-size: var(--h5-size);\n";
         $css .= "    font-weight: var(--h5-weight);\n";
@@ -917,6 +917,8 @@ class Plantillas extends LiteRecord
             $css .= "    float: left;\n";
             $css .= "    font-family: var(--dropcap-family);\n";
             $css .= "    font-size: var(--dropcap-size);\n";
+            $css .= "    font-weight: var(--dropcap-weight);\n";
+            $css .= "    font-style: var(--dropcap-style);\n";
             $css .= "    line-height: 1;\n";
             $css .= "    margin-top: calc(var(--dropcap-margin-top) - 10px);\n";
             $css .= "    margin-right: var(--dropcap-margin-right);\n";
@@ -1372,13 +1374,13 @@ class Plantillas extends LiteRecord
     const NIVELES_TIPOGRAFIA = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'body', 'small', 'dropcap'];
 
     const SELECTORES_TIPOGRAFIA = [
-        'h1'    => 'main.plantilla h1',
-        'h2'    => 'main.plantilla h2',
-        'h3'    => 'main.plantilla h3',
-        'h4'    => 'main.plantilla h4',
-        'h5'    => 'main.plantilla h5',
-        'h6'    => 'main.plantilla h6',
-        'body'  => 'main.plantilla',
-        'small' => 'main.plantilla small'
+        'h1'    => 'main h1',
+        'h2'    => 'main h2',
+        'h3'    => 'main h3',
+        'h4'    => 'main h4',
+        'h5'    => 'main h5',
+        'h6'    => 'main h6',
+        'body'  => 'main',
+        'small' => 'main small'
     ];
 }

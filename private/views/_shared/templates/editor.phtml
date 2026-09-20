@@ -38,11 +38,11 @@
             </button>
         <?php endif; ?>
 
-		<main class="<?=$format_page?> plantilla" data-manuales-idu="<?=h($manuales_idu)?>">
+		<main class="<?=$format_page?>" data-manuales-idu="<?=h($manuales_idu)?>">
 			<?php View::content(); ?>
 		</main>
 
-		<a href="#first-page" class="button-floating <?= $editable ? 'bottom-third' : 'bottom-second' ?> right scroll-top" title="<?=t('Subir a la primera página')?>">
+		<a href="javascript:void(0)" class="button-floating <?= $editable ? 'bottom-third' : 'bottom-second' ?> right scroll-top" title="<?=t('Subir a la primera página')?>">
 			<?=Ku::icon('arrow-up')?>
 		</a>
 
