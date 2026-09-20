@@ -223,6 +223,14 @@
                 if (badge) {
                     badge.remove();
                 }
+                
+                // Limpiar nodos de texto con \u200B cuando el elemento ya tiene contenido real
+                for (var j = el.childNodes.length - 1; j >= 0; j--) {
+                    var n = el.childNodes[j];
+                    if (n.nodeType === 3 && n.textContent === '\u200B') {
+                        el.removeChild(n);
+                    }
+                }
             }
         });
     }
