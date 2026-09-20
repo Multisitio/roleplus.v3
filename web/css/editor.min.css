@@ -2758,15 +2758,19 @@ nav[data-toolbar="pinceles"] button:hover {
     transform: scale(1.06);
 }
 
-nav[data-toolbar="pinceles"] button[data-tag="delete_parent"],
-nav[data-toolbar="pinceles"] button[data-tag="delete_node"] {
-    color: #cc0000;
+nav[data-toolbar="pinceles"] button[data-tag="delete_parent"] img,
+nav[data-toolbar="pinceles"] button[data-tag="delete_node"] img {
+    filter: sepia(99%) saturate(9999%) hue-rotate(19deg) brightness(99%) contrast(99%);
 }
 
 nav[data-toolbar="pinceles"] button[data-tag="delete_parent"]:hover,
 nav[data-toolbar="pinceles"] button[data-tag="delete_node"]:hover {
     background: #ffe6e6;
-    color: #990000;
+}
+
+nav[data-toolbar="pinceles"] button[data-tag="delete_parent"]:hover img,
+nav[data-toolbar="pinceles"] button[data-tag="delete_node"]:hover img {
+    filter: sepia(99%) saturate(9999%) hue-rotate(345deg) brightness(85%) contrast(150%);
 }
 
 nav[data-toolbar="pinceles"] button:active {
