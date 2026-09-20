@@ -3202,6 +3202,10 @@ main :is(header, section) :last-child {
     padding-bottom: 0 !important;
 }
 
+main header+section {
+    margin-top: 0 !important;
+}
+
 main :is(section, footer) :first-child {
     margin-top: 0 !important;
     padding-top: 0 !important;
