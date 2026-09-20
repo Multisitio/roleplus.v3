@@ -96,7 +96,8 @@
     function clearActiveHelpers() {
         document.querySelectorAll('.is-active-helper').forEach(function (el) {
             el.classList.remove('is-active-helper');
-            if (el.getAttribute('class') === '') {
+            var cls = el.getAttribute('class');
+            if (cls !== null && cls.trim() === '') {
                 el.removeAttribute('class');
             }
         });
@@ -235,8 +236,13 @@
                 // Limpiar nodos de texto con \u200B cuando el elemento ya tiene contenido real
                 for (var j = el.childNodes.length - 1; j >= 0; j--) {
                     var n = el.childNodes[j];
-                    if (n.nodeType === 3 && n.textContent === '\u200B') {
-                        el.removeChild(n);
+                    if (n.nodeType === 3 && n.textContent.indexOf('\u200B') !== -1) {
+                        var cleaned = n.textContent.replace(/\u200B/g, '');
+                        if (cleaned === '') {
+                            el.removeChild(n);
+                        } else {
+                            n.textContent = cleaned;
+                        }
                     }
                 }
             }
