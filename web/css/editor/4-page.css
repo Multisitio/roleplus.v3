@@ -5,7 +5,6 @@ html {
 body {
     background: grey;
     counter-reset: page;
-    padding: 25px 0;
 }
 
 :where(a) {
