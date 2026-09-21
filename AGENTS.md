@@ -50,3 +50,7 @@
 - **CachÃ© CSS:** Tras cualquier modificaciÃ³n de un archivo `.min.css`, es obligatorio incrementar la variable `$version` en `ev_controller.php` o similar, y realizar el despliegue al servidor, de lo contrario los cambios no se reflejarÃ¡n. No intentes sobrescribir CSS personalizados del usuario sin consultarlo (ej. variables como `--table-zebra-bg`).
 
 - **Entornos (Local vs Remoto):** Los archivos .htaccess, index.php y el contenido de la carpeta config tienen configuraciones y comportamientos específicos que difieren entre el entorno local (oleplus.vh) y el servidor remoto de producción. Nunca se deben sobrescribir los de producción con los locales (ni viceversa) sin revisar cuidadosamente las implicaciones de seguridad, rutas o directivas HTTPS (como CSP).
+
+- Las tarjetas de mamposteria deben respetar un maximo de 640px CSS y quedar
+  centradas tambien con zoom al 125%. Conservar el zoom elegido por el usuario;
+  cambiarlo no sustituye corregir el ancho ni verificar el CSS publicado.
