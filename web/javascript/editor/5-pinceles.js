@@ -180,6 +180,18 @@
        ----------------------------------------------------------------- */
     function syncHelpers(art) {
         if (!art) return;
+        // Retirar residuos antiguos sin reemplazar los nodos ni perder el cursor.
+        var walker = document.createTreeWalker(art, 4);
+        var textNode;
+        while ((textNode = walker.nextNode())) {
+            var matches = Array.from(textNode.data.matchAll(/\u200B|&(?:ZeroWidthSpace|#8203|#x200b);/gi));
+            for (var m = matches.length - 1; m >= 0; m--) {
+                textNode.deleteData(matches[m].index, matches[m][0].length);
+            }
+        }
+        art.querySelectorAll('[class]').forEach(function (el) {
+            if (!el.getAttribute('class').trim()) el.removeAttribute('class');
+        });
         
         var candidates = art.querySelectorAll('article, p, h1, h2, h3, h4, h5, h6, blockquote, div, header, section, footer, table, thead, tbody, tfoot, tr, td, th, caption, ul, ol, li');
         candidates.forEach(function (el) {
@@ -223,9 +235,10 @@
                     el.insertBefore(badge, el.firstChild);
                 }
                 
-                var lastNode = el.lastChild;
-                if (!lastNode || lastNode.nodeType !== 3 || lastNode.textContent.indexOf('\u200B') === -1) {
-                    el.appendChild(document.createTextNode('\u200B'));
+                if (!el.querySelector(':scope > br')) {
+                    var caret = document.createElement('br');
+                    caret.setAttribute('data-editor-helper', 'caret');
+                    el.appendChild(caret);
                 }
             } else {
                 el.removeAttribute('data-empty-helper');
@@ -233,18 +246,9 @@
                     badge.remove();
                 }
                 
-                // Limpiar nodos de texto con \u200B cuando el elemento ya tiene contenido real
-                for (var j = el.childNodes.length - 1; j >= 0; j--) {
-                    var n = el.childNodes[j];
-                    if (n.nodeType === 3 && n.textContent.indexOf('\u200B') !== -1) {
-                        var cleaned = n.textContent.replace(/\u200B/g, '');
-                        if (cleaned === '') {
-                            el.removeChild(n);
-                        } else {
-                            n.textContent = cleaned;
-                        }
-                    }
-                }
+                el.querySelectorAll(':scope > [data-editor-helper="caret"]').forEach(function (caret) {
+                    caret.remove();
+                });
             }
         });
     }
@@ -375,14 +379,10 @@
         }
 
         var target = el;
-        // Si está vacío, le inyectamos un nodo de texto vacío con zwsp para estabilizar el cursor en contenteditable
-        if (target.nodeType === 1 && !target.firstChild) {
-            target.appendChild(document.createTextNode('\u200B'));
-        }
-
-        // Si es un helper vacío, el foco debe ir al texto invisible del final, no al badge ineditable
+        // Los elementos vacíos usan un salto auxiliar, nunca texto invisible.
+        if (art) syncHelpers(art);
         if (target.nodeType === 1 && target.getAttribute('data-empty-helper') === 'true') {
-            target = target.lastChild;
+            target = target.querySelector(':scope > br') || target;
         } else {
             // Navegar hasta el nodo de texto o elemento hijo más profundo
             while (target.firstChild) {
@@ -394,7 +394,10 @@
         var range = document.createRange();
         
         try {
-            if (target.nodeType === 3) {
+            if (target.nodeType === 1 && target.tagName === 'BR') {
+                range.setStartBefore(target);
+                range.collapse(true);
+            } else if (target.nodeType === 3) {
                 range.setStart(target, 0);
                 range.setEnd(target, 0);
             } else {
@@ -686,6 +689,7 @@
             var innerArt = activeArticle.querySelector('article');
             if (innerArt) {
                 var isActive = innerArt.classList.toggle('no-page-number');
+                if (!innerArt.className.trim()) innerArt.removeAttribute('class');
                 btnNoPage.classList.toggle('active', isActive);
                 saveArticle(activeArticle);
             }
@@ -698,6 +702,7 @@
             var innerArt = activeArticle.querySelector('article');
             if (innerArt) {
                 var isActive = innerArt.classList.toggle('reset-page-number');
+                if (!innerArt.className.trim()) innerArt.removeAttribute('class');
                 btnResetPage.classList.toggle('active', isActive);
                 saveArticle(activeArticle);
             }
@@ -1090,12 +1095,9 @@
                 var art = targetEl.closest('div[contenteditable]');
                 if (art) art.focus({preventScroll: true});
 
-                var txt = document.createTextNode('\u200B');
-                targetEl.appendChild(txt);
-
                 var sel = window.getSelection();
                 var range = document.createRange();
-                range.selectNodeContents(txt);
+                range.selectNodeContents(targetEl);
                 range.collapse(false);
                 sel.removeAllRanges();
                 sel.addRange(range);
@@ -1346,11 +1348,15 @@
         clone.querySelectorAll('[data-empty-helper]').forEach(function (el) {
             el.removeAttribute('data-empty-helper');
         });
+        clone.querySelectorAll('[class]').forEach(function (el) {
+            el.classList.remove('is-active-helper');
+            if (!el.getAttribute('class').trim()) el.removeAttribute('class');
+        });
         
         var articleNode = clone.querySelector('article');
         var htmlToSend  = articleNode ? articleNode.outerHTML : clone.innerHTML;
         // Clean zero-width space characters (\u200B) used to stabilize contenteditable selection
-        htmlToSend = htmlToSend.replace(/\u200B/g, '');
+        htmlToSend = htmlToSend.replace(/\u200B|&(?:amp;)?(?:ZeroWidthSpace|#8203|#x200b);/gi, '');
 
         var fd = new FormData();
         fd.append('idu',         idu);
@@ -1665,4 +1671,3 @@
     });
 
 })(window, document);
-

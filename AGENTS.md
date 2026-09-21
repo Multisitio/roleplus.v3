@@ -54,3 +54,7 @@
 - Las tarjetas de mamposteria deben respetar un maximo de 640px CSS y quedar
   centradas tambien con zoom al 125%. Conservar el zoom elegido por el usuario;
   cambiarlo no sustituye corregir el ancho ni verificar el CSS publicado.
+
+- El editor de manuales no debe inyectar espacios de ancho cero (U+200B /
+  &ZeroWidthSpace;) ni dejar atributos class vacios. Verificar el DOM durante
+  la edicion y el HTML enviado al guardar, conservando las clases reales.
