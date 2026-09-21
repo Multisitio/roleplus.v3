@@ -3,6 +3,44 @@
  */
 class Rolflix_entradas extends LiteRecord
 {
+	private $ultimoErrorRss = '';
+
+	protected function esperarReintentoRss($intento)
+	{
+		sleep($intento);
+	}
+
+	protected function obtenerFeedYoutube($canal_id)
+	{
+		$this->ultimoErrorRss = '';
+		$url = 'https://www.youtube.com/feeds/videos.xml?channel_id=' . rawurlencode($canal_id);
+		for ($intento = 1; $intento <= 3; ++$intento) {
+			$res = _curl::get($url, [CURLOPT_USERAGENT => 'Mozilla/5.0']);
+			$codigo = (int) ($res->info['http_code'] ?? 0);
+			if ($res->ok) {
+				$anterior = libxml_use_internal_errors(true);
+				$xml = simplexml_load_string($res->body, 'SimpleXMLElement', LIBXML_NONET);
+				libxml_clear_errors();
+				libxml_use_internal_errors($anterior);
+				if ($xml !== false && $xml->getName() === 'feed'
+					&& in_array('http://www.w3.org/2005/Atom', $xml->getDocNamespaces(), true)) {
+					return $res->body;
+				}
+				$this->ultimoErrorRss = "HTTP $codigo: respuesta Atom no válida";
+			} else {
+				$this->ultimoErrorRss = "HTTP $codigo; cURL " . $res->errno . ': ' . $res->error;
+			}
+			$this->ultimoErrorRss .= " (intento $intento/3)";
+			error_log("Fallo RSS [$canal_id]: " . $this->ultimoErrorRss);
+			if ($intento === 3 || ($res->errno === 0 && ! $res->ok
+				&& ! in_array($codigo, [404, 408, 429], true) && $codigo < 500)) {
+				break;
+			}
+			$this->esperarReintentoRss($intento);
+		}
+		return false;
+	}
+
 	# 0
 	/*public function arreglo()
 	{
@@ -30,10 +68,11 @@ class Rolflix_entradas extends LiteRecord
 	{
 		_mail::send('dj@roleplus.app', 'Cargando vídeos de canales vía RSS...', 'Enjoy!');
 		$sitios = (new Rolflix_sitios)->obtenerSitios();
+		$body = [];
 		foreach ($sitios as $sit) {
 			$i = $this->cargarSitio($sit->idu, $sit->canal_id, $sit);
 			if ($i === false) {
-				$body[] = $log = "$sit->hashtag: Error obteniendo el feed RSS (Ver logs para mas detalles).";
+				$body[] = $log = "$sit->hashtag: Error obteniendo el feed RSS: " . $this->ultimoErrorRss;
 			} else {
 				$body[] = $log = "$sit->hashtag: $i vídeo/s nuevo/s.";
 			}
@@ -51,16 +90,10 @@ class Rolflix_entradas extends LiteRecord
 		$enlaces = $this->obtenerEnleces();
 
 		# XML EN TEXTO
-        $url = "https://www.youtube.com/feeds/videos.xml?channel_id=$canal_id";
-		$res = _curl::get($url);
-		
-		if ( ! $res->ok) {
-			// Evitar enviar un correo por canal; si es error enviamos al log directo para depurar si estamos en local o para mantener silencio
-			error_log("Fallo RSS [$canal_id]. HTTP_CODE: " . $res->info['http_code'] . " - CURL_ERR: " . $res->error);
+		$texto = $this->obtenerFeedYoutube($canal_id);
+		if ($texto === false) {
 			return false;
 		}
-		
-		$texto = $res->body;
 		$texto = str_ireplace(['<![CDATA[', ']]>'], '', $texto);
 
 		# ENTRADAS
