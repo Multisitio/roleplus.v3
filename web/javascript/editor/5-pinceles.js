@@ -876,7 +876,7 @@
                 return;
             }
 
-            if (tag === 'paste_before' || tag === 'paste_after') {
+            if (tag === 'paste_before' || tag === 'paste_after' || tag === 'paste_into') {
                 var clip = localStorage.getItem('roleplus-clipboard');
                 if (!clip) {
                     setSaveStatus('error', 'El portapapeles está vacío');
@@ -918,6 +918,8 @@
                         if (lastChild) {
                             if (tag === 'paste_before') {
                                 node.parentNode.insertBefore(frag, node);
+                            } else if (tag === 'paste_into') {
+                                node.appendChild(frag);
                             } else {
                                 node.parentNode.insertBefore(frag, node.nextSibling);
                             }
