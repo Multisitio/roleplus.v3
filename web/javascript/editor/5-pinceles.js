@@ -35,6 +35,7 @@
         { tag: 'h6',         block: true,  wrap: false, children: '' },
         { tag: 'p',          block: true,  wrap: false, children: '' },
         { tag: 'small',      block: false, wrap: true,  children: 'pequeño' },
+        { tag: 'br',         block: false, wrap: false, children: null, selfClose: true },
         { tag: 'a',          block: false, wrap: true,  children: 'enlace', attrs: 'href="#"' },
         { tag: 'b',          block: false, wrap: true,  children: 'negrita' },
         { tag: 'strong',     block: false, wrap: true,  children: 'negrita' },
