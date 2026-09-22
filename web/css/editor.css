@@ -3494,8 +3494,10 @@ nav[data-toolbar="pinceles"] .pinceles-grupo.active .grupo-trigger {
 nav[data-toolbar="contexto"] {
     align-items: center;
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     left: 70px;
+    right: 100px;
     position: fixed;
     top: 10px;
     z-index: 3;
