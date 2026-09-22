@@ -3497,7 +3497,7 @@ nav[data-toolbar="contexto"] {
     flex-wrap: wrap;
     gap: 10px;
     left: 70px;
-    right: 100px;
+    right: 200px;
     position: fixed;
     top: 10px;
     z-index: 3;
