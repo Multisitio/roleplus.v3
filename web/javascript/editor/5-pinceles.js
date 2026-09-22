@@ -292,13 +292,9 @@
                 if (sib.nodeType === 1 && sib.hasAttribute('data-editor-helper')) continue;
                 
                 visibleSiblings++;
-                
-                if (sib.nodeType === 1 && BLOCK_TAGS_SET[sib.tagName.toLowerCase()]) {
-                    hasBlockSibling = true;
-                }
             }
-            // Si el <br> tiene un bloque hermano (ej: entre dos div), O si el <br> está completamente solo (el navegador lo inyectó al vaciar la celda)
-            if (hasBlockSibling || visibleSiblings === 0) br.remove();
+            // Solo eliminamos el <br> si está completamente solo (el navegador lo inyecta a veces al vaciar contenedores)
+            if (visibleSiblings === 0) br.remove();
         });
     }
 
