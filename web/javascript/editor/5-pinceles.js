@@ -649,19 +649,16 @@
     ----------------------------------------------------------------- */
     function nativeDelete(nodeToDelete) {
         if (!nodeToDelete || !nodeToDelete.parentNode) return;
+        
+        // Simplemente removemos del DOM.
+        // Evitamos document.execCommand('delete') porque causa que Chrome/Firefox 
+        // fusionen o eliminen bloques adyacentes para "unir" el texto.
+        nodeToDelete.remove();
+        
+        // Limpiamos la selección si estaba dentro de lo que hemos borrado
         var sel = window.getSelection();
-        var range = document.createRange();
-        range.selectNode(nodeToDelete);
-        sel.removeAllRanges();
-        sel.addRange(range);
-        
-        // Ejecutar borrado nativo para que entre en la pila de Deshacer (Ctrl+Z)
-        document.execCommand('delete', false, null);
-        
-        // En algunos navegadores execCommand('delete') sobre bloques pesados 
-        // a veces vacía el nodo en lugar de borrarlo entero. Limpiamos si quedó algo.
-        if (nodeToDelete.parentNode) {
-            nodeToDelete.remove();
+        if (sel && sel.rangeCount > 0) {
+            sel.removeAllRanges();
         }
     }
 
