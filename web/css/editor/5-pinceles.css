@@ -285,7 +285,7 @@ main div[contenteditable] {
     scroll-margin-top: 75px;
 }
 
-main div[contenteditable] a {
+main div[contenteditable] a:not(.button-floating) {
     cursor: text;
 }
 
