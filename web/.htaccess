@@ -1,6 +1,7 @@
 # === ANTI-DDOS RULES - Global Protection ===
 <IfModule mod_rewrite.c>
 RewriteEngine On
+ErrorDocument 403 "Forbidden"
 
 # Block requests to /cards/ with long query strings (DDoS pattern: randomized filters)
 RewriteCond %{REQUEST_URI} ^/cards/ [NC]
