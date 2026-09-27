@@ -5,30 +5,9 @@
     /* ========================================= */
     
     @page {
+        size: A4;
         margin: 0mm;
     }
-    
-    @page a5-portrait {
-        size: A5 portrait;
-        margin: 0mm;
-    }
-    @page a5-landscape {
-        size: A5 landscape;
-        margin: 0mm;
-    }
-    @page a4-portrait {
-        size: A4 portrait;
-        margin: 0mm;
-    }
-    @page a4-landscape {
-        size: A4 landscape;
-        margin: 0mm;
-    }
-
-    main.a5.portrait { page: a5-portrait; }
-    main.a5.landscape { page: a5-landscape; }
-    main.a4.portrait { page: a4-portrait; }
-    main.a4.landscape { page: a4-landscape; }
 
     /* ========================================= */
     /* 1. LIMPIEZA DE IMPRESIÓN Y COLOR          */
@@ -47,7 +26,7 @@
         min-height: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
-        background-color: transparent !important;
+        background-color: white !important;
         box-shadow: none !important;
     }
 
@@ -55,7 +34,7 @@
     article {
         margin: 0 !important;
         padding: 0 !important;
-        background-color: transparent !important;
+        background-color: white !important;
         box-shadow: none !important;
     }
 
@@ -97,6 +76,20 @@
         break-before: page;
     }
 
+
+    /* ========================================= */
+    /* 3. APLICAR MEDIDAS A4 A A5                */
+    /* ========================================= */
+
+    main.a5 > div,
+    .a5 > div,
+    main.a5 > div article,
+    .a5 > div article {
+        width: 210mm !important;
+        height: 297mm !important;
+        transform: none !important;
+        zoom: normal !important;
+    }
 
     /* ========================================= */
     /* 4. MODO LIBRITO (BOOKLET MODE)            */
