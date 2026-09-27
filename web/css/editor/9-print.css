@@ -34,14 +34,13 @@
     article {
         margin: 0 !important;
         padding: 0 !important;
-        background-color: white !important;
         box-shadow: none !important;
     }
 
-    /* La portada (primera página) tiene fondo negro para evitar la línea blanca inferior por redondeo de píxeles */
-    main > div:first-child,
-    main > div:first-child article {
-        background-color: black !important;
+    /* Evitar el gap inferior de subpíxeles o del baseline de texto en las imágenes */
+    article img, section img {
+        display: block;
+        max-width: 100%;
     }
 
     main > div {
