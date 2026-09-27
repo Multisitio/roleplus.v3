@@ -38,6 +38,12 @@
         box-shadow: none !important;
     }
 
+    /* La portada (primera página) tiene fondo negro para evitar la línea blanca inferior por redondeo de píxeles */
+    main > div:first-child,
+    main > div:first-child article {
+        background-color: black !important;
+    }
+
     main > div {
         margin: 0 !important;
         padding: 0 !important;
