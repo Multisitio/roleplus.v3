@@ -23,9 +23,11 @@
         <?php endif; ?>
         <?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>
         <style>
-        @page { 
-            size: <?= $format_page ?>; 
-            margin: 0mm;
+        @media print {
+            @page { 
+                size: <?= $format_page ?>; 
+                margin: 0mm;
+            }
         }
         </style>
 	</head>
