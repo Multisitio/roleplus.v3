@@ -22,7 +22,7 @@
             <?php endif; ?>
         <?php endif; ?>
         <?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>
-
+        <link href="/css/print-formats/<?= str_replace(' ', '-', $format_page) ?>.css" rel="stylesheet" media="print">
 	</head>
 	<body>
 		<button class="button-floating top right" data-show=".index">
