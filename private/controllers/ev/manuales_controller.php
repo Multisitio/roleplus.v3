@@ -390,6 +390,7 @@ class ManualesController extends EvController
         $this->plantilla_manual = (new Plantillas)->obtenerOCrearPorNombre($this->manual->plantilla, Session::get('idu'), $this->manual->plantilla);
         $this->ajustes = $this->plantilla_manual->getSettings();
         
+        $this->format_page = strtolower($this->manual->formato) . ($this->manual->orientacion === 'h' ? ' landscape' : ' portrait');
         $this->format_print = strtoupper($this->manual->formato) . ($this->manual->orientacion === 'h' ? ' landscape' : '');
         $this->format_booklet = strtoupper($this->manual->formato === 'a5' ? 'a4' : ($this->manual->formato === 'a4' ? 'a3' : 'ledger')) . ' landscape';
         $this->format_kdp = Manuales::getKdpFormat($this->manual);
