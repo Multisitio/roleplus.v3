@@ -22,14 +22,7 @@
             <?php endif; ?>
         <?php endif; ?>
         <?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>
-        <style>
-        @media print {
-            @page { 
-                size: <?= $format_page ?>; 
-                margin: 0mm;
-            }
-        }
-        </style>
+
 	</head>
 	<body>
 		<button class="button-floating top right" data-show=".index">
