@@ -6,7 +6,7 @@
 
 		<title><?=h($manual->nombre)?></title>
 
-        <link href="/css/editor.min.css?v=<?=$version?>" rel="stylesheet">
+        <link href="/css/editor.min.css?v=<?=filemtime('css/editor.min.css')?>" rel="stylesheet">
 
         <?php 
         $plantilla_css = "css/" . h($manual->plantilla) . ".min.css";
@@ -22,6 +22,11 @@
             <?php endif; ?>
         <?php endif; ?>
         <?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>
+        <style>
+        @media print {
+            @page { size: <?= $format_page ?>; }
+        }
+        </style>
 	</head>
 	<body>
 		<button class="button-floating top right" data-show=".index">
@@ -77,6 +82,6 @@
 
 		<?php View::partial('color_picker_ps'); ?>
 
-		<script src="/javascript/editor.min.js?v=<?=$version?>"></script>
+		<script src="/javascript/editor.min.js?v=<?=filemtime('javascript/editor.min.js')?>"></script>
 	</body>
 </html>

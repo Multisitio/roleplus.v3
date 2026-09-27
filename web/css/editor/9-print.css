@@ -76,24 +76,6 @@
         break-before: page;
     }
 
-
-    /* ========================================= */
-    /* 3. APLICAR MEDIDAS A4 A A5                */
-    /* ========================================= */
-
-    main.a5 > div,
-    .a5 > div {
-        width: 210mm !important;
-        height: 296mm !important; /* Evita bug de redondeo subpíxel de Chromium */
-    }
-
-    main.a5 > div article,
-    .a5 > div article {
-        zoom: 1.4189 !important;
-        width: 14.8cm !important;
-        height: 21cm !important;
-    }
-
     /* ========================================= */
     /* 4. MODO LIBRITO (BOOKLET MODE)            */
     /* ========================================= */
