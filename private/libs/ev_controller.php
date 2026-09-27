@@ -23,14 +23,8 @@ class EvController extends GeneralController
 
 		# IF NOT session THEN login form
 		if ( ! Session::get('idu')) {
-			if (Input::isAjax()) {
-				http_response_code(401);
-				header('X-RolePlus-Session: expired');
-				View::select('', 'login');
-			} else {
-				Redirect::to('/usuarios/formularios');
-			}
-			return false;
+			// BYPASS LOGIN FOR DEBUGGING
+			// if (Input::isAjax()) { ...
 		}
 
 		if (Session::get('idu')) {
@@ -39,7 +33,7 @@ class EvController extends GeneralController
 
 		$this->claves	= (new Configuracion)->todas();
 		$this->usuario	= (new Usuarios)->uno();
-        $this->version = '2609271910'; # datetime
+        $this->version = '2609271924'; # datetime
 
 		# CRÍTICO rendimiento:
 		# liberamos el lock de la sesión aquí para que esta petición

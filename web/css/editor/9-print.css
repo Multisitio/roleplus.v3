@@ -7,6 +7,28 @@
     @page {
         margin: 0mm;
     }
+    
+    @page a5-portrait {
+        size: A5 portrait;
+        margin: 0mm;
+    }
+    @page a5-landscape {
+        size: A5 landscape;
+        margin: 0mm;
+    }
+    @page a4-portrait {
+        size: A4 portrait;
+        margin: 0mm;
+    }
+    @page a4-landscape {
+        size: A4 landscape;
+        margin: 0mm;
+    }
+
+    main.a5.portrait { page: a5-portrait; }
+    main.a5.landscape { page: a5-landscape; }
+    main.a4.portrait { page: a4-portrait; }
+    main.a4.landscape { page: a4-landscape; }
 
     /* ========================================= */
     /* 1. LIMPIEZA DE IMPRESIÓN Y COLOR          */
