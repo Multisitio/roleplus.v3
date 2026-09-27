@@ -82,14 +82,13 @@
 
     /* Solo aplicamos la transformación y el forzado de contenedor si el documento es A5 */
     main.a5 > div,
-    .a5 > div {
-        width: 210mm !important;
-        height: 296mm !important; /* Evita bug de redondeo subpíxel de Chromium (1123px vs 1122.5px) */
-    }
-
+    .a5 > div,
     main.a5 > div article,
     .a5 > div article {
-        zoom: 1.4189 !important;
+        width: 210mm !important;
+        height: 296mm !important; /* Evita bug de redondeo subpíxel de Chromium (1123px vs 1122.5px) */
+        transform: none !important;
+        zoom: normal !important;
     }
 
     /* ========================================= */
