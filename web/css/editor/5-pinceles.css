@@ -441,7 +441,8 @@ main.show-all-outlines div[contenteditable] :is(p, h1, h2, h3, h4, h5, h6, block
 }
 
 @media print {
-    [data-editor-helper] {
+    /* El salto de línea mantiene el espacio que ocupa el bloque vacío en pantalla. */
+    [data-editor-helper="badge"] {
         display: none !important;
     }
 }

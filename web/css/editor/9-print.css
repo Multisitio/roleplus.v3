@@ -21,29 +21,13 @@
         box-shadow: none !important;
     }
 
-    body > div,
-    article {
-        margin: 0 !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-    }
-
-    /* Evitar el gap inferior de subpíxeles o del baseline de texto en las imágenes */
-    article img, section img {
-        display: block;
-        max-width: 100%;
-    }
-
+    /* Quitar solo la separación entre hojas, sin alterar su contenido o fondos. */
     main > div {
         margin: 0 !important;
-        padding: 0 !important;
-        background-color: var(--background-color, white) !important;
         box-shadow: none !important;
     }
 
-    a:has(img),
-    aside,
-    nav,
+    body > :not(main),
     .button-floating,
     .no-print,
     .wysiwyg,

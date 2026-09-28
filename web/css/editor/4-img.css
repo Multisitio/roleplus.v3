@@ -16,15 +16,7 @@ main.a5.landscape article img { max-height: 14.7cm; }
 main.letter.portrait article img { max-height: 10.9in; }
 main.letter.landscape article img { max-height: 8.4in; }
 
-@media print { img { max-height: 98vh !important; } }
-
-@media print { img { page-break-inside: avoid; break-inside: avoid; max-height: 98vh; } }
-
 @media print {
+    /* Conservar las dimensiones del editor: vh reduce las portadas al imprimir. */
     img { page-break-inside: avoid; break-inside: avoid; }
-    main.a4.portrait article img { max-height: 29.6cm; }
-    main.a4.landscape article img { max-height: 20.9cm; }
-    main.a5.landscape article img { max-height: 14.7cm; }
-    main.letter.portrait article img { max-height: 10.9in; }
-    main.letter.landscape article img { max-height: 8.4in; }
 }
