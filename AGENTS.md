@@ -58,3 +58,8 @@
 - El editor de manuales no debe inyectar espacios de ancho cero (U+200B /
   &ZeroWidthSpace;) ni dejar atributos class vacios. Verificar el DOM durante
   la edicion y el HTML enviado al guardar, conservando las clases reales.
+
+- Al validar la impresion, comprobar tambien la ultima hoja y los nodos de
+  texto directamente bajo body, incluidos U+FEFF/BOM de parciales PHP. Una
+  copia serializada del DOM puede perder caracteres invisibles: preservarlos
+  explicitamente en la prueba y contrastar el PDF con el manual publicado.
