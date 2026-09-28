@@ -61,5 +61,6 @@
 
 - Al validar la impresion, comprobar tambien la ultima hoja y los nodos de
   texto directamente bajo body, incluidos U+FEFF/BOM de parciales PHP. Una
-  copia serializada del DOM puede perder caracteres invisibles: preservarlos
-  explicitamente en la prueba y contrastar el PDF con el manual publicado.
+  copia serializada del DOM puede estar truncada: verificar su longitud y
+  cierre HTML, extraerla por bloques cuando sea necesario y preservar los
+  caracteres invisibles. Contrastar el PDF con el manual publicado.
