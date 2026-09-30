@@ -17,6 +17,12 @@
   miniaturas mientras exista contenido antiguo que dependa de ellos.
 - Todos los cambios deben incluir su propio commit y push ejecutados por el agente. No delegar esta tarea al usuario.
 
+- Ante fallos masivos del RSS de videos, no dar por resuelta la incidencia solo
+  porque algunos canales se recuperen con reintentos de segundos. Comparar
+  los mismos canales desde produccion a la hora del cron y en otra franja,
+  revisar el horario real de MTGsearch y verificar una carga completa tras
+  el ajuste. Distinguir fallos del origen de una correccion verificada.
+
 - La sesión de un usuario activo debe renovarse de forma deslizante dentro de
   sus peticiones normales, con una frecuencia limitada. No añadir pings,
   polling ni peticiones keep-alive desde JavaScript para conservarla.
