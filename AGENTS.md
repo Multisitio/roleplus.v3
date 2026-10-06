@@ -70,3 +70,12 @@
   copia serializada del DOM puede estar truncada: verificar su longitud y
   cierre HTML, extraerla por bloques cuando sea necesario y preservar los
   caracteres invisibles. Contrastar el PDF con el manual publicado.
+
+
+- Correccion del usuario (2026-10-06): `main` es la raiz de la plantilla del
+  manual; no restaurar una clase `.plantilla` para resolver selectores antiguos.
+  Adaptar los selectores a `main`, incluidas combinaciones como `main.a5`.
+- Antes de recomendar mantener plantillas legacy, inventariar que estilos
+  reproduce el sistema de BD y que funciones faltan, valorando cada ampliacion.
+  El destino preferido para `srd20`, `for_the_quest` y `dragonbane` es una
+  migracion al sistema de BD, evitando mantener dos sistemas de plantillas.
