@@ -1,0 +1,2067 @@
+{
+  "nombre": "srd20",
+  "variables": {
+    "--color-bg-accent": "lightyellow",
+    "--color-text-header": "#58180D",
+    "--color-border-primary": "#C0AD6A",
+    "--color-text-footnote": "darkred",
+    "--color-text-emphasis": "darkred",
+    "--color-accent-gold": "gold",
+    "--color-card-text": "#634a39",
+    "--bg-table-stripe": "rgba(255, 255, 255, .3)",
+    "--font-body": "\"BookInsanity\",serif",
+    "--font-title": "\"MrEaves\",sans-serif",
+    "--font-table": "\"RecursiveVF\",sans-serif",
+    "--font-decorative": "\"BerkshireSwash\",cursive",
+    "--font-handwritten": "\"WalterTurncoat\",cursive",
+    "--font-initial": "\"SolberaImitation\",serif",
+    "--bg-page": "url(\"/img/editor/srd20/72/parchment_bg.jpg\")",
+    "--bg-blockquote": "url(\"/img/editor/srd20/72/silver_parchment.jpg\")",
+    "--bg-footer": "url(\"/img/editor/srd20/72/footer3.png\")",
+    "--border-image-blockquote": "url(\"/img/editor/srd20/72/border_fancy.jpg\")",
+    "--shadow-blockquote": "0 0 10px 0 #888",
+    "--shadow-text-light": "1px 1px 0 white",
+    "--shadow-text-glow": "0 0 3px white",
+    "--hb_color_accent": "var(--color-bg-accent)"
+  },
+  "ajustes": {
+    "--h1-family": "MrEaves",
+    "--h1-size": "34px",
+    "--h1-color": "#58180d",
+    "--h2-family": "MrEaves",
+    "--h2-size": "26px",
+    "--h2-color": "#58180d",
+    "--h3-family": "MrEaves",
+    "--h3-size": "22px",
+    "--h3-color": "#58180d",
+    "--h4-family": "MrEaves",
+    "--h4-size": "16px",
+    "--h4-color": "#58180d",
+    "--h5-family": "WalterTurncoat",
+    "--h5-size": "13px",
+    "--h5-color": "#ffffff",
+    "--h6-family": "WalterTurncoat",
+    "--h6-size": "11px",
+    "--h6-color": "#ffffff",
+    "--body-family": "BookInsanity, serif",
+    "--body-size": "13px",
+    "--body-color": "#ffffff",
+    "--body-variant": "normal",
+    "--body-weight": "normal",
+    "--body-align": "left",
+    "--body-style": "normal",
+    "--body-transform": "none",
+    "--small-variant": "normal",
+    "--small-weight": "normal",
+    "--small-align": "left",
+    "--small-style": "normal",
+    "--small-transform": "none",
+    "--h1-variant": "normal",
+    "--h1-weight": "800",
+    "--h1-align": "left",
+    "--h1-style": "normal",
+    "--h1-transform": "none",
+    "--h2-variant": "normal",
+    "--h2-weight": "800",
+    "--h2-align": "left",
+    "--h2-style": "normal",
+    "--h2-transform": "none",
+    "--h3-variant": "normal",
+    "--h3-weight": "800",
+    "--h3-align": "left",
+    "--h3-style": "normal",
+    "--h3-transform": "none",
+    "--h4-variant": "normal",
+    "--h4-weight": "800",
+    "--h4-align": "left",
+    "--h4-style": "normal",
+    "--h4-transform": "none",
+    "--h5-variant": "normal",
+    "--h5-weight": "700",
+    "--h5-align": "left",
+    "--h5-style": "normal",
+    "--h5-transform": "none",
+    "--h6-variant": "normal",
+    "--h6-weight": "700",
+    "--h6-align": "left",
+    "--h6-style": "normal",
+    "--h6-transform": "none",
+    "--background-image": "url(\"/img/editor/srd20/72/parchment_bg.jpg\")",
+    "--background-image-even": "url(\"/img/editor/srd20/72/parchment_bg.jpg\")",
+    "--footer-imagen": "url(\"/img/editor/srd20/72/footer3.png\")",
+    "--footer-height": "43px",
+    "--footer-page-x": "55px",
+    "--footer-page-y": "16px",
+    "--list-style-checkbox": "\"❑ \"",
+    "--header-padding-top": "49px",
+    "--header-padding-left": "49px",
+    "--header-padding-right": "49px",
+    "--header-padding-bottom": "0px",
+    "--section-padding-top": "0px",
+    "--section-padding-left": "49px",
+    "--section-padding-right": "49px",
+    "--section-padding-bottom": "0px",
+    "--p-gap": "10px",
+    "--body-margin-top": "0px",
+    "--h1-margin-top": "10px",
+    "--h2-margin-top": "5px",
+    "--h3-margin-top": "5px",
+    "--h4-margin-top": "5px",
+    "--h5-margin-top": "5px",
+    "--h6-margin-top": "5px",
+    "--small-family": "BookInsanity, serif",
+    "--small-size": "83.33%",
+    "--small-color": "#ffffff",
+    "--small-margin-top": "0px",
+    "--dropcap-family": "SolberaImitation",
+    "--dropcap-size": "132px",
+    "--dropcap-color": "rgba(0, 0, 0, 0)",
+    "--dropcap-weight": "normal",
+    "--dropcap-style": "normal",
+    "--dropcap-variant": "normal",
+    "--dropcap-align": "left",
+    "--dropcap-transform": "none",
+    "--dropcap-margin-top": "-11px",
+    "--header-margin-top": "0px",
+    "--header-margin-right": "0px",
+    "--header-margin-bottom": "0px",
+    "--header-margin-left": "0px",
+    "--section-margin-top": "0px",
+    "--section-margin-right": "0px",
+    "--section-margin-bottom": "0px",
+    "--section-margin-left": "0px",
+    "--footer-padding-top": "23px",
+    "--footer-padding-right": "70px",
+    "--footer-padding-bottom": "0px",
+    "--footer-padding-left": "70px",
+    "--footer-margin-top": "0px",
+    "--footer-margin-right": "0px",
+    "--footer-margin-bottom": "0px",
+    "--footer-margin-left": "0px",
+    "--p-padding-top": "0px",
+    "--p-padding-right": "0px",
+    "--p-padding-bottom": "0px",
+    "--p-padding-left": "0px",
+    "--p-margin-top": "10px",
+    "--p-margin-right": "0px",
+    "--p-margin-bottom": "0px",
+    "--p-margin-left": "0px",
+    "--list-padding-top": "0px",
+    "--list-padding-right": "0px",
+    "--list-padding-bottom": "0px",
+    "--list-padding-left": "15px",
+    "--list-margin-top": "5px",
+    "--list-margin-right": "0px",
+    "--list-margin-bottom": "10px",
+    "--list-margin-left": "0px",
+    "--blockquote-padding-top": "4px",
+    "--blockquote-padding-right": "2px",
+    "--blockquote-padding-bottom": "4px",
+    "--blockquote-padding-left": "2px",
+    "--blockquote-margin-top": "0px",
+    "--blockquote-margin-right": "0px",
+    "--blockquote-margin-bottom": "0px",
+    "--blockquote-margin-left": "0px",
+    "--table-padding-top": "0px",
+    "--table-padding-right": "0px",
+    "--table-padding-bottom": "0px",
+    "--table-padding-left": "0px",
+    "--table-margin-top": "10px",
+    "--table-margin-right": "0px",
+    "--table-margin-bottom": "0px",
+    "--table-margin-left": "0px",
+    "--dropcap-margin-right": "10px",
+    "--dropcap-margin-bottom": "0px",
+    "--dropcap-margin-left": "-40px",
+    "--table-td-padding-x": "3px",
+    "--table-td-padding-y": "3px",
+    "--table-th-border-bottom-width": "2px",
+    "--table-th-border-bottom-color": "#c0ad6a",
+    "--table-col1-border-right-width": "0px",
+    "--table-col1-border-right-color": "#ffffff",
+    "--blockquote-border-left-width": "5.6px",
+    "--blockquote-border-left-color": "#ffffff",
+    "--a-color": "#8b0000",
+    "--table-zebra-color": "#ffffff",
+    "--table-zebra-opacity": "30",
+    "--componentes-capitular-selector": "main :is(h1 + p,:is(header,section):has(h1) + section > div:first-child > p:first-child)::first-letter"
+  },
+  "reglas": [
+    {
+      "selector": "@font-face /* bloque 0 */",
+      "peso": 0,
+      "declarations": [
+        [
+          "font-family",
+          "BerkshireSwash"
+        ],
+        [
+          "src",
+          "url(\"/fonts/berkshire_swash.woff2\")"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 1 */",
+      "peso": 1,
+      "declarations": [
+        [
+          "font-family",
+          "BookInsanity"
+        ],
+        [
+          "src",
+          "url(\"/fonts/book_insanity.woff2\")"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 2 */",
+      "peso": 2,
+      "declarations": [
+        [
+          "font-family",
+          "BookInsanity"
+        ],
+        [
+          "src",
+          "url(\"/fonts/book_insanity_bold.woff2\")"
+        ],
+        [
+          "font-weight",
+          "700"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 3 */",
+      "peso": 3,
+      "declarations": [
+        [
+          "font-family",
+          "BookInsanity"
+        ],
+        [
+          "src",
+          "url(\"/fonts/book_insanity_italic.woff2\")"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "font-style",
+          "italic"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 4 */",
+      "peso": 4,
+      "declarations": [
+        [
+          "font-family",
+          "BookInsanity"
+        ],
+        [
+          "src",
+          "url(\"/fonts/book_insanity_bold_italic.woff2\")"
+        ],
+        [
+          "font-weight",
+          "700"
+        ],
+        [
+          "font-style",
+          "italic"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 5 */",
+      "peso": 5,
+      "declarations": [
+        [
+          "font-family",
+          "MrEaves"
+        ],
+        [
+          "src",
+          "url(\"/fonts/mr_eaves_small_caps.woff2\")"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 6 */",
+      "peso": 6,
+      "declarations": [
+        [
+          "font-family",
+          "RecursiveVF"
+        ],
+        [
+          "src",
+          "url(\"/fonts/recursive_vf.woff2\")"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 7 */",
+      "peso": 7,
+      "declarations": [
+        [
+          "font-family",
+          "SolberaImitation"
+        ],
+        [
+          "src",
+          "url(\"/fonts/solbera_imitation.woff2\")"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 8 */",
+      "peso": 8,
+      "declarations": [
+        [
+          "font-family",
+          "WalterTurncoat"
+        ],
+        [
+          "src",
+          "url(\"/fonts/walter_turncoat_regular.woff2\")"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(ol,ul) /* bloque 9 */",
+      "peso": 10,
+      "declarations": [
+        [
+          "padding-left",
+          "15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul /* bloque 10 */",
+      "peso": 11,
+      "declarations": [
+        [
+          "list-style",
+          "none"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul>li::before /* bloque 11 */",
+      "peso": 12,
+      "declarations": [
+        [
+          "content",
+          "\"✦ \""
+        ],
+        [
+          "margin-left",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul>li li::before /* bloque 12 */",
+      "peso": 13,
+      "declarations": [
+        [
+          "content",
+          "\"⮞ \""
+        ],
+        [
+          "margin-left",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.checkbox li::before /* bloque 13 */",
+      "peso": 14,
+      "declarations": [
+        [
+          "content",
+          "\"❑ \""
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.radio li::before /* bloque 14 */",
+      "peso": 15,
+      "declarations": [
+        [
+          "content",
+          "\"🔾 \""
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"] /* bloque 15 */",
+      "peso": 16,
+      "declarations": [
+        [
+          "display",
+          "grid"
+        ],
+        [
+          "grid-template-columns",
+          "auto 1fr auto"
+        ],
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "white-space",
+          "nowrap"
+        ],
+        [
+          "text-decoration",
+          "none"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"]:has(span) span:first-child /* bloque 16 */",
+      "peso": 17,
+      "declarations": [
+        [
+          "grid-column",
+          "1"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"]:has(span) span:last-child /* bloque 17 */",
+      "peso": 18,
+      "declarations": [
+        [
+          "grid-column",
+          "3"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"]::after /* bloque 18 */",
+      "peso": 19,
+      "declarations": [
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "grid-column",
+          "2"
+        ],
+        [
+          "border-bottom",
+          "1px dotted currentColor"
+        ],
+        [
+          "margin",
+          "-10px 3px 0"
+        ],
+        [
+          "width",
+          "calc(100% - 5px)"
+        ],
+        [
+          "height",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :is(em,strong) /* bloque 19 */",
+      "peso": 20,
+      "declarations": [
+        [
+          "color",
+          "#8b0000"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band /* bloque 20 */",
+      "peso": 21,
+      "declarations": [
+        [
+          "background",
+          "var(--hb_color_accent)"
+        ],
+        [
+          "padding",
+          "5px 10px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "width",
+          "90%"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left /* bloque 21 */",
+      "peso": 22,
+      "declarations": [
+        [
+          "border-radius",
+          "0 5px 5px 0"
+        ],
+        [
+          "box-shadow",
+          "3px 2px 5px #666"
+        ],
+        [
+          "margin-left",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.right /* bloque 22 */",
+      "peso": 23,
+      "declarations": [
+        [
+          "border-radius",
+          "5px 0 0 5px"
+        ],
+        [
+          "box-shadow",
+          "-3px 2px 5px #666"
+        ],
+        [
+          "margin-right",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band>:first-child /* bloque 23 */",
+      "peso": 24,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "margin",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left>:first-child /* bloque 24 */",
+      "peso": 25,
+      "declarations": [
+        [
+          "flex-direction",
+          "row-reverse"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band div /* bloque 25 */",
+      "peso": 26,
+      "declarations": [
+        [
+          "border-bottom",
+          "10px solid transparent"
+        ],
+        [
+          "border-top",
+          "13px solid #000"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "-22px"
+        ],
+        [
+          "z-index",
+          "-1"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left div /* bloque 26 */",
+      "peso": 27,
+      "declarations": [
+        [
+          "border-left",
+          "15px solid transparent"
+        ],
+        [
+          "left",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.right div /* bloque 27 */",
+      "peso": 28,
+      "declarations": [
+        [
+          "border-right",
+          "15px solid transparent"
+        ],
+        [
+          "right",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote /* bloque 28 */",
+      "peso": 29,
+      "declarations": [
+        [
+          "border-style",
+          "solid"
+        ],
+        [
+          "border-width",
+          "8px 6px"
+        ],
+        [
+          "background-color",
+          "var(--color-bg-accent)"
+        ],
+        [
+          "background-image",
+          "var(--bg-blockquote)"
+        ],
+        [
+          "border-image",
+          "var(--border-image-blockquote) 14 round"
+        ],
+        [
+          "border-image-outset",
+          "0px 2px"
+        ],
+        [
+          "background-blend-mode",
+          "overlay"
+        ],
+        [
+          "background-attachment",
+          "fixed"
+        ],
+        [
+          "box-shadow",
+          "var(--shadow-blockquote)"
+        ],
+        [
+          "padding",
+          "4px 2px"
+        ],
+        [
+          "margin-left",
+          "auto"
+        ],
+        [
+          "margin-right",
+          "auto"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>blockquote :first-child /* bloque 29 */",
+      "peso": 30,
+      "declarations": [
+        [
+          "margin-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main fieldset /* bloque 30 */",
+      "peso": 31,
+      "declarations": [
+        [
+          "border",
+          "2px solid var(--color-border-primary)"
+        ],
+        [
+          "margin",
+          "0"
+        ],
+        [
+          "padding",
+          "10px"
+        ]
+      ]
+    },
+    {
+      "selector": "main legend /* bloque 31 */",
+      "peso": 32,
+      "declarations": [
+        [
+          "border",
+          "2px solid var(--color-border-primary)"
+        ],
+        [
+          "padding",
+          "0 5px"
+        ]
+      ]
+    },
+    {
+      "selector": "main article footer:before /* bloque 32 */",
+      "peso": 33,
+      "declarations": [
+        [
+          "background-image",
+          "var(--bg-footer)"
+        ],
+        [
+          "background-size",
+          "100% auto"
+        ],
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "0"
+        ],
+        [
+          "left",
+          "0"
+        ],
+        [
+          "height",
+          "50px"
+        ],
+        [
+          "width",
+          "100%"
+        ],
+        [
+          "transform",
+          "scaleX(-1)"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a5 article footer:before /* bloque 33 */",
+      "peso": 34,
+      "declarations": [
+        [
+          "filter",
+          "contrast(.5)"
+        ],
+        [
+          "height",
+          "43px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div:nth-child(2n) footer:before /* bloque 34 */",
+      "peso": 35,
+      "declarations": [
+        [
+          "transform",
+          "scaleX(1)"
+        ]
+      ]
+    },
+    {
+      "selector": "main article footer /* bloque 35 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "color",
+          "var(--color-text-footnote)"
+        ],
+        [
+          "font-size",
+          ".8em"
+        ],
+        [
+          "height",
+          "43px"
+        ],
+        [
+          "width",
+          "100%"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "0"
+        ],
+        [
+          "left",
+          "0"
+        ],
+        [
+          "z-index",
+          "1"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer.color-invert /* bloque 36 */",
+      "peso": 37,
+      "declarations": [
+        [
+          "color",
+          "var(--color-accent-gold)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div:nth-child(odd) footer /* bloque 37 */",
+      "peso": 38,
+      "declarations": [
+        [
+          "padding-inline",
+          "70px"
+        ],
+        [
+          "text-align",
+          "left"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a5>div:nth-child(odd) footer /* bloque 38 */",
+      "peso": 39,
+      "declarations": [
+        [
+          "padding-inline",
+          "44px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div:nth-child(2n) footer /* bloque 39 */",
+      "peso": 40,
+      "declarations": [
+        [
+          "padding-inline",
+          "70px"
+        ],
+        [
+          "text-align",
+          "right"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a5>div:nth-child(2n) footer /* bloque 40 */",
+      "peso": 41,
+      "declarations": [
+        [
+          "padding-inline",
+          "44px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div /* bloque 41 */",
+      "peso": 42,
+      "declarations": [
+        [
+          "counter-increment",
+          "page"
+        ]
+      ]
+    },
+    {
+      "selector": "main article footer:after /* bloque 42 */",
+      "peso": 43,
+      "declarations": [
+        [
+          "content",
+          "counter(page)"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "16px"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "width",
+          "55px"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a5 article footer:after /* bloque 43 */",
+      "peso": 44,
+      "declarations": [
+        [
+          "bottom",
+          "17px"
+        ],
+        [
+          "width",
+          "36px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div:nth-child(odd) footer:after /* bloque 44 */",
+      "peso": 45,
+      "declarations": [
+        [
+          "left",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div:nth-child(2n) footer:after /* bloque 45 */",
+      "peso": 46,
+      "declarations": [
+        [
+          "right",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer /* bloque 46 */",
+      "peso": 47,
+      "declarations": [
+        [
+          "text-transform",
+          "uppercase"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1 /* bloque 47 */",
+      "peso": 48,
+      "declarations": [
+        [
+          "font-family",
+          "MrEaves"
+        ],
+        [
+          "font-weight",
+          "800"
+        ],
+        [
+          "color",
+          "var(--color-text-header)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2 /* bloque 48 */",
+      "peso": 48,
+      "declarations": [
+        [
+          "font-family",
+          "MrEaves"
+        ],
+        [
+          "font-weight",
+          "800"
+        ],
+        [
+          "color",
+          "var(--color-text-header)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3 /* bloque 49 */",
+      "peso": 48,
+      "declarations": [
+        [
+          "font-family",
+          "MrEaves"
+        ],
+        [
+          "font-weight",
+          "800"
+        ],
+        [
+          "color",
+          "var(--color-text-header)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h4 /* bloque 50 */",
+      "peso": 48,
+      "declarations": [
+        [
+          "font-family",
+          "MrEaves"
+        ],
+        [
+          "font-weight",
+          "800"
+        ],
+        [
+          "color",
+          "var(--color-text-header)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1 /* bloque 51 */",
+      "peso": 49,
+      "declarations": [
+        [
+          "font-size",
+          "34px"
+        ],
+        [
+          "line-height",
+          "1em"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "z-index",
+          "1"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1 + p,:is(header,section):has(h1) + section > div:first-child > p:first-child)::first-letter /* bloque 52 */",
+      "peso": 50,
+      "declarations": [
+        [
+          "color",
+          "transparent"
+        ],
+        [
+          "float",
+          "left"
+        ],
+        [
+          "font-family",
+          "SolberaImitation"
+        ],
+        [
+          "font-size",
+          "132px"
+        ],
+        [
+          "line-height",
+          "1em"
+        ],
+        [
+          "margin-block-end",
+          "0"
+        ],
+        [
+          "margin-block-start",
+          "-11px"
+        ],
+        [
+          "margin-inline-end",
+          "10px"
+        ],
+        [
+          "margin-inline-start",
+          "-40px"
+        ],
+        [
+          "padding-left",
+          "40px"
+        ],
+        [
+          "background-image",
+          "linear-gradient(-45deg,#322814,#998250,#322814)"
+        ],
+        [
+          "background-clip",
+          "text"
+        ],
+        [
+          "-webkit-background-clip",
+          "text"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1 + p,:is(header,section):has(h1) + section > div:first-child > p:first-child)+* /* bloque 53 */",
+      "peso": 51,
+      "declarations": [
+        [
+          "clear",
+          "both"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2 /* bloque 54 */",
+      "peso": 52,
+      "declarations": [
+        [
+          "font-size",
+          "26px"
+        ],
+        [
+          "line-height",
+          ".988em"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3 /* bloque 55 */",
+      "peso": 53,
+      "declarations": [
+        [
+          "font-size",
+          "22px"
+        ],
+        [
+          "border-bottom",
+          "2px solid var(--color-border-primary)"
+        ],
+        [
+          "line-height",
+          ".995em"
+        ]
+      ]
+    },
+    {
+      "selector": "main h4 /* bloque 56 */",
+      "peso": 54,
+      "declarations": [
+        [
+          "font-size",
+          "16px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3+h4 /* bloque 57 */",
+      "peso": 55,
+      "declarations": [
+        [
+          "padding-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main h5 /* bloque 58 */",
+      "peso": 56,
+      "declarations": [
+        [
+          "font-family",
+          "WalterTurncoat"
+        ],
+        [
+          "font-size",
+          "13px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h6 /* bloque 59 */",
+      "peso": 57,
+      "declarations": [
+        [
+          "font-family",
+          "WalterTurncoat"
+        ],
+        [
+          "font-size",
+          "11px"
+        ]
+      ]
+    },
+    {
+      "selector": "main hr /* bloque 60 */",
+      "peso": 58,
+      "declarations": [
+        [
+          "border-color",
+          "var(--color-accent-gold)"
+        ]
+      ]
+    },
+    {
+      "selector": "main .cards>img /* bloque 61 */",
+      "peso": 59,
+      "declarations": [
+        [
+          "float",
+          "left"
+        ],
+        [
+          "width",
+          "224px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div-2 /* bloque 62 */",
+      "peso": 60,
+      "declarations": [
+        [
+          "-webkit-mask-image",
+          "linear-gradient(110deg,rgba(0,0,0,0) 62%,rgba(0,0,0,1) 100%)"
+        ],
+        [
+          "mask-image",
+          "linear-gradient(105deg,rgba(0,0,0,0) 62%,rgba(0,0,0,1) 100%)"
+        ]
+      ]
+    },
+    {
+      "selector": "main .cards picture /* bloque 63 */",
+      "peso": 61,
+      "declarations": [
+        [
+          "float",
+          "left"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "height",
+          "320px"
+        ],
+        [
+          "width",
+          "224px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .horizontal-cards picture /* bloque 64 */",
+      "peso": 62,
+      "declarations": [
+        [
+          "display",
+          "block"
+        ],
+        [
+          "height",
+          "224px"
+        ],
+        [
+          "width",
+          "320px"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture [src*=\"card.jpg\"] /* bloque 65 */",
+      "peso": 63,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "0"
+        ],
+        [
+          "top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture [src*=\"/card/defense.jpg\"] /* bloque 66 */",
+      "peso": 64,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "right",
+          "7px"
+        ],
+        [
+          "bottom",
+          "81px"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "width",
+          "28px"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture [src*=\"/card/weight.jpg\"] /* bloque 67 */",
+      "peso": 65,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "7px"
+        ],
+        [
+          "bottom",
+          "81px"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "width",
+          "28px"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture [src*=\"/card/images/\"] /* bloque 68 */",
+      "peso": 66,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "6px"
+        ],
+        [
+          "top",
+          "60px"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "width",
+          "212px"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture [src*=\"/card/coins/\"] /* bloque 69 */",
+      "peso": 67,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "right",
+          "6px"
+        ],
+        [
+          "top",
+          "60px"
+        ],
+        [
+          "z-index",
+          "2"
+        ],
+        [
+          "width",
+          "50px"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture .title /* bloque 70 */",
+      "peso": 68,
+      "declarations": [
+        [
+          "color",
+          "var(--color-card-text)"
+        ],
+        [
+          "font",
+          "14px/1.25 var(--font-decorative)"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "43px"
+        ],
+        [
+          "top",
+          "16px"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "width",
+          "133px"
+        ],
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture .price /* bloque 71 */",
+      "peso": 69,
+      "declarations": [
+        [
+          "color",
+          "var(--color-card-text)"
+        ],
+        [
+          "font",
+          "bold 25px/1.25 var(--font-body)"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "right",
+          "7px"
+        ],
+        [
+          "top",
+          "71px"
+        ],
+        [
+          "z-index",
+          "3"
+        ],
+        [
+          "width",
+          "48px"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "text-shadow",
+          "var(--shadow-text-light)"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture .weight /* bloque 72 */",
+      "peso": 70,
+      "declarations": [
+        [
+          "color",
+          "#fff"
+        ],
+        [
+          "font",
+          "17px/1.25 var(--font-title)"
+        ],
+        [
+          "letter-spacing",
+          "-1px"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "7px"
+        ],
+        [
+          "bottom",
+          "81px"
+        ],
+        [
+          "z-index",
+          "2"
+        ],
+        [
+          "width",
+          "28px"
+        ],
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture .description /* bloque 73 */",
+      "peso": 71,
+      "declarations": [
+        [
+          "color",
+          "#000"
+        ],
+        [
+          "font",
+          "bold 0.6rem/1.25 var(--font-body)"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "20px"
+        ],
+        [
+          "bottom",
+          "14px"
+        ],
+        [
+          "z-index",
+          "2"
+        ],
+        [
+          "width",
+          "184px"
+        ],
+        [
+          "height",
+          "47px"
+        ],
+        [
+          "text-shadow",
+          "var(--shadow-text-glow)"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture .description.long /* bloque 74 */",
+      "peso": 72,
+      "declarations": [
+        [
+          "bottom",
+          "122px"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture .defense /* bloque 75 */",
+      "peso": 73,
+      "declarations": [
+        [
+          "color",
+          "#fff"
+        ],
+        [
+          "font",
+          "12px/1.25 var(--font-title)"
+        ],
+        [
+          "line-height",
+          "10px"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "right",
+          "7px"
+        ],
+        [
+          "bottom",
+          "88px"
+        ],
+        [
+          "z-index",
+          "2"
+        ],
+        [
+          "width",
+          "28px"
+        ],
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(ol,ul) /* bloque 76 */",
+      "peso": 74,
+      "declarations": [
+        [
+          "margin",
+          "5px 0 10px 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main ol.upper-roman /* bloque 77 */",
+      "peso": 75,
+      "declarations": [
+        [
+          "list-style",
+          "upper-roman"
+        ]
+      ]
+    },
+    {
+      "selector": "main ol.lower-latin /* bloque 78 */",
+      "peso": 76,
+      "declarations": [
+        [
+          "list-style",
+          "lower-latin"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul>li::before /* bloque 79 */",
+      "peso": 77,
+      "declarations": [
+        [
+          "color",
+          "var(--color-text-header)"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1,h2,h3,h4,h5,h6,p,table) /* bloque 80 */",
+      "peso": 78,
+      "declarations": [
+        [
+          "margin-block",
+          "10px 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(ol,ul) /* bloque 81 */",
+      "peso": 79,
+      "declarations": [
+        [
+          "margin-block",
+          "5px 10px"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1,h2,h3,h4,h5,h6)+* /* bloque 82 */",
+      "peso": 80,
+      "declarations": [
+        [
+          "margin-top",
+          "5px"
+        ]
+      ]
+    },
+    {
+      "selector": "main :not(blockquote h5):first-child /* bloque 83 */",
+      "peso": 81,
+      "declarations": [
+        [
+          "margin-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main :last-child /* bloque 84 */",
+      "peso": 82,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main li /* bloque 85 */",
+      "peso": 83,
+      "declarations": [
+        [
+          "margin-bottom",
+          "5px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div article /* bloque 86 */",
+      "peso": 84,
+      "declarations": [
+        [
+          "background",
+          "var(--bg-page)"
+        ],
+        [
+          "background-size",
+          "cover"
+        ],
+        [
+          "font",
+          "13px/1.25 var(--font-body)"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a4 article>header /* bloque 87 */",
+      "peso": 85,
+      "declarations": [
+        [
+          "padding",
+          "49px 49px 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a4 article>section /* bloque 88 */",
+      "peso": 86,
+      "declarations": [
+        [
+          "padding",
+          "0 49px"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a5 article>header /* bloque 89 */",
+      "peso": 87,
+      "declarations": [
+        [
+          "padding",
+          "18px 18px 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main.a5 article>section /* bloque 90 */",
+      "peso": 88,
+      "declarations": [
+        [
+          "padding",
+          "18px 18px 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main article>footer /* bloque 91 */",
+      "peso": 89,
+      "declarations": [
+        [
+          "padding",
+          "23px 0 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer:has(>div) /* bloque 92 */",
+      "peso": 90,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "18px"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main header:has(>div) /* bloque 93 */",
+      "peso": 90,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "18px"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main section:has(>div) /* bloque 94 */",
+      "peso": 90,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "18px"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer:has(>div)>div /* bloque 95 */",
+      "peso": 91,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main header:has(>div)>div /* bloque 96 */",
+      "peso": 91,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main section:has(>div)>div /* bloque 97 */",
+      "peso": 91,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main table /* bloque 98 */",
+      "peso": 92,
+      "declarations": [
+        [
+          "border-collapse",
+          "collapse"
+        ],
+        [
+          "border-spacing",
+          "0"
+        ],
+        [
+          "font",
+          "11px/1.18 var(--font-table)"
+        ],
+        [
+          "text-align",
+          "left"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(th,td) /* bloque 99 */",
+      "peso": 93,
+      "declarations": [
+        [
+          "padding",
+          "3px"
+        ],
+        [
+          "vertical-align",
+          "top"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(th) :is(th,td) /* bloque 100 */",
+      "peso": 94,
+      "declarations": [
+        [
+          "border-left",
+          "1px solid var(--color-border-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(th) :is(th,td):first-child /* bloque 101 */",
+      "peso": 95,
+      "declarations": [
+        [
+          "border-left",
+          "none"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(th) th /* bloque 102 */",
+      "peso": 96,
+      "declarations": [
+        [
+          "border-bottom",
+          "2px solid var(--color-border-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(th) :is(th,td):nth-child(2) /* bloque 103 */",
+      "peso": 97,
+      "declarations": [
+        [
+          "border-left",
+          "2px solid var(--color-border-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main tr:nth-child(2n) /* bloque 104 */",
+      "peso": 98,
+      "declarations": [
+        [
+          "background-color",
+          "var(--bg-table-stripe)"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(th) tr:last-child th /* bloque 105 */",
+      "peso": 99,
+      "declarations": [
+        [
+          "border-bottom",
+          "2px solid var(--color-border-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(th) :is(.big-tr:last-child th:first-child,.vertical-line td:first-child) /* bloque 106 */",
+      "peso": 100,
+      "declarations": [
+        [
+          "border-right",
+          "2px solid var(--color-border-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(th) tfoot tr:first-child /* bloque 107 */",
+      "peso": 101,
+      "declarations": [
+        [
+          "border-top",
+          "2px solid var(--color-border-primary)"
+        ]
+      ]
+    }
+  ]
+}

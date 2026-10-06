@@ -378,6 +378,31 @@ class ManualesController extends EvController
     }
 
     # 
+    public function componentes_plantilla($manuales_idu)
+    {
+        if ( ! $this->esEditable($manuales_idu)) {
+            http_response_code(403);
+            return Redirect::to('/ev/manuales');
+        }
+        $this->manual = (new Manuales)->uno($manuales_idu);
+        $this->plantilla = (new Plantillas)->obtenerOCrearPorNombre($this->manual->plantilla, Session::get('idu'), $this->manual->plantilla);
+        if ( ! $this->plantilla->tieneComponentes()) {
+            return Redirect::to('/ev/manuales/formulario/' . $manuales_idu);
+        }
+        if (Input::post('regla_idu')) {
+            try {
+                (new Plantillas_componentes)->guardarValor($this->plantilla->idu, Input::post('regla_idu'), Input::post('valor'));
+                $this->plantilla->compilar();
+                Session::setArray('toast', t('Regla de plantilla guardada.'));
+            } catch (InvalidArgumentException $e) {
+                Session::setArray('toast', t('Valor CSS no válido.'));
+            }
+            return Redirect::to('/ev/manuales/componentes_plantilla/' . $manuales_idu);
+        }
+        $this->componentes = (new Plantillas_componentes)->reglas($this->plantilla->idu);
+        $this->manuales_idu = $manuales_idu;
+    }
+
     public function editor($idioma, $manuales_idu)
     {
         $this->manual = (new Manuales)->uno($manuales_idu);

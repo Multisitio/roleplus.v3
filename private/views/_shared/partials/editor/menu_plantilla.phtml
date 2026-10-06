@@ -5,6 +5,11 @@
 		<?=Ku::icon('arrow-right')?>
 	</button>
 
+    <?php if ($plantilla_manual && $plantilla_manual->tieneComponentes()): ?>
+        <p><a href="/ev/manuales/componentes_plantilla/<?=h($manuales_idu)?>" target="_blank" rel="noopener"><?=t('Editar detalles decorativos de la plantilla')?></a></p>
+        <p><?=t('Los controles muestran los valores base. Las variantes por formato, posición en la página y tarjetas se conservan en los detalles decorativos.')?></p>
+    <?php endif; ?>
+
 	<form id="form-manual-estilos" action="/ev/manuales/guardar_fondo/<?=$manuales_idu?>" method="post" enctype="multipart/form-data">
 		<details class="template-panel">
 			<summary><?=t('Página')?></summary>
@@ -244,15 +249,14 @@
 							<?=t('CAPITULAR')?>: <?=$f_dc['fuente'] ?: t('Sin seleccionar')?>
 						</a>
 						
-						<select class="font-size-select" name="size_dropcap" data-change-ajax>
-							<option value="0px" <?=$f_dc['size'] == '0px' ? 'selected' : ''?>><?=t('Desactivado')?></option>
-							<?php for ($i = 10; $i <= 120; $i += 5): $px = "{$i}px"; ?>
-								<option value="<?=$px?>" <?=$f_dc['size'] == $px ? 'selected' : ''?>><?=$px?></option>
-							<?php endfor; ?>
-						</select>
+                        <select class="font-size-select" name="size_dropcap" data-change-ajax>
+                            <?php foreach (Plantillas::opcionesTamano('dropcap', $f_dc['size']) as $valor): ?>
+                                <option value="<?=h($valor)?>" <?=$f_dc['size'] === $valor ? 'selected' : ''?>><?=$valor === '0px' ? t('Desactivado') : h($valor)?></option>
+                            <?php endforeach; ?>
+                        </select>
 
 						<?php
-						$variant_dc = ($f_dc['weight'] === 'bold' && $f_dc['style'] === 'italic') ? 'bold-italic' : ($f_dc['weight'] === 'bold' ? 'bold' : ($f_dc['style'] === 'italic' ? 'italic' : ''));
+						$variant_dc = (($f_dc['weight'] === 'bold' || is_numeric($f_dc['weight']) && (int)$f_dc['weight'] >= 600) && $f_dc['style'] === 'italic') ? 'bold-italic' : (($f_dc['weight'] === 'bold' || is_numeric($f_dc['weight']) && (int)$f_dc['weight'] >= 600) ? 'bold' : ($f_dc['style'] === 'italic' ? 'italic' : ''));
 						?>
 						<select class="variant-select" name="variant_dropcap" data-change-ajax>
 							<?php foreach ($menu_plantilla['tipografia_controles']['variant'] as $value => $label): ?>
@@ -404,7 +408,7 @@
 				<?php foreach ($menu_plantilla['niveles_tipografia'] as $niv):
 					if ($niv === 'dropcap') continue;
 					$f = $ajustes->tipografia[$niv];
-					$variant = ($f['weight'] === 'bold' && $f['style'] === 'italic') ? 'bold-italic' : ($f['weight'] === 'bold' ? 'bold' : ($f['style'] === 'italic' ? 'italic' : ''));
+					$variant = (($f['weight'] === 'bold' || is_numeric($f['weight']) && (int)$f['weight'] >= 600) && $f['style'] === 'italic') ? 'bold-italic' : (($f['weight'] === 'bold' || is_numeric($f['weight']) && (int)$f['weight'] >= 600) ? 'bold' : ($f['style'] === 'italic' ? 'italic' : ''));
 					
 					$style_a = [];
 					if ($f['fuente']) $style_a[] = "font-family: '{$f['fuente']}'";
@@ -424,24 +428,17 @@
 							<?=strtoupper($niv)?>: <?=$f['fuente'] ?: t('Sin seleccionar')?>
 						</a>
 
-						<select class="font-size-select" name="size_<?=$niv?>" data-change-ajax>
-							<?php if ($niv === 'small'): ?>
-								<?php for ($i = 50; $i <= 150; $i += 5): $val = "{$i}%"; ?>
-									<option value="<?=$val?>" <?=$f['size'] == $val ? 'selected' : ''?>><?=$i?>%</option>
-								<?php endfor; ?>
-							<?php else: ?>
-								<?php for ($i = 8; $i <= 72; $i += 2): $px = "{$i}px"; ?>
-									<option value="<?=$px?>" <?=$f['size'] == $px ? 'selected' : ''?>><?=$px?></option>
-								<?php endfor; ?>
-							<?php endif; ?>
-						</select>
+                        <select class="font-size-select" name="size_<?=$niv?>" data-change-ajax>
+                            <?php foreach (Plantillas::opcionesTamano($niv, $f['size']) as $valor): ?>
+                                <option value="<?=h($valor)?>" <?=$f['size'] === $valor ? 'selected' : ''?>><?=h($valor)?></option>
+                            <?php endforeach; ?>
+                        </select>
 
-						<select class="margin-top-select" name="margin_top_<?=$niv?>" data-change-ajax>
-							<option value="0px" <?=($f['margin_top'] ?? '0px') == '0px' ? 'selected' : ''?>><?=t('Margen: 0')?></option>
-							<?php for ($i = 5; $i <= 100; $i += 5): $px = "{$i}px"; ?>
-								<option value="<?=$px?>" <?=($f['margin_top'] ?? '0px') == $px ? 'selected' : ''?>><?=t('Margen')?>: <?=$px?></option>
-							<?php endfor; ?>
-						</select>
+                        <select class="margin-top-select" name="margin_top_<?=$niv?>" data-change-ajax>
+                            <?php foreach (Plantillas::opcionesMargenTitulo($f['margin_top'] ?? '0px') as $valor): ?>
+                                <option value="<?=h($valor)?>" <?=($f['margin_top'] ?? '0px') === $valor ? 'selected' : ''?>><?=t('Margen')?>: <?=h($valor)?></option>
+                            <?php endforeach; ?>
+                        </select>
 
 						<?php foreach (['variant', 'align', 'transform', 'decoration'] as $control):
 							$current = $control === 'variant' ? $variant : $f[$control];

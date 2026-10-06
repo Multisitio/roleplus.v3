@@ -8,17 +8,13 @@
 
         <link href="/css/editor.min.css?v=<?=filemtime('css/editor.min.css')?>" rel="stylesheet">
 
-        <?php 
-        $plantilla_css = "css/" . h($manual->plantilla) . ".min.css";
-        if (file_exists($plantilla_css)): ?>
-            <link href="/<?= $plantilla_css ?>?<?= filemtime($plantilla_css) ?>" rel="stylesheet">
-        <?php endif; ?>
-
         <?php if ($plantilla_manual): ?>
             <link id="estilos-personalizados" href="<?= $plantilla_manual->getCssUrl() ?>" rel="stylesheet">
+            <?php if ( ! $plantilla_manual->tieneComponentes()): ?>
             <style id="estilos-personalizados-inline"><?= $plantilla_manual->cssPersonalizado() ?></style>
             <?php if (isset($ajustes->css_fuentes)): ?>
                 <style id="fuentes-personalizadas"><?= $ajustes->css_fuentes ?></style>
+            <?php endif; ?>
             <?php endif; ?>
         <?php endif; ?>
         <?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>

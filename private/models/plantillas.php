@@ -253,9 +253,12 @@ class Plantillas extends LiteRecord
             if (!$p) return parent::cols();
 
             // Si hay un nombre original, duplicamos sus reglas desde la versión "maestra" o de otro usuario
-            if ($nombre_original) {
+            if ($nombre_original || in_array($nombre, ['srd20', 'for_the_quest', 'dragonbane'], true)) {
                 // Buscamos la plantilla original (puede ser la misma por nombre pero sin dueño, o de otro usuario si se especificó)
-                $original = $this->first('SELECT idu FROM plantillas WHERE nombre=? AND usuarios_idu != ? AND idu != ? ORDER BY usuarios_idu ASC LIMIT 1', [$nombre_original, $idu_usuario, $p->idu]);
+                $original = $this->first('SELECT idu FROM plantillas WHERE nombre=? AND usuarios_idu=? LIMIT 1', [$nombre, 'catalogo']);
+                if ( ! $original && $nombre_original) {
+                    $original = $this->first('SELECT idu FROM plantillas WHERE nombre=? AND usuarios_idu != ? AND idu != ? ORDER BY usuarios_idu ASC LIMIT 1', [$nombre_original, $idu_usuario, $p->idu]);
+                }
                 if ($original) {
                     (new Plantillas_reglas)->duplicar($original->idu, $p->idu);
                 }
@@ -269,7 +272,7 @@ class Plantillas extends LiteRecord
      */
     public function todas()
     {
-        $sql = "SELECT DISTINCT nombre FROM plantillas WHERE usuarios_idu=? OR usuarios_idu IS NULL ORDER BY nombre";
+        $sql = "SELECT DISTINCT nombre FROM plantillas WHERE usuarios_idu=? OR usuarios_idu IS NULL OR usuarios_idu='catalogo' ORDER BY nombre";
         return self::all($sql, [Session::get('idu')]);
     }
 
@@ -283,6 +286,28 @@ class Plantillas extends LiteRecord
             'niveles_tipografia' => self::NIVELES_TIPOGRAFIA,
             'tipografia_controles' => self::MENU_TIPOGRAFIA_CONTROLES,
         ];
+    }
+
+    public static function opcionesTamano($nivel, $actual)
+    {
+        $valores = $nivel === 'dropcap' ? ['0px'] : [];
+        $numeros = $nivel === 'small' ? range(50, 150, 5) : ($nivel === 'dropcap' ? range(10, 120, 5) : range(8, 72, 2));
+        foreach ($numeros as $numero) {
+            $valores[] = $numero . ($nivel === 'small' ? '%' : 'px');
+        }
+        if ($actual !== '' && ! in_array($actual, $valores, true)) {
+            array_unshift($valores, $actual);
+        }
+        return $valores;
+    }
+
+    public static function opcionesMargenTitulo($actual)
+    {
+        $valores = array_map(fn($n) => $n . 'px', range(0, 100, 5));
+        if ($actual !== '' && ! in_array($actual, $valores, true)) {
+            array_unshift($valores, $actual);
+        }
+        return $valores;
     }
 
     public static function defaultCssVariables()
@@ -667,8 +692,24 @@ class Plantillas extends LiteRecord
         }
     }
 
+    public function tieneComponentes()
+    {
+        return (new Plantillas_reglas)->tieneComponentes($this->idu);
+    }
+
     private function generarCssPlantilla(array $variables)
     {
+        if (($variables['--componentes-version'] ?? '') === '1') {
+            $fuentes = [];
+            foreach (self::NIVELES_TIPOGRAFIA as $nivel) {
+                $key = '--' . $nivel . '-family';
+                if (isset($variables[$key], $variables['--componentes-base-' . $nivel . '-family'])
+                    && $variables[$key] !== $variables['--componentes-base-' . $nivel . '-family']) {
+                    $fuentes[] = $variables[$key];
+                }
+            }
+            return (new Plantillas_componentes)->css($this->idu, $variables, $this->generarCssFuentes($fuentes));
+        }
         $css = "/* Compilado: " . date('Y-m-d H:i:s') . " */\n";
         $css .= $this->generarCssFuentes($this->fuentesUsadas($variables));
         $css .= $this->cssVariables($variables);
@@ -1359,6 +1400,13 @@ class Plantillas extends LiteRecord
         $dir_base = $_SERVER['DOCUMENT_ROOT'] ?: (defined('PUB_PATH') ? PUB_PATH : '.');
         $dir_base = rtrim($dir_base, '\\/');
         $base_rel = "css/plantillas/{$this->idu}";
+        if ($this->tieneComponentes()) {
+            $css_file = $dir_base . DIRECTORY_SEPARATOR . $base_rel . '.css';
+            if ( ! file_exists($css_file)) {
+                $this->compilar();
+            }
+            return file_exists($css_file) ? '/' . $base_rel . '.css?t=' . substr(hash_file('sha256', $css_file), 0, 16) : '';
+        }
         
         $min_abs = $dir_base . DIRECTORY_SEPARATOR . $base_rel . ".min.css";
         $css_abs = $dir_base . DIRECTORY_SEPARATOR . $base_rel . ".css";

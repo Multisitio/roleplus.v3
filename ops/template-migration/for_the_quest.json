@@ -1,0 +1,2728 @@
+{
+  "nombre": "for_the_quest",
+  "variables": {
+    "--fleshbrown": "#c96",
+    "--leatherbrown": "#963",
+    "--demongreen": "#00604D",
+    "--dragonred": "#48000c",
+    "--parchmentyellow": "#cc996633",
+    "--link": "var(--dragonred)",
+    "--hb_color_background": "#EEE5CE",
+    "--hb_color_accent": "lightyellow",
+    "--hb_color_headerunderline": "#C0AD6A",
+    "--hb_color_horizontalrule": "#9C2B1B",
+    "--hb_color_headertext": "#58180D",
+    "--hb_color_monsterstatbackground": "#F2E5B5",
+    "--hb_color_captiontext": "#766649",
+    "--hb_color_watercolorstain": "#BBAD82",
+    "--hb_color_footnotes": "darkred"
+  },
+  "ajustes": {
+    "--h1-family": "Medieval Sharp",
+    "--h1-size": "29.3333px",
+    "--h1-color": "#d1cdc7",
+    "--h2-family": "Minion Pro",
+    "--h2-size": "21.3333px",
+    "--h2-color": "#e8e6e3",
+    "--h3-family": "Minion Pro",
+    "--h3-size": "24px",
+    "--h3-color": "#d1cdc7",
+    "--h4-family": "Minion Pro",
+    "--h4-size": "18.6667px",
+    "--h4-color": "#c8c3bc",
+    "--h5-family": "Medieval Sharp",
+    "--h5-size": "20px",
+    "--h5-color": "#e8e6e3",
+    "--h6-family": "Medieval Sharp",
+    "--h6-size": "48px",
+    "--h6-color": "#e8e6e3",
+    "--body-family": "Minion Pro",
+    "--body-size": "18.6667px",
+    "--body-color": "#c8c3bc",
+    "--body-variant": "normal",
+    "--body-weight": "normal",
+    "--body-align": "left",
+    "--body-style": "normal",
+    "--body-transform": "none",
+    "--small-variant": "normal",
+    "--small-weight": "normal",
+    "--small-align": "left",
+    "--small-style": "normal",
+    "--small-transform": "none",
+    "--h1-variant": "normal",
+    "--h1-weight": "700",
+    "--h1-align": "left",
+    "--h1-style": "italic",
+    "--h1-transform": "none",
+    "--h2-variant": "normal",
+    "--h2-weight": "700",
+    "--h2-align": "left",
+    "--h2-style": "normal",
+    "--h2-transform": "uppercase",
+    "--h3-variant": "normal",
+    "--h3-weight": "700",
+    "--h3-align": "left",
+    "--h3-style": "normal",
+    "--h3-transform": "uppercase",
+    "--h4-variant": "normal",
+    "--h4-weight": "700",
+    "--h4-align": "left",
+    "--h4-style": "normal",
+    "--h4-transform": "none",
+    "--h5-variant": "normal",
+    "--h5-weight": "700",
+    "--h5-align": "left",
+    "--h5-style": "italic",
+    "--h5-transform": "none",
+    "--h6-variant": "normal",
+    "--h6-weight": "700",
+    "--h6-align": "left",
+    "--h6-style": "italic",
+    "--h6-transform": "none",
+    "--background-image": "url(\"/img/editor/for_the_quest/96/pergamino.webp\")",
+    "--background-image-even": "url(\"/img/editor/for_the_quest/96/pergamino.webp\")",
+    "--footer-imagen": "none",
+    "--footer-height": "0px",
+    "--footer-page-x": "120px",
+    "--footer-page-y": "0px",
+    "--list-style-checkbox": "\"❑ \"",
+    "--body-margin-top": "0px",
+    "--h1-margin-top": "10px",
+    "--h2-margin-top": "5px",
+    "--h3-margin-top": "5px",
+    "--h4-margin-top": "5px",
+    "--h5-margin-top": "5px",
+    "--h6-margin-top": "5px",
+    "--small-family": "Minion Pro",
+    "--small-size": "83.33%",
+    "--small-color": "#c8c3bc",
+    "--small-margin-top": "0px",
+    "--dropcap-family": "Pamela",
+    "--dropcap-size": "57.3333px",
+    "--dropcap-color": "rgba(0, 0, 0, 0)",
+    "--dropcap-weight": "normal",
+    "--dropcap-style": "normal",
+    "--dropcap-variant": "normal",
+    "--dropcap-align": "left",
+    "--dropcap-transform": "none",
+    "--dropcap-margin-top": "-8px",
+    "--header-padding-top": "0px",
+    "--header-padding-right": "0px",
+    "--header-padding-bottom": "0px",
+    "--header-padding-left": "0px",
+    "--header-margin-top": "0px",
+    "--header-margin-right": "0px",
+    "--header-margin-bottom": "0px",
+    "--header-margin-left": "0px",
+    "--section-padding-top": "0px",
+    "--section-padding-right": "56.6929px",
+    "--section-padding-bottom": "0px",
+    "--section-padding-left": "56.6929px",
+    "--section-margin-top": "0px",
+    "--section-margin-right": "0px",
+    "--section-margin-bottom": "20px",
+    "--section-margin-left": "0px",
+    "--footer-padding-top": "0px",
+    "--footer-padding-right": "0px",
+    "--footer-padding-bottom": "0px",
+    "--footer-padding-left": "0px",
+    "--footer-margin-top": "0px",
+    "--footer-margin-right": "0px",
+    "--footer-margin-bottom": "0px",
+    "--footer-margin-left": "0px",
+    "--p-padding-top": "0px",
+    "--p-padding-right": "0px",
+    "--p-padding-bottom": "0px",
+    "--p-padding-left": "0px",
+    "--p-margin-top": "5px",
+    "--p-margin-right": "0px",
+    "--p-margin-bottom": "20px",
+    "--p-margin-left": "0px",
+    "--list-padding-top": "0px",
+    "--list-padding-right": "0px",
+    "--list-padding-bottom": "0px",
+    "--list-padding-left": "0px",
+    "--list-margin-top": "5px",
+    "--list-margin-right": "0px",
+    "--list-margin-bottom": "10px",
+    "--list-margin-left": "0px",
+    "--blockquote-padding-top": "0px",
+    "--blockquote-padding-right": "0px",
+    "--blockquote-padding-bottom": "0px",
+    "--blockquote-padding-left": "0px",
+    "--blockquote-margin-top": "40px",
+    "--blockquote-margin-right": "0px",
+    "--blockquote-margin-bottom": "40px",
+    "--blockquote-margin-left": "0px",
+    "--table-padding-top": "0px",
+    "--table-padding-right": "0px",
+    "--table-padding-bottom": "0px",
+    "--table-padding-left": "0px",
+    "--table-margin-top": "15px",
+    "--table-margin-right": "0px",
+    "--table-margin-bottom": "0px",
+    "--table-margin-left": "0px",
+    "--dropcap-margin-right": "13px",
+    "--dropcap-margin-bottom": "-20px",
+    "--dropcap-margin-left": "0px",
+    "--p-gap": "5px",
+    "--table-td-padding-x": "5px",
+    "--table-td-padding-y": "5px",
+    "--table-th-border-bottom-width": "2px",
+    "--table-th-border-bottom-color": "#e8e6e3",
+    "--table-col1-border-right-width": "0px",
+    "--table-col1-border-right-color": "#c8c3bc",
+    "--blockquote-border-left-width": "16px",
+    "--blockquote-border-left-color": "#e8e6e3",
+    "--a-color": "#48000c",
+    "--componentes-capitular-selector": "main .big-letter::first-letter"
+  },
+  "reglas": [
+    {
+      "selector": "@font-face /* bloque 0 */",
+      "peso": -2,
+      "declarations": [
+        [
+          "font-family",
+          "Colus"
+        ],
+        [
+          "src",
+          "url(\"/fonts/colus/regular.woff2\")"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 1 */",
+      "peso": 0,
+      "declarations": [
+        [
+          "font-family",
+          "\"Medieval Sharp\""
+        ],
+        [
+          "src",
+          "url(\"/fonts/medieval_sharp/regular.woff2?v2\")"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 2 */",
+      "peso": 1,
+      "declarations": [
+        [
+          "font-family",
+          "\"Minion Pro\""
+        ],
+        [
+          "src",
+          "url(\"/fonts/minion_pro/regular.woff2\")"
+        ],
+        [
+          "font-weight",
+          "normal"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 3 */",
+      "peso": 2,
+      "declarations": [
+        [
+          "font-family",
+          "\"Myriad Pro\""
+        ],
+        [
+          "src",
+          "url(\"/fonts/myriad_pro/regular.woff2\")"
+        ],
+        [
+          "font-weight",
+          "normal"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 4 */",
+      "peso": 3,
+      "declarations": [
+        [
+          "font-family",
+          "\"Pamela\""
+        ],
+        [
+          "src",
+          "url(\"/fonts/pamela/regular.woff2?v2\")"
+        ],
+        [
+          "font-weight",
+          "normal"
+        ],
+        [
+          "font-style",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(ol, ul) /* bloque 5 */",
+      "peso": 5,
+      "declarations": [
+        [
+          "padding-left",
+          "15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul /* bloque 6 */",
+      "peso": 6,
+      "declarations": [
+        [
+          "list-style",
+          "none"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul>li::before /* bloque 7 */",
+      "peso": 7,
+      "declarations": [
+        [
+          "content",
+          "\"✦ \""
+        ],
+        [
+          "margin-left",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul>li li::before /* bloque 8 */",
+      "peso": 8,
+      "declarations": [
+        [
+          "content",
+          "\"⮞ \""
+        ],
+        [
+          "margin-left",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.checkbox li::before /* bloque 9 */",
+      "peso": 9,
+      "declarations": [
+        [
+          "content",
+          "\"❑ \""
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.radio li::before /* bloque 10 */",
+      "peso": 10,
+      "declarations": [
+        [
+          "content",
+          "\"🔾 \""
+        ]
+      ]
+    },
+    {
+      "selector": "main > div :not(li)>a[href^=\"#\"] /* bloque 11 */",
+      "peso": 11,
+      "declarations": [
+        [
+          "display",
+          "grid"
+        ],
+        [
+          "grid-template-columns",
+          "auto 1fr auto"
+        ],
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "white-space",
+          "nowrap"
+        ],
+        [
+          "text-decoration",
+          "none"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div :not(li)>a[href^=\"#\"]:has(span) span:first-child /* bloque 12 */",
+      "peso": 12,
+      "declarations": [
+        [
+          "grid-column",
+          "1"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div :not(li)>a[href^=\"#\"]:has(span) span:last-child /* bloque 13 */",
+      "peso": 13,
+      "declarations": [
+        [
+          "grid-column",
+          "3"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div :not(li)>a[href^=\"#\"]::after /* bloque 14 */",
+      "peso": 14,
+      "declarations": [
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "grid-column",
+          "2"
+        ],
+        [
+          "border-bottom",
+          "1px dotted currentColor"
+        ],
+        [
+          "margin",
+          "-10px 3px 0"
+        ],
+        [
+          "width",
+          "calc(100% - 5px)"
+        ],
+        [
+          "height",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div :is(em, strong) /* bloque 15 */",
+      "peso": 15,
+      "declarations": [
+        [
+          "color",
+          "darkred"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band /* bloque 16 */",
+      "peso": 16,
+      "declarations": [
+        [
+          "background",
+          "var(--hb_color_accent)"
+        ],
+        [
+          "padding",
+          "5px 10px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "width",
+          "90%"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left /* bloque 17 */",
+      "peso": 17,
+      "declarations": [
+        [
+          "border-radius",
+          "0 5px 5px 0"
+        ],
+        [
+          "box-shadow",
+          "3px 2px 5px #666"
+        ],
+        [
+          "margin-left",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.right /* bloque 18 */",
+      "peso": 18,
+      "declarations": [
+        [
+          "border-radius",
+          "5px 0 0 5px"
+        ],
+        [
+          "box-shadow",
+          "-3px 2px 5px #666"
+        ],
+        [
+          "margin-right",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band>*:first-child /* bloque 19 */",
+      "peso": 19,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "margin",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left>*:first-child /* bloque 20 */",
+      "peso": 20,
+      "declarations": [
+        [
+          "flex-direction",
+          "row-reverse"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band div /* bloque 21 */",
+      "peso": 21,
+      "declarations": [
+        [
+          "border-bottom",
+          "10px solid transparent"
+        ],
+        [
+          "border-top",
+          "13px solid black"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "-22px"
+        ],
+        [
+          "z-index",
+          "-1"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left div /* bloque 22 */",
+      "peso": 22,
+      "declarations": [
+        [
+          "border-left",
+          "15px solid transparent"
+        ],
+        [
+          "left",
+          "0px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.right div /* bloque 23 */",
+      "peso": 23,
+      "declarations": [
+        [
+          "border-right",
+          "15px solid transparent"
+        ],
+        [
+          "right",
+          "0px"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote /* bloque 24 */",
+      "peso": 24,
+      "declarations": [
+        [
+          "background",
+          "var(--dragonred)"
+        ],
+        [
+          "border-style",
+          "solid"
+        ],
+        [
+          "border-width",
+          "16px 16px"
+        ],
+        [
+          "border-image-source",
+          "url(/img/editor/for_the_quest/borde_del_bloque.svg?v4)"
+        ],
+        [
+          "border-image-slice",
+          "80"
+        ],
+        [
+          "border-image-width",
+          "1"
+        ],
+        [
+          "border-image-outset",
+          "12px 16px"
+        ],
+        [
+          "color",
+          "#fff"
+        ],
+        [
+          "margin-block",
+          "40px"
+        ],
+        [
+          "margin-inline",
+          "auto"
+        ],
+        [
+          "padding",
+          "0"
+        ],
+        [
+          "position",
+          "relative"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) blockquote /* bloque 25 */",
+      "peso": 25,
+      "declarations": [
+        [
+          "background",
+          "none"
+        ],
+        [
+          "border",
+          "none"
+        ],
+        [
+          "color",
+          "#000"
+        ],
+        [
+          "font",
+          "bold 16pt \"Medieval Sharp\""
+        ],
+        [
+          "height",
+          "210px"
+        ],
+        [
+          "margin",
+          "0"
+        ],
+        [
+          "padding",
+          "0 40px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(div, section)>blockquote:first-child /* bloque 26 */",
+      "peso": 26,
+      "declarations": [
+        [
+          "margin-top",
+          "20px"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote p:last-child /* bloque 27 */",
+      "peso": 27,
+      "declarations": [
+        [
+          "margin-bottom",
+          "10px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards /* bloque 28 */",
+      "peso": 28,
+      "declarations": [
+        [
+          "border",
+          "3px solid #000"
+        ],
+        [
+          "flex",
+          "0 0 696px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards:has(> picture:only-child) /* bloque 29 */",
+      "peso": 29,
+      "declarations": [
+        [
+          "flex",
+          "0 0 236px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards:has(> picture:nth-child(2):last-child) /* bloque 30 */",
+      "peso": 30,
+      "declarations": [
+        [
+          "flex",
+          "0 0 466px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards picture /* bloque 31 */",
+      "peso": 31,
+      "declarations": [
+        [
+          "background",
+          "url(\"/img/editor/dragonbane/96/pergamino_carta.webp\") no-repeat"
+        ],
+        [
+          "border",
+          "3px solid #000"
+        ],
+        [
+          "float",
+          "left"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "width",
+          "230px"
+        ],
+        [
+          "height",
+          "320px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards picture h5 /* bloque 32 */",
+      "peso": 32,
+      "declarations": [
+        [
+          "background-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>\"),\n        url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>\"),\n        url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/></svg>\")"
+        ],
+        [
+          "margin-top",
+          "3px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "top",
+          "0"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "width",
+          "98%"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards picture h6 /* bloque 33 */",
+      "peso": 33,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "justify-content",
+          "center"
+        ],
+        [
+          "font",
+          "10pt Colus"
+        ],
+        [
+          "margin-inline",
+          "auto"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "top",
+          "-5px"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "width",
+          "156px"
+        ],
+        [
+          "height",
+          "44px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards picture h6::before /* bloque 34 */",
+      "peso": 34,
+      "declarations": [
+        [
+          "background",
+          "url(\"/img/editor/dragonbane/96/pergamino_para_titulos.webp?v=250415\") no-repeat"
+        ],
+        [
+          "background-size",
+          "cover"
+        ],
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%, 0)"
+        ],
+        [
+          "top",
+          "0"
+        ],
+        [
+          "z-index",
+          "-1"
+        ],
+        [
+          "width",
+          "156px"
+        ],
+        [
+          "height",
+          "44px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards picture>*:not(h5, h6, hr, img) /* bloque 35 */",
+      "peso": 35,
+      "declarations": [
+        [
+          "margin",
+          "0 10px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards picture hr /* bloque 36 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "-5px"
+        ],
+        [
+          "width",
+          "170px"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%, 0)"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div .cards picture img /* bloque 37 */",
+      "peso": 37,
+      "declarations": [
+        [
+          "opacity",
+          ".25"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "0"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%, 0)"
+        ],
+        [
+          "z-index",
+          "-1"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article /* bloque 38 */",
+      "peso": 38,
+      "declarations": [
+        [
+          "background",
+          "white"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article [src*=\"portada\"] /* bloque 39 */",
+      "peso": 39,
+      "declarations": [
+        [
+          "display",
+          "block"
+        ],
+        [
+          "width",
+          "100%"
+        ],
+        [
+          "height",
+          "100%"
+        ],
+        [
+          "max-width",
+          "none"
+        ],
+        [
+          "object-fit",
+          "cover"
+        ]
+      ]
+    },
+    {
+      "selector": "main header:has(>div) /* bloque 40 */",
+      "peso": 40,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "20px"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main section:has(>div) /* bloque 41 */",
+      "peso": 40,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "20px"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer:has(>div) /* bloque 42 */",
+      "peso": 40,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "20px"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main header:has(>div)>div /* bloque 43 */",
+      "peso": 41,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main section:has(>div)>div /* bloque 44 */",
+      "peso": 41,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer:has(>div)>div /* bloque 45 */",
+      "peso": 41,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div footer /* bloque 46 */",
+      "peso": 42,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "justify-content",
+          "center"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "22px"
+        ],
+        [
+          "left",
+          "30px"
+        ],
+        [
+          "right",
+          "30px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div footer::after /* bloque 47 */",
+      "peso": 43,
+      "declarations": [
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "color",
+          "#48000c"
+        ],
+        [
+          "content",
+          "counter(page)"
+        ],
+        [
+          "display",
+          "block"
+        ],
+        [
+          "font-family",
+          "\"Medieval Sharp\""
+        ],
+        [
+          "font-size",
+          "21pt"
+        ],
+        [
+          "font-style",
+          "italic"
+        ],
+        [
+          "font-weight",
+          "bold"
+        ],
+        [
+          "padding",
+          "2px 0 0"
+        ],
+        [
+          "width",
+          "120px"
+        ],
+        [
+          "height",
+          "30px"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1, h5, h6) /* bloque 48 */",
+      "peso": 44,
+      "declarations": [
+        [
+          "color",
+          "var(--dragonred)"
+        ],
+        [
+          "font-family",
+          "\"Medieval Sharp\""
+        ],
+        [
+          "font-size",
+          "16pt"
+        ],
+        [
+          "font-style",
+          "italic"
+        ],
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main .medieval-sharp /* bloque 49 */",
+      "peso": 44,
+      "declarations": [
+        [
+          "color",
+          "var(--dragonred)"
+        ],
+        [
+          "font-family",
+          "\"Medieval Sharp\""
+        ],
+        [
+          "font-size",
+          "16pt"
+        ],
+        [
+          "font-style",
+          "italic"
+        ],
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote h1 /* bloque 50 */",
+      "peso": 45,
+      "declarations": [
+        [
+          "color",
+          "white"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1 /* bloque 51 */",
+      "peso": 46,
+      "declarations": [
+        [
+          "font-size",
+          "22pt"
+        ],
+        [
+          "line-height",
+          "1"
+        ],
+        [
+          "margin-bottom",
+          "5px"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) h1 /* bloque 52 */",
+      "peso": 47,
+      "declarations": [
+        [
+          "color",
+          "#000"
+        ],
+        [
+          "font-size",
+          "xxx-large"
+        ],
+        [
+          "margin",
+          "-20px 0 20px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1+cite /* bloque 53 */",
+      "peso": 48,
+      "declarations": [
+        [
+          "display",
+          "block"
+        ],
+        [
+          "font-family",
+          "\"Medieval Sharp\""
+        ],
+        [
+          "font-size",
+          "13pt"
+        ],
+        [
+          "text-align",
+          "right"
+        ]
+      ]
+    },
+    {
+      "selector": "main .big-letter::first-letter /* bloque 54 */",
+      "peso": 49,
+      "declarations": [
+        [
+          "float",
+          "left"
+        ],
+        [
+          "font-family",
+          "Pamela"
+        ],
+        [
+          "font-size",
+          "43pt"
+        ],
+        [
+          "line-height",
+          "1"
+        ],
+        [
+          "margin-block",
+          "-6pt -20px"
+        ],
+        [
+          "margin-inline",
+          "0 13px"
+        ],
+        [
+          "background-image",
+          "linear-gradient(to bottom, var(--dragonred), color-mix(in srgb, var(--dragonred) 40%, transparent))"
+        ],
+        [
+          "background-clip",
+          "text"
+        ],
+        [
+          "-webkit-background-clip",
+          "text"
+        ],
+        [
+          "color",
+          "transparent"
+        ],
+        [
+          "-webkit-text-fill-color",
+          "transparent"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2 /* bloque 55 */",
+      "peso": 50,
+      "declarations": [
+        [
+          "background",
+          "var(--dragonred)"
+        ],
+        [
+          "color",
+          "white"
+        ],
+        [
+          "font-size",
+          "16pt"
+        ],
+        [
+          "height",
+          "38px"
+        ],
+        [
+          "line-height",
+          "1"
+        ],
+        [
+          "margin",
+          "15px -75px 20px 0"
+        ],
+        [
+          "padding",
+          "8px 0 0 10px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "text-align",
+          "left"
+        ],
+        [
+          "text-transform",
+          "uppercase"
+        ],
+        [
+          "transform",
+          "translate(110px, 0)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2::before /* bloque 56 */",
+      "peso": 51,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/llave_fija.svg) no-repeat center center"
+        ],
+        [
+          "background-size",
+          "contain"
+        ],
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "-43px"
+        ],
+        [
+          "top",
+          "50%"
+        ],
+        [
+          "transform",
+          "translateY(-50%)"
+        ],
+        [
+          "width",
+          "44px"
+        ],
+        [
+          "height",
+          "60px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2.to-right /* bloque 57 */",
+      "peso": 52,
+      "declarations": [
+        [
+          "margin",
+          "15px 0 20px -75px"
+        ],
+        [
+          "padding",
+          "8px 10px 0 0"
+        ],
+        [
+          "text-align",
+          "right"
+        ],
+        [
+          "transform",
+          "translate(-110px, 0)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2.to-right::before /* bloque 58 */",
+      "peso": 53,
+      "declarations": [
+        [
+          "left",
+          "unset"
+        ],
+        [
+          "right",
+          "-43px"
+        ],
+        [
+          "transform",
+          "translateY(-50%) rotate(180deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3 /* bloque 59 */",
+      "peso": 54,
+      "declarations": [
+        [
+          "display",
+          "table"
+        ],
+        [
+          "margin",
+          "20px auto"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "color",
+          "var(--dragonred)"
+        ],
+        [
+          "font-size",
+          "18pt"
+        ],
+        [
+          "text-transform",
+          "uppercase"
+        ],
+        [
+          "padding",
+          "0 60px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) h3 /* bloque 60 */",
+      "peso": 55,
+      "declarations": [
+        [
+          "color",
+          "black"
+        ],
+        [
+          "font-style",
+          "italic"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3::before /* bloque 61 */",
+      "peso": 56,
+      "declarations": [
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "top",
+          "50%"
+        ],
+        [
+          "width",
+          "44px"
+        ],
+        [
+          "height",
+          "60px"
+        ],
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha.svg?v3) no-repeat center/contain"
+        ],
+        [
+          "transform",
+          "translateY(-50%)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3::after /* bloque 62 */",
+      "peso": 56,
+      "declarations": [
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "top",
+          "50%"
+        ],
+        [
+          "width",
+          "44px"
+        ],
+        [
+          "height",
+          "60px"
+        ],
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha.svg?v3) no-repeat center/contain"
+        ],
+        [
+          "transform",
+          "translateY(-50%)"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1 + blockquote) h3::after /* bloque 63 */",
+      "peso": 57,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center/contain"
+        ],
+        [
+          "color",
+          "black"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1 + blockquote) h3::before /* bloque 64 */",
+      "peso": 57,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center/contain"
+        ],
+        [
+          "color",
+          "black"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3::before /* bloque 65 */",
+      "peso": 58,
+      "declarations": [
+        [
+          "left",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3::after /* bloque 66 */",
+      "peso": 59,
+      "declarations": [
+        [
+          "right",
+          "0"
+        ],
+        [
+          "transform",
+          "translateY(-50%) rotate(180deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) h3::before /* bloque 67 */",
+      "peso": 60,
+      "declarations": [
+        [
+          "left",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) h3::after /* bloque 68 */",
+      "peso": 61,
+      "declarations": [
+        [
+          "right",
+          "0"
+        ],
+        [
+          "transform",
+          "translateY(-50%) rotate(180deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h3, h4) /* bloque 69 */",
+      "peso": 62,
+      "declarations": [
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) h4 /* bloque 70 */",
+      "peso": 63,
+      "declarations": [
+        [
+          "padding-left",
+          "55px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "text-align",
+          "left"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) h4:before /* bloque 71 */",
+      "peso": 64,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha_negra.svg?v2) no-repeat center/contain"
+        ],
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "0"
+        ],
+        [
+          "top",
+          "50%"
+        ],
+        [
+          "transform",
+          "translateY(-50%)"
+        ],
+        [
+          "width",
+          "50px"
+        ],
+        [
+          "height",
+          "20px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h5 /* bloque 72 */",
+      "peso": 65,
+      "declarations": [
+        [
+          "color",
+          "white"
+        ],
+        [
+          "font-size",
+          "15pt"
+        ]
+      ]
+    },
+    {
+      "selector": "main h6 /* bloque 73 */",
+      "peso": 66,
+      "declarations": [
+        [
+          "color",
+          "#000"
+        ],
+        [
+          "display",
+          "inline-block"
+        ],
+        [
+          "font-size",
+          "xxx-large"
+        ],
+        [
+          "padding",
+          "0 68px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%, 0)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h6::before /* bloque 74 */",
+      "peso": 67,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center / contain"
+        ],
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "top",
+          "50%"
+        ],
+        [
+          "transform",
+          "translateY(-50%)"
+        ],
+        [
+          "width",
+          "50px"
+        ],
+        [
+          "height",
+          "40px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h6::after /* bloque 75 */",
+      "peso": 67,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha_hueca.svg?v2) no-repeat center / contain"
+        ],
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "top",
+          "50%"
+        ],
+        [
+          "transform",
+          "translateY(-50%)"
+        ],
+        [
+          "width",
+          "50px"
+        ],
+        [
+          "height",
+          "40px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h6::before /* bloque 76 */",
+      "peso": 68,
+      "declarations": [
+        [
+          "left",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main h6::after /* bloque 77 */",
+      "peso": 69,
+      "declarations": [
+        [
+          "right",
+          "0"
+        ],
+        [
+          "transform",
+          "translateY(-50%) rotate(180deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(div, section)>:is(h1, h2, h3, h4, h5, h6):first-child /* bloque 78 */",
+      "peso": 70,
+      "declarations": [
+        [
+          "margin-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main hr /* bloque 79 */",
+      "peso": 71,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/96/lanza_dos_puntas.webp?v2) no-repeat center/contain"
+        ],
+        [
+          "border",
+          "0"
+        ],
+        [
+          "margin",
+          "0 auto"
+        ],
+        [
+          "width",
+          "50%"
+        ],
+        [
+          "height",
+          "17px"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) hr /* bloque 80 */",
+      "peso": 72,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/lanza_negra.svg) no-repeat center/contain"
+        ],
+        [
+          "width",
+          "unset"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote hr /* bloque 81 */",
+      "peso": 73,
+      "declarations": [
+        [
+          "filter",
+          "invert(1)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul /* bloque 82 */",
+      "peso": 74,
+      "declarations": [
+        [
+          "list-style",
+          "none"
+        ],
+        [
+          "margin",
+          "0 0 20px"
+        ],
+        [
+          "padding",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(blockquote, small) ul /* bloque 83 */",
+      "peso": 75,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul > li /* bloque 84 */",
+      "peso": 76,
+      "declarations": [
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "padding-left",
+          "40px"
+        ],
+        [
+          "margin-bottom",
+          "0.5em"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(blockquote, small) ul > li /* bloque 85 */",
+      "peso": 77,
+      "declarations": [
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "padding-left",
+          "15px"
+        ],
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul > li::before /* bloque 86 */",
+      "peso": 78,
+      "declarations": [
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "top",
+          "5px"
+        ],
+        [
+          "left",
+          "0"
+        ],
+        [
+          "width",
+          "32px"
+        ],
+        [
+          "height",
+          "32px"
+        ],
+        [
+          "background",
+          "url(/img/editor/for_the_quest/calavera.svg?v2) no-repeat center center"
+        ],
+        [
+          "background-size",
+          "contain"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul > li:has(> i:first-child > b)::before /* bloque 87 */",
+      "peso": 79,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/for_the_quest/punta_de_flecha.svg?v3) no-repeat center"
+        ],
+        [
+          "top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(blockquote, small) ul > li::before /* bloque 88 */",
+      "peso": 80,
+      "declarations": [
+        [
+          "width",
+          "12px"
+        ],
+        [
+          "height",
+          "12px"
+        ],
+        [
+          "top",
+          "4px"
+        ],
+        [
+          "background",
+          "none"
+        ],
+        [
+          "background-color",
+          "#fff"
+        ],
+        [
+          "mask",
+          "url(/img/editor/for_the_quest/calavera.svg?v2) no-repeat center center"
+        ],
+        [
+          "mask-size",
+          "contain"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote ul > li::before /* bloque 89 */",
+      "peso": 81,
+      "declarations": [
+        [
+          "top",
+          "7px"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.checkbox li::before /* bloque 90 */",
+      "peso": 82,
+      "declarations": [
+        [
+          "content",
+          "\"❑ \""
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.radio li::before /* bloque 91 */",
+      "peso": 83,
+      "declarations": [
+        [
+          "content",
+          "\"🔾 \""
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> :is(em, strong))::before /* bloque 92 */",
+      "peso": 84,
+      "declarations": [
+        [
+          "color",
+          "var(--dragonred)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> b)~li:has(> :is(em, strong))::before /* bloque 93 */",
+      "peso": 84,
+      "declarations": [
+        [
+          "color",
+          "var(--dragonred)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> :is(em, strong)):has(~ li > b)::before /* bloque 94 */",
+      "peso": 85,
+      "declarations": [
+        [
+          "color",
+          "var(--demongreen)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> :is(em, strong)):has(~ li > b)>:is(em, strong) /* bloque 95 */",
+      "peso": 86,
+      "declarations": [
+        [
+          "color",
+          "var(--demongreen)"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1, h2, h3, h4, h5, h6, p, table) /* bloque 96 */",
+      "peso": 87,
+      "declarations": [
+        [
+          "margin-block",
+          "10px 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(ol, ul) /* bloque 97 */",
+      "peso": 88,
+      "declarations": [
+        [
+          "margin-block",
+          "5px 10px"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1, h2, h3, h4, h5, h6)+* /* bloque 98 */",
+      "peso": 89,
+      "declarations": [
+        [
+          "margin-top",
+          "5px"
+        ]
+      ]
+    },
+    {
+      "selector": "main :not(blockquote h5):first-child /* bloque 99 */",
+      "peso": 90,
+      "declarations": [
+        [
+          "margin-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main :last-child /* bloque 100 */",
+      "peso": 91,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main li /* bloque 101 */",
+      "peso": 92,
+      "declarations": [
+        [
+          "margin-bottom",
+          "5px"
+        ]
+      ]
+    },
+    {
+      "selector": "main article /* bloque 102 */",
+      "peso": 93,
+      "declarations": [
+        [
+          "counter-increment",
+          "page"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article /* bloque 103 */",
+      "peso": 94,
+      "declarations": [
+        [
+          "background",
+          "url(\"/img/editor/for_the_quest/96/pergamino.webp\")"
+        ],
+        [
+          "background-size",
+          "cover"
+        ],
+        [
+          "font",
+          "14pt/1.5 \"Minion Pro\""
+        ],
+        [
+          "color",
+          "#333"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) /* bloque 104 */",
+      "peso": 95,
+      "declarations": [
+        [
+          "background",
+          "url(\"/img/editor/for_the_quest/96/pergamino_cabecera.webp?v2\")"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(main > div, main > div) article>section /* bloque 105 */",
+      "peso": 96,
+      "declarations": [
+        [
+          "padding-inline",
+          "1.5cm"
+        ],
+        [
+          "margin-bottom",
+          "20px"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(main > div, main > div) article>section:first-child /* bloque 106 */",
+      "peso": 97,
+      "declarations": [
+        [
+          "padding-top",
+          "1.5cm"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(main > div, main > div) article>section:last-child /* bloque 107 */",
+      "peso": 98,
+      "declarations": [
+        [
+          "padding-bottom",
+          "2.4cm"
+        ],
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>*:last-child /* bloque 108 */",
+      "peso": 99,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main p /* bloque 109 */",
+      "peso": 100,
+      "declarations": [
+        [
+          "margin-bottom",
+          "20px"
+        ],
+        [
+          "margin-top",
+          "5px"
+        ],
+        [
+          "line-height",
+          "1.2"
+        ]
+      ]
+    },
+    {
+      "selector": "main table /* bloque 110 */",
+      "peso": 100,
+      "declarations": [
+        [
+          "margin-bottom",
+          "20px"
+        ],
+        [
+          "margin-top",
+          "5px"
+        ],
+        [
+          "line-height",
+          "1.2"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote mark /* bloque 111 */",
+      "peso": 101,
+      "declarations": [
+        [
+          "background",
+          "#000"
+        ],
+        [
+          "color",
+          "#fff"
+        ],
+        [
+          "font-style",
+          "italic"
+        ],
+        [
+          "padding-inline",
+          "10px"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "-29px"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%, 0)"
+        ],
+        [
+          "width",
+          "max-content"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture:has(figcaption) img /* bloque 112 */",
+      "peso": 102,
+      "declarations": [
+        [
+          "display",
+          "block"
+        ]
+      ]
+    },
+    {
+      "selector": "main figcaption /* bloque 113 */",
+      "peso": 103,
+      "declarations": [
+        [
+          "clear",
+          "both"
+        ],
+        [
+          "font-style",
+          "italic"
+        ],
+        [
+          "font-weight",
+          "bolder"
+        ],
+        [
+          "line-height",
+          "1"
+        ],
+        [
+          "text-align",
+          "center"
+        ]
+      ]
+    },
+    {
+      "selector": "main > div article:has(>section:first-child>h1+blockquote) figcaption /* bloque 114 */",
+      "peso": 104,
+      "declarations": [
+        [
+          "background",
+          "black"
+        ],
+        [
+          "border-radius",
+          "5px"
+        ],
+        [
+          "color",
+          "white"
+        ],
+        [
+          "margin",
+          "-20px auto 0"
+        ],
+        [
+          "padding",
+          "5px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "width",
+          "fit-content"
+        ]
+      ]
+    },
+    {
+      "selector": "main caption /* bloque 115 */",
+      "peso": 105,
+      "declarations": [
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "background-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>\"), url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>\"),\n        url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/></svg>\")"
+        ],
+        [
+          "background-position",
+          "center, left center, right"
+        ],
+        [
+          "background-repeat",
+          "no-repeat"
+        ],
+        [
+          "background-size",
+          "calc(100% - 40px) 100%, 30px 40px, 30px 40px"
+        ],
+        [
+          "color",
+          "white"
+        ],
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "font-size",
+          "14pt"
+        ],
+        [
+          "height",
+          "40px"
+        ],
+        [
+          "inset",
+          "-28px 0 auto"
+        ],
+        [
+          "margin",
+          "auto"
+        ],
+        [
+          "padding",
+          "0 30px"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "top",
+          "-45px"
+        ],
+        [
+          "width",
+          "fit-content"
+        ]
+      ]
+    },
+    {
+      "selector": "main caption::before /* bloque 116 */",
+      "peso": 106,
+      "declarations": [
+        [
+          "background-position",
+          "center left"
+        ],
+        [
+          "margin-left",
+          "-2mm"
+        ],
+        [
+          "margin-right",
+          ".2em"
+        ]
+      ]
+    },
+    {
+      "selector": "main caption::after /* bloque 117 */",
+      "peso": 107,
+      "declarations": [
+        [
+          "background-position",
+          "center right"
+        ],
+        [
+          "margin-left",
+          ".2em"
+        ],
+        [
+          "margin-right",
+          "-2mm"
+        ]
+      ]
+    },
+    {
+      "selector": "main table /* bloque 118 */",
+      "peso": 108,
+      "declarations": [
+        [
+          "border-collapse",
+          "collapse"
+        ],
+        [
+          "border-spacing",
+          "0"
+        ],
+        [
+          "margin-block",
+          "15px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "text-align",
+          "left"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(caption) /* bloque 119 */",
+      "peso": 109,
+      "declarations": [
+        [
+          "margin-block",
+          "65px 20px"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>table:first-child /* bloque 120 */",
+      "peso": 110,
+      "declarations": [
+        [
+          "margin-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>table:has(caption):first-child /* bloque 121 */",
+      "peso": 111,
+      "declarations": [
+        [
+          "margin-top",
+          "45px"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>table:last-child /* bloque 122 */",
+      "peso": 112,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main th /* bloque 123 */",
+      "peso": 113,
+      "declarations": [
+        [
+          "font-style",
+          "italic"
+        ],
+        [
+          "padding",
+          "5px"
+        ],
+        [
+          "vertical-align",
+          "top"
+        ]
+      ]
+    },
+    {
+      "selector": "main td /* bloque 124 */",
+      "peso": 113,
+      "declarations": [
+        [
+          "font-style",
+          "italic"
+        ],
+        [
+          "padding",
+          "5px"
+        ],
+        [
+          "vertical-align",
+          "top"
+        ]
+      ]
+    },
+    {
+      "selector": "main th /* bloque 125 */",
+      "peso": 114,
+      "declarations": [
+        [
+          "background",
+          "var(--dragonred)"
+        ],
+        [
+          "color",
+          "white"
+        ],
+        [
+          "font-weight",
+          "normal"
+        ]
+      ]
+    },
+    {
+      "selector": "main tr:nth-child(even) /* bloque 126 */",
+      "peso": 115,
+      "declarations": [
+        [
+          "background-color",
+          "#ccc"
+        ]
+      ]
+    },
+    {
+      "selector": "main tr:nth-child(odd) /* bloque 127 */",
+      "peso": 116,
+      "declarations": [
+        [
+          "background-color",
+          "white"
+        ]
+      ]
+    },
+    {
+      "selector": "main .white-first tr:nth-child(even) /* bloque 128 */",
+      "peso": 117,
+      "declarations": [
+        [
+          "background-color",
+          "white"
+        ]
+      ]
+    },
+    {
+      "selector": "main .white-first tr:nth-child(odd) /* bloque 129 */",
+      "peso": 118,
+      "declarations": [
+        [
+          "background-color",
+          "#ccc"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(+ul) /* bloque 130 */",
+      "peso": 119,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    }
+  ]
+}

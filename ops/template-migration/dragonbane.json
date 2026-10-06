@@ -1,0 +1,2370 @@
+{
+  "nombre": "dragonbane",
+  "variables": {
+    "--color-accent": "#EE3D3C",
+    "--color-band-bg": "lightyellow",
+    "--color-band-shadow": "#666",
+    "--color-bg-cover": "white",
+    "--color-bg-even-row": "#66550022",
+    "--color-blockquote-bg": "#00ff0011",
+    "--color-blockquote-shadow": "#888",
+    "--color-emphasis": "darkred",
+    "--color-primary": "#00604D",
+    "--color-secondary": "#963",
+    "--color-tertiary": "#c96",
+    "--color-text": "#333",
+    "--color-text-inverse": "#fff",
+    "--gradient-forest": "linear-gradient(-45deg, #322814, #006600, #322814)",
+    "--bg-band": "url(\"data:image/svg+xml;charset=utf8,%3Csvg height='40' width='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/%3E%3C/svg%3E\"),url(\"data:image/svg+xml;charset=utf8,%3Csvg height='40' width='30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/%3E%3C/svg%3E\"),url(\"data:image/svg+xml;charset=utf8,%3Csvg height='40' width='30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/%3E%3C/svg%3E\")",
+    "--font-annotation": "\"WalterTurncoat\"",
+    "--font-body": "\"Crimson Pro Regular\"",
+    "--font-handwritten": "\"Caveat\"",
+    "--font-heading": "\"Colus\"",
+    "--font-size-body": "15px",
+    "--font-size-caption": "19px",
+    "--font-size-card-title": "13px",
+    "--font-size-drop-cap": "57px",
+    "--font-size-footer": "11px",
+    "--font-size-footer-num": "15px",
+    "--font-size-h1": "64px",
+    "--font-size-h2": "24px",
+    "--font-size-h3": "16px",
+    "--font-size-h4": "15px",
+    "--font-size-h5": "19px",
+    "--font-size-h6": "12px",
+    "--font-size-mark": "16px",
+    "--list-bullet": "\"✦ \"",
+    "--list-checkbox": "\"❑ \"",
+    "--list-padding": "25px",
+    "--list-radio": "\"🔾 \"",
+    "--list-sub-bullet": "\"⮞ \"",
+    "--column-gap": "20px",
+    "--spacing-after-heading": "10px",
+    "--spacing-block-heading": "15px 0",
+    "--spacing-block-list": "8px 10px",
+    "--spacing-blockquote-block": "40px 20px",
+    "--spacing-cell": "5px",
+    "--spacing-heading-bottom": "8px",
+    "--spacing-li": "8px",
+    "--spacing-page-bottom": "90px",
+    "--spacing-page-inline": "40px",
+    "--spacing-page-top": "40px",
+    "--border-card": "3px solid #000",
+    "--border-h3": "2px solid var(--color-secondary)",
+    "--border-td": "1px solid var(--color-secondary)",
+    "--border-th": "2px solid var(--color-secondary)",
+    "--card-height": "320px",
+    "--card-min-width": "230px",
+    "--card-title-height": "44px",
+    "--card-title-width": "156px",
+    "--footer-counter-width": "120px",
+    "--img-watermark-opacity": ".25",
+    "--mark-size": "22px"
+  },
+  "ajustes": {
+    "--h1-family": "Colus",
+    "--h1-size": "64px",
+    "--h1-color": "#ee3d3c",
+    "--h2-family": "Colus",
+    "--h2-size": "24px",
+    "--h2-color": "#00604d",
+    "--h3-family": "Colus",
+    "--h3-size": "16px",
+    "--h3-color": "#996633",
+    "--h4-family": "Colus",
+    "--h4-size": "15px",
+    "--h4-color": "#333333",
+    "--h5-family": "Colus",
+    "--h5-size": "19px",
+    "--h5-color": "#ffffff",
+    "--h6-family": "WalterTurncoat",
+    "--h6-size": "12px",
+    "--h6-color": "#333333",
+    "--body-family": "Crimson Pro Regular",
+    "--body-size": "15px",
+    "--body-color": "#333333",
+    "--body-variant": "normal",
+    "--body-weight": "normal",
+    "--body-align": "left",
+    "--body-style": "normal",
+    "--body-transform": "none",
+    "--small-variant": "normal",
+    "--small-weight": "normal",
+    "--small-align": "left",
+    "--small-style": "normal",
+    "--small-transform": "none",
+    "--h1-variant": "small-caps",
+    "--h1-weight": "normal",
+    "--h1-align": "left",
+    "--h1-style": "normal",
+    "--h1-transform": "none",
+    "--h2-variant": "small-caps",
+    "--h2-weight": "normal",
+    "--h2-align": "left",
+    "--h2-style": "normal",
+    "--h2-transform": "none",
+    "--h3-variant": "small-caps",
+    "--h3-weight": "normal",
+    "--h3-align": "left",
+    "--h3-style": "normal",
+    "--h3-transform": "none",
+    "--h4-variant": "small-caps",
+    "--h4-weight": "normal",
+    "--h4-align": "left",
+    "--h4-style": "normal",
+    "--h4-transform": "uppercase",
+    "--h5-variant": "small-caps",
+    "--h5-weight": "normal",
+    "--h5-align": "left",
+    "--h5-style": "normal",
+    "--h5-transform": "none",
+    "--h6-variant": "normal",
+    "--h6-weight": "700",
+    "--h6-align": "left",
+    "--h6-style": "normal",
+    "--h6-transform": "none",
+    "--background-image": "url(\"/img/editor/dragonbane/96/pergamino.webp\")",
+    "--background-image-even": "url(\"/img/editor/dragonbane/96/pergamino.webp\")",
+    "--footer-imagen": "none",
+    "--footer-height": "0px",
+    "--footer-page-x": "120px",
+    "--footer-page-y": "0px",
+    "--list-style-checkbox": "\"❑ \"",
+    "--section-padding-top": "0px",
+    "--section-padding-left": "40px",
+    "--section-padding-right": "40px",
+    "--section-padding-bottom": "0px",
+    "--p-gap": "15px",
+    "--body-margin-top": "0px",
+    "--h1-margin-top": "15px",
+    "--h2-margin-top": "10px",
+    "--h3-margin-top": "10px",
+    "--h4-margin-top": "10px",
+    "--h5-margin-top": "10px",
+    "--h6-margin-top": "10px",
+    "--small-family": "Crimson Pro Regular",
+    "--small-size": "83.33%",
+    "--small-color": "#333333",
+    "--small-margin-top": "0px",
+    "--dropcap-family": "Colus",
+    "--dropcap-size": "57px",
+    "--dropcap-color": "rgba(0, 0, 0, 0)",
+    "--dropcap-weight": "normal",
+    "--dropcap-style": "normal",
+    "--dropcap-variant": "normal",
+    "--dropcap-align": "left",
+    "--dropcap-transform": "none",
+    "--dropcap-margin-top": "-16px",
+    "--header-padding-top": "0px",
+    "--header-padding-right": "0px",
+    "--header-padding-bottom": "0px",
+    "--header-padding-left": "0px",
+    "--header-margin-top": "0px",
+    "--header-margin-right": "0px",
+    "--header-margin-bottom": "0px",
+    "--header-margin-left": "0px",
+    "--section-margin-top": "0px",
+    "--section-margin-right": "0px",
+    "--section-margin-bottom": "0px",
+    "--section-margin-left": "0px",
+    "--footer-padding-top": "0px",
+    "--footer-padding-right": "0px",
+    "--footer-padding-bottom": "0px",
+    "--footer-padding-left": "0px",
+    "--footer-margin-top": "0px",
+    "--footer-margin-right": "0px",
+    "--footer-margin-bottom": "0px",
+    "--footer-margin-left": "0px",
+    "--p-padding-top": "0px",
+    "--p-padding-right": "0px",
+    "--p-padding-bottom": "0px",
+    "--p-padding-left": "0px",
+    "--p-margin-top": "15px",
+    "--p-margin-right": "0px",
+    "--p-margin-bottom": "0px",
+    "--p-margin-left": "0px",
+    "--list-padding-top": "0px",
+    "--list-padding-right": "0px",
+    "--list-padding-bottom": "0px",
+    "--list-padding-left": "25px",
+    "--list-margin-top": "8px",
+    "--list-margin-right": "0px",
+    "--list-margin-bottom": "10px",
+    "--list-margin-left": "0px",
+    "--blockquote-padding-top": "10px",
+    "--blockquote-padding-right": "25px",
+    "--blockquote-padding-bottom": "10px",
+    "--blockquote-padding-left": "25px",
+    "--blockquote-margin-top": "40px",
+    "--blockquote-margin-right": "0px",
+    "--blockquote-margin-bottom": "20px",
+    "--blockquote-margin-left": "0px",
+    "--table-padding-top": "0px",
+    "--table-padding-right": "0px",
+    "--table-padding-bottom": "0px",
+    "--table-padding-left": "0px",
+    "--table-margin-top": "15px",
+    "--table-margin-right": "0px",
+    "--table-margin-bottom": "0px",
+    "--table-margin-left": "0px",
+    "--dropcap-margin-right": "0px",
+    "--dropcap-margin-bottom": "-26px",
+    "--dropcap-margin-left": "0px",
+    "--table-td-padding-x": "5px",
+    "--table-td-padding-y": "5px",
+    "--table-th-border-bottom-width": "2px",
+    "--table-th-border-bottom-color": "#996633",
+    "--table-col1-border-right-width": "0px",
+    "--table-col1-border-right-color": "#333333",
+    "--blockquote-border-left-width": "16px",
+    "--blockquote-border-left-color": "#333333",
+    "--a-color": "#8b0000",
+    "--table-zebra-color": "#665500",
+    "--table-zebra-opacity": "13",
+    "--componentes-capitular-selector": "main :is(h1:first-child + p,section:has(h1) + section > div:first-child > p:first-child)::first-letter"
+  },
+  "reglas": [
+    {
+      "selector": "@font-face /* bloque 0 */",
+      "peso": -2,
+      "declarations": [
+        [
+          "font-family",
+          "WalterTurncoat"
+        ],
+        [
+          "src",
+          "url(\"/fonts/walter_turncoat_regular.woff2\")"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 1 */",
+      "peso": 0,
+      "declarations": [
+        [
+          "font-family",
+          "Caveat"
+        ],
+        [
+          "src",
+          "url(\"/fonts/caveat/regular.woff2\")"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 2 */",
+      "peso": 1,
+      "declarations": [
+        [
+          "font-family",
+          "\"Crimson Pro Regular\""
+        ],
+        [
+          "src",
+          "url(\"/fonts/crimson_pro/variable.woff2\")"
+        ]
+      ]
+    },
+    {
+      "selector": "@font-face /* bloque 3 */",
+      "peso": 2,
+      "declarations": [
+        [
+          "font-family",
+          "Colus"
+        ],
+        [
+          "src",
+          "url(\"/fonts/colus/regular.woff2\")"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"] /* bloque 4 */",
+      "peso": 4,
+      "declarations": [
+        [
+          "display",
+          "grid"
+        ],
+        [
+          "grid-template-columns",
+          "auto 1fr auto"
+        ],
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "white-space",
+          "nowrap"
+        ],
+        [
+          "text-decoration",
+          "none"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"]:has(span) span:first-child /* bloque 5 */",
+      "peso": 5,
+      "declarations": [
+        [
+          "grid-column",
+          "1"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"]:has(span) span:last-child /* bloque 6 */",
+      "peso": 6,
+      "declarations": [
+        [
+          "grid-column",
+          "3"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :not(li)>a[href^=\"#\"]::after /* bloque 7 */",
+      "peso": 7,
+      "declarations": [
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "grid-column",
+          "2"
+        ],
+        [
+          "border-bottom",
+          "1px dotted currentColor"
+        ],
+        [
+          "margin",
+          "-10px 3px 0"
+        ],
+        [
+          "width",
+          "calc(100% - 5px)"
+        ],
+        [
+          "height",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div :is(em,strong) /* bloque 8 */",
+      "peso": 8,
+      "declarations": [
+        [
+          "color",
+          "var(--color-emphasis)"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band /* bloque 9 */",
+      "peso": 9,
+      "declarations": [
+        [
+          "background",
+          "var(--color-band-bg)"
+        ],
+        [
+          "padding",
+          "5px 10px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "width",
+          "90%"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left /* bloque 10 */",
+      "peso": 10,
+      "declarations": [
+        [
+          "border-radius",
+          "0 5px 5px 0"
+        ],
+        [
+          "box-shadow",
+          "3px 2px 5px var(--color-band-shadow)"
+        ],
+        [
+          "margin-left",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.right /* bloque 11 */",
+      "peso": 11,
+      "declarations": [
+        [
+          "border-radius",
+          "5px 0 0 5px"
+        ],
+        [
+          "box-shadow",
+          "-3px 2px 5px var(--color-band-shadow)"
+        ],
+        [
+          "margin-right",
+          "-15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band>:first-child /* bloque 12 */",
+      "peso": 12,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "margin",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left>:first-child /* bloque 13 */",
+      "peso": 13,
+      "declarations": [
+        [
+          "flex-direction",
+          "row-reverse"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band div /* bloque 14 */",
+      "peso": 14,
+      "declarations": [
+        [
+          "border-bottom",
+          "10px solid transparent"
+        ],
+        [
+          "border-top",
+          "13px solid #000"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "-22px"
+        ],
+        [
+          "z-index",
+          "-1"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.left div /* bloque 15 */",
+      "peso": 15,
+      "declarations": [
+        [
+          "border-left",
+          "15px solid transparent"
+        ],
+        [
+          "left",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main .band.right div /* bloque 16 */",
+      "peso": 16,
+      "declarations": [
+        [
+          "border-right",
+          "15px solid transparent"
+        ],
+        [
+          "right",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote /* bloque 17 */",
+      "peso": 17,
+      "declarations": [
+        [
+          "background-attachment",
+          "fixed"
+        ],
+        [
+          "background-color",
+          "var(--color-blockquote-bg)"
+        ],
+        [
+          "background-blend-mode",
+          "overlay"
+        ],
+        [
+          "border-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='30' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M10 5 Q7 3, 5 0 Q3 3,0 5 Q3 7, 5 10 Q7 7, 10 5 M20 5 Q23 7, 25 10 Q27 7, 30 5 Q27 3, 25 0 Q23 3, 20 5 M10 25 Q7 23, 5 20 Q3 23, 0 25 Q3 27, 5 30 Q7 27, 10 25 M20 25 Q23 27, 25 30 Q27 27, 30 25 Q27 23, 25 20 Q23 23, 20 25 Z' fill='RGB(0, 96, 77)'/><path d='M5 3.5 L25 3.5 L25 6.5 L5 6.5 Z' fill='RGB(0, 96, 77)'/><path d='M5 23.5 L25 23.5 L25 26.5 L5 26.5 Z' fill='RGB(0, 96, 77)'/></svg>\") 10 stretch"
+        ],
+        [
+          "border-image-outset",
+          "4px 8px"
+        ],
+        [
+          "border-style",
+          "solid"
+        ],
+        [
+          "border-width",
+          "8px 16px"
+        ],
+        [
+          "box-shadow",
+          "0 0 10px 0 var(--color-blockquote-shadow)"
+        ],
+        [
+          "padding",
+          "10px 25px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "margin-block",
+          "var(--spacing-blockquote-block)"
+        ],
+        [
+          "margin-inline",
+          "auto"
+        ]
+      ]
+    },
+    {
+      "selector": "main blockquote h5 /* bloque 18 */",
+      "peso": 18,
+      "declarations": [
+        [
+          "margin-top",
+          "-38px"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>blockquote:first-child /* bloque 19 */",
+      "peso": 19,
+      "declarations": [
+        [
+          "margin-top",
+          "20px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards /* bloque 20 */",
+      "peso": 20,
+      "declarations": [
+        [
+          "border",
+          "var(--border-card)"
+        ],
+        [
+          "box-sizing",
+          "border-box"
+        ],
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-wrap",
+          "wrap"
+        ],
+        [
+          "flex",
+          "0 0 696px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards picture /* bloque 21 */",
+      "peso": 21,
+      "declarations": [
+        [
+          "background",
+          "url(/img/editor/dragonbane/96/pergamino_carta.webp) no-repeat"
+        ],
+        [
+          "background-size",
+          "cover"
+        ],
+        [
+          "border",
+          "var(--border-card)"
+        ],
+        [
+          "box-sizing",
+          "border-box"
+        ],
+        [
+          "flex",
+          "1 0 var(--card-min-width)"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "height",
+          "var(--card-height)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards:has(> picture:only-child) /* bloque 22 */",
+      "peso": 22,
+      "declarations": [
+        [
+          "flex",
+          "0 0 236px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards:has(> picture:nth-child(2):last-child) /* bloque 23 */",
+      "peso": 23,
+      "declarations": [
+        [
+          "flex",
+          "0 0 466px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards picture h5 /* bloque 24 */",
+      "peso": 24,
+      "declarations": [
+        [
+          "background-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>\"),url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>\"),url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/></svg>\")"
+        ],
+        [
+          "margin-top",
+          "3px"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "top",
+          "0"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "width",
+          "98%"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards picture h6 /* bloque 25 */",
+      "peso": 25,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "justify-content",
+          "center"
+        ],
+        [
+          "font",
+          "var(--font-size-card-title) var(--font-heading)"
+        ],
+        [
+          "margin-inline",
+          "auto"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "top",
+          "-10px"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "width",
+          "var(--card-title-width)"
+        ],
+        [
+          "height",
+          "var(--card-title-height)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards picture h6::before /* bloque 26 */",
+      "peso": 26,
+      "declarations": [
+        [
+          "background",
+          "url(\"/img/editor/dragonbane/96/pergamino_para_titulos.webp?v=250415\") no-repeat"
+        ],
+        [
+          "background-size",
+          "cover"
+        ],
+        [
+          "content",
+          "\"\""
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%,0)"
+        ],
+        [
+          "top",
+          "0"
+        ],
+        [
+          "z-index",
+          "-1"
+        ],
+        [
+          "width",
+          "var(--card-title-width)"
+        ],
+        [
+          "height",
+          "var(--card-title-height)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards picture>:not(h5,h6,hr,img) /* bloque 27 */",
+      "peso": 27,
+      "declarations": [
+        [
+          "margin",
+          "0 10px"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards picture hr /* bloque 28 */",
+      "peso": 28,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "-5px"
+        ],
+        [
+          "width",
+          "170px"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%,0)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .cards picture img /* bloque 29 */",
+      "peso": 29,
+      "declarations": [
+        [
+          "opacity",
+          "var(--img-watermark-opacity)"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "0"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%,0)"
+        ],
+        [
+          "z-index",
+          "-1"
+        ]
+      ]
+    },
+    {
+      "selector": "main .cover article /* bloque 30 */",
+      "peso": 30,
+      "declarations": [
+        [
+          "background",
+          "var(--color-bg-cover)"
+        ]
+      ]
+    },
+    {
+      "selector": "main .cover article [src*=portada] /* bloque 31 */",
+      "peso": 31,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "left",
+          "50%"
+        ],
+        [
+          "top",
+          "50%"
+        ],
+        [
+          "transform",
+          "translate(-50%,-50%)"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer:has(>div) /* bloque 32 */",
+      "peso": 32,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "var(--column-gap)"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main header:has(>div) /* bloque 33 */",
+      "peso": 32,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "var(--column-gap)"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main section:has(>div) /* bloque 34 */",
+      "peso": 32,
+      "declarations": [
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "flex-direction",
+          "row"
+        ],
+        [
+          "gap",
+          "var(--column-gap)"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main footer:has(>div)>div /* bloque 35 */",
+      "peso": 33,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main header:has(>div)>div /* bloque 36 */",
+      "peso": 33,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main section:has(>div)>div /* bloque 37 */",
+      "peso": 33,
+      "declarations": [
+        [
+          "flex",
+          "1"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div footer /* bloque 38 */",
+      "peso": 34,
+      "declarations": [
+        [
+          "color",
+          "var(--color-primary)"
+        ],
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "justify-content",
+          "center"
+        ],
+        [
+          "flex-direction",
+          "column"
+        ],
+        [
+          "font",
+          "bold var(--font-size-footer) var(--font-heading)"
+        ],
+        [
+          "margin",
+          "auto"
+        ],
+        [
+          "min-width",
+          "var(--footer-counter-width)"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "bottom",
+          "10px"
+        ],
+        [
+          "left",
+          "30px"
+        ],
+        [
+          "right",
+          "30px"
+        ],
+        [
+          "z-index",
+          "1"
+        ],
+        [
+          "text-transform",
+          "uppercase"
+        ],
+        [
+          "width",
+          "fit-content"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div footer::after /* bloque 39 */",
+      "peso": 35,
+      "declarations": [
+        [
+          "background-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='30' width='120' xmlns='http://www.w3.org/2000/svg'><path d='M0 0 L0 3   Q40 10, 60 30   Q80 10, 120 3  L 120 0 Z' fill='RGB(0, 96, 77)'/></svg>\")"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "color",
+          "var(--color-text-inverse)"
+        ],
+        [
+          "content",
+          "counter(page)"
+        ],
+        [
+          "display",
+          "block"
+        ],
+        [
+          "font-size",
+          "var(--font-size-footer-num)"
+        ],
+        [
+          "padding",
+          "2px 0 0"
+        ],
+        [
+          "width",
+          "var(--footer-counter-width)"
+        ],
+        [
+          "height",
+          "30px"
+        ]
+      ]
+    },
+    {
+      "selector": "main caption /* bloque 40 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-variant",
+          "small-caps"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "line-height",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1 /* bloque 41 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-variant",
+          "small-caps"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "line-height",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2 /* bloque 42 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-variant",
+          "small-caps"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "line-height",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3 /* bloque 43 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-variant",
+          "small-caps"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "line-height",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main h4 /* bloque 44 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-variant",
+          "small-caps"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "line-height",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main h5 /* bloque 45 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-variant",
+          "small-caps"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "line-height",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main th /* bloque 46 */",
+      "peso": 36,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-variant",
+          "small-caps"
+        ],
+        [
+          "font-weight",
+          "400"
+        ],
+        [
+          "line-height",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1 /* bloque 47 */",
+      "peso": 37,
+      "declarations": [
+        [
+          "margin-bottom",
+          "var(--spacing-heading-bottom)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2 /* bloque 48 */",
+      "peso": 37,
+      "declarations": [
+        [
+          "margin-bottom",
+          "var(--spacing-heading-bottom)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h4 /* bloque 49 */",
+      "peso": 37,
+      "declarations": [
+        [
+          "margin-bottom",
+          "var(--spacing-heading-bottom)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1 /* bloque 50 */",
+      "peso": 38,
+      "declarations": [
+        [
+          "color",
+          "var(--color-accent)"
+        ],
+        [
+          "font-size",
+          "var(--font-size-h1)"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "width",
+          "100%"
+        ],
+        [
+          "z-index",
+          "1"
+        ]
+      ]
+    },
+    {
+      "selector": "main h1+hr /* bloque 51 */",
+      "peso": 39,
+      "declarations": [
+        [
+          "border-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(238, 61, 60)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(238, 61, 60)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(238, 61, 60)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(238, 61, 60)'/></svg>\") 16 8"
+        ],
+        [
+          "border-style",
+          "solid"
+        ],
+        [
+          "border-width",
+          "0 32px 16px"
+        ],
+        [
+          "margin",
+          "0 auto"
+        ],
+        [
+          "width",
+          "50%"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1:first-child + p,section:has(h1) + section > div:first-child > p:first-child)::first-letter /* bloque 52 */",
+      "peso": 40,
+      "declarations": [
+        [
+          "color",
+          "transparent"
+        ],
+        [
+          "-webkit-text-fill-color",
+          "transparent"
+        ],
+        [
+          "background-clip",
+          "text"
+        ],
+        [
+          "-webkit-background-clip",
+          "text"
+        ],
+        [
+          "background-image",
+          "var(--gradient-forest)"
+        ],
+        [
+          "float",
+          "left"
+        ],
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-size",
+          "var(--font-size-drop-cap)"
+        ],
+        [
+          "line-height",
+          "1"
+        ],
+        [
+          "margin",
+          "-16px 0 -26px 0"
+        ],
+        [
+          "padding",
+          "10px 10px 10px 0"
+        ]
+      ]
+    },
+    {
+      "selector": "main section:has(h1)+section p:first-child /* bloque 53 */",
+      "peso": 41,
+      "declarations": [
+        [
+          "color",
+          "var(--color-secondary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2 /* bloque 54 */",
+      "peso": 42,
+      "declarations": [
+        [
+          "background-image",
+          "var(--gradient-forest)"
+        ],
+        [
+          "background-clip",
+          "text"
+        ],
+        [
+          "color",
+          "var(--color-primary)"
+        ],
+        [
+          "font-size",
+          "var(--font-size-h2)"
+        ],
+        [
+          "padding-top",
+          "15px"
+        ]
+      ]
+    },
+    {
+      "selector": "main h2~p /* bloque 55 */",
+      "peso": 43,
+      "declarations": [
+        [
+          "color",
+          "var(--color-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3 /* bloque 56 */",
+      "peso": 44,
+      "declarations": [
+        [
+          "border-bottom",
+          "var(--border-h3)"
+        ],
+        [
+          "color",
+          "var(--color-secondary)"
+        ],
+        [
+          "font-size",
+          "var(--font-size-h3)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3+p /* bloque 57 */",
+      "peso": 45,
+      "declarations": [
+        [
+          "color",
+          "var(--color-secondary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>:is(h1,h2,h3,h4,h5,h6):first-child /* bloque 58 */",
+      "peso": 46,
+      "declarations": [
+        [
+          "padding-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main h4 /* bloque 59 */",
+      "peso": 47,
+      "declarations": [
+        [
+          "font-size",
+          "var(--font-size-h4)"
+        ],
+        [
+          "padding-top",
+          "15px"
+        ],
+        [
+          "text-transform",
+          "uppercase"
+        ]
+      ]
+    },
+    {
+      "selector": "main h3+h4 /* bloque 60 */",
+      "peso": 48,
+      "declarations": [
+        [
+          "padding-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main h5 /* bloque 61 */",
+      "peso": 49,
+      "declarations": [
+        [
+          "background-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='40' width='80' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 L0 35 L30 35 Q38 35, 40 40 Q42 35, 50 35 L80 35 L80 5 L50 5 Q42 5, 40 0 Q38 5, 30 5 Z' fill='RGB(0, 96, 77)'/></svg>\"),url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M30 5 Q20 5 ,20 2 Q13 13, 0 20 Q13 27, 20 38 Q20 35, 30 35 Z' fill='RGB(0, 96, 77)'/></svg>\"),url(\"data:image/svg+xml;utf8,<svg height='40' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M0 5 Q10 5 ,10 2 Q17 13, 30 20 Q17 27, 10 38 Q10 35, 0 35 Z' fill='RGB(0, 96, 77)'/></svg>\")"
+        ],
+        [
+          "background-position",
+          "center,left center,right"
+        ],
+        [
+          "background-repeat",
+          "no-repeat"
+        ],
+        [
+          "background-size",
+          "calc(100% - 40px) 100%,30px 40px,30px 40px"
+        ],
+        [
+          "color",
+          "var(--color-text-inverse)"
+        ],
+        [
+          "font-size",
+          "var(--font-size-h5)"
+        ],
+        [
+          "height",
+          "40px"
+        ],
+        [
+          "inset",
+          "-28px 0 auto"
+        ],
+        [
+          "margin-inline",
+          "auto"
+        ],
+        [
+          "padding",
+          "0 20px"
+        ],
+        [
+          "place-content",
+          "center"
+        ],
+        [
+          "width",
+          "fit-content"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div h5 /* bloque 62 */",
+      "peso": 50,
+      "declarations": [
+        [
+          "filter",
+          "var(--tone, none)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .magic /* bloque 63 */",
+      "peso": 51,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(110deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .magic h5 /* bloque 64 */",
+      "peso": 51,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(110deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .event /* bloque 65 */",
+      "peso": 52,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(42deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .event h5 /* bloque 66 */",
+      "peso": 52,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(42deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .plant /* bloque 67 */",
+      "peso": 53,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(312deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .plant h5 /* bloque 68 */",
+      "peso": 53,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(312deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .pnj /* bloque 69 */",
+      "peso": 54,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(282deg) brightness(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .pnj h5 /* bloque 70 */",
+      "peso": 54,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(282deg) brightness(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .gold-item /* bloque 71 */",
+      "peso": 55,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(242deg) brightness(2)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .gold-item h5 /* bloque 72 */",
+      "peso": 55,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(242deg) brightness(2)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .condition /* bloque 73 */",
+      "peso": 56,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(170deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .condition h5 /* bloque 74 */",
+      "peso": 56,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(170deg)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .monster /* bloque 75 */",
+      "peso": 57,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(192deg) saturate(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .monster h5 /* bloque 76 */",
+      "peso": 57,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(192deg) saturate(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .silver-item /* bloque 77 */",
+      "peso": 58,
+      "declarations": [
+        [
+          "--tone",
+          "saturate(0) brightness(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .silver-item h5 /* bloque 78 */",
+      "peso": 58,
+      "declarations": [
+        [
+          "--tone",
+          "saturate(0) brightness(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .bronze-item /* bloque 79 */",
+      "peso": 59,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(212deg) brightness(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div .bronze-item h5 /* bloque 80 */",
+      "peso": 59,
+      "declarations": [
+        [
+          "--tone",
+          "hue-rotate(212deg) brightness(1.25)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h5+p /* bloque 81 */",
+      "peso": 60,
+      "declarations": [
+        [
+          "color",
+          "var(--color-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main h6 /* bloque 82 */",
+      "peso": 61,
+      "declarations": [
+        [
+          "font-family",
+          "var(--font-annotation)"
+        ],
+        [
+          "font-size",
+          "var(--font-size-h6)"
+        ]
+      ]
+    },
+    {
+      "selector": "main hr:not(h1+hr) /* bloque 83 */",
+      "peso": 62,
+      "declarations": [
+        [
+          "border-image",
+          "url(\"data:image/svg+xml;utf8,<svg height='16' width='170' xmlns='http://www.w3.org/2000/svg'><path d='M2 4 L0 8 L2 12 L4 8 Z' fill='RGB(0, 96, 77)'/><path d='M168 4 L170 8 L168 12 L166 8 Z' fill='RGB(0, 96, 77)'/><path d='M2 6 L2 10 L168 10 L168 6 Z' fill='RGB(0, 96, 77)'/><path d='M85 0 Q83 6 ,81 6 L81 10 Q83 10, 85 16 Q87 10, 89 10 L89 6 Q87 6, 85 0 Z' fill='RGB(0, 96, 77)'/></svg>\") 16 8"
+        ],
+        [
+          "border-style",
+          "solid"
+        ],
+        [
+          "border-width",
+          "0 32px 16px"
+        ],
+        [
+          "margin",
+          "0 auto"
+        ],
+        [
+          "width",
+          "50%"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(ol,ul) /* bloque 84 */",
+      "peso": 63,
+      "declarations": [
+        [
+          "padding-left",
+          "var(--list-padding)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul /* bloque 85 */",
+      "peso": 64,
+      "declarations": [
+        [
+          "list-style",
+          "none"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul>li::before /* bloque 86 */",
+      "peso": 65,
+      "declarations": [
+        [
+          "content",
+          "var(--list-bullet)"
+        ],
+        [
+          "margin-left",
+          "calc(-1 * var(--list-padding))"
+        ],
+        [
+          "color",
+          "var(--color-text)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul>li li::before /* bloque 87 */",
+      "peso": 66,
+      "declarations": [
+        [
+          "content",
+          "var(--list-sub-bullet)"
+        ],
+        [
+          "margin-left",
+          "calc(-1 * var(--list-padding))"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.checkbox li::before /* bloque 88 */",
+      "peso": 67,
+      "declarations": [
+        [
+          "content",
+          "var(--list-checkbox)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul.radio li::before /* bloque 89 */",
+      "peso": 68,
+      "declarations": [
+        [
+          "content",
+          "var(--list-radio)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> :is(em,strong))::before /* bloque 90 */",
+      "peso": 69,
+      "declarations": [
+        [
+          "color",
+          "var(--color-text)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> b)~li:has(> :is(em,strong))::before /* bloque 91 */",
+      "peso": 69,
+      "declarations": [
+        [
+          "color",
+          "var(--color-text)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> :is(em,strong)):has(~ li > b:first-child)::before /* bloque 92 */",
+      "peso": 70,
+      "declarations": [
+        [
+          "color",
+          "var(--color-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ul li:has(> :is(em,strong)):has(~ li > b:first-child)>:is(em,strong) /* bloque 93 */",
+      "peso": 71,
+      "declarations": [
+        [
+          "color",
+          "var(--color-primary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main ol li::marker /* bloque 94 */",
+      "peso": 72,
+      "declarations": [
+        [
+          "font-weight",
+          "700"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1,h2,h3,h4,h5,h6,p,table) /* bloque 95 */",
+      "peso": 73,
+      "declarations": [
+        [
+          "margin-block",
+          "var(--spacing-block-heading)"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(ol,ul) /* bloque 96 */",
+      "peso": 74,
+      "declarations": [
+        [
+          "margin-block",
+          "var(--spacing-block-list)"
+        ]
+      ]
+    },
+    {
+      "selector": "main :is(h1,h2,h3,h4,h5,h6)+* /* bloque 97 */",
+      "peso": 75,
+      "declarations": [
+        [
+          "margin-top",
+          "var(--spacing-after-heading)"
+        ]
+      ]
+    },
+    {
+      "selector": "main :not(blockquote h5):first-child /* bloque 98 */",
+      "peso": 76,
+      "declarations": [
+        [
+          "margin-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main :last-child /* bloque 99 */",
+      "peso": 77,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main li /* bloque 100 */",
+      "peso": 78,
+      "declarations": [
+        [
+          "margin-bottom",
+          "var(--spacing-li)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div article /* bloque 101 */",
+      "peso": 79,
+      "declarations": [
+        [
+          "background",
+          "url(\"/img/editor/dragonbane/96/pergamino.webp\")"
+        ],
+        [
+          "background-size",
+          "cover"
+        ],
+        [
+          "counter-increment",
+          "page"
+        ],
+        [
+          "font",
+          "var(--font-size-body) var(--font-body)"
+        ],
+        [
+          "color",
+          "var(--color-text)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div article>section /* bloque 102 */",
+      "peso": 80,
+      "declarations": [
+        [
+          "padding-inline",
+          "var(--spacing-page-inline)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div article>section:first-child /* bloque 103 */",
+      "peso": 81,
+      "declarations": [
+        [
+          "padding-top",
+          "var(--spacing-page-top)"
+        ]
+      ]
+    },
+    {
+      "selector": "main>div article>section:last-child /* bloque 104 */",
+      "peso": 82,
+      "declarations": [
+        [
+          "padding-bottom",
+          "var(--spacing-page-bottom)"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture:has(mark) /* bloque 105 */",
+      "peso": 83,
+      "declarations": [
+        [
+          "display",
+          "block"
+        ],
+        [
+          "position",
+          "relative"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture:has(mark) img /* bloque 106 */",
+      "peso": 84,
+      "declarations": [
+        [
+          "mix-blend-mode",
+          "multiply"
+        ],
+        [
+          "mask-image",
+          "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' preserveAspectRatio='none'><path fill='white' d='M0,0 H600 V390 L595,397 L585,390 L575,400 L565,390 L555,393 L545,390 L535,398 L525,390 L515,392 L505,390 L495,396 L485,390 L475,394 L465,390 L455,400 L445,390 L435,393 L425,390 L415,397 L405,390 L395,392 L385,390 L375,396 L365,390 L355,395 L345,390 L335,398 L325,390 L315,394 L305,390 L295,393 L285,390 L275,400 L265,390 L255,392 L245,390 L235,396 L225,390 L215,394 L205,390 L195,398 L185,390 L175,393 L165,390 L155,397 L145,390 L135,392 L125,390 L115,395 L105,390 L95,398 L85,390 L75,394 L65,390 L55,393 L45,390 L35,400 L25,390 L15,392 L5,390 L0,390 Z'/></svg>\")"
+        ],
+        [
+          "mask-repeat",
+          "no-repeat"
+        ],
+        [
+          "mask-size",
+          "100% 100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main mark /* bloque 107 */",
+      "peso": 85,
+      "declarations": [
+        [
+          "background-color",
+          "var(--color-primary)"
+        ],
+        [
+          "border-radius",
+          "100%"
+        ],
+        [
+          "color",
+          "var(--color-text-inverse)"
+        ],
+        [
+          "display",
+          "inline-block"
+        ],
+        [
+          "font-family",
+          "var(--font-heading)"
+        ],
+        [
+          "font-size",
+          "var(--font-size-mark)"
+        ],
+        [
+          "height",
+          "var(--mark-size)"
+        ],
+        [
+          "line-height",
+          "1.5"
+        ],
+        [
+          "text-align",
+          "center"
+        ],
+        [
+          "width",
+          "var(--mark-size)"
+        ]
+      ]
+    },
+    {
+      "selector": "main picture mark /* bloque 108 */",
+      "peso": 86,
+      "declarations": [
+        [
+          "position",
+          "absolute"
+        ]
+      ]
+    },
+    {
+      "selector": "main caption /* bloque 109 */",
+      "peso": 87,
+      "declarations": [
+        [
+          "align-items",
+          "center"
+        ],
+        [
+          "background-image",
+          "var(--bg-band)"
+        ],
+        [
+          "background-position",
+          "center,left center,right"
+        ],
+        [
+          "background-repeat",
+          "no-repeat"
+        ],
+        [
+          "background-size",
+          "calc(100% - 40px) 100%,30px 40px,30px 40px"
+        ],
+        [
+          "color",
+          "#fff"
+        ],
+        [
+          "display",
+          "flex"
+        ],
+        [
+          "font-size",
+          "var(--font-size-caption)"
+        ],
+        [
+          "height",
+          "40px"
+        ],
+        [
+          "inset",
+          "-28px 0 auto"
+        ],
+        [
+          "margin",
+          "auto"
+        ],
+        [
+          "padding",
+          "0 30px"
+        ],
+        [
+          "position",
+          "absolute"
+        ],
+        [
+          "top",
+          "-45px"
+        ],
+        [
+          "width",
+          "fit-content"
+        ]
+      ]
+    },
+    {
+      "selector": "main caption::before /* bloque 110 */",
+      "peso": 88,
+      "declarations": [
+        [
+          "background-position",
+          "center left"
+        ],
+        [
+          "margin-left",
+          "-2mm"
+        ],
+        [
+          "margin-right",
+          ".2em"
+        ]
+      ]
+    },
+    {
+      "selector": "main caption::after /* bloque 111 */",
+      "peso": 89,
+      "declarations": [
+        [
+          "background-position",
+          "center right"
+        ],
+        [
+          "margin-left",
+          ".2em"
+        ],
+        [
+          "margin-right",
+          "-2mm"
+        ]
+      ]
+    },
+    {
+      "selector": "main table /* bloque 112 */",
+      "peso": 90,
+      "declarations": [
+        [
+          "border-collapse",
+          "collapse"
+        ],
+        [
+          "border-spacing",
+          "0"
+        ],
+        [
+          "position",
+          "relative"
+        ],
+        [
+          "text-align",
+          "left"
+        ],
+        [
+          "width",
+          "100%"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(caption) /* bloque 113 */",
+      "peso": 91,
+      "declarations": [
+        [
+          "margin-block",
+          "100px 5px"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>table:first-child /* bloque 114 */",
+      "peso": 92,
+      "declarations": [
+        [
+          "margin-top",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>table:has(caption):first-child /* bloque 115 */",
+      "peso": 93,
+      "declarations": [
+        [
+          "margin-top",
+          "45px"
+        ]
+      ]
+    },
+    {
+      "selector": "main div>table:last-child /* bloque 116 */",
+      "peso": 94,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    },
+    {
+      "selector": "main td /* bloque 117 */",
+      "peso": 95,
+      "declarations": [
+        [
+          "padding",
+          "var(--spacing-cell)"
+        ],
+        [
+          "vertical-align",
+          "top"
+        ]
+      ]
+    },
+    {
+      "selector": "main th /* bloque 118 */",
+      "peso": 95,
+      "declarations": [
+        [
+          "padding",
+          "var(--spacing-cell)"
+        ],
+        [
+          "vertical-align",
+          "top"
+        ]
+      ]
+    },
+    {
+      "selector": "main th /* bloque 119 */",
+      "peso": 96,
+      "declarations": [
+        [
+          "border-bottom",
+          "var(--border-th)"
+        ],
+        [
+          "color",
+          "var(--color-secondary)"
+        ]
+      ]
+    },
+    {
+      "selector": "main td /* bloque 120 */",
+      "peso": 97,
+      "declarations": [
+        [
+          "border-bottom",
+          "var(--border-td)"
+        ]
+      ]
+    },
+    {
+      "selector": "main tr:nth-child(2n) /* bloque 121 */",
+      "peso": 98,
+      "declarations": [
+        [
+          "background-color",
+          "var(--color-bg-even-row)"
+        ]
+      ]
+    },
+    {
+      "selector": "main table:has(+ul) /* bloque 122 */",
+      "peso": 99,
+      "declarations": [
+        [
+          "margin-bottom",
+          "0"
+        ]
+      ]
+    }
+  ]
+}

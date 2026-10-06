@@ -33,7 +33,7 @@ class EvController extends GeneralController
 
 		$this->claves	= (new Configuracion)->todas();
 		$this->usuario	= (new Usuarios)->uno();
-        $this->version = '260928'; # datetime
+        $this->version = '261006'; # datetime
 
 		# CRÍTICO rendimiento:
 		# liberamos el lock de la sesión aquí para que esta petición

@@ -75,7 +75,7 @@ class Plantillas_reglas extends LiteRecord
         if ($this->es_idu($reglas_idu)) {
             // Delete all other rules for the same property to prevent conflict / desfasadas
             self::query(
-                'DELETE FROM plantillas_reglas WHERE plantillas_idu=? AND propiedad=? AND idu != ?',
+                'DELETE FROM plantillas_reglas WHERE plantillas_idu=? AND selector=\'.plantilla\' AND propiedad=? AND idu != ?',
                 [$plantillas_idu, $propiedad, $reglas_idu]
             );
 
@@ -95,7 +95,7 @@ class Plantillas_reglas extends LiteRecord
 
         // Otherwise, check if we already have any rule for this property (under selector or obsolete selectors)
         $existing = self::all(
-            'SELECT idu FROM plantillas_reglas WHERE plantillas_idu=? AND propiedad=?',
+            'SELECT idu FROM plantillas_reglas WHERE plantillas_idu=? AND selector=\'.plantilla\' AND propiedad=?',
             [$plantillas_idu, $propiedad]
         );
 
@@ -171,6 +171,10 @@ class Plantillas_reglas extends LiteRecord
     {
         if (!$plantillas_idu) return;
 
+        if ($this->tieneComponentes($plantillas_idu)) {
+            return;
+        }
+
         $this->sanear($plantillas_idu);
 
         if (self::PROPIEDADES_OBSOLETAS) {
@@ -197,8 +201,19 @@ class Plantillas_reglas extends LiteRecord
         }
     }
 
+    public function tieneComponentes($plantillas_idu)
+    {
+        return (bool)self::first(
+            'SELECT idu FROM plantillas_reglas WHERE plantillas_idu=? AND selector=? AND propiedad=? AND valor=?',
+            [$plantillas_idu, self::SELECTOR_VARIABLES, '--componentes-version', '1']
+        );
+    }
+
     public function sanear($plantillas_idu)
     {
+        if ($this->tieneComponentes($plantillas_idu)) {
+            return;
+        }
         if (!$plantillas_idu) return;
 
         $placeholders = implode(',', array_fill(0, count(self::SELECTORES_OBSOLETOS), '?'));
@@ -231,6 +246,15 @@ class Plantillas_reglas extends LiteRecord
 
     public function duplicar($idu_origen, $idu_destino)
     {
+        if ($this->tieneComponentes($idu_origen)) {
+            $rows = self::all('SELECT selector, propiedad, valor, peso FROM plantillas_reglas WHERE plantillas_idu=? ORDER BY peso, id', [$idu_origen]);
+            foreach ($rows as $row) {
+                self::query('INSERT INTO plantillas_reglas (idu, plantillas_idu, selector, propiedad, valor, peso) VALUES (?, ?, ?, ?, ?, ?)',
+                    [_str::uid('reg'), $idu_destino, $row->selector, $row->propiedad, $row->valor, $row->peso]);
+            }
+            return;
+        }
+
         $reglas = self::all(
             'SELECT propiedad, valor FROM plantillas_reglas WHERE plantillas_idu=? AND selector=?',
             [$idu_origen, self::SELECTOR_VARIABLES]
