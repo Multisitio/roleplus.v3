@@ -79,3 +79,11 @@
   reproduce el sistema de BD y que funciones faltan, valorando cada ampliacion.
   El destino preferido para `srd20`, `for_the_quest` y `dragonbane` es una
   migracion al sistema de BD, evitando mantener dos sistemas de plantillas.
+
+- Correccion del usuario (2026-10-07): las carpetas de fuentes CSS no deben
+  contener archivos .min.css. En web/css/editor/ solo van los fuentes;
+  el conjunto se compila en web/css/editor.min.css. Tras compilar y desplegar,
+  comprobar que no quedan minificados individuales dentro de la carpeta.
+  Antes de retirar un minificado individual, compararlo con su fuente y el
+  bundle utilizado; conservar en el fuente cualquier funcionalidad necesaria
+  que exista solo en ese minificado y verificar el resultado compilado.

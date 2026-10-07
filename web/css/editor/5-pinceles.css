@@ -16,7 +16,7 @@
 
 /* barra pegada a la izquierda (48px) + margen */
 main {
-    margin: 45px;
+    margin: 45px 70px;
     box-sizing: border-box;
     padding: 0;
 }
