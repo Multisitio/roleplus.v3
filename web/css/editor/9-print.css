@@ -37,7 +37,6 @@
 
     [data-empty-helper="true"] {
         outline: none !important;
-        background: transparent !important;
         min-height: 0 !important;
     }
 

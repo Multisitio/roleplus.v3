@@ -87,3 +87,7 @@
   Antes de retirar un minificado individual, compararlo con su fuente y el
   bundle utilizado; conservar en el fuente cualquier funcionalidad necesaria
   que exista solo en ese minificado y verificar el resultado compilado.
+
+- Correccion del usuario (2026-10-07): las ayudas visuales de elementos vacios
+  no deben sustituir el fondo de la plantilla, ni en reposo, hover, seleccion
+  o impresion. Una pagina nueva debe conservar su fondo aunque este vacia.

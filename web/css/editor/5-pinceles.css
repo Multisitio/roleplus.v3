@@ -321,13 +321,11 @@ main div[contenteditable] [data-empty-helper="true"] {
     display: block;
     box-sizing: border-box;
     outline: none;
-    background: transparent;
 }
 
 main div[contenteditable] [data-empty-helper="true"]:hover,
 main div[contenteditable] [data-empty-helper="true"].is-active-helper {
     outline: 1px dashed rgba(200, 100, 100, 0.35);
-    background: rgba(255, 100, 100, 0.02);
 }
 
 main div[contenteditable] td[data-empty-helper="true"],
