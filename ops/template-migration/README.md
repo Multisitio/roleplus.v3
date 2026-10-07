@@ -12,7 +12,7 @@ ni infringir su índice único sobre plantilla, selector y propiedad.
 Los valores medidos en los JSON `*-computed.json` alimentan los controles
 habituales. Los tamaños que no estaban en sus listas también se muestran.
 Las excepciones según tarjeta, posición o formato siguen siendo reglas editables
-en «Detalles decorativos». Los ajustes habituales solo añaden una modificación
+en «Reglas del sistema anterior». Los ajustes habituales solo añaden una modificación
 cuando difieren de su valor importado.
 
 La marca `--componentes-version=1` protege esas reglas frente a la limpieza

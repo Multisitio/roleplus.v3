@@ -105,7 +105,6 @@ class Plantillas_componentes extends LiteRecord
         }
         $reglas = [
             '--background-image' => ['main > div:nth-child(odd) article', 'background-image'],
-            '--background-image-even' => ['main > div:nth-child(even) article', 'background-image'],
             '--background-color' => ['main > div:nth-child(odd) article', 'background-color'],
             '--background-color-even' => ['main > div:nth-child(even) article', 'background-color'],
             '--a-color' => ['main :is(a, em, strong)', 'color'],
@@ -130,6 +129,13 @@ class Plantillas_componentes extends LiteRecord
             if ($this->cambiado($vars, $key)) {
                 $css .= "{$selector} { {$propiedad}: var({$key}) !important; }\n";
             }
+        }
+        $fondo_par = trim($vars['--background-image-even'] ?? 'none');
+        $hereda_fondo = $fondo_par === '' || strtolower($fondo_par) === 'none';
+        if ($this->cambiado($vars, '--background-image-even')
+            || ($hereda_fondo && $this->cambiado($vars, '--background-image'))) {
+            $variable_fondo = $hereda_fondo ? '--background-image' : '--background-image-even';
+            $css .= "main > div:nth-child(even) article {background-image: var({$variable_fondo}) !important;}\n";
         }
         if ($this->cambiado($vars, '--footer-imagen')) {
             $css .= "main footer::before {content: ''; position: absolute; inset: 0; background-image: var(--footer-imagen); background-repeat: no-repeat; background-position: center bottom; z-index: -1;}\n";

@@ -105,3 +105,8 @@
   conservar el propietario del directorio web. Verificar una reescritura
   como usuario de PHP-FPM; una compilacion correcta como root no valida el
   guardado desde el editor. No informar exito si la compilacion falla.
+
+- Correccion del usuario (2026-10-07): el fondo de paginas pares es opcional.
+  Si esta vacio o se quita, hereda el fondo de las impares. Verificar este
+  comportamiento tanto en plantillas de BD habituales como en las migradas;
+  no obligar a seleccionar dos veces la misma imagen.
