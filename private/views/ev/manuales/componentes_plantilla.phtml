@@ -1,6 +1,5 @@
-<h1><?=h($plantilla->nombre)?>: <?=t('Detalles decorativos')?></h1>
+<h2><?=h($plantilla->nombre)?></h2>
 <p><?=t('Cada cambio se guarda en la plantilla de BD. Afecta a tus manuales que utilicen esta misma plantilla; no modifica el texto de las páginas.')?></p>
-<p><a href="/ev/manuales/editor/es/<?=h($manuales_idu)?>"><?=t('Ver el manual')?></a></p>
 <?php $grupo = null; ?>
 <?php foreach ($componentes as $regla): ?>
     <?php $nuevo_grupo = $regla->peso . '|' . $regla->selector; ?>
@@ -10,7 +9,7 @@
             <summary><code><?=h($regla->selector)?></code></summary>
         <?php $grupo = $nuevo_grupo; ?>
     <?php endif; ?>
-    <form method="post" action="/ev/manuales/componentes_plantilla/<?=h($manuales_idu)?>" class="pa10">
+    <form method="post" action="/ev/manuales/componentes_plantilla/<?=h($manuales_idu)?>" class="pa10" data-componentes-form>
         <input type="hidden" name="regla_idu" value="<?=h($regla->idu)?>">
         <label><code><?=h($regla->propiedad)?></code>
             <textarea name="valor" rows="2" required><?=h($regla->valor)?></textarea>

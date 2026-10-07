@@ -1,5 +1,6 @@
 aside {
-    background: white;
+    background: var(--background-card);
+    color: var(--color);
     box-shadow: -5px 0px 15px 5px grey;
     height: 100%;
     max-width: 670px;
@@ -9,4 +10,16 @@ aside {
     top: 0;
     z-index: 4;
     width: 100%;
+}
+
+aside.template .template-component-content {
+    text-align: left;
+}
+
+aside.template .template-component-content summary {
+    overflow-wrap: anywhere;
+}
+
+aside.template .template-component-panel .template-component-content details:not([open]) > summary::after {
+    content: '+';
 }

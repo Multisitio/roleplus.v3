@@ -91,3 +91,8 @@
 - Correccion del usuario (2026-10-07): las ayudas visuales de elementos vacios
   no deben sustituir el fondo de la plantilla, ni en reposo, hover, seleccion
   o impresion. Una pagina nueva debe conservar su fondo aunque este vacia.
+
+- Correccion del usuario (2026-10-07): los detalles decorativos de plantillas
+  deben editarse dentro del panel del manual, sobre un fondo solido del tema.
+  Cargar solo el fragmento por AJAX; no abrir popups ni cargar el layout
+  completo. Guardar sin recargar el manual ni interrumpir la escritura.

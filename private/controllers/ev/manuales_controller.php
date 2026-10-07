@@ -380,9 +380,14 @@ class ManualesController extends EvController
     # 
     public function componentes_plantilla($manuales_idu)
     {
+        if ( ! Input::isAjax()) {
+            return Redirect::to('/ev/manuales/editor/es/' . $manuales_idu);
+        }
         if ( ! $this->esEditable($manuales_idu)) {
+            View::template(null);
+            View::select(null);
             http_response_code(403);
-            return Redirect::to('/ev/manuales');
+            return;
         }
         $this->manual = (new Manuales)->uno($manuales_idu);
         $this->plantilla = (new Plantillas)->obtenerOCrearPorNombre($this->manual->plantilla, Session::get('idu'), $this->manual->plantilla);
@@ -390,14 +395,18 @@ class ManualesController extends EvController
             return Redirect::to('/ev/manuales/formulario/' . $manuales_idu);
         }
         if (Input::post('regla_idu')) {
+            View::template(null);
+            View::select(null);
+            header('Content-Type: application/json; charset=utf-8');
             try {
                 (new Plantillas_componentes)->guardarValor($this->plantilla->idu, Input::post('regla_idu'), Input::post('valor'));
                 $this->plantilla->compilar();
-                Session::setArray('toast', t('Regla de plantilla guardada.'));
+                echo json_encode(['success' => true, 'css_url' => $this->plantilla->getCssUrl()]);
             } catch (InvalidArgumentException $e) {
-                Session::setArray('toast', t('Valor CSS no válido.'));
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => t('Valor CSS no válido.')]);
             }
-            return Redirect::to('/ev/manuales/componentes_plantilla/' . $manuales_idu);
+            return;
         }
         $this->componentes = (new Plantillas_componentes)->reglas($this->plantilla->idu);
         $this->manuales_idu = $manuales_idu;

@@ -6,7 +6,11 @@
 	</button>
 
     <?php if ($plantilla_manual && $plantilla_manual->tieneComponentes()): ?>
-        <p><a href="/ev/manuales/componentes_plantilla/<?=h($manuales_idu)?>" target="_blank" rel="noopener"><?=t('Editar detalles decorativos de la plantilla')?></a></p>
+        <details class="template-panel template-component-panel">
+            <summary><?=t('Detalles decorativos de la plantilla')?></summary>
+            <p class="template-component-status" role="status"></p>
+            <div class="template-component-content" data-componentes-url="/ev/manuales/componentes_plantilla/<?=h($manuales_idu)?>"></div>
+        </details>
         <p><?=t('Los controles muestran los valores base. Las variantes por formato, posición en la página y tarjetas se conservan en los detalles decorativos.')?></p>
     <?php endif; ?>
 
