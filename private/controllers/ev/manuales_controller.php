@@ -399,12 +399,16 @@ class ManualesController extends EvController
             View::select(null);
             header('Content-Type: application/json; charset=utf-8');
             try {
-                (new Plantillas_componentes)->guardarValor($this->plantilla->idu, Input::post('regla_idu'), Input::post('valor'));
+                if (Input::post('operacion') === 'eliminar') {
+                    (new Plantillas_componentes)->eliminarRegla($this->plantilla->idu, Input::post('regla_idu'));
+                } else {
+                    (new Plantillas_componentes)->guardarValor($this->plantilla->idu, Input::post('regla_idu'), Input::post('valor'));
+                }
                 $this->plantilla->compilar();
                 echo json_encode(['success' => true, 'css_url' => $this->plantilla->getCssUrl()]);
             } catch (InvalidArgumentException $e) {
                 http_response_code(400);
-                echo json_encode(['success' => false, 'error' => t('Valor CSS no válido.')]);
+                echo json_encode(['success' => false, 'error' => t($e->getMessage())]);
             }
             return;
         }

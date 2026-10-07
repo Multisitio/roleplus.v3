@@ -148,6 +148,17 @@ class Plantillas_componentes extends LiteRecord
         return $css;
     }
 
+    public function eliminarRegla($plantilla_idu, $regla_idu)
+    {
+        $regla = self::first('SELECT idu FROM plantillas_reglas WHERE plantillas_idu=? AND idu=? AND selector != ?',
+            [$plantilla_idu, $regla_idu, Plantillas_reglas::SELECTOR_VARIABLES]);
+        if ( ! $regla) {
+            throw new InvalidArgumentException('Regla no encontrada en esta plantilla.');
+        }
+        self::query('DELETE FROM plantillas_reglas WHERE plantillas_idu=? AND idu=? AND selector != ?',
+            [$plantilla_idu, $regla_idu, Plantillas_reglas::SELECTOR_VARIABLES]);
+    }
+
     public function guardarValor($plantilla_idu, $regla_idu, $valor)
     {
         $valor = trim((string)$valor);

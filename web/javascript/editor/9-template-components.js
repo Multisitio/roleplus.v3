@@ -30,23 +30,32 @@
         var form = event.target;
         if (!form.matches('form[data-componentes-form]')) return;
         event.preventDefault();
-        var button = form.querySelector('button[type="submit"]');
+        var buttons = form.querySelectorAll('button[type="submit"]');
+        var deleting = event.submitter && event.submitter.value === 'eliminar';
         var status = form.closest('.template-component-panel').querySelector('.template-component-status');
-        if (button.disabled) return;
-        button.disabled = true;
-        status.textContent = 'Guardando regla…';
+        if (Array.from(buttons).some(function (button) { return button.disabled; })) return;
+        if (deleting && !window.confirm('¿Eliminar esta regla de la plantilla?')) return;
+        buttons.forEach(function (button) { button.disabled = true; });
+        status.textContent = deleting ? 'Eliminando regla…' : 'Guardando regla…';
         try {
-            var response = await fetch(form.action, { method: 'POST', headers: requestHeaders, body: new FormData(form) });
+            var data = new FormData(form);
+            data.set('operacion', deleting ? 'eliminar' : 'guardar');
+            var response = await fetch(form.action, { method: 'POST', headers: requestHeaders, body: data });
             if (!(response.headers.get('Content-Type') || '').includes('application/json')) throw new Error('No se ha podido guardar la regla. Comprueba tu sesión.');
             var result = await response.json();
             if (!response.ok || !result.success) throw new Error(result.error || 'No se ha podido guardar la regla.');
             var stylesheet = document.getElementById('estilos-personalizados');
             if (stylesheet && result.css_url) stylesheet.href = result.css_url;
-            status.textContent = 'Regla guardada.';
+            if (deleting) {
+                var group = form.closest('details');
+                form.remove();
+                if (group && !group.querySelector('form[data-componentes-form]')) group.remove();
+            }
+            status.textContent = deleting ? 'Regla eliminada.' : 'Regla guardada.';
         } catch (error) {
             status.textContent = error.message;
         } finally {
-            button.disabled = false;
+            buttons.forEach(function (button) { button.disabled = false; });
         }
     });
 }());

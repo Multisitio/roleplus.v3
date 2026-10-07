@@ -14,7 +14,8 @@
         <label><code><?=h($regla->propiedad)?></code>
             <textarea name="valor" rows="2" required><?=h($regla->valor)?></textarea>
         </label>
-        <button type="submit"><?=t('Guardar regla')?></button>
+        <button type="submit" name="operacion" value="guardar"><?=t('Guardar regla')?></button>
+        <button type="submit" name="operacion" value="eliminar" formnovalidate><?=t('Eliminar regla')?></button>
     </form>
 <?php endforeach; ?>
 <?php if ($grupo !== null): ?></details><?php endif; ?>
