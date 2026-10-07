@@ -63,6 +63,9 @@ main :not(main):has(+ :is(ul, ol)) {
 
 main :is(header, section) :last-child {
     margin-bottom: 0 !important;
+}
+
+main :is(header, section) :last-child:not(blockquote) {
     padding-bottom: 0 !important;
 }
 
@@ -72,6 +75,9 @@ main :is(header, section)+section {
 
 main :is(section, footer) :first-child {
     margin-top: 0 !important;
+}
+
+main :is(section, footer) :first-child:not(blockquote) {
     padding-top: 0 !important;
 }
 
