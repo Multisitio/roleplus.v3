@@ -347,7 +347,18 @@ class ManualesController extends EvController
             $manual->save();
         }
 
-        $ajustes = $plantilla->saveSettings($_POST, $_FILES);
+        try {
+            $ajustes = $plantilla->saveSettings($_POST, $_FILES);
+        } catch (RuntimeException $e) {
+            if (Input::isAjax()) {
+                View::template(null);
+                View::select(null);
+                http_response_code(500);
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode(['success' => false, 'error' => t($e->getMessage())]);
+            }
+            return;
+        }
         
         if (Input::isAjax()) {
             View::template(null);
@@ -404,7 +415,11 @@ class ManualesController extends EvController
                 } else {
                     (new Plantillas_componentes)->guardarValor($this->plantilla->idu, Input::post('regla_idu'), Input::post('valor'));
                 }
-                $this->plantilla->compilar();
+                if ( ! $this->plantilla->compilar()) {
+                    http_response_code(500);
+                    echo json_encode(['success' => false, 'error' => t('No se pudo actualizar el CSS de la plantilla.')]);
+                    return;
+                }
                 echo json_encode(['success' => true, 'css_url' => $this->plantilla->getCssUrl()]);
             } catch (InvalidArgumentException $e) {
                 http_response_code(400);

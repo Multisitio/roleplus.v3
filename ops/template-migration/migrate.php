@@ -95,8 +95,7 @@ try {
 }
 foreach ($migradas as $idu) {
     $p = (new Plantillas)->first('SELECT * FROM plantillas WHERE idu=?', [$idu]);
-    $p->compilar();
-    if ($p->getCssUrl() === '') {
+    if ( ! $p->compilar() || $p->getCssUrl() === '') {
         throw new RuntimeException('Compilation failed for ' . $idu);
     }
 }

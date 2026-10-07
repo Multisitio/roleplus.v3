@@ -1,5 +1,3 @@
-<h2><?=h($plantilla->nombre)?></h2>
-<p><?=t('Cada cambio se guarda en la plantilla de BD. Afecta a tus manuales que utilicen esta misma plantilla; no modifica el texto de las páginas.')?></p>
 <?php $grupo = null; ?>
 <?php foreach ($componentes as $regla): ?>
     <?php $nuevo_grupo = $regla->peso . '|' . $regla->selector; ?>

@@ -100,3 +100,8 @@
 - Correccion del usuario (2026-10-07): el boton para quitar una imagen debe
   recibir el clic por encima del input transparente de subida y evitar la
   activacion del label. Comprobar el elemento real bajo el centro de la X.
+
+- Correccion del usuario (2026-10-07): al generar CSS de plantillas por CLI,
+  conservar el propietario del directorio web. Verificar una reescritura
+  como usuario de PHP-FPM; una compilacion correcta como root no valida el
+  guardado desde el editor. No informar exito si la compilacion falla.

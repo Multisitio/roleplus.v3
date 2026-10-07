@@ -38,3 +38,8 @@ El catálogo con propietario `catalogo` permite crear nuevas copias completas.
 el catálogo y rechazo de declaraciones que escapen de su selector. Revierte sus
 cambios. Una referencia opcional de CSS permite contrastar las plantillas
 ordinarias antes y después. El CSS por usuario se genera desde BD y no se versiona.
+
+En producción los CSS generados deben pertenecer al usuario web propietario de
+su directorio. La compilación por CLI conserva ese propietario y reemplaza el
+archivo de forma atómica. Validar la escritura también como usuario de PHP-FPM,
+no solo como root; `verify-compiler.php` permite probarlo en un directorio temporal.

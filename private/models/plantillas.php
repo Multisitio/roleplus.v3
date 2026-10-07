@@ -642,7 +642,9 @@ class Plantillas extends LiteRecord
             $debe_compilar = true;
         }
 
-        if ($debe_compilar) $this->compilar();
+        if ($debe_compilar && ! $this->compilar()) {
+            throw new RuntimeException('No se pudo actualizar el CSS de la plantilla.');
+        }
 
         return $this->getSettings();
     }
@@ -670,9 +672,24 @@ class Plantillas extends LiteRecord
         $folder = dirname($ruta_absoluta);
         if (!is_dir($folder)) @mkdir($folder, 0775, true);
 
-        if (file_put_contents($ruta_absoluta, $css) === false) {
+        $temporal = @tempnam($folder, '.plantilla-');
+        if ($temporal === false || @file_put_contents($temporal, $css) === false) {
+            if ($temporal !== false) {
+                @unlink($temporal);
+            }
             Session::setArray('toast', "Error: No se pudo escribir el archivo CSS en $rel_path. Verifique permisos.");
-            return;
+            return false;
+        }
+        @chmod($temporal, 0644);
+        // CLI migrations must leave generated files owned by the web directory's user.
+        if (PHP_SAPI === 'cli' && PHP_OS_FAMILY !== 'Windows') {
+            @chown($temporal, fileowner($folder));
+            @chgrp($temporal, filegroup($folder));
+        }
+        if ( ! @rename($temporal, $ruta_absoluta)) {
+            @unlink($temporal);
+            Session::setArray('toast', "Error: No se pudo escribir el archivo CSS en $rel_path. Verifique permisos.");
+            return false;
         }
 
         $script = dirname($dir_base) . '/web/javascript/minify.js';
@@ -690,6 +707,7 @@ class Plantillas extends LiteRecord
                 @exec($node . ' ' . escapeshellarg($script) . ' ' . escapeshellarg($ruta_absoluta));
             }
         }
+        return true;
     }
 
     public function tieneComponentes()
