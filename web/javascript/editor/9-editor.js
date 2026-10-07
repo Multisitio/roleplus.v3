@@ -605,6 +605,7 @@
     });
 
     Kumbia.utils.on('click', 'aside.template .dropimage button', function (e) {
+        e.preventDefault();
         var form = this.closest('form'), drop = this.closest('.dropimage');
         if (drop) {
             var input = drop.querySelector('[type="file"]'), name = input ? input.name : '';

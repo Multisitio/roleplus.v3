@@ -96,3 +96,7 @@
   deben editarse dentro del panel del manual, sobre un fondo solido del tema.
   Cargar solo el fragmento por AJAX; no abrir popups ni cargar el layout
   completo. Guardar sin recargar el manual ni interrumpir la escritura.
+
+- Correccion del usuario (2026-10-07): el boton para quitar una imagen debe
+  recibir el clic por encima del input transparente de subida y evitar la
+  activacion del label. Comprobar el elemento real bajo el centro de la X.
