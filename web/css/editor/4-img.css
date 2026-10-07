@@ -9,7 +9,6 @@ img {
     max-width: 100%;
 }
 
-main.a4.portrait article img { max-height: 29.6cm; }
 main.a4.landscape article img { max-height: 20.9cm; }
 
 main.a5.landscape article img { max-height: 14.7cm; }
