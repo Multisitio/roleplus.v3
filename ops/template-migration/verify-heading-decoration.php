@@ -30,10 +30,10 @@ try {
                     throw new RuntimeException('Editor lost heading border width');
                 }
                 if ($width !== '0' && ($saved->tipografia[$level]['line_height'] !== '1.0'
-                    || !str_contains($css, "main {$level} {line-height: 1.0 !important; margin-bottom: 10px !important;}"))) {
+                    || !str_contains($css, "main {$level} {margin-bottom: 10px !important;}"))) {
                     throw new RuntimeException('Underlined heading spacing differs from editor');
                 }
-                if ($width === '0' && str_contains($css, "main {$level} {line-height: 1.0 !important; margin-bottom: 10px !important;}")) {
+                if ($width === '0' && str_contains($css, "main {$level} {margin-bottom: 10px !important;}")) {
                     throw new RuntimeException('Underline spacing remains when disabled');
                 }
                 $expected = $migrated
@@ -43,6 +43,21 @@ try {
                     throw new RuntimeException('Heading border missing from compiled CSS');
                 }
             }
+        }
+        // Full-form saves include decoration even when only line-height changes.
+        $saved = $editor->saveSettings(['decoration_h3' => '2px', 'line_height_h3' => '2.2'], []);
+        if ($saved->tipografia['h3']['line_height'] !== '2.2') {
+            throw new RuntimeException('User cannot override the initial line-height');
+        }
+        $saved = $editor->saveSettings(['decoration_h3' => '3px', 'line_height_h3' => '2.2'], []);
+        if ($saved->tipografia['h3']['line_height'] !== '2.2'
+            || str_contains($p->cssPersonalizado(), 'main h3 {line-height: 1.0 !important;')) {
+            throw new RuntimeException('Underline width or CSS imposes line-height');
+        }
+        $editor->saveSettings(['decoration_h3' => '0'], []);
+        $saved = $editor->saveSettings(['decoration_h3' => '2px', 'line_height_h3' => '2.2'], []);
+        if ($saved->tipografia['h3']['line_height'] !== '1.0') {
+            throw new RuntimeException('Activating underline should initialize line-height');
         }
     }
     echo 'PASS: all ', count($templates), " templates, H1-H6, off/1/2/3px, return to base, editor and compiled block borders; rollback\n";

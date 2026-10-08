@@ -473,13 +473,14 @@
     ['change', 'input'].forEach(function (evt) {
         Kumbia.utils.on(evt, 'aside.template select[data-change-ajax], aside.template input[data-change-ajax]', function (e) {
             var $el = this, name = $el.name, val = $el.value;
-            if (/^decoration_h[1-6]$/.test(name) && parseFloat(val) > 0) {
+            var preview = document.querySelector('main');
+            if (/^decoration_h[1-6]$/.test(name) && parseFloat(val) > 0 && preview
+                && !(parseFloat(getComputedStyle(preview).getPropertyValue('--' + name.substring(11) + '-decoration')) > 0)) {
                 var heightControl = $el.closest('section[data-nivel]').querySelector('.line-height-select');
                 if (heightControl) heightControl.value = '1.0';
             }
 
             // 1. Actualización visual inmediata (sin esperar a BD)
-            var preview = document.querySelector('main');
             if (!preview) return;
 
             if (name.indexOf('footer_') === 0) {

@@ -381,7 +381,7 @@ class Plantillas extends LiteRecord
                 'transform'  => ($vars["--{$niv}-variant"] === 'small-caps' ? 'small-caps' : $vars["--{$niv}-transform"]),
                 'variant'    => $vars["--{$niv}-variant"],
                 'margin_top' => $vars["--{$niv}-margin-top"] ?? '0px',
-                'line_height' => self::tituloSubrayado($vars, $niv) ? '1.0' : ($vars["--{$niv}-line-height"] ?? '1.5'),
+                'line_height' => $vars["--{$niv}-line-height"] ?? '1.5',
             ];
         }
 
@@ -425,12 +425,14 @@ class Plantillas extends LiteRecord
         $Reglas = new Plantillas_reglas;
         $debe_compilar = false;
         $Reglas->eliminar_obsoletas($this->idu);
+        $variablesActuales = $Reglas->leer($this->idu, self::DEFAULTS);
 
         // 1. Tipografía
         foreach (self::NIVELES_TIPOGRAFIA as $niv) {
             // Fuente
             if (preg_match('/^h[1-6]$/', $niv) && isset($post["decoration_{$niv}"])
-                && (float)$post["decoration_{$niv}"] > 0) {
+                && (float)$post["decoration_{$niv}"] > 0
+                && ! self::tituloSubrayado($variablesActuales, $niv)) {
                 $post["line_height_{$niv}"] = '1.0';
             }
             if (isset($post["fuente_{$niv}"])) {
@@ -759,7 +761,7 @@ class Plantillas extends LiteRecord
         foreach ($selectores as $nivel => $selector) {
             $css .= "{$selector} {line-height: var(--{$nivel}-line-height, 1.5) !important;}\n";
             if (self::tituloSubrayado($variables, $nivel)) {
-                $css .= "main {$nivel} {line-height: 1.0 !important; margin-bottom: 10px !important;}\n";
+                $css .= "main {$nivel} {margin-bottom: 10px !important;}\n";
             }
         }
         return $css;

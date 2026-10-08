@@ -126,5 +126,6 @@
   uno, comparar con las fuentes y comprobar referencias y codigo exclusivo.
 
 - Tipografias del editor (2026-10-08): al activar el subrayado de bloque
-  en H1-H6, mostrar interlineado 1.0 en el combo y aplicarlo junto con
-  margin-bottom de 10px; conservar el color de la fuente en la linea.
+  en H1-H6, inicializar el interlineado a 1.0 una sola vez y mostrarlo en
+  el combo; permitir cambiarlo despues, incluso al ajustar el grosor.
+  Imponer solo margin-bottom de 10px y conservar el color de la fuente.
