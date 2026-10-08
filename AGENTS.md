@@ -141,3 +141,7 @@
   necesario. Si el usuario se ofrece a borrar reglas de BD, indicar sus
   bloques y dejar esa edicion al usuario. El subrayado conserva sus 10px
   inferiores, incluso si el titulo es ultimo hijo.
+
+- Celdas del manual (2026-10-08): excluir td y th de los ajustes de
+  margen y padding para first-child y last-child de la base del editor.
+  El sangrado de las celdas debe seguir las reglas de la tabla.

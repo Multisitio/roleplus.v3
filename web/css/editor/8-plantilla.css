@@ -154,11 +154,11 @@ main ul {
     list-style: none;
 }
 
-main :is(header, section) :last-child:not(h1, h2, h3, h4, h5, h6) {
+main :is(header, section) :last-child:not(h1, h2, h3, h4, h5, h6, td, th) {
     margin-bottom: 0 !important;
 }
 
-main :is(header, section) :last-child:not(blockquote) {
+main :is(header, section) :last-child:not(blockquote, td, th) {
     padding-bottom: 0 !important;
 }
 
@@ -166,11 +166,11 @@ main :is(header, section)+section {
     margin-top: 0 !important;
 }
 
-main :is(section, footer) :first-child {
+main :is(section, footer) :first-child:not(td, th) {
     margin-top: 0 !important;
 }
 
-main :is(section, footer) :first-child:not(blockquote) {
+main :is(section, footer) :first-child:not(blockquote, td, th) {
     padding-top: 0 !important;
 }
 
