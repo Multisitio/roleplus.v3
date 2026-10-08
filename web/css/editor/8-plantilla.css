@@ -179,7 +179,7 @@ main :is(article, header, section, div, blockquote, li, td, th, picture, figure,
 }
 
 main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > p {
-    margin-top: calc(var(--p-margin-top, 0px) + var(--block-gap-before));
+    margin-top: var(--block-gap-before);
 }
 
 main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > table {

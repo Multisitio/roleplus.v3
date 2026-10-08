@@ -176,3 +176,7 @@
   Comprobar desplazamientos y espacio reservado para el adorno; separar
   ese espacio interno del gap entre grupos. No recomendar poner todos
   los margenes verticales a cero sin revisar estas dependencias.
+
+- Gap de parrafos (2026-10-08): usar exclusivamente --block-gap-before
+  para margin-top; no sumar --p-margin-top ni emitir un override del
+  compilador migrado que vuelva a agregarlo. Verificar p+p de 15px reales.

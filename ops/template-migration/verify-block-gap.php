@@ -42,7 +42,8 @@ try {
         // A customized paragraph margin must not override the h+p grouping.
         $rules->guardar($template->idu, '--p-margin-top', '23px');
         if ($template->tieneComponentes()
-            && ! str_contains($template->cssPersonalizado(), 'main p:not(:is(h1, h2, h3, h4, h5, h6) + p) { margin-top:')) {
+            && (str_contains($template->cssPersonalizado(), 'main p { margin-top:')
+                || str_contains($template->cssPersonalizado(), 'main p:not(:is(h1, h2, h3, h4, h5, h6) + p) { margin-top:'))) {
             throw new RuntimeException('Paragraph margin still separates heading and paragraph');
         }
         if (str_contains($template->cssPersonalizado(), 'main p + p {')) {
