@@ -336,8 +336,19 @@ main div[contenteditable] th[data-empty-helper="true"] {
 }
 
 main div[contenteditable] footer[data-empty-helper="true"] {
-    position: absolute;
-    margin: auto;
+    position: relative;
+    inset: auto;
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 36px;
+    outline: 1px dashed rgba(200, 100, 100, 0.35);
+}
+
+main div[contenteditable] footer[data-empty-helper="true"]::before,
+main div[contenteditable] footer[data-empty-helper="true"]::after {
+    display: none;
 }
 
 /* El badge flotante arriba a la derecha */
