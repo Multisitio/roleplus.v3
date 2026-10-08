@@ -180,3 +180,13 @@
 - Gap de parrafos (2026-10-08): usar exclusivamente --block-gap-before
   para margin-top; no sumar --p-margin-top ni emitir un override del
   compilador migrado que vuelva a agregarlo. Verificar p+p de 15px reales.
+
+- Correccion de proceso (2026-10-08): ante una correccion puntual y
+  explicita, ejecutarla en el mismo turno; no limitarse a explicar el
+  cambio ni esperar a que el usuario vuelva a pedirlo. Mantener el
+  alcance concreto, compilar y desplegar los artefactos necesarios,
+  verificar el resultado real afectado y cerrar con commit y push.
+  No ampliar pruebas, repetir comprobaciones ya satisfactorias ni
+  investigar asuntos independientes sin un fallo o riesgo concreto
+  que lo justifique. Una disculpa no sustituye registrar y aplicar
+  la correccion de proceso.
