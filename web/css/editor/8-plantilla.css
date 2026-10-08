@@ -183,23 +183,23 @@ main :is(article, header, section, div, blockquote, li, td, th, picture, figure,
 }
 
 main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > table {
-    margin-top: calc(var(--table-margin-top, 0px) + var(--block-gap-before));
+    margin-top: var(--block-gap-before);
 }
 
 main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > blockquote {
-    margin-top: calc(var(--blockquote-margin-top, 0px) + var(--block-gap-before));
+    margin-top: var(--block-gap-before);
 }
 
 main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > :is(ol, ul) {
-    margin-top: calc(var(--list-margin-top, 0px) + var(--block-gap-before));
+    margin-top: var(--block-gap-before);
 }
 
 main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > header {
-    margin-top: calc(var(--header-margin-top, 0px) + var(--block-gap-before));
+    margin-top: var(--block-gap-before);
 }
 
 main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > section {
-    margin-top: calc(var(--section-margin-top, 0px) + var(--block-gap-before));
+    margin-top: var(--block-gap-before);
 }
 
 /* A heading and its paragraph form one block, without paragraph spacing. */

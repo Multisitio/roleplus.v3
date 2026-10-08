@@ -201,12 +201,11 @@ class Plantillas_componentes extends LiteRecord
             foreach (['margin', 'padding'] as $propiedad) {
                 foreach (['top', 'right', 'bottom', 'left'] as $lado) {
                     $key = '--' . $bloque . '-' . $propiedad . '-' . $lado;
-                    if ($bloque === 'p' && $propiedad === 'margin' && $lado === 'top') {
-                        continue; // Paragraph separation belongs exclusively to the block gap.
+                    if ($bloque !== 'footer' && $propiedad === 'margin' && $lado === 'top') {
+                        continue; // Block separation belongs exclusively to the block gap.
                     }
                     if ($this->cambiado($vars, $key)) {
-                        $valor = $propiedad === 'margin' && $lado === 'top' && $bloque !== 'footer'
-                            ? "calc(var({$key}) + var(--block-gap-before, 0px))" : "var({$key})";
+                        $valor = "var({$key})";
                         $css .= "{$selector} { {$propiedad}-{$lado}: {$valor} !important; }\n";
                     }
                 }

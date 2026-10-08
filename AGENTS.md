@@ -190,3 +190,11 @@
   investigar asuntos independientes sin un fallo o riesgo concreto
   que lo justifique. Una disculpa no sustituye registrar y aplicar
   la correccion de proceso.
+
+- Gap de todos los bloques (2026-10-08): no sumar ningun margen al gap,
+  ni en los fuentes CSS ni en el compilador. Eliminar esas sumas para
+  todos los tipos de bloque, no corregir solo el ejemplo senalado.
+
+- Correccion de proceso reiterada (2026-10-08): tras verificar el cambio
+  puntual publicado, cerrar inmediatamente con commit y push. No seguir
+  explorando ni ampliar la validacion de una correccion ya comprobada.

@@ -39,6 +39,9 @@ try {
         if ($before !== $after) {
             throw new RuntimeException('Unrelated template settings changed');
         }
+        if (str_contains($template->cssPersonalizado(), '+ var(--block-gap-before')) {
+            throw new RuntimeException('Margin still added to block gap');
+        }
         // A customized paragraph margin must not override the h+p grouping.
         $rules->guardar($template->idu, '--p-margin-top', '23px');
         if ($template->tieneComponentes()
