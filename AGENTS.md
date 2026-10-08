@@ -134,3 +134,8 @@
   web/css/editor/8-plantilla.css. Los otros fuentes deben contener solo
   controles/ayudas del editor, utilidades compartidas o reglas contextuales
   de impresion; no repartir entre ellos estilos por defecto del manual.
+
+- Correccion del usuario (2026-10-08): el reset de margenes de H1-H6
+  debe ganar a los espaciados residuales de las plantillas migradas.
+  Verificar el margen efectivo de todos los lados; la excepcion es el
+  margen inferior de 10px del subrayado, incluso si el titulo es ultimo hijo.

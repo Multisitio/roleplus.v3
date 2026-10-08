@@ -24,7 +24,7 @@ main section {
 }
 
 main :is(h1, h2, h3, h4, h5, h6) {
-    margin: 0;
+    margin: 0 !important;
     padding: 0;
 }
 
@@ -154,7 +154,7 @@ main ul {
     list-style: none;
 }
 
-main :is(header, section) :last-child {
+main :is(header, section) :last-child:not(h1, h2, h3, h4, h5, h6) {
     margin-bottom: 0 !important;
 }
 
