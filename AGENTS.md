@@ -164,3 +164,9 @@
   real, incluidos padding y margenes legacy de titulos. Un gap no
   justifica espacio exterior; retirar las declaraciones antiguas que
   lo provocan sin reforzar el reset con !important.
+
+- Retirada gradual de legacy (2026-10-08): eliminar las reglas antiguas
+  poco a poco al trabajar cada parte del editor. No hacer limpiezas
+  generales ni extender una retirada a otras plantillas por iniciativa
+  propia. Si el usuario pide los bloques para quitarlos, identificarlos
+  y dejarle esa edicion; no borrarlos automaticamente.
