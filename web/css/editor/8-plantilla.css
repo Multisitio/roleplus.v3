@@ -4,7 +4,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: 25px 0;
-    margin: 45px 70px;
+    margin: 70px;
     box-sizing: border-box;
     padding: 0;
 }
