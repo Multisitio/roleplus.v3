@@ -154,3 +154,13 @@
   diferentes; h+p y cualquier elemento seguido de blockquote, ol o ul
   pertenecen al mismo grupo. Distancia entre bloques, en Pagina, usa 15px
   por defecto y no agrega gap en los extremos ni entre columnas.
+
+- Correccion del usuario (2026-10-08): h+p es un unico bloque. Su
+  parrafo no debe conservar un margen superior residual ni sumar el
+  margen de parrafos al gap cero. Validar margin-top efectivo y distancia
+  entre cajas, no solo la variable de agrupacion.
+
+- Gap del manual (2026-10-08): comprobar el primer y ultimo bloque
+  real, incluidos padding y margenes legacy de titulos. Un gap no
+  justifica espacio exterior; retirar las declaraciones antiguas que
+  lo provocan sin reforzar el reset con !important.

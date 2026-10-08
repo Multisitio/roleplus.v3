@@ -204,7 +204,9 @@ class Plantillas_componentes extends LiteRecord
                     if ($this->cambiado($vars, $key)) {
                         $valor = $propiedad === 'margin' && $lado === 'top' && $bloque !== 'footer'
                             ? "calc(var({$key}) + var(--block-gap-before, 0px))" : "var({$key})";
-                        $css .= "{$selector} { {$propiedad}-{$lado}: {$valor} !important; }\n";
+                        $selectorMargen = $bloque === 'p' && $propiedad === 'margin' && $lado === 'top'
+                            ? 'main p:not(:is(h1, h2, h3, h4, h5, h6) + p)' : $selector;
+                        $css .= "{$selectorMargen} { {$propiedad}-{$lado}: {$valor} !important; }\n";
                     }
                 }
             }
