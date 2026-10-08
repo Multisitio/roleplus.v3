@@ -92,10 +92,6 @@ main.a5.landscape article img { max-height: 14.7cm; }
 main.letter.portrait article img { max-height: 10.9in; }
 main.letter.landscape article img { max-height: 8.4in; }
 
-main :is(h1, h2, h3, h4, h5, h6)+p {
-    margin-top: 0;
-    padding-top: 0;
-}
 main :is(header, section, footer):has(>div) {
     display: flex;
     flex-direction: row;
@@ -154,26 +150,6 @@ main ul {
     list-style: none;
 }
 
-main :is(header, section) :last-child:not(h1, h2, h3, h4, h5, h6, td, th) {
-    margin-bottom: 0 !important;
-}
-
-main :is(header, section) :last-child:not(blockquote, td, th) {
-    padding-bottom: 0 !important;
-}
-
-main :is(header, section)+section {
-    margin-top: 0 !important;
-}
-
-main :is(section, footer) :first-child:not(td, th) {
-    margin-top: 0 !important;
-}
-
-main :is(section, footer) :first-child:not(blockquote, td, th) {
-    padding-top: 0 !important;
-}
-
 main article {
     counter-increment: page;
 }
@@ -185,4 +161,48 @@ main article img:not(section img) {
 main footer:after {
     content: counter(page);
     text-align: center;
+}
+
+/* Sibling groups: only the following block receives a separation. */
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > :is(h1, h2, h3, h4, h5, h6, p, table, blockquote, ol, ul, header, section, figure, pre, hr) {
+    --block-gap-before: 0px;
+    margin-top: var(--block-gap-before);
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > * + :is(h1, h2, h3, h4, h5, h6, p, table, blockquote, ol, ul, header, section, figure, pre, hr) {
+    --block-gap-before: var(--block-gap, 15px);
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > :is(h1, h2, h3, h4, h5, h6) + p,
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > * + :is(blockquote, ol, ul) {
+    --block-gap-before: 0px;
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > p {
+    margin-top: calc(var(--p-margin-top, 0px) + var(--block-gap-before));
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > table {
+    margin-top: calc(var(--table-margin-top, 0px) + var(--block-gap-before));
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > blockquote {
+    margin-top: calc(var(--blockquote-margin-top, 0px) + var(--block-gap-before));
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > :is(ol, ul) {
+    margin-top: calc(var(--list-margin-top, 0px) + var(--block-gap-before));
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > header {
+    margin-top: calc(var(--header-margin-top, 0px) + var(--block-gap-before));
+}
+
+main :is(article, header, section, div, blockquote, li, td, th, picture, figure, figcaption) > section {
+    margin-top: calc(var(--section-margin-top, 0px) + var(--block-gap-before));
+}
+
+/* Consecutive tables form separate vertical groups. */
+main table + table {
+    display: table;
 }

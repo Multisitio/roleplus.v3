@@ -126,7 +126,7 @@ class Plantillas extends LiteRecord
         '--p-padding-left' => '0',
         '--p-padding-right' => '0',
         '--p-padding-top' => '10',
-        '--p-gap' => '0',
+        '--block-gap' => '15px',
         '--section-margin-bottom' => '0',
         '--section-margin-left' => '0',
         '--section-margin-right' => '0',
@@ -396,7 +396,7 @@ class Plantillas extends LiteRecord
         $ajustes->blockquote_border_left_width = $vars['--blockquote-border-left-width'] ?? '0';
         $ajustes->blockquote_border_left_color = $vars['--blockquote-border-left-color'] ?? 'transparent';
         $ajustes->a_color = $vars['--a-color'] ?? 'inherit';
-        $ajustes->p_gap = intval($vars['--p-gap'] ?? '0');
+        $ajustes->block_gap = intval($vars['--block-gap'] ?? '15px');
 
         $ajustes->dropcap_family = trim($vars['--dropcap-family'] ?? 'inherit', "'\" ");
         if ($ajustes->dropcap_family === 'inherit') $ajustes->dropcap_family = '';
@@ -515,10 +515,10 @@ class Plantillas extends LiteRecord
             }
         }
 
-        // Distancia entre párrafos
-        if (isset($post['p_gap'])) {
-            $val = intval($post['p_gap']) . 'px';
-            $Reglas->guardar($this->idu, '--p-gap', $val);
+        // Distancia entre bloques
+        if (isset($post['block_gap'])) {
+            $val = max(0, intval($post['block_gap'])) . 'px';
+            $Reglas->guardar($this->idu, '--block-gap', $val);
             $debe_compilar = true;
         }
 
@@ -725,6 +725,11 @@ class Plantillas extends LiteRecord
 
     private function generarCssPlantilla(array $variables)
     {
+        foreach ($variables as $propiedad => $valor) {
+            if (str_contains($propiedad, '-margin-') && is_numeric($valor)) {
+                $variables[$propiedad] = $valor . 'px';
+            }
+        }
         if (($variables['--componentes-version'] ?? '') === '1') {
             $fuentes = [];
             foreach (self::NIVELES_TIPOGRAFIA as $nivel) {
@@ -914,7 +919,6 @@ class Plantillas extends LiteRecord
         $css .= $this->cssEspaciado('main header', 'header');
         $css .= $this->cssEspaciado('main section', 'section');
         $css .= $this->cssEspaciado('main p', 'p');
-        $css .= "main p + p { margin-top: var(--p-gap); }\n";
         $css .= $this->cssEspaciado('main blockquote', 'blockquote');
         $css .= $this->cssEspaciado('main :is(ul, ol)', 'list', "    list-style: none !important;\n");
         $css .= "main :not(main):has(+ :is(ul, ol)) {\n";

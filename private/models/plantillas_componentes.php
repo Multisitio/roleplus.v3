@@ -202,7 +202,9 @@ class Plantillas_componentes extends LiteRecord
                 foreach (['top', 'right', 'bottom', 'left'] as $lado) {
                     $key = '--' . $bloque . '-' . $propiedad . '-' . $lado;
                     if ($this->cambiado($vars, $key)) {
-                        $css .= "{$selector} { {$propiedad}-{$lado}: var({$key}) !important; }\n";
+                        $valor = $propiedad === 'margin' && $lado === 'top' && $bloque !== 'footer'
+                            ? "calc(var({$key}) + var(--block-gap-before, 0px))" : "var({$key})";
+                        $css .= "{$selector} { {$propiedad}-{$lado}: {$valor} !important; }\n";
                     }
                 }
             }
@@ -212,7 +214,6 @@ class Plantillas_componentes extends LiteRecord
             '--background-color' => ['main > div:nth-child(odd) article', 'background-color'],
             '--background-color-even' => ['main > div:nth-child(even) article', 'background-color'],
             '--a-color' => ['main :is(a, em, strong)', 'color'],
-            '--p-gap' => ['main p + p', 'margin-top'],
             '--footer-height' => ['main footer', 'height'],
             '--footer-page-x' => ['main footer::after', 'width'],
             '--footer-page-y' => ['main footer::after', 'bottom'],

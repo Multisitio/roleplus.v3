@@ -149,3 +149,8 @@
 - Sangrado de celdas migradas (2026-10-08): compilar siempre los valores
   de los controles horizontal y vertical, incluidos cero y el valor base;
   no depender de que sobreviva una regla del sistema anterior.
+
+- Grupos del manual (2026-10-08): p+p, table+table y h+h son grupos
+  diferentes; h+p y cualquier elemento seguido de blockquote, ol o ul
+  pertenecen al mismo grupo. Distancia entre bloques, en Pagina, usa 15px
+  por defecto y no agrega gap en los extremos ni entre columnas.

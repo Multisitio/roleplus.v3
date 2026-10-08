@@ -524,8 +524,8 @@
                     suffix = isNaN(val) || val === '' ? '' : 'px';
                 }
                 preview.style.setProperty(prop, val + suffix);
-            } else if (name === 'p_gap') {
-                preview.style.setProperty('--p-gap', val + 'px');
+            } else if (name === 'block_gap') {
+                // The saved external stylesheet updates spacing without inline CSS.
             } else if (name.indexOf('blockquote_') === 0) {
                 var prop = '--' + name.replace(/_/g, '-');
                 var suffix = '';
