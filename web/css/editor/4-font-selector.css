@@ -104,7 +104,7 @@ aside.template section[data-nivel] .font-size-select {
     grid-row: 1;
 }
 
-aside.template section[data-nivel] .margin-top-select {
+aside.template section[data-nivel] .line-height-select {
     grid-column: 1;
     grid-row: 2;
 }

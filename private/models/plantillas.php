@@ -301,13 +301,9 @@ class Plantillas extends LiteRecord
         return $valores;
     }
 
-    public static function opcionesMargenTitulo($actual)
+    public static function opcionesInterlineado()
     {
-        $valores = array_map(fn($n) => $n . 'px', range(0, 100, 5));
-        if ($actual !== '' && ! in_array($actual, $valores, true)) {
-            array_unshift($valores, $actual);
-        }
-        return $valores;
+        return array_map(fn($n) => number_format($n / 10, 1, '.', ''), range(5, 25));
     }
 
     public static function defaultCssVariables()
@@ -385,6 +381,7 @@ class Plantillas extends LiteRecord
                 'transform'  => ($vars["--{$niv}-variant"] === 'small-caps' ? 'small-caps' : $vars["--{$niv}-transform"]),
                 'variant'    => $vars["--{$niv}-variant"],
                 'margin_top' => $vars["--{$niv}-margin-top"] ?? '0px',
+                'line_height' => $vars["--{$niv}-line-height"] ?? '1.5',
             ];
         }
 
@@ -448,11 +445,16 @@ class Plantillas extends LiteRecord
             }
 
             // Atributos numéricos y selects
-            $props = ['size', 'color', 'align', 'variant', 'transform', 'decoration', 'margin_top'];
+            $props = ['size', 'color', 'align', 'variant', 'transform', 'decoration', 'margin_top', 'line_height'];
             foreach ($props as $p) {
                 $key = "{$p}_{$niv}";
                 if (isset($post[$key])) {
                     $val = trim($post[$key]);
+                    if ($p === 'line_height') {
+                        if ( ! in_array($val, self::opcionesInterlineado(), true)) {
+                            continue;
+                        }
+                    }
                     if ($p === 'size' && is_numeric($val)) {
                         $val .= ($niv === 'small') ? '%' : 'px';
                     }
@@ -726,13 +728,28 @@ class Plantillas extends LiteRecord
                     $fuentes[] = $variables[$key];
                 }
             }
-            return (new Plantillas_componentes)->css($this->idu, $variables, $this->generarCssFuentes($fuentes));
+            return (new Plantillas_componentes)->css($this->idu, $variables, $this->generarCssFuentes($fuentes)) . $this->cssInterlineado();
         }
         $css = "/* Compilado: " . date('Y-m-d H:i:s') . " */\n";
         $css .= $this->generarCssFuentes($this->fuentesUsadas($variables));
         $css .= $this->cssVariables($variables);
         $css .= $this->cssTipografia();
         $css .= $this->cssEstructuraPlantilla($variables);
+        $css .= $this->cssInterlineado();
+        return $css;
+    }
+
+    private function cssInterlineado()
+    {
+        $selectores = self::SELECTORES_TIPOGRAFIA;
+        $selectores['body'] = 'main, main > div > article, main :is(p, li, td, th, blockquote)';
+        $selectores['h5'] .= ', main caption';
+        $selectores['h6'] .= ', main footer';
+        $selectores['small'] .= ', main tfoot :is(td, th)';
+        $css = '';
+        foreach ($selectores as $nivel => $selector) {
+            $css .= "{$selector} {line-height: var(--{$nivel}-line-height, 1.5) !important;}\n";
+        }
         return $css;
     }
 

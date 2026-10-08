@@ -437,9 +437,9 @@
                             <?php endforeach; ?>
                         </select>
 
-                        <select class="margin-top-select" name="margin_top_<?=$niv?>" data-change-ajax>
-                            <?php foreach (Plantillas::opcionesMargenTitulo($f['margin_top'] ?? '0px') as $valor): ?>
-                                <option value="<?=h($valor)?>" <?=($f['margin_top'] ?? '0px') === $valor ? 'selected' : ''?>><?=t('Margen')?>: <?=h($valor)?></option>
+                        <select class="line-height-select" name="line_height_<?=$niv?>" data-change-ajax>
+                            <?php foreach (Plantillas::opcionesInterlineado() as $valor): ?>
+                                <option value="<?=h($valor)?>" <?=($f['line_height'] ?? '1.5') === $valor ? 'selected' : ''?>><?=t('Interlineado')?>: <?=h($valor)?></option>
                             <?php endforeach; ?>
                         </select>
 
