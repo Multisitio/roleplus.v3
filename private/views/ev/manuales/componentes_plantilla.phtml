@@ -1,3 +1,18 @@
+<?php if ($variables_anteriores): ?>
+<details class="pa10" data-componentes-variables>
+    <summary><?=t('Bloque 0 — Variables del sistema anterior')?></summary>
+    <?php foreach ($variables_anteriores as $variable): ?>
+    <form method="post" action="/ev/manuales/componentes_plantilla/<?=h($manuales_idu)?>" class="pa10" data-componentes-form>
+        <input type="hidden" name="regla_idu" value="<?=h($variable->idu)?>">
+        <label><code><?=h($variable->propiedad)?></code>
+            <textarea name="valor" rows="2" required><?=h($variable->valor)?></textarea>
+        </label>
+        <button type="submit" name="operacion" value="guardar"><?=t('Guardar variable')?></button>
+    </form>
+    <?php endforeach; ?>
+</details>
+<?php endif; ?>
+
 <?php $grupo = null; ?>
 <?php foreach ($componentes as $regla): ?>
     <?php $nuevo_grupo = $regla->peso . '|' . $regla->selector; ?>

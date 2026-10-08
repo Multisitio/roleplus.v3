@@ -2,6 +2,109 @@
 /** Reglas decorativas de BD. Los ajustes comunes conservan su contrato actual. */
 class Plantillas_componentes extends LiteRecord
 {
+    /** Native variables from the three migrated file templates. */
+    const VARIABLES_ANTERIORES = [
+        '--bg-band',
+        '--bg-blockquote',
+        '--bg-footer',
+        '--bg-page',
+        '--bg-table-stripe',
+        '--border-card',
+        '--border-h3',
+        '--border-image-blockquote',
+        '--border-td',
+        '--border-th',
+        '--card-height',
+        '--card-min-width',
+        '--card-title-height',
+        '--card-title-width',
+        '--color-accent',
+        '--color-accent-gold',
+        '--color-band-bg',
+        '--color-band-shadow',
+        '--color-bg-accent',
+        '--color-bg-cover',
+        '--color-bg-even-row',
+        '--color-blockquote-bg',
+        '--color-blockquote-shadow',
+        '--color-border-primary',
+        '--color-card-text',
+        '--color-emphasis',
+        '--color-primary',
+        '--color-secondary',
+        '--color-tertiary',
+        '--color-text',
+        '--color-text-emphasis',
+        '--color-text-footnote',
+        '--color-text-header',
+        '--color-text-inverse',
+        '--column-gap',
+        '--demongreen',
+        '--dragonred',
+        '--fleshbrown',
+        '--font-annotation',
+        '--font-body',
+        '--font-decorative',
+        '--font-handwritten',
+        '--font-heading',
+        '--font-initial',
+        '--font-size-body',
+        '--font-size-caption',
+        '--font-size-card-title',
+        '--font-size-drop-cap',
+        '--font-size-footer',
+        '--font-size-footer-num',
+        '--font-size-h1',
+        '--font-size-h2',
+        '--font-size-h3',
+        '--font-size-h4',
+        '--font-size-h5',
+        '--font-size-h6',
+        '--font-size-mark',
+        '--font-table',
+        '--font-title',
+        '--footer-counter-width',
+        '--gradient-forest',
+        '--hb_color_accent',
+        '--hb_color_background',
+        '--hb_color_captiontext',
+        '--hb_color_footnotes',
+        '--hb_color_headertext',
+        '--hb_color_headerunderline',
+        '--hb_color_horizontalrule',
+        '--hb_color_monsterstatbackground',
+        '--hb_color_watercolorstain',
+        '--img-watermark-opacity',
+        '--leatherbrown',
+        '--link',
+        '--list-bullet',
+        '--list-checkbox',
+        '--list-padding',
+        '--list-radio',
+        '--list-sub-bullet',
+        '--mark-size',
+        '--parchmentyellow',
+        '--shadow-blockquote',
+        '--shadow-text-glow',
+        '--shadow-text-light',
+        '--spacing-after-heading',
+        '--spacing-block-heading',
+        '--spacing-block-list',
+        '--spacing-blockquote-block',
+        '--spacing-cell',
+        '--spacing-heading-bottom',
+        '--spacing-li',
+        '--spacing-page-bottom',
+        '--spacing-page-inline',
+        '--spacing-page-top',
+    ];
+
+    public function variablesAnteriores($idu)
+    {
+        $rows = self::all('SELECT * FROM plantillas_reglas WHERE plantillas_idu=? AND selector=? ORDER BY propiedad, id', [$idu, Plantillas_reglas::SELECTOR_VARIABLES]);
+        return array_filter($rows, fn($r) => in_array($r->propiedad, self::VARIABLES_ANTERIORES, true));
+    }
+
     public function reglas($idu)
     {
         return self::all('SELECT * FROM plantillas_reglas WHERE plantillas_idu=? AND selector != ? ORDER BY peso, id', [$idu, Plantillas_reglas::SELECTOR_VARIABLES]);
@@ -168,12 +271,17 @@ class Plantillas_componentes extends LiteRecord
 
     public function guardarValor($plantilla_idu, $regla_idu, $valor)
     {
+        $regla = self::first('SELECT * FROM plantillas_reglas WHERE plantillas_idu=? AND idu=?', [$plantilla_idu, $regla_idu]);
+        if ( ! $regla || ($regla->selector === Plantillas_reglas::SELECTOR_VARIABLES
+            && ! in_array($regla->propiedad, self::VARIABLES_ANTERIORES, true))) {
+            throw new InvalidArgumentException('Regla no encontrada en esta plantilla.');
+        }
         $valor = trim((string)$valor);
         if ( ! $this->valorValido($valor)) {
             throw new InvalidArgumentException('Valor CSS no válido.');
         }
-        self::query('UPDATE plantillas_reglas SET valor=? WHERE plantillas_idu=? AND idu=? AND selector != ?',
-            [$valor, $plantilla_idu, $regla_idu, Plantillas_reglas::SELECTOR_VARIABLES]);
+        self::query('UPDATE plantillas_reglas SET valor=? WHERE plantillas_idu=? AND idu=?',
+            [$valor, $plantilla_idu, $regla_idu]);
     }
 
     private function valorValido($valor)

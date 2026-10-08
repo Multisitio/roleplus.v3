@@ -428,6 +428,7 @@ class ManualesController extends EvController
             return;
         }
         $this->componentes = (new Plantillas_componentes)->reglas($this->plantilla->idu);
+        $this->variables_anteriores = (new Plantillas_componentes)->variablesAnteriores($this->plantilla->idu);
         $this->manuales_idu = $manuales_idu;
     }
 
