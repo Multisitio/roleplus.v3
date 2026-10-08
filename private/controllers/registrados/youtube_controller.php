@@ -18,6 +18,8 @@ class YoutubeController extends RegistradosController
     {
         if (Input::post('action') == 'incluir') {
             (new Rolflix_sitios)->incluirSitio($_POST);
+            Redirect::to('/registrados/youtube');
+            return;
         }
         else if (Input::post('action') == 'no_ver') {
             (new Rolflix_suscripciones)->suscribirLista($_POST['sitios']);
