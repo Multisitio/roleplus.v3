@@ -135,7 +135,9 @@
   controles/ayudas del editor, utilidades compartidas o reglas contextuales
   de impresion; no repartir entre ellos estilos por defecto del manual.
 
-- Correccion del usuario (2026-10-08): el reset de margenes de H1-H6
-  debe ganar a los espaciados residuales de las plantillas migradas.
-  Verificar el margen efectivo de todos los lados; la excepcion es el
-  margen inferior de 10px del subrayado, incluso si el titulo es ultimo hijo.
+- Correccion del usuario (2026-10-08): ante espaciados residuales del
+  sistema anterior, identificar y eliminar las reglas obsoletas; no taparlas
+  con !important en el reset. Usar !important solo cuando sea estrictamente
+  necesario. Si el usuario se ofrece a borrar reglas de BD, indicar sus
+  bloques y dejar esa edicion al usuario. El subrayado conserva sus 10px
+  inferiores, incluso si el titulo es ultimo hijo.
