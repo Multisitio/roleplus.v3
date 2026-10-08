@@ -54,3 +54,17 @@ main > div > .button-floating {
     opacity: 1 !important;
     box-shadow: 0 0 12px 2px #333 !important;
 }
+/* BUTTON EDIT RULE */
+
+main>div>a.button-floating[data-ajax=".ajax.show"] {
+    background: white;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 1px #666;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    z-index: 4;
+}

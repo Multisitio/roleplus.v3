@@ -9,12 +9,6 @@ img {
     max-width: 100%;
 }
 
-main.a4.landscape article img { max-height: 20.9cm; }
-
-main.a5.landscape article img { max-height: 14.7cm; }
-main.letter.portrait article img { max-height: 10.9in; }
-main.letter.landscape article img { max-height: 8.4in; }
-
 @media print {
     /* Conservar las dimensiones del editor: vh reduce las portadas al imprimir. */
     img { page-break-inside: avoid; break-inside: avoid; }

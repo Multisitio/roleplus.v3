@@ -1,3 +1,101 @@
+/* Base del manual. Las plantillas de BD se cargan despues de esta hoja. */
+main {
+    counter-reset: page;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px 0;
+    margin: 45px 70px;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+main>div {
+    position: relative;
+}
+
+main header {
+    padding: 0;
+}
+
+main section {
+    clear: both;
+    position: relative;
+    z-index: 2;
+}
+
+main :is(h1, h2, h3, h4, h5, h6) {
+    margin: 0;
+    padding: 0;
+}
+
+/* Page Sizes */
+
+main article {
+    overflow: hidden;
+}
+
+
+main.a4.landscape article {
+    height: 21cm;
+    width: 29.7cm;
+}
+
+main.a4.portrait article {
+    height: 29.7cm;
+    width: 21cm;
+}
+
+main.a5.landscape article {
+    height: 14.8cm;
+    width: 21cm;
+}
+
+main.a5.portrait article {
+    height: 21cm;
+    width: 14.8cm;
+}
+
+main.letter.landscape article {
+    height: 8.5in;
+    width: 11in;
+}
+
+main.letter.portrait article {
+    height: 11in;
+    width: 8.5in;
+}
+
+main.letter.portrait > div {
+    background-color: white;
+}
+
+/* Booklet mode for screen preview */
+
+.booklet-mode main {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 0;
+    justify-content: center;
+    max-width: 32cm;
+    margin: 0 auto;
+}
+
+.booklet-mode main .blank-page article {
+    background: white !important;
+    box-shadow: none !important;
+}
+
+/* Limites de imagen segun el formato de la pagina. */
+main.a4.landscape article img { max-height: 20.9cm; }
+main.a5.landscape article img { max-height: 14.7cm; }
+main.letter.portrait article img { max-height: 10.9in; }
+main.letter.landscape article img { max-height: 8.4in; }
+
+main :is(h1, h2, h3, h4, h5, h6)+p {
+    margin-top: 0;
+    padding-top: 0;
+}
 main :is(header, section, footer):has(>div) {
     display: flex;
     flex-direction: row;
@@ -38,11 +136,11 @@ main section:has(> table) {
     text-align: center;
 }
 
-main section:has(> table) > :not(table) {
+main section:has(> table)> :not(table) {
     text-align: var(--body-align, left);
 }
 
-main section > table {
+main section>table {
     display: inline-table;
     vertical-align: top;
     text-align: left;
@@ -54,11 +152,6 @@ main td {
 
 main ul {
     list-style: none;
-}
-
-main :not(main):has(+ :is(ul, ol)) {
-    margin-bottom: 0;
-    padding-bottom: 0;
 }
 
 main :is(header, section) :last-child {

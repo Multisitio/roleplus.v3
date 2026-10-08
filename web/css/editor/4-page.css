@@ -4,7 +4,6 @@ html {
 
 body {
     background: grey;
-    counter-reset: page;
 }
 
 :where(a) {
@@ -12,104 +11,10 @@ body {
     text-decoration: none;
 }
 
-main {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px 0;
-    margin-top: 65px !important;
-}
-
-main>div {
-    position: relative;
-}
-
-header {
-    padding: 0;
-}
-
-section {
-    clear: both;
-    position: relative;
-    z-index: 2;
-}
-
 body> :not(main) ul {
     border-left: 4px solid lightgrey;
     list-style: none;
     padding-left: 5px;
-}
-
-/* Page Sizes */
-
-article {
-    overflow: hidden;
-}
-
-
-.a4.landscape article {
-    height: 21cm;
-    width: 29.7cm;
-}
-
-.a4.portrait article {
-    height: 29.7cm;
-    width: 21cm;
-}
-
-.a5.landscape article {
-    height: 14.8cm;
-    width: 21cm;
-}
-
-.a5.portrait article {
-    height: 21cm;
-    width: 14.8cm;
-}
-
-.letter.landscape article {
-    height: 8.5in;
-    width: 11in;
-}
-
-.letter.portrait article {
-    height: 11in;
-    width: 8.5in;
-}
-
-main.letter.portrait > div {
-    background-color: white;
-}
-
-/* BUTTON EDIT RULE */
-
-main>div a[data-ajax=".ajax.show"] {
-    background: white;
-    border: 0;
-    border-radius: 50%;
-    box-shadow: 0 0 10px 1px #666;
-    cursor: pointer;
-    padding: 10px;
-    position: absolute;
-    right: -10px;
-    top: -10px;
-    z-index: 4;
-}
-
-/* Booklet mode for screen preview */
-
-.booklet-mode main {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    gap: 0;
-    justify-content: center;
-    max-width: 32cm;
-    margin: 0 auto;
-}
-
-.booklet-mode main .blank-page article {
-    background: white !important;
-    box-shadow: none !important;
 }
 
 @media (display-mode: fullscreen) {

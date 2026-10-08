@@ -129,3 +129,8 @@
   en H1-H6, inicializar el interlineado a 1.0 una sola vez y mostrarlo en
   el combo; permitir cambiarlo despues, incluso al ajustar el grosor.
   Imponer solo margin-bottom de 10px y conservar el color de la fuente.
+
+- CSS del editor (2026-10-08): concentrar la base del manual main en
+  web/css/editor/8-plantilla.css. Los otros fuentes deben contener solo
+  controles/ayudas del editor, utilidades compartidas o reglas contextuales
+  de impresion; no repartir entre ellos estilos por defecto del manual.

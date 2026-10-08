@@ -8,17 +8,8 @@
    de las barras de herramientas fijas ("espacio reservado").
    /* NO usar .editor en este archivo */
 --------------------------------------------------------- */ body {
-    background: grey;
-    counter-reset: page;
     padding: 0 !important;
     margin: 0 !important;
-}
-
-/* barra pegada a la izquierda (48px) + margen */
-main {
-    margin: 45px 70px;
-    box-sizing: border-box;
-    padding: 0;
 }
 
 /* El aside derecho (y general) debe sobreponerse a los controles */
@@ -297,7 +288,7 @@ main div[contenteditable] ::selection {
     background: rgba(100, 160, 255, 0.25);
 }
 
-article {
+main div[contenteditable]>article {
     scroll-margin-top: 75px;
 }
 
