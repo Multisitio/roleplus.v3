@@ -110,3 +110,8 @@
   Si esta vacio o se quita, hereda el fondo de las impares. Verificar este
   comportamiento tanto en plantillas de BD habituales como en las migradas;
   no obligar a seleccionar dos veces la misma imagen.
+
+- Correccion del usuario (2026-10-08): los nombres de fuente seleccionada en
+  el panel conservan la previsualizacion personalizada, salvo la alineacion:
+  siempre a la izquierda para identificar la etiqueta. Comprobar tambien
+  justify-content del enlace flex, sin cambiar la alineacion del manual.
