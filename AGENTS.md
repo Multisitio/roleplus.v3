@@ -170,3 +170,9 @@
   generales ni extender una retirada a otras plantillas por iniciativa
   propia. Si el usuario pide los bloques para quitarlos, identificarlos
   y dejarle esa edicion; no borrarlos automaticamente.
+
+- Ornamentacion y gap (2026-10-08): no recomendar borrar margenes de
+  caption, h5 ornamentados o sus contenedores solo por ser legacy.
+  Comprobar desplazamientos y espacio reservado para el adorno; separar
+  ese espacio interno del gap entre grupos. No recomendar poner todos
+  los margenes verticales a cero sin revisar estas dependencias.
