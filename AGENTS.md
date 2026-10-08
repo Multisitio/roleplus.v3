@@ -145,3 +145,7 @@
 - Celdas del manual (2026-10-08): excluir td y th de los ajustes de
   margen y padding para first-child y last-child de la base del editor.
   El sangrado de las celdas debe seguir las reglas de la tabla.
+
+- Sangrado de celdas migradas (2026-10-08): compilar siempre los valores
+  de los controles horizontal y vertical, incluidos cero y el valor base;
+  no depender de que sobreviva una regla del sistema anterior.

@@ -249,7 +249,7 @@ class Plantillas_componentes extends LiteRecord
         }
         foreach (['x' => ['left', 'right'], 'y' => ['top', 'bottom']] as $eje => $lados) {
             $key = '--table-td-padding-' . $eje;
-            if ($this->cambiado($vars, $key)) {
+            if (isset($vars[$key])) {
                 foreach ($lados as $lado) {
                     $css .= "main :is(td, th) {padding-{$lado}: var({$key}) !important;}\n";
                 }
