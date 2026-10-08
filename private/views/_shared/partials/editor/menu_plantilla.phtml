@@ -423,7 +423,6 @@
 					if ($transform) $style_a[] = "text-transform: {$transform}";
 					if ($var_caps) $style_a[] = "font-variant: {$var_caps}";
 					if ($f['color']) $style_a[] = "color: {$f['color']}";
-					if (!empty($f['decoration']) && $f['decoration'] !== '0') $style_a[] = "text-decoration: underline";
 					$style_attr = $style_a ? 'style="' . implode('; ', $style_a) . '"' : '';
 				?>
 					<section data-nivel="<?=$niv?>">

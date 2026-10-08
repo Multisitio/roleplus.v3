@@ -76,12 +76,13 @@ class Plantillas_componentes extends LiteRecord
                 }
             }
             $key = '--' . $nivel . '-decoration';
-            if ($this->cambiado($vars, $key)) {
+            if (preg_match('/^h[1-6]$/', $nivel)) {
+                // The heading rule remains editable even when returning to its base value.
+                $grosor = ($vars[$key] ?? '0') === 'none' ? '0' : "var({$key}, 0)";
+                $css .= "{$selector} {text-decoration: none !important; border-bottom: {$grosor} solid currentColor !important;}\n";
+            } elseif ($this->cambiado($vars, $key)) {
                 $linea = in_array($vars[$key], ['0', 'none'], true) ? 'none' : 'underline';
                 $css .= "{$selector} {text-decoration: {$linea} !important;}\n";
-                if ($nivel === 'h3' && $linea === 'none') {
-                    $css .= "{$selector} {border-bottom: none !important;}\n";
-                }
             }
             if ($nivel === 'dropcap') {
                 foreach (['right', 'bottom', 'left'] as $lado) {

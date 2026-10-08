@@ -46,6 +46,11 @@ for name in ['srd20','dragonbane','for_the_quest']:
  else:
   fam=['Medieval Sharp','Minion Pro','Minion Pro','Minion Pro','Medieval Sharp','Medieval Sharp'];sizes=['22pt','16pt','18pt','14pt','15pt','xxx-large'];body=('Minion Pro','14pt','#333333');colors=['#48000c','#ffffff','#48000c','#333333','#ffffff','#000000']
  controls={}
+ # The legacy h3 underline is a 2px border across the whole heading block.
+ if name in ['srd20','dragonbane']:controls['--h3-decoration']='2px'
+ for rule in rules:
+  if rule['selector']=='main h3':
+   rule['declarations']=[(k,v) for k,v in rule['declarations'] if k!='border-bottom']
  for i in range(1,7):
   controls.update({f'--h{i}-family':fam[i-1],f'--h{i}-size':sizes[i-1],f'--h{i}-color':colors[i-1]})
  controls.update({'--body-family':body[0],'--body-size':body[1],'--body-color':body[2]})

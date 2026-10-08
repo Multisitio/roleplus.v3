@@ -115,3 +115,12 @@
   el panel conservan la previsualizacion personalizada, salvo la alineacion:
   siempre a la izquierda para identificar la etiqueta. Comprobar tambien
   justify-content del enlace flex, sin cambiar la alineacion del manual.
+
+- Correccion del usuario (2026-10-08): el subrayado de H1-H6 es una linea
+  bajo todo el bloque, con el grosor elegido, no text-decoration de la fuente.
+  La migracion debe reflejar el borde original en el control editable y
+  comprobar el CSS efectivo al cambiarlo, quitarlo y volver al valor base.
+
+- Correccion del usuario (2026-10-08): no guardar .min.css ni .min.js
+  dentro de carpetas de fuentes; usar el bundle exterior. Antes de retirar
+  uno, comparar con las fuentes y comprobar referencias y codigo exclusivo.

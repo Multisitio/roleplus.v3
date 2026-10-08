@@ -25,6 +25,7 @@
     "--hb_color_accent": "var(--color-bg-accent)"
   },
   "ajustes": {
+    "--h3-decoration": "2px",
     "--h1-family": "MrEaves",
     "--h1-size": "34px",
     "--h1-color": "#58180d",
@@ -1196,10 +1197,6 @@
         [
           "font-size",
           "22px"
-        ],
-        [
-          "border-bottom",
-          "2px solid var(--color-border-primary)"
         ],
         [
           "line-height",

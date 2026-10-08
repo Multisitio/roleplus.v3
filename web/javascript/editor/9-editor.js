@@ -370,7 +370,6 @@
                         linkMenu.style.textAlign = f.align || 'left';
                         linkMenu.style.textTransform = f.transform === 'small-caps' ? 'none' : (f.transform || 'none');
                         linkMenu.style.fontVariant = f.transform === 'small-caps' ? 'small-caps' : 'normal';
-                        linkMenu.style.textDecoration = f.decoration && f.decoration !== '0' ? 'underline' : 'none';
                         if (f.color) linkMenu.style.color = f.color;
                         linkMenu.textContent = niv.toUpperCase() + ': ' + (f.fuente || 'Sin seleccionar');
                     }
@@ -564,9 +563,6 @@
                         if (propType === 'transform') {
                             linkMenu.style.textTransform = val === 'small-caps' ? 'none' : val;
                             linkMenu.style.fontVariant = val === 'small-caps' ? 'small-caps' : 'normal';
-                        }
-                        if (propType === 'decoration') {
-                            linkMenu.style.textDecoration = val === '0' ? 'none' : 'underline';
                         }
                     }
                 }
