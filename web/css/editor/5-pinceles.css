@@ -198,7 +198,7 @@ nav[data-toolbar="contexto"]>span:not(:empty) {
     min-height: 42px;
     padding: 10px 25px 10px 12px;
     border-radius: 0;
-    filter: drop-shadow(3px 3px 2px #666);
+    filter: drop-shadow(3px 3px 1px #666);
     position: relative;
 }
 

@@ -124,3 +124,7 @@
 - Correccion del usuario (2026-10-08): no guardar .min.css ni .min.js
   dentro de carpetas de fuentes; usar el bundle exterior. Antes de retirar
   uno, comparar con las fuentes y comprobar referencias y codigo exclusivo.
+
+- Tipografias del editor (2026-10-08): al activar el subrayado de bloque
+  en H1-H6, mostrar interlineado 1.0 en el combo y aplicarlo junto con
+  margin-bottom de 10px; conservar el color de la fuente en la linea.

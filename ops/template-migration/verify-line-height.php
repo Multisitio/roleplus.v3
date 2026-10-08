@@ -25,6 +25,7 @@ try {
         $rules = new Plantillas_reglas;
         $editor = new LineHeightTestPlantillas;
         $editor->idu = $p->idu;
+        $rules->guardar($p->idu, '--h3-decoration', '0');
         $rules->guardar($p->idu, '--h3-margin-top', '17px');
         foreach (['0.5', '1.5', '2.5'] as $height) {
             $editor->saveSettings(['line_height_h3' => $height], []);

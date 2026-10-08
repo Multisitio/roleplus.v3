@@ -29,6 +29,13 @@ try {
                 if ($saved->tipografia[$level]['decoration'] !== $width) {
                     throw new RuntimeException('Editor lost heading border width');
                 }
+                if ($width !== '0' && ($saved->tipografia[$level]['line_height'] !== '1.0'
+                    || !str_contains($css, "main {$level} {line-height: 1.0 !important; margin-bottom: 10px !important;}"))) {
+                    throw new RuntimeException('Underlined heading spacing differs from editor');
+                }
+                if ($width === '0' && str_contains($css, "main {$level} {line-height: 1.0 !important; margin-bottom: 10px !important;}")) {
+                    throw new RuntimeException('Underline spacing remains when disabled');
+                }
                 $expected = $migrated
                     ? "main {$level} {text-decoration: none !important; border-bottom: var(--{$level}-decoration, 0) solid currentColor !important;}"
                     : "border-top: var(--{$level}-decoration) solid currentColor;";

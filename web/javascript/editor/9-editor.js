@@ -395,6 +395,8 @@
 
                     var decorationSelect = section.querySelector('select[name="decoration_' + niv + '"]');
                     if (decorationSelect) decorationSelect.value = f.decoration || '0';
+                    var lineHeightSelect = section.querySelector('select[name="line_height_' + niv + '"]');
+                    if (lineHeightSelect) lineHeightSelect.value = f.line_height || '1.5';
 
                     var colorInput = section.querySelector('input[name="color_' + niv + '"]');
                     if (colorInput) colorInput.value = f.color;
@@ -471,6 +473,10 @@
     ['change', 'input'].forEach(function (evt) {
         Kumbia.utils.on(evt, 'aside.template select[data-change-ajax], aside.template input[data-change-ajax]', function (e) {
             var $el = this, name = $el.name, val = $el.value;
+            if (/^decoration_h[1-6]$/.test(name) && parseFloat(val) > 0) {
+                var heightControl = $el.closest('section[data-nivel]').querySelector('.line-height-select');
+                if (heightControl) heightControl.value = '1.0';
+            }
 
             // 1. Actualización visual inmediata (sin esperar a BD)
             var preview = document.querySelector('main');

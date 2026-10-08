@@ -381,7 +381,7 @@ class Plantillas extends LiteRecord
                 'transform'  => ($vars["--{$niv}-variant"] === 'small-caps' ? 'small-caps' : $vars["--{$niv}-transform"]),
                 'variant'    => $vars["--{$niv}-variant"],
                 'margin_top' => $vars["--{$niv}-margin-top"] ?? '0px',
-                'line_height' => $vars["--{$niv}-line-height"] ?? '1.5',
+                'line_height' => self::tituloSubrayado($vars, $niv) ? '1.0' : ($vars["--{$niv}-line-height"] ?? '1.5'),
             ];
         }
 
@@ -429,6 +429,10 @@ class Plantillas extends LiteRecord
         // 1. Tipografía
         foreach (self::NIVELES_TIPOGRAFIA as $niv) {
             // Fuente
+            if (preg_match('/^h[1-6]$/', $niv) && isset($post["decoration_{$niv}"])
+                && (float)$post["decoration_{$niv}"] > 0) {
+                $post["line_height_{$niv}"] = '1.0';
+            }
             if (isset($post["fuente_{$niv}"])) {
                 $fuente = trim($post["fuente_{$niv}"]);
                 if ($fuente) {
@@ -728,18 +732,23 @@ class Plantillas extends LiteRecord
                     $fuentes[] = $variables[$key];
                 }
             }
-            return (new Plantillas_componentes)->css($this->idu, $variables, $this->generarCssFuentes($fuentes)) . $this->cssInterlineado();
+            return (new Plantillas_componentes)->css($this->idu, $variables, $this->generarCssFuentes($fuentes)) . $this->cssInterlineado($variables);
         }
         $css = "/* Compilado: " . date('Y-m-d H:i:s') . " */\n";
         $css .= $this->generarCssFuentes($this->fuentesUsadas($variables));
         $css .= $this->cssVariables($variables);
         $css .= $this->cssTipografia();
         $css .= $this->cssEstructuraPlantilla($variables);
-        $css .= $this->cssInterlineado();
+        $css .= $this->cssInterlineado($variables);
         return $css;
     }
 
-    private function cssInterlineado()
+    private static function tituloSubrayado(array $variables, $nivel)
+    {
+        return preg_match('/^h[1-6]$/', $nivel) && (float)($variables["--{$nivel}-decoration"] ?? '0') > 0;
+    }
+
+    private function cssInterlineado(array $variables)
     {
         $selectores = self::SELECTORES_TIPOGRAFIA;
         $selectores['body'] = 'main, main > div > article, main :is(p, li, td, th, blockquote)';
@@ -749,6 +758,9 @@ class Plantillas extends LiteRecord
         $css = '';
         foreach ($selectores as $nivel => $selector) {
             $css .= "{$selector} {line-height: var(--{$nivel}-line-height, 1.5) !important;}\n";
+            if (self::tituloSubrayado($variables, $nivel)) {
+                $css .= "main {$nivel} {line-height: 1.0 !important; margin-bottom: 10px !important;}\n";
+            }
         }
         return $css;
     }
@@ -808,7 +820,7 @@ class Plantillas extends LiteRecord
                 $css .= "    width: 100%;\n";
                 $css .= "    height: 0;\n";
                 $css .= '    border-top: var(--' . $niv . "-decoration) solid currentColor;\n";
-                $css .= "    margin-block: -8px 8px;\n";
+                $css .= "    margin-block: 0;\n";
                 $css .= "}\n\n";
             }
         }
