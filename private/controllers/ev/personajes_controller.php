@@ -36,7 +36,26 @@ class PersonajesController extends EvController
     #
     public function salvar()
     {
-        $idu = (new Personajes)->salvar($_POST);
+        if (Input::isAjax()) {
+            View::select(null);
+            View::template(null);
+            header('Content-Type: application/json; charset=UTF-8');
+        }
+        try {
+            $idu = (new Personajes)->salvar($_POST);
+        } catch (Throwable $e) {
+            if ( ! Input::isAjax()) {
+                throw $e;
+            }
+            http_response_code($e->getCode() >= 400 && $e->getCode() <= 599 ? $e->getCode() : 500);
+            echo json_encode(['success' => false, 'error' => 'No se ha podido guardar el personaje. Comprueba tu sesión y vuelve a intentarlo.']);
+            return;
+        }
+        if (Input::isAjax()) {
+            echo json_encode(['success' => true, 'idu' => $idu,
+                'url' => '/ev/personajes/montar/' . Input::post('fichas_idu') . '/' . $idu]);
+            return;
+        }
         return Redirect::to("ev/personajes/montar/" . Input::post('fichas_idu') . "/$idu");
     }
 
@@ -67,7 +86,10 @@ class PersonajesController extends EvController
         $this->cajas = (new Fichas_cajas)->todas($this->ficha->idu);
         $this->personaje = (new Personajes)->uno($this->ficha->idu, $personajes_idu);
         $this->personajes_usuarios = (new Personajes_usuarios)->uno($personajes_idu);
-        $this->idu = $personajes_idu;
+        $this->puede_salvar = Session::get('idu') && ( ! $personajes_idu
+            || (new Personajes)->esPropietario($personajes_idu));
+        $this->puede_eliminar = $personajes_idu && $this->puede_salvar;
+        $this->idu = $personajes_idu ?: _str::uid();
         View::template('fichas');
     }
 }

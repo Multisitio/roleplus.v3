@@ -24,11 +24,17 @@ class Personajes extends LiteRecord
     #
 	public function salvar($cat)
 	{
+        if ( ! Session::get('idu')) {
+            throw new RuntimeException('Sesión ausente.', 401);
+        }
         $fichas_idu = (string)$cat['fichas_idu'];
 		$idu = empty($cat['idu']) ? _str::uid() : $cat['idu'];
+        $existente = self::first('SELECT usuarios_idu FROM personajes WHERE idu=? LIMIT 1', [$idu]);
+        if ($existente && ! $this->esPropietario($idu)) {
+            throw new RuntimeException('Personaje de otro usuario.', 403);
+        }
         unset($cat['fichas_idu'], $cat['idu']);
-
-        $this->eliminar($idu, 'sin alerta');
+        unset($cat['action']);
 
         if ( ! empty($cat['fotos']) && is_array($cat['fotos']) && ! empty($_FILES['imagenes'])) {
             $files = $_FILES['imagenes'];
@@ -49,6 +55,7 @@ class Personajes extends LiteRecord
         }
         unset($cat['fotos']);
 
+        $keys = $vals = [];
         foreach ($cat as $name=>$value)
         {
             # Generado aquí
@@ -60,14 +67,28 @@ class Personajes extends LiteRecord
             $vals[] = (string)$value;
         }
         if ( ! $vals) {
-            return;
+            throw new RuntimeException('No hay datos para guardar.', 400);
         }
         $sql = 'INSERT INTO personajes (usuarios_idu, fichas_idu, idu, variable_nombre, variable_valor) VALUES ' . implode(', ', $keys);
-        self::query($sql, $vals);
+        self::query('START TRANSACTION');
+        try {
+            $this->eliminar($idu, 'sin alerta');
+            self::query($sql, $vals);
+            self::query('COMMIT');
+        } catch (Throwable $e) {
+            self::query('ROLLBACK');
+            throw $e;
+        }
 
 		Session::setArray('toast', t('Personaje salvado.'));
 
         return $idu;
+    }
+
+    public function esPropietario($idu)
+    {
+        $row = self::first('SELECT usuarios_idu FROM personajes WHERE idu=? LIMIT 1', [$idu]);
+        return $row && ($row->usuarios_idu == Session::get('idu') || Session::get('rol') > 5);
     }
 
     #

@@ -1,0 +1,43 @@
+const assert = require('node:assert/strict');
+const { chromium } = require('playwright');
+const path = require('node:path');
+(async () => {
+    const browser = await chromium.launch({headless: true, channel:'chrome'});
+    const page = await browser.newPage();
+    let requests = [], pending, fail = false;
+    await page.route('https://character.test/**', async route => {
+        if (route.request().method() === 'POST') {
+            requests.push(route.request().postData());
+            if (pending) await pending;
+            await route.fulfill({status: fail ? 401 : 200, contentType: 'application/json', body: JSON.stringify(fail ? {success:false} : {success:true, idu:'stable-id', url:'/montar/sheet/stable-id'})});
+        } else await route.fulfill({contentType:'text/html', body:'<main><form data-autosave="salvar" method="post"><input name="nombre" type="text"><input name="idu" type="hidden" value="stable-id"><input name="fichas_idu" type="hidden" value="sheet"><span data-save-status role="status"></span><button name="action" value="salvar" type="submit">Salvar</button><button name="action" value="duplicar" type="submit">Duplicar</button></form></main>'});
+    });
+    await page.goto('https://character.test/montar/sheet');
+    await page.addScriptTag({path:path.resolve(process.argv[2] || 'web/javascript/fichas/4-autosave.js')});
+    await page.fill('[name=nombre]', 'First');
+    await page.waitForFunction(() => document.querySelector('[data-save-status]').textContent === 'Cambios guardados');
+    assert.equal(requests.length, 1);
+    assert.equal(new URL(page.url()).pathname, '/montar/sheet/stable-id');
+    let resolve;
+    pending = new Promise(r => resolve = r);
+    await page.fill('[name=nombre]', 'During request');
+    await page.click('[value=salvar]');
+    await page.waitForFunction(() => document.querySelector('[data-save-status]').textContent === 'Guardando…');
+    await page.fill('[name=nombre]', 'Latest edit');
+    resolve(); pending = null;
+    await page.waitForFunction(() => document.querySelector('[data-save-status]').textContent === 'Cambios guardados');
+    assert.equal(requests.length, 3);
+    assert.match(requests[2], /Latest edit/);
+    for (const request of requests) assert.match(request, /stable-id/);
+    fail = true;
+    await page.fill('[name=nombre]', 'Unsaved');
+    await page.click('[value=salvar]');
+    await page.waitForFunction(() => document.querySelector('[data-save-status]').textContent.startsWith('Error al guardar'));
+    assert.equal(await page.evaluate(() => { const e = new Event('beforeunload', {cancelable:true}); window.dispatchEvent(e); return e.defaultPrevented; }), true);
+    fail = false;
+    await page.click('[value=salvar]');
+    await page.waitForFunction(() => document.querySelector('[data-save-status]').textContent === 'Cambios guardados');
+    assert.equal(await page.evaluate(() => { const e = new Event('beforeunload', {cancelable:true}); window.dispatchEvent(e); return e.defaultPrevented; }), false);
+    await browser.close();
+    console.log('PASS: new character, stable URL, edits during save, failed save, exit warning, retry');
+})().catch(e => {console.error(e); process.exit(1);});

@@ -88,8 +88,11 @@
 			<a class="paper-btn btn-warning-outline mh5" href="/ev/fichas/cajas/<?=$ficha->idu?>">< <?=t('Diseñar')?></a>
 		<?php endif; ?>
 
-		<?php if ($personajes_usuarios && Session::get('idu') == $personajes_usuarios->usuarios_idu): ?>
+		<?php if ($puede_salvar): ?>
+			<span role="status" aria-live="polite" data-save-status></span>
+			<?php if ($puede_eliminar): ?>
 			<button type="submit" class="paper-btn btn-danger-outline mh5" name="action" value="eliminar">- <?=t('Eliminar')?></button>
+			<?php endif; ?>
 			<button type="submit" class="paper-btn btn-success-outline mh5" name="action" value="salvar">+ <?=t('Salvar')?></button>
 		<?php endif; ?>
 

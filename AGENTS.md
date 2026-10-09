@@ -198,3 +198,10 @@
 - Correccion de proceso reiterada (2026-10-08): tras verificar el cambio
   puntual publicado, cerrar inmediatamente con commit y push. No seguir
   explorando ni ampliar la validacion de una correccion ya comprobada.
+
+- Personajes (2026-10-09): escribir en una ficha nueva debe crear y guardar
+  automaticamente el personaje, conservando su identificador en los guardados
+  siguientes. Duplicar crea una copia y nunca es requisito para guardar.
+  Confirmar el guardado real y advertir al salir con cambios pendientes.
+- Salvar es Crear si no hay personaje guardado y Actualizar si ya existe su ID;
+  el autoguardado debe usar Salvar. Duplicar siempre crea otra copia.

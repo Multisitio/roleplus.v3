@@ -60,8 +60,6 @@
         var saveBtn = form.querySelector(saveBtnSel);
         if (!saveBtn) return;
 
-        saveBtn.style.display = "inline-block";
-
         var watched = form.querySelectorAll(
             'textarea, input[type="text"], input[type="checkbox"], input[type="file"]'
         );
@@ -69,8 +67,20 @@
         var timer = null;
         var saving = false;
         var isSubmitting = false;
+        var status = form.querySelector('[data-save-status]');
 
-        form.addEventListener("submit", function() {
+        function setStatus(message) {
+            if (status) status.textContent = message;
+        }
+
+        form.addEventListener("submit", function(e) {
+            if (e.submitter === saveBtn) {
+                e.preventDefault();
+                if (timer) clearTimeout(timer);
+                timer = null;
+                doSave(true);
+                return;
+            }
             isSubmitting = true;
         });
 
@@ -78,8 +88,7 @@
             if (isSubmitting) return;
 
             var currentSnapshot = takeSnapshot(watched);
-            if (timer || currentSnapshot !== lastData) {
-                if (timer) doSave();
+            if (saving || timer || currentSnapshot !== lastData) {
                 var msg = "¿Guardar cambios antes de salir?";
                 e.preventDefault();
                 e.returnValue = msg;
@@ -89,33 +98,46 @@
 
         function scheduleSave() {
             if (timer) clearTimeout(timer);
+            setStatus('Cambios pendientes de guardar…');
             timer = setTimeout(function () { doSave(); }, 3000);
         }
 
-        function doSave() {
+        function doSave(force) {
             timer = null;
             if (saving) return;
             var currentData = takeSnapshot(watched);
-            if (currentData === lastData) return;
+            if ( ! force && currentData === lastData) return;
             var fd = new FormData(form);
             fd.set("action", actionVal);
             var url = (form.getAttribute("action") || "").trim() || window.location.href;
             saving = true;
+            setStatus('Guardando…');
             fetch(url, {
                 method: "POST",
                 cache: "no-store",
                 headers: { "X-Requested-With": "XMLHttpRequest" },
                 body: fd,
-                credentials: "same-origin",
-                keepalive: true
+                credentials: "same-origin"
             })
                 .then(function (res) {
-                    if (res.ok) {
-                        lastData = currentData;
-                        showToast("Cambios guardados automáticamente", "success");
-                    }
+                    if (!res.ok || res.redirected) throw new Error('No se ha podido guardar.');
+                    return res.json();
                 })
-                .finally(function () { saving = false; });
+                .then(function (data) {
+                    if (!data.success || !data.idu || !data.url) throw new Error('Guardado no confirmado.');
+                    form.querySelector('[name="idu"]').value = data.idu;
+                    window.history.replaceState(null, '', data.url);
+                    lastData = currentData;
+                    setStatus('Cambios guardados');
+                    saving = false;
+                    // Preserve edits made while the previous request was in flight.
+                    if (takeSnapshot(watched) !== lastData) scheduleSave();
+                })
+                .catch(function () {
+                    saving = false;
+                    setStatus('Error al guardar. Tus cambios siguen pendientes.');
+                    showToast('No se han podido guardar tus cambios. No salgas de la ficha; pulsa Salvar para reintentar.', 'error');
+                });
         }
 
         for (var i = 0; i < watched.length; i++) {
