@@ -1420,18 +1420,21 @@
         }
         
         e.preventDefault();
-        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+        var clipboard = (e.originalEvent || e).clipboardData;
+        var html = clipboard.getData('text/html');
+        var text = clipboard.getData('text/plain');
         
         var sel = window.getSelection();
         if (sel && sel.rangeCount > 0) {
             var range = sel.getRangeAt(0);
             range.deleteContents();
             
-            var textNode = document.createTextNode(text);
-            range.insertNode(textNode);
-            
-            range.setStartAfter(textNode);
-            range.setEndAfter(textNode);
+            var fragment = html ? Kumbia.utils.parseHTML(html) : document.createDocumentFragment();
+            if (!html) fragment.appendChild(document.createTextNode(text));
+            var lastNode = fragment.lastChild;
+            range.insertNode(fragment);
+            if (lastNode) range.setStartAfter(lastNode);
+            range.collapse(true);
             sel.removeAllRanges();
             sel.addRange(range);
             

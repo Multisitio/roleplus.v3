@@ -205,3 +205,8 @@
   Confirmar el guardado real y advertir al salir con cambios pendientes.
 - Salvar es Crear si no hay personaje guardado y Actualizar si ya existe su ID;
   el autoguardado debe usar Salvar. Duplicar siempre crea otra copia.
+
+- Pegado HTML (2026-10-10): conservar el HTML del portapapeles, incluidos
+  style y atributos de contenido. La prohibicion de generar CSS en linea
+  no autoriza a destruir estilos aportados por el usuario. Mantener los
+  filtros existentes contra scripts, manejadores ejecutables y javascript:.
