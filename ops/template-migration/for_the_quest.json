@@ -86,7 +86,6 @@
     "--footer-page-x": "120px",
     "--footer-page-y": "0px",
     "--list-style-checkbox": "\"❑ \"",
-    "--body-margin-top": "0px",
     "--h1-margin-top": "10px",
     "--h2-margin-top": "5px",
     "--h3-margin-top": "5px",

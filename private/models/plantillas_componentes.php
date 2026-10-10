@@ -169,6 +169,9 @@ class Plantillas_componentes extends LiteRecord
                 $selector = 'main > div > article';
             }
             foreach ($tipografia as $suffix => $propiedad) {
+                if ($nivel === 'body' && $suffix === 'margin-top') {
+                    continue;
+                }
                 $key = '--' . $nivel . '-' . $suffix;
                 if ($this->cambiado($vars, $key)) {
                     if ($nivel === 'dropcap' && $suffix === 'color') {

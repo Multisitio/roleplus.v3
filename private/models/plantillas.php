@@ -28,7 +28,6 @@ class Plantillas extends LiteRecord
         '--body-style' => 'normal',
         '--body-transform' => 'none',
         '--body-variant' => 'normal',
-        '--body-margin-top' => '0px',
         '--footer-height' => '0',
         '--footer-imagen' => 'none',
         '--footer-margin-bottom' => '0',
@@ -453,6 +452,9 @@ class Plantillas extends LiteRecord
             // Atributos numéricos y selects
             $props = ['size', 'color', 'align', 'variant', 'transform', 'decoration', 'margin_top', 'line_height'];
             foreach ($props as $p) {
+                if ($niv === 'body' && $p === 'margin_top') {
+                    continue;
+                }
                 $key = "{$p}_{$niv}";
                 if (isset($post[$key])) {
                     $val = trim($post[$key]);
@@ -725,6 +727,7 @@ class Plantillas extends LiteRecord
 
     private function generarCssPlantilla(array $variables)
     {
+        unset($variables['--body-margin-top'], $variables['--componentes-base-body-margin-top']);
         foreach ($variables as $propiedad => $valor) {
             if (str_contains($propiedad, '-margin-') && is_numeric($valor)) {
                 $variables[$propiedad] = $valor . 'px';
@@ -817,7 +820,9 @@ class Plantillas extends LiteRecord
             $css .= '    font-variant: var(--' . $niv . "-variant);\n";
             $css .= "    text-decoration: none !important;\n";
             $css .= '    color: var(--' . $niv . "-color);\n";
-            $css .= '    margin-top: var(--' . $niv . "-margin-top);\n";
+            if ($niv !== 'body') {
+                $css .= '    margin-top: var(--' . $niv . "-margin-top);\n";
+            }
             $css .= "}\n\n";
 
             if ($niv !== 'body' && $niv !== 'small') {

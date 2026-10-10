@@ -103,7 +103,6 @@
     "--section-padding-right": "49px",
     "--section-padding-bottom": "0px",
     "--p-gap": "10px",
-    "--body-margin-top": "0px",
     "--h1-margin-top": "10px",
     "--h2-margin-top": "5px",
     "--h3-margin-top": "5px",
