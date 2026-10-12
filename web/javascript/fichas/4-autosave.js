@@ -1,170 +1,151 @@
 (function () {
-    "use strict";
-
-    function showToast(message, type) {
-        var container = document.querySelector(".toast-container");
-        if (!container) {
-            container = document.createElement('div');
-            container.className = 'toast-container';
-            document.querySelector('main').appendChild(container);
-        }
-        var toastId = "toast-js-" + Math.floor(Math.random() * 1000000);
-        var title = (type === "error") ? "ERROR" : "INFO";
-        var html =
-            '<div class="mb15 ' + toastId + '">' +
-            '<button type="button" class="btn-small" data-remove="parent">' +
-            '<img alt="Cerrar" src="/img/icons/x.svg">' +
-            '</button>' +
-            '<h3>' + title + '</h3>' +
-            '<p>' + message + '</p>' +
-            '</div>';
-            
-        var wrapper = document.createElement('div');
-        wrapper.innerHTML = html;
-        var toast = wrapper.firstElementChild;
-        container.appendChild(toast);
-        
-        var btn = toast.querySelector('[data-remove="parent"]');
-        if(btn) {
-            btn.addEventListener('click', function() {
-                if(window.Kumbia && Kumbia.fx) Kumbia.fx.fadeOut(toast);
-                else toast.remove();
-            });
-        }
-        setTimeout(function () {
-            if (toast.parentElement) {
-                if(window.Kumbia && Kumbia.fx) Kumbia.fx.fadeOut(toast);
-                else toast.remove();
-            }
-        }, 4000);
+    'use strict';
+    function init() {
+        document.querySelectorAll('form[data-autosave]').forEach(initForm);
     }
-
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initAll);
-    } else {
-        initAll();
-    }
-
-    function initAll() {
-        var forms = document.querySelectorAll("form[data-autosave]");
-        for (var f = 0; f < forms.length; f++) {
-            initForm(forms[f]);
-        }
-    }
-
     function initForm(form) {
-        if (!form) return;
-        var actionVal = (form.getAttribute("data-autosave") || "").trim();
-        if (!actionVal) return;
-        var saveBtnSel = 'button[name="action"][value="' + actionVal + '"]';
-        var saveBtn = form.querySelector(saveBtnSel);
-        if (!saveBtn) return;
-
-        var watched = form.querySelectorAll(
-            'textarea, input[type="text"], input[type="checkbox"], input[type="file"]'
-        );
-        var lastData = takeSnapshot(watched);
-        var timer = null;
-        var saving = false;
-        var isSubmitting = false;
-        var status = form.querySelector('[data-save-status]');
-
-        function setStatus(message) {
-            if (status) status.textContent = message;
+        const initialField = form.querySelector('[name="estado_inicial"]');
+        if (!initialField) return;
+        const initial = JSON.parse(initialField.value);
+        const id = form.querySelector('[name="idu"]');
+        const ficha = form.querySelector('[name="fichas_idu"]').value;
+        const status = form.querySelector('[data-save-status]');
+        let button = form.querySelector('button[value="salvar"]');
+        const fields = Array.from(form.elements).filter(el => el.name &&
+            ['text','textarea','checkbox','hidden'].includes(el.type) &&
+            !['idu','fichas_idu','estado_inicial','fotos[]','action'].includes(el.name));
+        const files = Array.from(form.querySelectorAll('input[type="file"]'));
+        const fotos = Array.from(form.querySelectorAll('[name="fotos[]"]'));
+        const base = {};
+        const fileBase = new Map();
+        const value = el => el.type === 'checkbox' ? (el.checked ? el.value : '') : el.value;
+        fields.forEach(el => { base[el.name] = value(el); });
+        files.forEach(el => fileBase.set(el, ''));
+        const fileKey = el => Array.from(el.files || []).map(f => f.name+'|'+f.size+'|'+f.lastModified).join(';');
+        let revision = initial.revision, editable = initial.editable;
+        let timer = null, saving = false, submitting = false, syncing = false, stopped = false;
+        const message = text => { if (status) status.textContent = text; };
+        function dirty() {
+            const names = fields.filter(el => value(el) !== base[el.name]).map(el => el.name);
+            files.forEach((el,i) => { if (fileKey(el) !== fileBase.get(el) && fotos[i]) names.push(fotos[i].value); });
+            return [...new Set(names)];
         }
-
-        form.addEventListener("submit", function(e) {
-            if (e.submitter === saveBtn) {
-                e.preventDefault();
-                if (timer) clearTimeout(timer);
-                timer = null;
-                doSave(true);
-                return;
+        function permissions(allowed) {
+            editable = allowed;
+            if (allowed && !button) {
+                button = document.createElement('button');
+                button.type = 'submit'; button.name = 'action'; button.value = 'salvar';
+                button.className = 'paper-btn btn-success-outline mh5';
+                button.textContent = '+ Salvar';
+                form.querySelector('.fixed-bottom-right').appendChild(button);
             }
-            isSubmitting = true;
-        });
-
-        window.addEventListener("beforeunload", function (e) {
-            if (isSubmitting) return;
-
-            var currentSnapshot = takeSnapshot(watched);
-            if (saving || timer || currentSnapshot !== lastData) {
-                var msg = "¿Guardar cambios antes de salir?";
-                e.preventDefault();
-                e.returnValue = msg;
-                return msg;
-            }
-        });
-
-        function scheduleSave() {
-            if (timer) clearTimeout(timer);
-            setStatus('Cambios pendientes de guardar…');
-            timer = setTimeout(function () { doSave(); }, 3000);
+            if (button) button.disabled = !allowed;
+            fields.forEach(el => { if (el.type === 'text' || el.type === 'textarea') el.readOnly = !allowed; });
+            files.forEach(el => { el.disabled = !allowed; });
         }
-
-        function doSave(force) {
-            timer = null;
-            if (saving) return;
-            var currentData = takeSnapshot(watched);
-            if ( ! force && currentData === lastData) return;
-            var fd = new FormData(form);
-            fd.set("action", actionVal);
-            var url = (form.getAttribute("action") || "").trim() || window.location.href;
-            saving = true;
-            setStatus('Guardando…');
-            fetch(url, {
-                method: "POST",
-                cache: "no-store",
-                headers: { "X-Requested-With": "XMLHttpRequest" },
-                body: fd,
-                credentials: "same-origin"
-            })
-                .then(function (res) {
-                    if (!res.ok || res.redirected) throw new Error('No se ha podido guardar.');
-                    return res.json();
-                })
-                .then(function (data) {
-                    if (!data.success || !data.idu || !data.url) throw new Error('Guardado no confirmado.');
-                    form.querySelector('[name="idu"]').value = data.idu;
-                    window.history.replaceState(null, '', data.url);
-                    lastData = currentData;
-                    setStatus('Cambios guardados');
-                    saving = false;
-                    // Preserve edits made while the previous request was in flight.
-                    if (takeSnapshot(watched) !== lastData) scheduleSave();
-                })
-                .catch(function () {
-                    saving = false;
-                    setStatus('Error al guardar. Tus cambios siguen pendientes.');
-                    showToast('No se han podido guardar tus cambios. No salgas de la ficha; pulsa Salvar para reintentar.', 'error');
-                });
-        }
-
-        for (var i = 0; i < watched.length; i++) {
-            var el = watched[i];
-            var evt = (el.type === "checkbox" || el.type === "file") ? "change" : "input";
-            el.addEventListener(evt, scheduleSave);
-        }
-    }
-
-    function takeSnapshot(nodeList) {
-        var out = [];
-        for (var i = 0; i < nodeList.length; i++) {
-            var el = nodeList[i];
-            var name = el.name || ("__idx" + i);
-            if (el.type === "checkbox") {
-                out.push(name + "=" + (el.checked ? "1" : "0"));
-            } else if (el.type === "file") {
-                if (el.files && el.files.length > 0) {
-                    var f = el.files[0];
-                    out.push(name + "=" + f.name + "|" + f.size + "|" + f.lastModified);
-                } else {
-                    out.push(name + "=");
+        permissions(editable);
+        function apply(data, sent, sentFiles) {
+            if (data.revision < revision) return;
+            revision = data.revision;
+            id.value = data.idu;
+            fields.forEach(el => {
+                const remote = String(data.datos[el.name] ?? '');
+                const local = value(el);
+                const unchanged = local === base[el.name] || (sent && local === sent[el.name]);
+                if (unchanged) {
+                    if (el.type === 'checkbox') el.checked = remote !== '' && remote !== '0';
+                    else el.value = remote;
                 }
-            } else {
-                out.push(name + "=" + (el.value === undefined ? "" : el.value));
+                base[el.name] = remote;
+            });
+            if (sentFiles) files.forEach(el => {
+                if (fileKey(el) === sentFiles.get(el)) { el.value = ''; fileBase.set(el, ''); }
+            });
+            // Portrait references are updated independently of the current file selection.
+            fotos.forEach(el => {
+                const hidden = fields.find(field => field.name === el.value);
+                const box = el.closest('.dropimage');
+                if (!hidden || !box || files.some(file => file.closest('.dropimage') === box && file.files.length)) return;
+                let image = box.querySelector('img');
+                if (hidden.value) {
+                    if (!image) { image = document.createElement('img'); image.alt = 'Retrato'; box.appendChild(image); }
+                    const src = '/img/fichas/retratos/l.'+hidden.value;
+                    if (image.getAttribute('src') !== src) image.setAttribute('src', src);
+                    box.classList.add('dropnocontent');
+                } else { if (image) image.remove(); box.classList.remove('dropnocontent'); }
+            });
+            permissions(data.editable);
+        }
+        function schedule() {
+            if (!editable) return;
+            if (timer) clearTimeout(timer);
+            message('Cambios pendientes de guardar…');
+            timer = setTimeout(save, 3000);
+        }
+        async function save(force) {
+            timer = null;
+            if (saving || !editable) return;
+            let names = dirty();
+            if (!names.length && force && !revision) names = fields.map(el => el.name);
+            if (!names.length) { message('Cambios guardados'); return; }
+            const sent = Object.fromEntries(fields.map(el => [el.name,value(el)]));
+            const sentFiles = new Map(files.map(el => [el,fileKey(el)]));
+            const body = new FormData(form);
+            body.set('action','salvar'); body.set('campos',JSON.stringify(names));
+            saving = true; message('Guardando…');
+            try {
+                const res = await fetch(location.href, {method:'POST', headers:{'X-Requested-With':'XMLHttpRequest'},body,credentials:'same-origin',cache:'no-store'});
+                if (!res.ok || res.redirected) throw new Error('No se ha podido guardar.');
+                const data = await res.json();
+                if (!data.success || !data.idu || !data.datos || !data.url) throw new Error('Guardado no confirmado.');
+                apply(data,sent,sentFiles);
+                history.replaceState(null,'',data.url);
+                message('Cambios guardados');
+                saving = false;
+                if (dirty().length) schedule();
+            } catch (err) {
+                saving = false;
+                message('Error al guardar. Tus cambios siguen pendientes; pulsa Salvar para reintentar.');
             }
         }
-        return out.join("&");
+        async function sync() {
+            if (!revision || syncing || saving || stopped || document.hidden || initial.sincronizar === false) return;
+            syncing = true;
+            try {
+                const res = await fetch('/ev/personajes/estado/'+encodeURIComponent(ficha)+'/'+encodeURIComponent(id.value), {headers:{'X-Requested-With':'XMLHttpRequest'},credentials:'same-origin',cache:'no-store'});
+                if (res.status === 401 || res.status === 404) {
+                    stopped = true;
+                    message(res.status === 401 ? 'La sesión ha caducado. Conserva tus cambios antes de salir.' : 'El personaje ha sido eliminado. Conserva tus cambios antes de salir.');
+                    return;
+                }
+                if (!res.ok) throw new Error('Sincronización interrumpida.');
+                const data = await res.json();
+                if (!data.success || !data.datos) throw new Error('Respuesta inválida.');
+                if (data.revision > revision) {
+                    apply(data);
+                    message(dirty().length ? 'Cambios pendientes de guardar…' : 'Datos actualizados');
+                }
+            } catch (err) {
+                if (!dirty().length) message('Sin conexión. Se reintentará la sincronización.');
+            } finally { syncing = false; }
+        }
+        fields.forEach(el => {
+            el.addEventListener(el.type === 'checkbox' ? 'change' : 'input',schedule);
+            if (el.type === 'checkbox') el.addEventListener('click',e => { if (!editable) e.preventDefault(); });
+        });
+        files.forEach(el => el.addEventListener('change',schedule));
+        form.addEventListener('submit',e => {
+            if (e.submitter && e.submitter.value === 'salvar') {
+                e.preventDefault(); if (timer) clearTimeout(timer); timer = null; save(true);
+            } else submitting = true;
+        });
+        window.addEventListener('beforeunload',e => {
+            if (!submitting && (saving || dirty().length)) { e.preventDefault(); e.returnValue = ''; }
+        });
+        // These requests deliver other editors' changes; they are not session keep-alives.
+        setInterval(sync,3000);
+        document.addEventListener('visibilitychange',() => { if (!document.hidden) sync(); });
     }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',init);
+    else init();
 })();

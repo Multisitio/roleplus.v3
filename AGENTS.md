@@ -209,3 +209,11 @@
 - Pegado del editor (2026-10-10): revertido el pegado HTML por la basura
   que Chrome incorpora. Mantener el pegado como texto plano; no restaurar
   la conservacion de HTML y style sin una nueva peticion del usuario.
+
+- Edicion compartida de personajes (2026-10-12): guardar como guardian no
+  cambia el propietario ni vincula automaticamente. Vincular solo toma un
+  personaje libre; Desvincular permite a otros tomarlo. Sincronizar las hojas
+  abiertas sin F5 y guardar solo campos modificados: el ultimo guardado gana
+  en el mismo campo. Una fila activa por personaje y campo. Archivar las
+  alternativas antes de consolidar duplicados y validar InnoDB en ambos
+  entornos: una prueba con SQLite no acredita transacciones en produccion.

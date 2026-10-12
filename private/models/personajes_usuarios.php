@@ -21,22 +21,30 @@ class Personajes_usuarios extends LiteRecord
     #
     public function vincular($fichas_idu, $personajes_idu)
     {
-        # Transferimos Personajes (datos)
-        $sql = "UPDATE personajes SET usuarios_idu=? WHERE idu=?";
-        parent::query($sql, [Session::get('idu'), $personajes_idu]);
-
-        # Eliminamos vinculaciones previas y creamos la nuestra
-        $sql = "DELETE FROM personajes_usuarios WHERE personajes_idu=?";
-        parent::query($sql, [$personajes_idu]);
-
-        $sql = "INSERT INTO personajes_usuarios SET fichas_idu=?, personajes_idu=?, usuarios_idu=?";
-        parent::query($sql, [$fichas_idu, $personajes_idu, Session::get('idu')]);
+        if ( ! Session::get('idu')) { throw new RuntimeException('Sesión ausente.', 401); }
+        parent::query('START TRANSACTION');
+        try {
+            $estado = parent::first('SELECT * FROM personajes_estado WHERE idu=? FOR UPDATE', [$personajes_idu]);
+            if ( ! $estado || $estado->fichas_idu !== $fichas_idu) { throw new RuntimeException('Personaje inexistente.', 404); }
+            $vinculo = parent::first('SELECT usuarios_idu FROM personajes_usuarios WHERE personajes_idu=?', [$personajes_idu]);
+            if ($vinculo) { throw new RuntimeException('Este personaje ya está vinculado. Debe desvincularse antes.', 409); }
+            parent::query('INSERT INTO personajes_usuarios (fichas_idu,personajes_idu,usuarios_idu) VALUES (?,?,?)', [$fichas_idu,$personajes_idu,Session::get('idu')]);
+            parent::query('UPDATE personajes_estado SET usuarios_idu=?,revision=revision+1 WHERE idu=?', [Session::get('idu'),$personajes_idu]);
+            parent::query('UPDATE personajes SET usuarios_idu=? WHERE idu=?', [Session::get('idu'),$personajes_idu]);
+            parent::query('COMMIT');
+        } catch (Throwable $e) { parent::query('ROLLBACK'); throw $e; }
     }
 
     #
     public function desvincular($personajes_idu)
     {
-        $sql = "DELETE FROM personajes_usuarios WHERE personajes_idu=? AND usuarios_idu=?";
-        parent::query($sql, [$personajes_idu, Session::get('idu')]);
+        if ( ! Session::get('idu')) { throw new RuntimeException('Sesión ausente.', 401); }
+        parent::query('START TRANSACTION');
+        try {
+            parent::first('SELECT idu FROM personajes_estado WHERE idu=? FOR UPDATE', [$personajes_idu]);
+            parent::query('DELETE FROM personajes_usuarios WHERE personajes_idu=? AND usuarios_idu=?', [$personajes_idu,Session::get('idu')]);
+            parent::query('UPDATE personajes_estado SET revision=revision+1 WHERE idu=?', [$personajes_idu]);
+            parent::query('COMMIT');
+        } catch (Throwable $e) { parent::query('ROLLBACK'); throw $e; }
     }
 }

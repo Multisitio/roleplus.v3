@@ -25,10 +25,14 @@ class PersonajesController extends EvController
     #
     public function vincular($fichas_idu, $personajes_idu)
     {
-        $uno = (new Personajes_usuarios)->uno($personajes_idu);
-        empty($uno)
-            ? (new Personajes_usuarios)->vincular($fichas_idu, $personajes_idu)
-            : (new Personajes_usuarios)->desvincular($personajes_idu);
+        try {
+            $uno = (new Personajes_usuarios)->uno($personajes_idu);
+            empty($uno)
+                ? (new Personajes_usuarios)->vincular($fichas_idu, $personajes_idu)
+                : (new Personajes_usuarios)->desvincular($personajes_idu);
+        } catch (RuntimeException $e) {
+            Session::setArray('toast', t($e->getMessage()));
+        }
 
         Redirect::to("/ev/personajes/montados/$fichas_idu#$personajes_idu");
     }
@@ -52,8 +56,8 @@ class PersonajesController extends EvController
             return;
         }
         if (Input::isAjax()) {
-            echo json_encode(['success' => true, 'idu' => $idu,
-                'url' => '/ev/personajes/montar/' . Input::post('fichas_idu') . '/' . $idu]);
+            echo json_encode(['success'=>true, 'url'=>'/ev/personajes/montar/' . Input::post('fichas_idu') . '/' . $idu]
+                + (new Personajes)->estado(Input::post('fichas_idu'), $idu));
             return;
         }
         return Redirect::to("ev/personajes/montar/" . Input::post('fichas_idu') . "/$idu");
@@ -90,6 +94,24 @@ class PersonajesController extends EvController
             || (new Personajes)->esPropietario($personajes_idu));
         $this->puede_eliminar = $personajes_idu && $this->puede_salvar;
         $this->idu = $personajes_idu ?: _str::uid();
+        $this->estado_inicial = $personajes_idu ? (new Personajes)->estado($fichas_idu, $personajes_idu)
+            : ['idu'=>$this->idu, 'revision'=>0, 'datos'=>$this->personaje, 'editable'=>(bool)$this->puede_salvar];
+        $this->estado_inicial['sincronizar'] = (bool)Session::get('idu');
         View::template('fichas');
+    }
+
+    public function estado($fichas_idu, $personajes_idu)
+    {
+        View::select(null);
+        View::template(null);
+        header('Content-Type: application/json; charset=UTF-8');
+        header('Cache-Control: no-store');
+        try {
+            if ( ! Session::get('idu')) { throw new RuntimeException('Sesión ausente.', 401); }
+            echo json_encode(['success'=>true] + (new Personajes)->estado($fichas_idu,$personajes_idu));
+        } catch (Throwable $e) {
+            http_response_code(in_array($e->getCode(),[401,403,404],true) ? $e->getCode() : 500);
+            echo json_encode(['success'=>false]);
+        }
     }
 }
