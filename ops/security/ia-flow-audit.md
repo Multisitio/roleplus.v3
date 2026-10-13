@@ -148,3 +148,9 @@ Verificacion publicada: solicitud 9ae3d1db7194, mismo formulario y prompt
 (3346 bytes), HTTP 200, gemini-3.8-flash, STOP, 337 tokens de salida,
 11922 ms de API. HTML completo incorporado con siete entradas de cartas;
 boton reactivado. Prueba temporal sin guardar cambios del manual.
+
+## Fin de la prueba de Flash 3.8 (2026-10-13)
+
+Por peticion expresa se restaura gemini-flash-lite-latest, sin imponer
+thinkingLevel LOW de la prueba Flash. Se mantienen los 8192 tokens,
+la lectura completa de partes y las protecciones de truncamiento y errores.

@@ -67,11 +67,10 @@ class _ia
             'generationConfig' => [
                 'temperature' => 0.7,
                 'maxOutputTokens' => 8192,
-                'thinkingConfig' => ['thinkingLevel' => 'LOW'],
             ]
         ];
 
-        $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" . $key;
+        $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=" . $key;
 
         $res = self::postJson($apiUrl, ['Content-Type: application/json'], $payload);
 
@@ -92,7 +91,7 @@ class _ia
             return (object)[
                 'output_text' => $text,
                 '_source' => 'gemini_api',
-                '_model' => $res['json']->modelVersion ?? 'gemini-3.8-flash'
+                '_model' => $res['json']->modelVersion ?? 'gemini-flash-lite-latest'
             ];
         }
 

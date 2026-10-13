@@ -230,3 +230,5 @@
 - Prueba autorizada por el usuario (2026-10-13): usar `gemini-3.8-flash` en lugar de `gemini-flash-lite-latest` para comparar su rendimiento. Esta peticion expresa sustituye la preferencia anterior durante la prueba.
 
 - Correccion del usuario (2026-10-13): ante HTML generado mostrado en un toast de error, revisar la integracion propia y finishReason antes de atribuirlo al proveedor. El presupuesto de salida incluye razonamiento; no leer solo parts[0], no incorporar MAX_TOKENS ni renderizar HTML recibido como error.
+
+- Fin de la prueba (2026-10-13): por peticion del usuario, restaurar `gemini-flash-lite-latest` y su razonamiento predeterminado. Conservar lectura de partes, proteccion de truncamiento y presupuesto de salida corregidos.

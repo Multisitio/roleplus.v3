@@ -4,7 +4,7 @@ class _curl {
     static $result; static $queue=[]; static $calls=0;
     static function post($url,$data,$options) {
         $config=json_decode($data)->generationConfig;
-        if (strpos($url,'gemini-3.8-flash:generateContent') === false || ($options[CURLOPT_TIMEOUT] > 60 || $options[CURLOPT_TIMEOUT] < 1) || $config->maxOutputTokens!==8192 || $config->thinkingConfig->thinkingLevel!=='LOW') { throw new Exception('Modelo, presupuesto o razonamiento incorrectos'); }
+        if (strpos($url,'gemini-flash-lite-latest:generateContent') === false || ($options[CURLOPT_TIMEOUT] > 60 || $options[CURLOPT_TIMEOUT] < 1) || $config->maxOutputTokens!==8192 || isset($config->thinkingConfig)) { throw new Exception('Modelo, presupuesto o razonamiento incorrectos'); }
         self::$calls++; return self::$queue ? array_shift(self::$queue) : self::$result;
     }
 }
@@ -44,4 +44,4 @@ if ($code!==502 || strpos($text,'límite')===false || strpos($text,'<article>')!
 [$code,$text]=candidateResponse([['text'=>'<h1>Fragmento sin article</h1>']]);
 if ($code!==502 || strpos($text,'página HTML completa')===false || strpos($text,'<h1>')!==false) { throw new Exception('Se renderiza HTML en el error de formato'); }
 Session::$idu=null; [$code,$text]=response(); if ($code!==401) { throw new Exception('Sesión ausente incorrecta'); }
-echo "OK: 3.8 Flash LOW, partes completas, truncamiento protegido, errores sin HTML, timeout y autenticación\n";
+echo "OK: Flash Lite latest, partes completas, truncamiento protegido, errores sin HTML, timeout y autenticación\n";
