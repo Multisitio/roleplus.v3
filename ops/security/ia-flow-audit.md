@@ -190,3 +190,10 @@ la regresion historica. No restaurar la cuota global que bloqueaba usuarios
 ni aumentar procesos a ciegas; investigar la ocupacion de los workers.
 
 Lite latest restaurado y fuente/produccion verificados (b04ed83).
+
+## Investigación detallada de carga PHP-FPM
+
+Ver `fpm-load-audit.md`: ráfagas de scraping desde una IP, avisos de
+saturación anteriores al 9 de octubre y comparación diaria. La muestra
+temporal actual midió 173 peticiones PHP, p95 de 88,308 ms y cola cero.
+La configuración del pool quedó restaurada exactamente, sin aumentar procesos.
