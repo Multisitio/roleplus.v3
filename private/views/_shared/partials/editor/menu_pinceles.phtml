@@ -7,7 +7,7 @@
 
 	<div class="pinceles-grupo" data-grupo="acciones">
 		<button type="button" class="grupo-trigger" title="<?=t('Edición')?>">
-			<span style="font-size:24px; font-weight:bold; line-height: 1;">±</span>
+			<?=Ku::icon('edit')?>
 		</button>
 		<div class="grupo-contenido">
 			<button type="button" data-tag="delete_parent" title="Borrar elemento padre" style="margin-bottom: 5px;"><?=Ku::icon('trash-2')?></button>
@@ -58,12 +58,15 @@
 		</button>
 		<div class="grupo-contenido">
 			<button type="button" data-tag="clear" title="Limpiar formato" style="margin-bottom: 5px;"><?=Ku::icon('delete')?></button>
-			<button type="button" data-tag="a" title="Enlace &lt;a&gt;">A</button>
-			<button type="button" data-tag="b" title="Negrita &lt;b&gt;">B</button>
+			<button type="button" data-tag="align_left" title="<?=t('Alinear a la izquierda (quitar alineacion personalizada)')?>" aria-label="<?=t('Alinear a la izquierda')?>"><?=Ku::icon('align-left')?></button>
+			<button type="button" data-tag="align_center" title="<?=t('Centrar contenido')?>" aria-label="<?=t('Centrar contenido')?>"><?=Ku::icon('align-center')?></button>
+			<button type="button" data-tag="align_right" title="<?=t('Alinear a la derecha')?>" aria-label="<?=t('Alinear a la derecha')?>"><?=Ku::icon('align-right')?></button>
+			<button type="button" data-tag="a" title="Enlace &lt;a&gt;"><?=Ku::icon('link')?></button>
+			<button type="button" data-tag="b" title="Negrita &lt;b&gt;"><?=Ku::icon('bold')?></button>
 			<button type="button" data-tag="strong" title="Negrita a color &lt;strong&gt;">STRONG</button>
-			<button type="button" data-tag="i" title="Cursiva &lt;i&gt;">I</button>
+			<button type="button" data-tag="i" title="Cursiva &lt;i&gt;"><?=Ku::icon('italic')?></button>
 			<button type="button" data-tag="em" title="Cursiva a color &lt;em&gt;">EM</button>
-			<button type="button" data-tag="img" title="Imagen &lt;img&gt;">IMG</button>
+			<button type="button" data-tag="img" title="Imagen &lt;img&gt;"><?=Ku::icon('image')?></button>
 			<button type="button" data-tag="mark" title="marcado &lt;mark&gt;">MARK</button>
 			<button type="button" data-tag="q" title="Cita &lt;q&gt;">Q</button>
 			<button type="button" data-tag="s" title="tachado &lt;s&gt;">S</button>
@@ -71,7 +74,7 @@
 			<button type="button" data-tag="span" title="Contenedor en línea &lt;span&gt;">SPAN</button>
 			<button type="button" data-tag="sub" title="sub &lt;sub&gt;">SUB</button>
 			<button type="button" data-tag="sup" title="sup &lt;sup&gt;">SUP</button>
-			<button type="button" data-tag="u" title="Subrayado &lt;u&gt;">U</button>
+			<button type="button" data-tag="u" title="Subrayado &lt;u&gt;"><?=Ku::icon('underline')?></button>
 		</div>
 	</div>
 

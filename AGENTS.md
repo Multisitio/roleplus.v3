@@ -217,3 +217,8 @@
   en el mismo campo. Una fila activa por personaje y campo. Archivar las
   alternativas antes de consolidar duplicados y validar InnoDB en ambos
   entornos: una prueba con SQLite no acredita transacciones en produccion.
+
+- Alineacion de pinceles (2026-10-13): por peticion expresa, left/center/right
+  de Formato editan text-align en el style de la etiqueta seleccionada del
+  manual. Left retira text-align y style si queda vacio; center/right
+  conservan las demas propiedades. Excepcion limitada al contenido editable.

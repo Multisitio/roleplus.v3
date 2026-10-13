@@ -782,6 +782,23 @@
 
             e.preventDefault();
 
+            if (tag === 'align_left' || tag === 'align_center' || tag === 'align_right') {
+                var targetArticle = activeArticle && activeArticle.querySelector('article');
+                var node = currentCrumbs[currentCrumbs.length - 1];
+                if (!targetArticle || !node || !targetArticle.contains(node)) return;
+
+                // Excepcion expresa para la alineacion del contenido editable del manual.
+                if (tag === 'align_left') {
+                    node.style.removeProperty('text-align');
+                    if (!(node.getAttribute('style') || '').trim()) node.removeAttribute('style');
+                } else {
+                    node.style.setProperty('text-align', tag === 'align_center' ? 'center' : 'right');
+                }
+                restoreRange();
+                scheduleSave(activeArticle);
+                return;
+            }
+
             if (tag === 'delete_node' || tag === 'delete_parent') {
                 if (activeArticle && currentCrumbs && currentCrumbs.length > 0) {
                     var targetArticle = activeArticle.querySelector('article');
