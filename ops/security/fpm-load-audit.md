@@ -120,3 +120,13 @@ las comprobaciones. Copias privadas .before-light-20261013 junto a los tres
 fuentes publicados. No se cambia Apache, PHP-FPM, firewall ni otras webs;
 no se recargan servicios. Los tiempos HTTP observados incluyen red y no
 acreditan por si solos una mejora global de latencia bajo carga.
+
+## Segunda fase: diagnóstico continuo activo
+
+Ver ../php/roleplus-observability.md. Registros privados de duración PHP
+por familia de ruta, muestra 1/20 de rápidas y todas las lentas/5xx;
+estado del pool cada cinco segundos y trazas a partir de dos segundos.
+No se registran prompts, cookies, IP, parámetros ni identificadores.
+Se conservan WAF y límites. Se validaron respuestas durante recarga
+gradual, estado privado, AJAX 401 y disponibilidad HTTP de ambas webs.
+La duración PHP no mide la cola previa ni el tiempo completo del navegador.

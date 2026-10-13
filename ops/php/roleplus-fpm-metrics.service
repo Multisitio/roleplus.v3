@@ -1,0 +1,21 @@
+[Unit]
+Description=RolePlus private PHP-FPM metrics
+After=php8.4-fpm.service
+
+[Service]
+Type=simple
+User=web6
+Group=client1
+ExecStart=/usr/bin/python3 /var/www/clients/client1/web6/private/ops/php/sample-roleplus-fpm.py
+Restart=on-failure
+RestartSec=10
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/www/clients/client1/web6/private/var/observability
+RestrictAddressFamilies=AF_UNIX
+
+[Install]
+WantedBy=multi-user.target
