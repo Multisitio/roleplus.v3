@@ -130,3 +130,39 @@ No se registran prompts, cookies, IP, parámetros ni identificadores.
 Se conservan WAF y límites. Se validaron respuestas durante recarga
 gradual, estado privado, AJAX 401 y disponibilidad HTTP de ambas webs.
 La duración PHP no mide la cola previa ni el tiempo completo del navegador.
+
+## Tercera fase: quitar dependencias innecesarias del camino habitual
+
+Las primeras muestras (2026-10-13, hasta 20:58 UTC) contienen 120 registros
+PHP y 198 muestras de pool. El ultimo estado tiene cola y max_children_reached
+cero tras la segunda recarga; no demuestra ausencia de saturacion historica.
+Las trazas iniciales de Composer coinciden con la primera recarga y no prueban
+un atasco permanente. Hay tambien dos trazas posteriores en session_start;
+la espera de sesion sigue siendo un hallazgo separado por investigar.
+
+Usuarios cargaba vendor/autoload.php en cuanto se incluia el modelo, tambien
+para visitas anonimas sin cookie y redirecciones. Solo sus dos metodos Google
+requieren directamente el SDK; el helper de correo tiene su propio autoload.
+Se retira la carga global y se conserva require_once al entrar en ambos
+metodos Google. No se modifican credenciales, consultas, filtros ni permisos.
+Se pospone la cache HTML: las paginas publicas mezclan experiencia,
+notificaciones y etiquetas del usuario, por lo que no son cacheables tal cual.
+
+El test test-lazy-user-dependencies.php usa dobles y ninguna cuenta real:
+visita sin cookie sin consulta ni Composer; cookie invalida validada por el
+modelo sin Composer; login/registro Google conservan verificacion de token,
+campos y rechazo de tokens invalidos; autoload se ejecuta una sola vez.
+No es una prueba de autenticacion real contra Google.
+
+Despliegue por rename, trait antes que modelo para conservar el SDK en todo
+momento; respaldo privado de los dos fuentes. Sin recargas de servicios ni
+cambios en otras webs. La comprobacion adicional privada con PHP-FPM usa
+el modelo y SDK reales, sin DB ni llamadas a Google, y retira su fixture.
+Eliminar esta carga reduce trabajo; aun no acredita una mejora de latencia
+bajo carga ni explica por si solo los 50 segundos de la generacion de IA.
+
+Validacion publicada: portada y login RolePlus 200, privado anonimo 302
+a identificarse, AJAX de IA sin sesion 401, portada MTGsearch 200.
+Prueba local y CLI de produccion aprobadas; PHP-FPM confirma ausencia de
+Composer en la visita normal y disponibilidad del SDK real. Fuentes
+publicados comparados byte a byte con la copia local.

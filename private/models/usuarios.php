@@ -1,5 +1,4 @@
 <?php
-require_once VENDOR_PATH . 'autoload.php';
 require_once APP_PATH . 'models/usuarios/trait_admin.php';
 require_once APP_PATH . 'models/usuarios/trait_google.php';
 require_once APP_PATH . 'models/usuarios/trait_perfil.php';

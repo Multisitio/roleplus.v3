@@ -7,6 +7,9 @@ trait UsuariosGoogle
     # Google
     public function identificarseConGoogle()
     {
+        // El SDK solo es necesario al verificar credenciales de Google.
+        require_once VENDOR_PATH . 'autoload.php';
+
         #_var::die($_POST);
         $keys = Config::get('keys.google.oauth2');
         $keys = json_decode($keys, true)['web'];
@@ -32,6 +35,9 @@ trait UsuariosGoogle
     # Google
     public function registrarseConGoogle()
     {
+        // El SDK solo es necesario al verificar credenciales de Google.
+        require_once VENDOR_PATH . 'autoload.php';
+
         #_var::die($_POST);
         $keys = Config::get('keys.google.oauth2');
         $keys = json_decode($keys, true)['web'];
