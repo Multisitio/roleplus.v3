@@ -234,3 +234,5 @@
 - Fin de la prueba (2026-10-13): por peticion del usuario, restaurar `gemini-flash-lite-latest` y su razonamiento predeterminado. Conservar lectura de partes, proteccion de truncamiento y presupuesto de salida corregidos.
 
 - Diagnostico de IA (2026-10-13): no reducir maxOutputTokens como arreglo de latencia sin comprobar salida completa y tokens de razonamiento. Registrar el commit que introduce una regresion propia; e8614ea redujo 8192 a 2048 y 8b59479 lo restauro. Distinguir saturacion de PHP-FPM previa a ejecutar PHP de tiempo medido dentro de la llamada API.
+
+- Correccion antibots (2026-10-13): no proponer bloqueos de IP como solucion estructural ni cuotas de peticiones indiferenciadas. Una pagina con muchas imagenes rotas puede generar una rafaga legitima. Diagnosticar coste y origen por ruta, errores de imagenes, autenticacion verificada y concurrencia; priorizar respuestas baratas/cacheables, eliminar trabajo y redirecciones innecesarias y aislar recursos criticos. El volumen o User-Agent aislados no acreditan abuso.

@@ -52,3 +52,33 @@ Se habilitaron durante una muestra de unos 40 segundos el estado de FPM por sock
 Existe scraping con ráfagas capaces de competir por el pool compartido y amplificación mediante redirecciones al login. La aplicación responde rápido en la muestra actual; no se ha observado una cola sostenida en ella. Los HTTP 503 recibidos dentro de cURL desde Google son un fallo distinto y no pueden atribuirse a una espera anterior en la cola PHP.
 
 La mitigación a evaluar es frenar las ráfagas sobre rutas privadas antes de ocupar PHP y reducir redirecciones innecesarias al login, preservando usuarios autenticados, assets y miniaturas dinámicas. No restaurar indiscriminadamente la cuota global que bloqueaba navegación legítima, ni aumentar procesos sin una medición de memoria y concurrencia. Para explicar un episodio futuro de espera local hace falta capturar cola y trazas durante ese episodio; los registros antiguos no contienen esa evidencia.
+
+## Corrección de criterio y propuesta estructural
+
+La cifra de peticiones por segundo no autoriza un bloqueo: puede proceder
+de una página con numerosas imágenes rotas. El bloqueo de IP es temporal
+y no se propone como solución estructural. Se sustituye la recomendación
+genérica de frenar ráfagas por estas prioridades:
+
+1. Medición continuada y rotada de ruta, duración total, tiempo en PHP,
+   consultas y cola; sin cuerpos ni credenciales. Capturar durante saturación.
+2. Ruta ligera para imágenes y ausencias: ImgController hereda AppController,
+   que consulta BD y prepara datos de usuario antes de llegar a Thumbnail.
+   Una imagen inexistente lanza KumbiaException. Revisar los errores reales
+   antes de implementar 404 baratos, caché negativa breve y generación única
+   de miniaturas concurrentes; conservar originales y URLs históricas.
+3. Resolver acceso sin sesión con respuesta mínima y destino de login directo;
+   no interpretar una cookie presente como autenticación válida.
+4. Cachear solo contenido público que no dependa del usuario. Mantener
+   respuestas privadas fuera de esa caché y corregir enlaces rotos de origen.
+5. Separar navegación pública/imágenes del editor/IA mediante pools y
+   presupuestos de recursos medidos. Esto limita competencia por workers;
+   CPU, memoria, BD y red siguen siendo recursos compartidos.
+6. Aplicar controles de admisión por clase y coste real de operación, con
+   autenticación verificada y señales de automatización combinadas; sin una
+   cuota global que trate imágenes, errores, guardados e IA como equivalentes.
+
+Esta propuesta no implica que una cifra aislada o una cabecera User-Agent
+identifiquen por sí solas tráfico abusivo, ni promete corregir errores 503
+externos. En este turno se registra el criterio; no se cambian reglas de
+bloqueo ni la arquitectura sin concretar y validar la implementación.
