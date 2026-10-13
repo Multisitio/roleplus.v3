@@ -749,7 +749,10 @@
                     }
                 })
                 .catch(function (err) {
-                    if (typeof window.editorToast === 'function') window.editorToast('Error al generar con IA: ' + err.message, 'error');
+                    var safeMessage = err.message.replace(/[&<>"']/g, function (char) {
+                        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char];
+                    });
+                    if (typeof window.editorToast === 'function') window.editorToast('Error al generar con IA: ' + safeMessage, 'error');
                 })
                 .finally(function () {
                     btn.disabled = false;
@@ -759,4 +762,3 @@
     });
 
 })(window, document);
-

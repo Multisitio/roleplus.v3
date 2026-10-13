@@ -3,7 +3,8 @@ class Config { static function get($key) { return 'test-key'; } }
 class _curl {
     static $result; static $queue=[]; static $calls=0;
     static function post($url,$data,$options) {
-        if (strpos($url,'gemini-3.8-flash:generateContent') === false || ($options[CURLOPT_TIMEOUT] > 60 || $options[CURLOPT_TIMEOUT] < 1) || isset(json_decode($data)->generationConfig->thinkingConfig)) { throw new Exception('Modelo o razonamiento distinto de la prueba autorizada'); }
+        $config=json_decode($data)->generationConfig;
+        if (strpos($url,'gemini-3.8-flash:generateContent') === false || ($options[CURLOPT_TIMEOUT] > 60 || $options[CURLOPT_TIMEOUT] < 1) || $config->maxOutputTokens!==8192 || $config->thinkingConfig->thinkingLevel!=='LOW') { throw new Exception('Modelo, presupuesto o razonamiento incorrectos'); }
         self::$calls++; return self::$queue ? array_shift(self::$queue) : self::$result;
     }
 }
@@ -13,8 +14,10 @@ class Input { static function post($v) { return $_POST[$v] ?? null; } }
 class Session { static $idu='owner'; static function get($key) { return self::$idu; } static function close() {} }
 class Manuales { function uno($id) { return (object)['idu'=>$id,'usuarios_idu'=>'owner','nombre'=>'Manual','alcance'=>'privado']; } }
 class Manuales_reglas { function todas($id) { return []; } }
-require dirname(__DIR__,2).'/private/libs/_ia.php';
-require dirname(__DIR__,2).'/private/controllers/ev/manuales_controller.php';
+$appPath=dirname(__DIR__,2);
+if (is_dir($appPath.'/private/libs')) { $appPath.='/private'; }
+require $appPath.'/libs/_ia.php';
+require $appPath.'/controllers/ev/manuales_controller.php';
 $_POST=['prompt'=>'Sintetiza','manuales_idu'=>'manual','current_content'=>'<article>Texto</article>'];
 function response($errno=0) {
     _curl::$result=(object)['body'=> $errno ? false : json_encode(['candidates'=>[['content'=>['parts'=>[['text'=>'<article>Resultado</article>']]]]],'modelVersion'=>'latest-version']),'info'=>['http_code'=>$errno?0:200],'errno'=>$errno,'ok'=>$errno===0];
@@ -30,5 +33,15 @@ if (_curl::$calls!==2 || $recovered!=='<article>Resultado</article>') { throw ne
 _curl::$calls=0; _curl::$queue=[$fail,$fail];
 ob_start(); (new ManualesController)->ia_html(); $failed=ob_get_clean();
 if (_curl::$calls!==2 || http_response_code()!==503 || strpos($failed,'temporalmente')===false) { throw new Exception('Reintentos ilimitados o error incorrecto'); }
-Session::$idu=null; [$code,$text]=response(); if ($code!==401) { throw new Exception('Sesión ausente incorrecta'); }
-echo "OK: modelo 3.8 Flash, HTML correcto, timeout 503 y sesión ausente 401\n";
+function candidateResponse($parts,$finish='STOP') {
+    _curl::$result=(object)['body'=>json_encode(['candidates'=>[['finishReason'=>$finish,'content'=>['parts'=>$parts]]]]),'info'=>['http_code'=>200],'errno'=>0,'ok'=>true];
+    http_response_code(200); ob_start(); (new ManualesController)->ia_html(); return [http_response_code(),ob_get_clean()];
+}
+[$code,$text]=candidateResponse([['thought'=>true,'text'=>'Razonamiento'],['text'=>'<article>'],['text'=>'Completo</article>']]);
+if ($code!==200 || $text!=='<article>Completo</article>') { throw new Exception('No se concatenan todas las partes de salida'); }
+[$code,$text]=candidateResponse([['text'=>'<article>Parcial']], 'MAX_TOKENS');
+if ($code!==502 || strpos($text,'límite')===false || strpos($text,'<article>')!==false) { throw new Exception('Se incorpora o renderiza salida truncada'); }
+[$code,$text]=candidateResponse([['text'=>'<h1>Fragmento sin article</h1>']]);
+if ($code!==502 || strpos($text,'página HTML completa')===false || strpos($text,'<h1>')!==false) { throw new Exception('Se renderiza HTML en el error de formato'); }
+Session::$idu=null; [$code,$text]=response(); if ($code!==401) { throw new Exception('Sesión ausente incorrecta'); }
+echo "OK: 3.8 Flash LOW, partes completas, truncamiento protegido, errores sin HTML, timeout y autenticación\n";

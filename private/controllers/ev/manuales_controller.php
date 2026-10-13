@@ -565,7 +565,7 @@ class ManualesController extends EvController
         $respuesta = _ia::ask($prompt_user, $system_instructions);
 
         if ( ! empty($respuesta->_error)) {
-            http_response_code(503);
+            http_response_code($respuesta->_error === 'ia_truncated' ? 502 : 503);
             header('Content-Type: text/plain; charset=UTF-8');
             echo $respuesta->output_text;
             return;
@@ -584,8 +584,9 @@ class ManualesController extends EvController
                 $html = trim($m[1]);
                 echo $html;
             } else {
-                http_response_code(400);
-                echo $html;
+                http_response_code(502);
+                header('Content-Type: text/plain; charset=UTF-8');
+                echo 'La respuesta no contiene una página HTML completa. Tu contenido se conserva; vuelve a intentarlo.';
             }
         } else {
             http_response_code(400);

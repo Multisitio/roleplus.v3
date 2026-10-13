@@ -127,3 +127,24 @@ La prueba desde el editor con el mismo prompt y contenido (3594 bytes,
 918 ms y 650 ms de llamada API, solicitud `b86f87321755`.
 No hubo generacion correcta para comparar la latencia. El boton quedo
 reactivado al finalizar. El modelo permanece configurado para la prueba.
+
+## Corte de salida confirmado (2026-10-13)
+
+La captura de Resolucion de viajes muestra HTML dentro del toast ERROR.
+El registro de esa peticion (`d6e11f580242`) contiene HTTP 200 del proveedor;
+el controlador rechazaba el fragmento sin cierre article y devolvia el HTML
+con estado 400, que el toast renderizaba.
+
+Reproduccion con el prompt y contenido del formulario: HTTP 200,
+finishReason MAX_TOKENS, 1962 tokens de razonamiento y 81 de salida,
+254 bytes de texto sin cierre article. El limite propio era 2048 tokens.
+Se corrige a 8192 y thinkingLevel LOW; se concatenan las partes de texto
+final (excluyendo thought), se detecta MAX_TOKENS y el error de formato
+responde texto plano sin el HTML generado. El frontend escapa el error.
+Pruebas locales: partes multiples, truncamiento, formato invalido,
+timeout, reintento limitado y autenticacion.
+
+Verificacion publicada: solicitud 9ae3d1db7194, mismo formulario y prompt
+(3346 bytes), HTTP 200, gemini-3.8-flash, STOP, 337 tokens de salida,
+11922 ms de API. HTML completo incorporado con siete entradas de cartas;
+boton reactivado. Prueba temporal sin guardar cambios del manual.

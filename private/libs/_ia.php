@@ -66,7 +66,8 @@ class _ia
             ],
             'generationConfig' => [
                 'temperature' => 0.7,
-                'maxOutputTokens' => 2048,
+                'maxOutputTokens' => 8192,
+                'thinkingConfig' => ['thinkingLevel' => 'LOW'],
             ]
         ];
 
@@ -74,9 +75,22 @@ class _ia
 
         $res = self::postJson($apiUrl, ['Content-Type: application/json'], $payload);
 
-        if ($res['ok'] && !empty($res['json']->candidates[0]->content->parts[0]->text)) {
+        $candidate = $res['json']->candidates[0] ?? null;
+        if ($res['ok'] && ($candidate->finishReason ?? '') === 'MAX_TOKENS') {
             return (object)[
-                'output_text' => $res['json']->candidates[0]->content->parts[0]->text,
+                'output_text' => 'La respuesta se ha cortado al alcanzar el límite de salida. Tu contenido se conserva; pide un cambio más breve.',
+                '_error' => 'ia_truncated'
+            ];
+        }
+        $text = '';
+        foreach ($candidate->content->parts ?? [] as $part) {
+            if (empty($part->thought) && isset($part->text)) {
+                $text .= $part->text;
+            }
+        }
+        if ($res['ok'] && $text !== '' && in_array($candidate->finishReason ?? 'STOP', ['STOP'], true)) {
+            return (object)[
+                'output_text' => $text,
                 '_source' => 'gemini_api',
                 '_model' => $res['json']->modelVersion ?? 'gemini-3.8-flash'
             ];
@@ -196,7 +210,10 @@ class _ia
                 'first_byte_ms' => round(($res->info['starttransfer_time'] ?? 0) * 1000),
                 'total_ms' => round(($res->info['total_time'] ?? 0) * 1000),
                 'model' => $json->modelVersion ?? null,
-                'provider_status' => $json->error->status ?? null
+                'provider_status' => $json->error->status ?? null,
+                'finish_reason' => $json->candidates[0]->finishReason ?? null,
+                'output_tokens' => $json->usageMetadata->candidatesTokenCount ?? null,
+                'thought_tokens' => $json->usageMetadata->thoughtsTokenCount ?? null
             ]));
 
             // Un único reintento ante fallo del proveedor, dentro del mismo presupuesto.

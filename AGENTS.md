@@ -228,3 +228,5 @@
 - Correccion del usuario (2026-10-13): para explicar una regresion de latencia tras cambios anti-scraping, contrastar el mismo prompt, clave y endpoint entre rutas y entornos comparables. Una medicion de cURL no demuestra por si sola la causa de la regresion; revisar la cronologia y los cambios de filtros antes de atribuirla al proveedor.
 
 - Prueba autorizada por el usuario (2026-10-13): usar `gemini-3.8-flash` en lugar de `gemini-flash-lite-latest` para comparar su rendimiento. Esta peticion expresa sustituye la preferencia anterior durante la prueba.
+
+- Correccion del usuario (2026-10-13): ante HTML generado mostrado en un toast de error, revisar la integracion propia y finishReason antes de atribuirlo al proveedor. El presupuesto de salida incluye razonamiento; no leer solo parts[0], no incorporar MAX_TOKENS ni renderizar HTML recibido como error.
