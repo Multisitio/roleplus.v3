@@ -697,6 +697,7 @@
         if (btn) {
             e.preventDefault();
             e.stopPropagation();
+            if (btn.disabled) return;
             var promptInput = document.getElementById('ai-prompt');
             var promptVal = promptInput ? promptInput.value.trim() : '';
             if (!promptVal) {
@@ -721,9 +722,9 @@
             fd.append('manuales_idu', manualesIdu);
             fd.append('current_content', currentContent);
 
-            if (typeof window.editorToast === 'function') window.editorToast('PROMPT ENVIADO', 'info');
-
             btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+            if (typeof window.editorToast === 'function') window.editorToast('Petición enviada. Espera la respuesta.', 'info');
 
             fetch('/ev/manuales/ia_html', {
                 method: 'POST',
@@ -752,10 +753,10 @@
                 })
                 .finally(function () {
                     btn.disabled = false;
+                    btn.removeAttribute('aria-busy');
                 });
         }
     });
 
 })(window, document);
-
 

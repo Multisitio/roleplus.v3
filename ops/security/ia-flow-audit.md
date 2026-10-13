@@ -89,3 +89,31 @@ la generación rápida no está garantizada ni se declara recuperada.
 Si ISPConfig regenera el vhost, volver a ejecutar el instalador para conservar
 el include de RolePlus. No copiar el vhost, `.htaccess`, `index.php` ni claves
 entre local y producción.
+
+## Contraste independiente tras la corrección del usuario
+
+Se ejecutaron simultáneamente dos peticiones REST con la misma clave de
+producción, endpoint `gemini-flash-lite-latest`, cuerpo JSON y User-Agent:
+una desde el equipo del usuario mediante urllib y otra desde el servidor
+mediante PHP/cURL CLI, fuera de Apache, PHP-FPM y el WAF.
+
+| Ruta | Tiempo hasta finalizar | Respuesta de la API |
+| --- | --- | --- |
+| Equipo del usuario, llamada directa | 3,125 s | HTTP 503, UNAVAILABLE |
+| Servidor, llamada directa | 1,744 s | HTTP 503, UNAVAILABLE |
+
+Esto acredita que ese fallo concreto ocurre también fuera de los filtros del
+servidor. No reproduce una generación correcta de 50 s ni determina por sí
+solo cuándo o por qué comenzó la regresión de latencia. La atribución histórica
+al proveedor queda sin confirmar; no presentar el tiempo de cURL aislado como
+prueba de esa causa.
+
+La cronología revisada sitúa `zzz-antihang.conf` en noviembre de 2025,
+`antiddos.conf` en abril de 2026, el bloqueador de bots en septiembre de 2026
+y el último cambio del WAF PHP el 9 de octubre de 2026 (retirada de la cuota por
+IP que afectaba a la navegación normal). Las fechas de archivo no sustituyen
+una comparación de comportamiento antes y después.
+
+El aviso del editor queda como «Petición enviada. Espera la respuesta.».
+Se comprobó en el formulario publicado `disabled=true` y `aria-busy=true`
+durante la espera; al finalizar, `disabled=false` y el atributo busy retirado.

@@ -224,3 +224,5 @@
   conservan las demas propiedades. Excepcion limitada al contenido editable.
 
 - Correccion del usuario (2026-10-13): ante lentitud de IA, diagnosticar primero las caracteristicas y cambios del servidor. Conservar `gemini-flash-lite-latest`, preferido expresamente para evitar actualizaciones manuales; una prueba mas rapida con otro modelo no acredita la causa ni autoriza sustituirlo.
+
+- Correccion del usuario (2026-10-13): para explicar una regresion de latencia tras cambios anti-scraping, contrastar el mismo prompt, clave y endpoint entre rutas y entornos comparables. Una medicion de cURL no demuestra por si sola la causa de la regresion; revisar la cronologia y los cambios de filtros antes de atribuirla al proveedor.
