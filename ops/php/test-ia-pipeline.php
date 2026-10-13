@@ -3,7 +3,7 @@ class Config { static function get($key) { return 'test-key'; } }
 class _curl {
     static $result; static $queue=[]; static $calls=0;
     static function post($url,$data,$options) {
-        if (strpos($url,'gemini-flash-lite-latest:generateContent') === false || ($options[CURLOPT_TIMEOUT] > 60 || $options[CURLOPT_TIMEOUT] < 1) || isset(json_decode($data)->generationConfig->thinkingConfig)) { throw new Exception('Se ha cambiado el modelo o su razonamiento'); }
+        if (strpos($url,'gemini-3.8-flash:generateContent') === false || ($options[CURLOPT_TIMEOUT] > 60 || $options[CURLOPT_TIMEOUT] < 1) || isset(json_decode($data)->generationConfig->thinkingConfig)) { throw new Exception('Modelo o razonamiento distinto de la prueba autorizada'); }
         self::$calls++; return self::$queue ? array_shift(self::$queue) : self::$result;
     }
 }
@@ -31,4 +31,4 @@ _curl::$calls=0; _curl::$queue=[$fail,$fail];
 ob_start(); (new ManualesController)->ia_html(); $failed=ob_get_clean();
 if (_curl::$calls!==2 || http_response_code()!==503 || strpos($failed,'temporalmente')===false) { throw new Exception('Reintentos ilimitados o error incorrecto'); }
 Session::$idu=null; [$code,$text]=response(); if ($code!==401) { throw new Exception('Sesión ausente incorrecta'); }
-echo "OK: latest conservado, HTML correcto, timeout 503 y sesión ausente 401\n";
+echo "OK: modelo 3.8 Flash, HTML correcto, timeout 503 y sesión ausente 401\n";

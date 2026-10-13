@@ -117,3 +117,13 @@ una comparación de comportamiento antes y después.
 El aviso del editor queda como «Petición enviada. Espera la respuesta.».
 Se comprobó en el formulario publicado `disabled=true` y `aria-busy=true`
 durante la espera; al finalizar, `disabled=false` y el atributo busy retirado.
+
+## Prueba autorizada de Gemini 3.8 Flash (2026-10-13)
+
+Por peticion expresa se cambia el endpoint a `gemini-3.8-flash`,
+conservando los parametros de generacion y los limites existentes.
+La prueba desde el editor con el mismo prompt y contenido (3594 bytes,
+12 paginas de contexto) produjo dos respuestas HTTP 503 UNAVAILABLE:
+918 ms y 650 ms de llamada API, solicitud `b86f87321755`.
+No hubo generacion correcta para comparar la latencia. El boton quedo
+reactivado al finalizar. El modelo permanece configurado para la prueba.
