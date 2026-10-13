@@ -3,8 +3,12 @@
  * KumbiaPHP - Session OO wrapper
  */
 
-/* Arranque inicial de sesión (como tenías) */
-if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+/* Leer una sesion existente; una visita anonima no necesita crear un fichero.
+ * Las escrituras de la API abren y guardan su sesion de forma perezosa. */
+if (session_status() !== PHP_SESSION_ACTIVE &&
+    (session_id() !== '' || ! empty($_COOKIE[session_name()]))) {
+    session_start();
+}
 
 class Session
 {
@@ -132,3 +136,6 @@ class Session
         return isset($_SESSION['KUMBIA_SESSION'][APP_PATH][$namespace][$index]);
     }
 }
+
+// No retener el bloqueo durante consultas, llamadas externas o renderizado.
+Session::close();

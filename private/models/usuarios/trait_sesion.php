@@ -55,13 +55,19 @@ trait UsuariosSesion
     {
         $usuario = (array)$usuario;
 
-        foreach ($usuario as $key=>$val) {
-            if ($key === 'la_clave' ||
-                $key === 'sesion_clave' || 
-                $key === 'sesion_valor') {
-                continue;
+        // Publicar el login completo antes de liberar la sesion.
+        Session::open();
+        try {
+            foreach ($usuario as $key=>$val) {
+                if ($key === 'la_clave' ||
+                    $key === 'sesion_clave' ||
+                    $key === 'sesion_valor') {
+                    continue;
+                }
+                Session::set($key, $val);
             }
-            Session::set($key, $val);
+        } finally {
+            Session::close();
         }
 
         $this->recordarSesion();

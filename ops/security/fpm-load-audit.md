@@ -166,3 +166,51 @@ a identificarse, AJAX de IA sin sesion 401, portada MTGsearch 200.
 Prueba local y CLI de produccion aprobadas; PHP-FPM confirma ausencia de
 Composer en la visita normal y disponibilidad del SDK real. Fuentes
 publicados comparados byte a byte con la copia local.
+
+## Cuarta fase: sesiones sin trabajo innecesario ni bloqueo de lectura
+
+Las trazas de las 20:49 UTC muestran dos esperas en session_start, con
+peticiones totales de 3505 y 3320 ms. La duracion total no equivale a la
+espera exacta. Otras peticiones lentas posteriores no tienen traza que
+acredite el mismo motivo. No hay identificadores de sesion en los logs;
+no se ha identificado retrospectivamente la peticion que retenia el lock.
+
+El directorio propio del pool tiene 281516 ficheros sess_: 120178 de menos
+de un dia y 161403 de uno a siete dias; contenido agregado 3793362 bytes.
+No se leen sus contenidos ni se borran. GC probabilistico esta desactivado
+en php.ini (probabilidad cero); estos datos no prueban que PHP este
+recorriendo el directorio durante cada session_start. Disco al 49%.
+
+Antes, incluir Session abria/creaba una sesion incluso sin cookie y mantenia
+el bloqueo hasta el final de la preparacion comun del controlador. Ahora
+solo lee una sesion existente (cookie o ID ya establecido) y la cierra
+inmediatamente, conservando renovacion deslizante. Las escrituras siguen
+reabriendo el almacenamiento actual y cerrando tras guardar. Open/close
+explicitos permiten lotes. El login publica todos sus campos bajo un unico
+bloqueo breve y lo libera antes de recordarSesion y sus consultas.
+
+Test de archivos reales y procesos separados, en carpeta temporal propia:
+visita anonima no crea fichero; primera escritura si lo crea; lectura y
+escritura concurrente no esperan a una peticion de dos segundos; ambas
+escrituras persisten sin sobrescribir otras claves; toast, borrado,
+namespaces, renovacion, open/close y logout se conservan. El test de login
+usa el metodo real establecerSesion con un doble para recordarSesion;
+no incluye credenciales, cuentas reales ni una validacion remota de Google.
+La sincronizacion del test excluye del tiempo medido el arranque del
+interprete por UNC: mide la lectura/escritura dentro del segundo proceso.
+
+Despliegue del trait primero y del wrapper de sesion despues, por rename,
+con respaldo privado y reversion ante fallo. Sin recargas de servicios,
+sin cambiar limites ni eliminar sesiones existentes. Esto reduce sesiones
+anonimas y el periodo en que se mantiene el lock; no acredita por si solo
+la causa completa de los 50 segundos de IA ni el efecto bajo un ataque.
+
+Validacion publicada: test concurrente CLI de produccion 1 ms para la
+segunda lectura/escritura mientras la primera dura dos segundos; prueba
+local 98 ms (almacenamiento por UNC). No son tiempos de una pagina real.
+PHP-FPM real con fixture privada: anonimo sin fichero ni Set-Cookie; sesion
+existente leida y cerrada; cookie deslizante con caducidad y HttpOnly,
+renovada una vez y conservada sin renovar en la siguiente peticion.
+Fixture retirada. Portada y login RolePlus 200, privado anonimo 302 sin
+PHPSESSID nueva, AJAX IA sin sesion 401, portada MTGsearch 200. Replica
+de los cuatro fuentes verificada byte a byte. Ninguna sesion real borrada.
