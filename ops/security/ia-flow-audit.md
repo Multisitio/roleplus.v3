@@ -154,3 +154,39 @@ boton reactivado. Prueba temporal sin guardar cambios del manual.
 Por peticion expresa se restaura gemini-flash-lite-latest, sin imponer
 thinkingLevel LOW de la prueba Flash. Se mantienen los 8192 tokens,
 la lectura completa de partes y las protecciones de truncamiento y errores.
+
+## Revision de commits antibots solicitada (2026-10-13)
+
+- c63e876 (5 septiembre): introduce reglas .htaccess para /cards/,
+  /tracker/, agentes concretos y ficheros sensibles. El POST /ev/manuales/ia_html
+  no coincide con esas reglas. La CSP permite fetch al propio dominio.
+- 3b46a58 (24 septiembre): agrega ErrorDocument 403 "Forbidden" para
+  cortar bucles de errores; no modifica la llamada saliente de IA.
+- 9049ecc (9 octubre): retira la cuota global de 20 peticiones por IP
+  en 10 segundos. Contrastado con global_waf.php.before-rate-limit-removal
+  del servidor: elimina lecturas/escrituras /tmp/php_waf y el rechazo 429,
+  sin introducir pausas. WAF publicado coincide con fuente local.
+- e8614ea (hoy): reduce maxOutputTokens de 8192 a 2048; esta regresion
+  propia explica el truncamiento reproducido. 8b59479 restaura 8192.
+
+Configuracion real: zzz-antihang conserva Timeout 30 (mtime noviembre
+2025), antiddos data de abril 2026; los mtimes no prueban fechas de alta.
+RolePlus incluye ProxyTimeout 75 en ambos vhosts. El bloqueo bot_blocker
+solo afecta PREROUTING a puertos de destino 80/443; OUTPUT permite trafico
+y no contiene reglas de bloqueo. _curl publicado coincide con local.
+No hay evidencia de que esos filtros retrasen la llamada saliente a Google.
+
+Hay una pista local independiente: PHP-FPM alcanzo max_children=10
+el 12 octubre a las 11:13, 12:16 y 23:52, y el 13 a las 00:59 y 15:53.
+Entre 15:52 y 15:55 del 13 hay 1332 peticiones desde 546 clientes;
+1323 GET, 8 POST y 1 HEAD. Rutas principales: formularios de usuarios 327,
+identificarse 301 y publicaciones registradas 202. Respuestas: 687 HTTP 302,
+583 HTTP 200 y 8 HTTP 500, ademas de otros estados.
+Estos datos acreditan saturacion local en esas franjas, no que la cuota
+retirada la causara ni que corresponda a las peticiones de IA capturadas.
+La espera en cola antes de iniciar PHP no se mide mediante before_action_ms.
+Falta un contraste equivalente anterior al 9 de octubre para atribuir
+la regresion historica. No restaurar la cuota global que bloqueaba usuarios
+ni aumentar procesos a ciegas; investigar la ocupacion de los workers.
+
+Lite latest restaurado y fuente/produccion verificados (b04ed83).

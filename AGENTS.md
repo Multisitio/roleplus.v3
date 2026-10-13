@@ -232,3 +232,5 @@
 - Correccion del usuario (2026-10-13): ante HTML generado mostrado en un toast de error, revisar la integracion propia y finishReason antes de atribuirlo al proveedor. El presupuesto de salida incluye razonamiento; no leer solo parts[0], no incorporar MAX_TOKENS ni renderizar HTML recibido como error.
 
 - Fin de la prueba (2026-10-13): por peticion del usuario, restaurar `gemini-flash-lite-latest` y su razonamiento predeterminado. Conservar lectura de partes, proteccion de truncamiento y presupuesto de salida corregidos.
+
+- Diagnostico de IA (2026-10-13): no reducir maxOutputTokens como arreglo de latencia sin comprobar salida completa y tokens de razonamiento. Registrar el commit que introduce una regresion propia; e8614ea redujo 8192 a 2048 y 8b59479 lo restauro. Distinguir saturacion de PHP-FPM previa a ejecutar PHP de tiempo medido dentro de la llamada API.
