@@ -7,6 +7,13 @@ class ManualesController extends EvController
 	protected function before_filter()
 	{
         if ($this->action_name === 'check_db') return;
+        if ($this->action_name === 'ia_html' && ! Session::get('idu')) {
+            View::select(null, null);
+            http_response_code(401);
+            header('Content-Type: text/plain; charset=UTF-8');
+            echo 'Tu sesión ha caducado. Conserva el contenido y vuelve a identificarte.';
+            return false;
+        }
         if ($this->usuario->rol < 5) {
             Session::setArray('toast', t('Adquiera el rol Chamán.'));
             return Redirect::to('/registrados/tienda');
@@ -494,7 +501,17 @@ class ManualesController extends EvController
     #
     public function ia_html()
     {
-        View::select(null);
+        // La respuesta de IA es el fragmento o el error, sin el layout AJAX/toasts.
+        View::select(null, null);
+        $started = microtime(true);
+        $_SERVER['ROLEPLUS_IA_REQUEST'] = bin2hex(random_bytes(6));
+        header('X-RolePlus-IA-Request: ' . $_SERVER['ROLEPLUS_IA_REQUEST']);
+        if ( ! Session::get('idu')) {
+            http_response_code(401);
+            header('Content-Type: text/plain; charset=UTF-8');
+            echo 'Tu sesión ha caducado. Conserva el contenido y vuelve a identificarte.';
+            return;
+        }
         $prompt = Input::post('prompt');
         $manuales_idu = Input::post('manuales_idu');
         if (!$prompt || !$manuales_idu) {
@@ -536,7 +553,23 @@ class ManualesController extends EvController
         }
         $prompt_user .= "PETICIÓN DEL USUARIO:\n" . $prompt;
 
+        Session::close();
+        error_log('ROLEPLUS_IA_PREP ' . json_encode([
+            'request' => $_SERVER['ROLEPLUS_IA_REQUEST'],
+            'before_action_ms' => round(($started - ($_SERVER['REQUEST_TIME_FLOAT'] ?? $started)) * 1000),
+            'prepare_ms' => round((microtime(true) - $started) * 1000),
+            'prompt_bytes' => strlen($prompt_user),
+            'pages' => count($reglas),
+            'session_locked' => session_status() === PHP_SESSION_ACTIVE
+        ]));
         $respuesta = _ia::ask($prompt_user, $system_instructions);
+
+        if ( ! empty($respuesta->_error)) {
+            http_response_code(503);
+            header('Content-Type: text/plain; charset=UTF-8');
+            echo $respuesta->output_text;
+            return;
+        }
         
         if (!empty($respuesta->output_text)) {
             $html = trim($respuesta->output_text);
@@ -613,5 +646,3 @@ class ManualesController extends EvController
         return ($manual && $manual->idu && $manual->usuarios_idu === Session::get('idu'));
     }
 }
-
-

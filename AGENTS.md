@@ -222,3 +222,5 @@
   de Formato editan text-align en el style de la etiqueta seleccionada del
   manual. Left retira text-align y style si queda vacio; center/right
   conservan las demas propiedades. Excepcion limitada al contenido editable.
+
+- Correccion del usuario (2026-10-13): ante lentitud de IA, diagnosticar primero las caracteristicas y cambios del servidor. Conservar `gemini-flash-lite-latest`, preferido expresamente para evitar actualizaciones manuales; una prueba mas rapida con otro modelo no acredita la causa ni autoriza sustituirlo.

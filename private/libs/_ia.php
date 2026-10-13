@@ -17,7 +17,7 @@ class _ia
         if ($url && self::isYouTubeChannelUrl($url)) {
             $videosUrl = self::ensureVideosTab($url);
             $html = self::httpGet($videosUrl);
-            
+
             if (is_string($html) && $html !== '') {
                 $videoId = self::extractLatestYouTubeVideoId($html);
                 if ($videoId) {
@@ -28,7 +28,7 @@ class _ia
                     ];
                 }
             }
-            
+
             return (object)[
                 'output_text' => 'No he encontrado fuentes fiables.',
                 '_error' => 'youtube_parse_failed',
@@ -66,23 +66,28 @@ class _ia
             ],
             'generationConfig' => [
                 'temperature' => 0.7,
-                'maxOutputTokens' => 8192,
+                'maxOutputTokens' => 2048,
             ]
         ];
 
         $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=" . $key;
-        
+
         $res = self::postJson($apiUrl, ['Content-Type: application/json'], $payload);
-        
+
         if ($res['ok'] && !empty($res['json']->candidates[0]->content->parts[0]->text)) {
             return (object)[
                 'output_text' => $res['json']->candidates[0]->content->parts[0]->text,
-                '_source' => 'gemini_api'
+                '_source' => 'gemini_api',
+                '_model' => $res['json']->modelVersion ?? 'gemini-flash-lite-latest'
             ];
         }
 
         return (object)[
-            'output_text' => 'No he encontrado fuentes fiables o la IA no respondió correctamente.',
+            'output_text' => $res['errno'] === CURLE_OPERATION_TIMEDOUT
+                ? 'Gemini no ha respondido dentro de los 60 segundos de espera. Tu contenido se conserva; vuelve a intentarlo.'
+                : ($res['http'] === 503
+                    ? 'Gemini está temporalmente no disponible (503). Tu contenido se conserva; vuelve a intentarlo.'
+                    : 'Gemini no ha podido completar la petición. Tu contenido se conserva; vuelve a intentarlo.'),
             '_error' => 'ia_unavailable',
             '_raw' => $res['raw']
         ];
@@ -164,26 +169,50 @@ class _ia
 
     private static function postJson($url, $headers, $data)
     {
-        $res = _curl::post($url, json_encode($data), [
-            'headers' => $headers,
-            CURLOPT_TIMEOUT => 60
-        ]);
+        $deadline = microtime(true) + 60;
+        $body = json_encode($data);
+        for ($attempt = 0; $attempt < 2; $attempt++) {
+            $timeout = $attempt === 0 ? 60 : (int) floor($deadline - microtime(true));
+            $res = _curl::post($url, $body, [
+                'headers' => $headers,
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT => $timeout
+            ]);
 
-        $raw = $res->body;
-        $http = $res->info['http_code'];
-        if ($res->error) {
-            $raw .= ' Error:' . $res->error;
-        }
+            $raw = $res->body;
+            $http = $res->info['http_code'];
+            $json = json_decode($raw);
 
-        $json = json_decode($raw);
-        
-        if (!$res->ok) {
-            _mail::toAdmin('_ia::ask[http '.$http.']', '<pre>'.$raw);
+            // Solo métricas: nunca registrar la clave, el prompt ni la respuesta.
+            // El correo síncrono en este punto añadía otra espera tras un fallo de IA.
+            error_log('ROLEPLUS_IA_API ' . json_encode([
+                'request' => $_SERVER['ROLEPLUS_IA_REQUEST'] ?? '',
+                'attempt' => $attempt + 1,
+                'http' => $http,
+                'errno' => $res->errno,
+                'dns_ms' => round(($res->info['namelookup_time'] ?? 0) * 1000),
+                'connect_ms' => round(($res->info['connect_time'] ?? 0) * 1000),
+                'ready_ms' => round(($res->info['pretransfer_time'] ?? 0) * 1000),
+                'first_byte_ms' => round(($res->info['starttransfer_time'] ?? 0) * 1000),
+                'total_ms' => round(($res->info['total_time'] ?? 0) * 1000),
+                'model' => $json->modelVersion ?? null,
+                'provider_status' => $json->error->status ?? null
+            ]));
+
+            // Un único reintento ante fallo del proveedor, dentro del mismo presupuesto.
+            // No reintentar errores de permisos/configuración ni alargar un timeout.
+            if ($attempt === 0 && $res->errno === 0 && in_array($http, [502, 503, 504], true)
+                && $deadline - microtime(true) > 3) {
+                usleep(random_int(1000000, 1250000));
+                continue;
+            }
+            break;
         }
 
         return [
             'ok' => ($res->ok && $json),
             'http' => $http,
+            'errno' => $res->errno,
             'raw' => $raw,
             'json' => $json
         ];
