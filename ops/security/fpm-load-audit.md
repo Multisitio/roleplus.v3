@@ -82,3 +82,41 @@ Esta propuesta no implica que una cifra aislada o una cabecera User-Agent
 identifiquen por sí solas tráfico abusivo, ni promete corregir errores 503
 externos. En este turno se registra el criterio; no se cambian reglas de
 bloqueo ni la arquitectura sin concretar y validar la implementación.
+
+## Primera fase publicada (2026-10-13)
+
+- ImgController pasa a GeneralController y cierra la sesion antes de resolver
+  la imagen. No ejecuta las consultas/contexto de AppController. Las imagenes
+  siguen siendo publicas, como sus originales servidos por Apache.
+- Rutas invalidas y originales ausentes: HTTP 404, texto plano breve y
+  Cache-Control private,max-age=15; sin error completo del framework.
+  El realpath debe permanecer bajo web/img. Se conservan las URLs de
+  miniaturas de una y dos partes y el generador historico.
+- Thumbnail reutiliza un fichero existente no vacio y vigente respecto al
+  original. Publica nuevas miniaturas mediante temporal y rename, sin
+  modificar el original. Esta fase no introduce un bloqueo de generacion
+  concurrente; ese control necesita una politica de espera validada.
+- RegistradosController conserva sesion y autologin verificado. Sin sesion
+  cierra el lock; GET normal redirige directamente a identificarse y AJAX
+  conserva 401. Se evita el aviso de PHP por preg_match(null).
+
+Pruebas locales y CLI de produccion: 43 ausencias, rutas invalidas y
+recorrido de directorios, proporcion, URL historica, reutilizacion e
+invalidacion de miniatura, original intacto y limpieza del temporal; login
+directo, AJAX 401, cookie invalida rechazada, autologin y sesion conservados.
+Los tests de autenticacion usan dobles para comprobar el flujo del controlador;
+no sustituyen una prueba del mecanismo real de credenciales, que no se modifica.
+
+HTTP real: imagen ausente paso de 500 a 404; ruta privada anonima paso de
+302 a formularios a 302 directamente a identificarse. Login y portada 200.
+Fixture propia PNG generada a traves de PHP-FPM: redireccion 302 a fichero
+PNG 200 de 384x192, original intacto, propietario correcto y reutilizacion
+verificada. Fixture y miniatura retiradas al terminar, sin alterar contenido
+de usuarios. No se realizaron pruebas de carga contra produccion.
+
+Fuentes locales comparadas con HEAD de produccion antes de publicar;
+sintaxis validada y despliegue por rename con reversion automatica si fallan
+las comprobaciones. Copias privadas .before-light-20261013 junto a los tres
+fuentes publicados. No se cambia Apache, PHP-FPM, firewall ni otras webs;
+no se recargan servicios. Los tiempos HTTP observados incluyen red y no
+acreditan por si solos una mejora global de latencia bajo carga.

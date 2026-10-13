@@ -16,19 +16,20 @@ class RegistradosController extends GeneralController
 		}
 		
 		# Acciones permitidas sin login
-		if ( ! Session::get('idu') && preg_match('/(borrarse|identificarse|registrarse|recordar_clave)/', Input::post('action'))) {
+		if ( ! Session::get('idu') && preg_match('/(borrarse|identificarse|registrarse|recordar_clave)/', (string) Input::post('action'))) {
 			$action = Input::post('action');
 			(new Usuarios)->$action($_POST);
 		}
 
 		# IF NOT session THEN login form
 		if ( ! Session::get('idu')) {
+			Session::close();
 			if (Input::isAjax()) {
 				http_response_code(401);
 				header('X-RolePlus-Session: expired');
 				View::select('', 'login');
 			} else {
-				Redirect::to('/usuarios/formularios');
+				Redirect::to('/usuarios/identificarse');
 			}
 			return false;
 		}

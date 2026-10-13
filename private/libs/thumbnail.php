@@ -113,6 +113,17 @@ class Thumbnail
             throw new KumbiaException('La imagen original no existe');
         }
 
+        // Una petición dinámica puede llegar aunque la miniatura ya esté creada.
+        // Reutilizarla solo si sigue vigente respecto a su original.
+        $dir = dirname($imagen_original);
+        $name = basename($imagen_original);
+        $imagen_nueva = "$dir/$miniatura.$name";
+        clearstatcache(true, $imagen_nueva);
+        if (is_file($imagen_nueva) && filesize($imagen_nueva) > 0
+            && filemtime($imagen_nueva) >= filemtime($imagen_original)) {
+            return $imagen_nueva;
+        }
+
         $anchos = Config::get('vistas.miniaturas'); 
         $thu = new Thumbnail($imagen_original);
         if ( ! $thu) {
@@ -120,12 +131,21 @@ class Thumbnail
         }
 
         $thu->size_width($anchos[$miniatura]);
-        $dir = dirname($imagen_original);
-        $name = basename($imagen_original);
-        $imagen_nueva = "$dir/$miniatura.$name";
 
-        $r = $thu->save($imagen_nueva);
-#_var::die([$imagen_nueva, $r]);
+        // Publicar el fichero completo: Apache no debe servir una escritura parcial.
+        $temporal = tempnam($dir, '.thumb-');
+        if ($temporal === false) {
+            throw new KumbiaException('No se pudo crear la miniatura');
+        }
+        try {
+            if ( ! $thu->save($temporal) || ! chmod($temporal, 0644) || ! rename($temporal, $imagen_nueva)) {
+                throw new KumbiaException('No se pudo guardar la miniatura');
+            }
+        } finally {
+            if (is_file($temporal)) {
+                unlink($temporal);
+            }
+        }
         return $imagen_nueva;
     }
 }
