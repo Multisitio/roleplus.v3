@@ -6,7 +6,7 @@ en test-lazy-user-dependencies.php, sin cuentas reales ni conexion a Google.
 Los literales del doble se sustituyeron por valores generados en memoria.
 La alerta externa no se ha cerrado ni clasificado mediante GitGuardian.
 
-La revision adicional de fuentes versionados encontro una contraseña SSH
+La revision adicional de fuentes versionados encontro una contraseÃ±a SSH
 en ssh_cmd.py y una clave con formato Google en un ejemplo comentado de
 suscripciones copy.php. Se retiro el ejemplo, incluido su token de destino.
 La clave del comentario no coincide con ninguna clave de los config/keys.php
@@ -32,9 +32,14 @@ local y de produccion del login Google simulado aprobado. Replica del
 modelo antiguo saneado y de las instrucciones privada verificada. No se
 cambian limites, sesiones, peticiones de IA, claves Google activas o servicios.
 
-La contraseña SSH real sigue en el historial Git. La retirada del literal
-no la revoca. Queda pendiente autorizar y coordinar su rotacion: mantener
-abierta la conexion actual, comprobar los accesos afectados, actualizar
-keys.ssh.password local y verificar una segunda conexion independiente
-antes de cerrar la primera. No se reescribe el historial por iniciativa
-propia ni se afirma que la credencial expuesta ha quedado revocada.
+La contrasena SSH antigua sigue en el historial Git, pero se roto el
+14 de octubre de 2026 con autorizacion expresa del usuario. Se mantuvo una
+conexion autenticada con la contrasena anterior mientras se actualizaba
+el password del usuario de administracion. La nueva contrasena aleatoria
+se comprobo mediante una segunda conexion independiente con autenticacion
+por password, sin agente ni claves privadas. Se actualizo keys.ssh.password
+local y se verifico de nuevo el helper antes de cerrar los accesos abiertos.
+No se imprimio la contrasena ni se copio keys.php a produccion. No se
+reescribe el historial. Otros clientes externos guardados deben usar la
+contrasena nueva que figura en la configuracion local. Portadas RolePlus y
+MTGsearch respondieron HTTP 200 despues de la rotacion.
