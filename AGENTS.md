@@ -2,18 +2,18 @@
 
 - Las bases de datos no comparten necesariamente fuente de verdad. Identificar
   la fuente correspondiente a cada conjunto de datos antes de modificarlo o
-  sincronizarlo; la regla de copia local del cÃƒÂ³digo no determina la de los datos.
+  sincronizarlo; la regla de copia local del cÃƒÆ’Ã‚Â³digo no determina la de los datos.
 
 - La copia local de `X:\htdocs\roleplus.app` es la fuente de verdad. Aplicar
-  primero aquÃƒÂ­ los cambios, verificarlos y solo despuÃƒÂ©s replicarlos en
-  producciÃƒÂ³n.
-- La excepciÃƒÂ³n son las imÃƒÂ¡genes y demÃƒÂ¡s archivos generados por usuarios, junto
-  con sus referencias en la base de datos: su fuente de verdad es producciÃƒÂ³n y
-  no se exige descargar ni mantener una rÃƒÂ©plica local de ese contenido.
-- Al analizar imÃƒÂ¡genes, distinguir siempre entre el original guardado durante
+  primero aquÃƒÆ’Ã‚Â­ los cambios, verificarlos y solo despuÃƒÆ’Ã‚Â©s replicarlos en
+  producciÃƒÆ’Ã‚Â³n.
+- La excepciÃƒÆ’Ã‚Â³n son las imÃƒÆ’Ã‚Â¡genes y demÃƒÆ’Ã‚Â¡s archivos generados por usuarios, junto
+  con sus referencias en la base de datos: su fuente de verdad es producciÃƒÆ’Ã‚Â³n y
+  no se exige descargar ni mantener una rÃƒÆ’Ã‚Â©plica local de ese contenido.
+- Al analizar imÃƒÆ’Ã‚Â¡genes, distinguir siempre entre el original guardado durante
   la subida y las miniaturas que `ImgController` puede generar al vuelo. No
-  concluir que RolePlus no redimensiona basÃƒÂ¡ndose ÃƒÂºnicamente en el uploader.
-- Mantener las URLs histÃƒÂ³ricas de imÃƒÂ¡genes y el generador dinÃƒÂ¡mico de
+  concluir que RolePlus no redimensiona basÃƒÆ’Ã‚Â¡ndose ÃƒÆ’Ã‚Âºnicamente en el uploader.
+- Mantener las URLs histÃƒÆ’Ã‚Â³ricas de imÃƒÆ’Ã‚Â¡genes y el generador dinÃƒÆ’Ã‚Â¡mico de
   miniaturas mientras exista contenido antiguo que dependa de ellos.
 - Todos los cambios deben incluir su propio commit y push ejecutados por el agente. No delegar esta tarea al usuario.
 
@@ -23,12 +23,12 @@
   revisar el horario real de MTGsearch y verificar una carga completa tras
   el ajuste. Distinguir fallos del origen de una correccion verificada.
 
-- La sesiÃƒÂ³n de un usuario activo debe renovarse de forma deslizante dentro de
-  sus peticiones normales, con una frecuencia limitada. No aÃƒÂ±adir pings,
+- La sesiÃƒÆ’Ã‚Â³n de un usuario activo debe renovarse de forma deslizante dentro de
+  sus peticiones normales, con una frecuencia limitada. No aÃƒÆ’Ã‚Â±adir pings,
   polling ni peticiones keep-alive desde JavaScript para conservarla.
-- Las acciones largas y AJAX no deben retener el bloqueo de la sesiÃƒÂ³n despuÃƒÂ©s
-  de escribir en ella. Una sesiÃƒÂ³n ausente en AJAX debe responder como error de
-  autenticaciÃƒÂ³n, nunca devolver silenciosamente un formulario con estado 200.
+- Las acciones largas y AJAX no deben retener el bloqueo de la sesiÃƒÆ’Ã‚Â³n despuÃƒÆ’Ã‚Â©s
+  de escribir en ella. Una sesiÃƒÆ’Ã‚Â³n ausente en AJAX debe responder como error de
+  autenticaciÃƒÆ’Ã‚Â³n, nunca devolver silenciosamente un formulario con estado 200.
 
 - Ante un fallo visual en un manual, inspeccionar el elemento real y sus estilos
   efectivos en el manual afectado antes y despues del cambio. Una prueba del
@@ -49,14 +49,14 @@
 - Conservar el desplazamiento historico del boton de editar de pagina:
   `top: -15px; right: -15px`, relativo a su pagina.
 
-- **Lectura de instrucciones tÃƒÂ©cnicas:** Antes de modificar cÃƒÂ³digo fuente, leer el `SKILL.md` asociado a su tecnologÃƒÂ­a (ej. `kumbiaphp` para MVC, `z_index_hierarchy` para capas). Si `view_file` no estÃƒÂ¡ disponible, usar directamente un lector equivalente, sin pedir permiso ni detener el trabajo por el nombre de una herramienta. No se asume el conocimiento de memoria.
-- **DiagnÃƒÂ³stico de estilos:** Distinguir una variable CSS ausente de un conflicto entre reglas. Comprobar los estilos efectivos y el bundle publicado antes de atribuir la causa; usar las variables del tema existente en lugar de introducir una paleta duplicada.
+- **Lectura de instrucciones tÃƒÆ’Ã‚Â©cnicas:** Antes de modificar cÃƒÆ’Ã‚Â³digo fuente, leer el `SKILL.md` asociado a su tecnologÃƒÆ’Ã‚Â­a (ej. `kumbiaphp` para MVC, `z_index_hierarchy` para capas). Si `view_file` no estÃƒÆ’Ã‚Â¡ disponible, usar directamente un lector equivalente, sin pedir permiso ni detener el trabajo por el nombre de una herramienta. No se asume el conocimiento de memoria.
+- **DiagnÃƒÆ’Ã‚Â³stico de estilos:** Distinguir una variable CSS ausente de un conflicto entre reglas. Comprobar los estilos efectivos y el bundle publicado antes de atribuir la causa; usar las variables del tema existente en lugar de introducir una paleta duplicada.
 
-- **ImpresiÃƒÂ³n CSS (Chrome Bug):** Para que Chrome imprima los colores de fondo es necesario usar `-webkit-print-color-adjust: exact`. Sin embargo, si un contenedor con imagen de fondo (`background-image`) tiene `background-color: transparent`, Chrome descartarÃƒÂ¡ el canal alfa (transparencias) de todos sus elementos hijos al imprimir en PDF. AsegÃƒÂºrate siempre de que el contenedor padre mantenga un color de fondo sÃƒÂ³lido.
-- **CachÃƒÂ© CSS:** Tras cualquier modificaciÃƒÂ³n de un archivo `.min.css`, es obligatorio incrementar la variable `$version` en `ev_controller.php` o similar, y realizar el despliegue al servidor, de lo contrario los cambios no se reflejarÃƒÂ¡n. No intentes sobrescribir CSS personalizados del usuario sin consultarlo (ej. variables como `--table-zebra-bg`).
+- **ImpresiÃƒÆ’Ã‚Â³n CSS (Chrome Bug):** Para que Chrome imprima los colores de fondo es necesario usar `-webkit-print-color-adjust: exact`. Sin embargo, si un contenedor con imagen de fondo (`background-image`) tiene `background-color: transparent`, Chrome descartarÃƒÆ’Ã‚Â¡ el canal alfa (transparencias) de todos sus elementos hijos al imprimir en PDF. AsegÃƒÆ’Ã‚Âºrate siempre de que el contenedor padre mantenga un color de fondo sÃƒÆ’Ã‚Â³lido.
+- **CachÃƒÆ’Ã‚Â© CSS:** Tras cualquier modificaciÃƒÆ’Ã‚Â³n de un archivo `.min.css`, es obligatorio incrementar la variable `$version` en `ev_controller.php` o similar, y realizar el despliegue al servidor, de lo contrario los cambios no se reflejarÃƒÆ’Ã‚Â¡n. No intentes sobrescribir CSS personalizados del usuario sin consultarlo (ej. variables como `--table-zebra-bg`).
 
-- **Entornos (Local vs Remoto):** Los archivos .htaccess, index.php y el contenido de la carpeta config tienen configuraciones y comportamientos especÃ­ficos que difieren entre el entorno local (
-oleplus.vh) y el servidor remoto de producciÃ³n. Nunca se deben sobrescribir los de producciÃ³n con los locales (ni viceversa) sin revisar cuidadosamente las implicaciones de seguridad, rutas o directivas HTTPS (como CSP).
+- **Entornos (Local vs Remoto):** Los archivos .htaccess, index.php y el contenido de la carpeta config tienen configuraciones y comportamientos especÃƒÂ­ficos que difieren entre el entorno local (
+oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescribir los de producciÃƒÂ³n con los locales (ni viceversa) sin revisar cuidadosamente las implicaciones de seguridad, rutas o directivas HTTPS (como CSP).
 
 - Las tarjetas de mamposteria deben respetar un maximo de 640px CSS y quedar
   centradas tambien con zoom al 125%. Conservar el zoom elegido por el usuario;
@@ -251,3 +251,12 @@ oleplus.vh) y el servidor remoto de producciÃ³n. Nunca se deben sobrescribir l
   con includes directos, literales en fuentes o logs. No sincronizar keys.php
   entre local y produccion ni versionar sus valores. Los dobles de pruebas
   usan valores sinteticos efimeros sin acceder a las claves reales.
+
+- SSH de mantenimiento (2026-10-14): ssh_cmd.py es una herramienta local.
+  Lee keys.ssh del private/config/keys.php local mediante el Config del
+  framework; no guardar su password en el script ni extraer constantes por
+  AST para conectar. Usar read_connection(), sin imprimir su resultado.
+  No copiar esa seccion SSH a produccion. Los ejemplos antiguos comentados
+  tampoco pueden conservar tokens o claves reales. Retirar un literal de
+  HEAD no revoca la credencial expuesta en el historial; comprobar su uso
+  y coordinar su rotacion sin cortar los accesos de mantenimiento.

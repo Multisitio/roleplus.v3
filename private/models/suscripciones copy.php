@@ -34,7 +34,7 @@ class Suscripciones extends LiteRecord
     public function suscribirse()
     {
         if ( ! Session::get('idu')) {
-            return Session::setArray('toast', t('Su identificador está vacio, revise que no esté bloqueando desde su navegador la cookie que guarda la sesión.'));
+            return Session::setArray('toast', t('Su identificador estÃ¡ vacio, revise que no estÃ© bloqueando desde su navegador la cookie que guarda la sesiÃ³n.'));
         }
 
         $a = json_decode(file_get_contents('php://input'), true);
@@ -88,12 +88,6 @@ class Suscripciones extends LiteRecord
         Session::setArray('toast', t('Baja en notificaciones.'));
     }
 
-    /*
-    curl -X POST --header "Authorization: key=AIzaSyAPqLjGWW8tThJ8Ye14k_Rb6uVRlBvsIXQ" \
-    --Header "Content-Type: application/json" \
-    https://fcm.googleapis.com/fcm/send \
-    -d "{\"to\":\"cecnrMlGFbc:APA91bF3JYd01sQ42kRwHIzWjsgy3FUdCwgmGxbv5EMQi15Wr0vtIUXeu1w8AFa-RXx4Wv8bpoJW-4AA8DUnekCuii3roziTthyDl3VKCVY3EBr42XXPTIUpTrCHuEtKPAGHExS7-GFR\",\"notification\":{\"body\":\"ENTER YOUR MESSAGE HERE\"}}"
-    */
     public function notificar($arr)
     {
         #Logger::debug($arr);
@@ -110,20 +104,20 @@ class Suscripciones extends LiteRecord
         # Afeitado y corte de pelo
         $arr['vibrate'] = [100,200,100,100,75,25,100,200,100,500,100,200,100,500];
 
-        # Envío de un payload a los usuarios previstos
+        # EnvÃ­o de un payload a los usuarios previstos
         $suscripciones = (empty($arr['usuarios_idu']) or is_array($arr['usuarios_idu']))
-            # Para todos si está vacio o un grupo si es un array
+            # Para todos si estÃ¡ vacio o un grupo si es un array
             ? $this->todas($arr['usuarios_idu'])
             # Para un usuario si es 
             : $this->todasPorUsuario($arr['usuarios_idu']);
 
-        # Aquí se montan las notificaciones con los datos de cada suscripción y el payload
+        # AquÃ­ se montan las notificaciones con los datos de cada suscripciÃ³n y el payload
         $notifications = [];
         foreach ($suscripciones as $sus)
         {
             #$url = 'https://' . $_SERVER['HTTP_HOST']; 
             $url = is_array($arr['url']) ? $arr['url'][$sus->usuarios_idu] : $arr['url'];
-            #_mail::send('ia@roleplus.app', 'URL en notificación', print_r([$url], 1));
+            #_mail::send('ia@roleplus.app', 'URL en notificaciÃ³n', print_r([$url], 1));
 
             $notifications[] = [
                 'subscription' => Subscription::create([
@@ -149,7 +143,7 @@ class Suscripciones extends LiteRecord
 
         $webPush = new WebPush(Config::get('webpush.auth'));
 
-        # Aquí se envían las notificación montadas
+        # AquÃ­ se envÃ­an las notificaciÃ³n montadas
         foreach ($notifications as $notification) {
             $webPush->queueNotification(
                 $notification['subscription'],
@@ -157,7 +151,7 @@ class Suscripciones extends LiteRecord
             );
         }
 
-        # Sí la notificación falla se prepara un informe
+        # SÃ­ la notificaciÃ³n falla se prepara un informe
         $mail_and_unsub = 0;
         foreach ($webPush->flush() as $report) {
             $endpoint = $report->getRequest()->getUri()->__toString();
@@ -176,7 +170,7 @@ class Suscripciones extends LiteRecord
             }
         }
 
-        # Se envía el informe preparado por correo
+        # Se envÃ­a el informe preparado por correo
         if ($mail_and_unsub) {
             _mail::send('ia@roleplus.app', 'Message failed to sent for subscription', '<pre>'.print_r([$requestToPushService, $responseOfPushService, $failReason, $isTheEndpointWrongOrExpired, $messages, $endpoints, $_SESSION, $_SERVER], 1));
 

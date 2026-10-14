@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Ejecuta un único lote histórico con baja prioridad. Conserva los originales,
-# actualiza únicamente las referencias seguras y deja un informe por lote.
+# Ejecuta un ÃƒÂºnico lote histÃƒÂ³rico con baja prioridad. Conserva los originales,
+# actualiza ÃƒÂºnicamente las referencias seguras y deja un informe por lote.
 set -u
 
 BATCH_SIZE="${1:-25}"
@@ -20,21 +20,21 @@ APPLY_REPORT="$LOG_DIR/$RUN_ID-references-apply.json"
 STATUS_FILE="$LOG_DIR/$RUN_ID-status.txt"
 
 case "$BATCH_SIZE" in
-    ''|*[!0-9]*) echo "El tamaño del lote debe ser un entero positivo." >&2; exit 2 ;;
+    ''|*[!0-9]*) echo "El tamaÃƒÂ±o del lote debe ser un entero positivo." >&2; exit 2 ;;
 esac
 if [ "$BATCH_SIZE" -lt 1 ] || [ "$BATCH_SIZE" -gt 100 ]; then
-    echo "El tamaño del lote debe estar entre 1 y 100." >&2
+    echo "El tamaÃƒÂ±o del lote debe estar entre 1 y 100." >&2
     exit 2
 fi
 
 mkdir -p "$LOG_DIR"
 exec 9>"$OPS_DIR/migration.lock"
 if ! flock -n 9; then
-    echo "Ya hay un lote de migración en curso." >&2
+    echo "Ya hay un lote de migraciÃƒÂ³n en curso." >&2
     exit 3
 fi
 if [ ! -s "$BACKUP" ] || ! gzip -t "$BACKUP"; then
-    echo "No existe un respaldo SQL válido; se cancela el lote." >&2
+    echo "No existe un respaldo SQL vÃƒÂ¡lido; se cancela el lote." >&2
     exit 4
 fi
 AVAILABLE_KB="$(df -Pk "$MEDIA_ROOT" | awk 'NR == 2 { print $4 }')"
@@ -63,8 +63,8 @@ fi
 
 tail -n "+$((BEFORE_LINES + 1))" "$MANIFEST" > "$DELTA_MANIFEST"
 
-DB_PASSWORD="$(php -r 'include "/var/www/clients/client1/web6/private/config/databases.php"; echo $databases["default"]["password"];')"
-DB_USER="$(php -r 'include "/var/www/clients/client1/web6/private/config/databases.php"; echo $databases["default"]["username"];')"
+DB_PASSWORD="$(php -r 'define("APP_PATH", "/var/www/clients/client1/web6/private/"); require "/var/www/clients/client1/core/kumbia/config.php"; $database = Config::read("databases"); echo $database["default"]["password"];')"
+DB_USER="$(php -r 'define("APP_PATH", "/var/www/clients/client1/web6/private/"); require "/var/www/clients/client1/core/kumbia/config.php"; $database = Config::read("databases"); echo $database["default"]["username"];')"
 export ROLEPLUS_DB_PASSWORD="$DB_PASSWORD"
 
 php "$OPS_DIR/update-media-references.php" \
