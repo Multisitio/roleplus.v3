@@ -17,6 +17,11 @@ main header {
     padding: 0;
 }
 
+/* Las notas independientes calculan sus lineas con el interlineado de small. */
+main :is(article, header, section, div, footer, blockquote) > small {
+    display: block;
+}
+
 main section {
     clear: both;
     position: relative;
