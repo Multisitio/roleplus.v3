@@ -2,18 +2,18 @@
 
 - Las bases de datos no comparten necesariamente fuente de verdad. Identificar
   la fuente correspondiente a cada conjunto de datos antes de modificarlo o
-  sincronizarlo; la regla de copia local del código no determina la de los datos.
+  sincronizarlo; la regla de copia local del cÃ³digo no determina la de los datos.
 
 - La copia local de `X:\htdocs\roleplus.app` es la fuente de verdad. Aplicar
-  primero aquí los cambios, verificarlos y solo después replicarlos en
-  producción.
-- La excepción son las imágenes y demás archivos generados por usuarios, junto
-  con sus referencias en la base de datos: su fuente de verdad es producción y
-  no se exige descargar ni mantener una réplica local de ese contenido.
-- Al analizar imágenes, distinguir siempre entre el original guardado durante
+  primero aquÃ­ los cambios, verificarlos y solo despuÃ©s replicarlos en
+  producciÃ³n.
+- La excepciÃ³n son las imÃ¡genes y demÃ¡s archivos generados por usuarios, junto
+  con sus referencias en la base de datos: su fuente de verdad es producciÃ³n y
+  no se exige descargar ni mantener una rÃ©plica local de ese contenido.
+- Al analizar imÃ¡genes, distinguir siempre entre el original guardado durante
   la subida y las miniaturas que `ImgController` puede generar al vuelo. No
-  concluir que RolePlus no redimensiona basándose únicamente en el uploader.
-- Mantener las URLs históricas de imágenes y el generador dinámico de
+  concluir que RolePlus no redimensiona basÃ¡ndose Ãºnicamente en el uploader.
+- Mantener las URLs histÃ³ricas de imÃ¡genes y el generador dinÃ¡mico de
   miniaturas mientras exista contenido antiguo que dependa de ellos.
 - Todos los cambios deben incluir su propio commit y push ejecutados por el agente. No delegar esta tarea al usuario.
 
@@ -23,12 +23,12 @@
   revisar el horario real de MTGsearch y verificar una carga completa tras
   el ajuste. Distinguir fallos del origen de una correccion verificada.
 
-- La sesión de un usuario activo debe renovarse de forma deslizante dentro de
-  sus peticiones normales, con una frecuencia limitada. No añadir pings,
+- La sesiÃ³n de un usuario activo debe renovarse de forma deslizante dentro de
+  sus peticiones normales, con una frecuencia limitada. No aÃ±adir pings,
   polling ni peticiones keep-alive desde JavaScript para conservarla.
-- Las acciones largas y AJAX no deben retener el bloqueo de la sesión después
-  de escribir en ella. Una sesión ausente en AJAX debe responder como error de
-  autenticación, nunca devolver silenciosamente un formulario con estado 200.
+- Las acciones largas y AJAX no deben retener el bloqueo de la sesiÃ³n despuÃ©s
+  de escribir en ella. Una sesiÃ³n ausente en AJAX debe responder como error de
+  autenticaciÃ³n, nunca devolver silenciosamente un formulario con estado 200.
 
 - Ante un fallo visual en un manual, inspeccionar el elemento real y sus estilos
   efectivos en el manual afectado antes y despues del cambio. Una prueba del
@@ -49,13 +49,14 @@
 - Conservar el desplazamiento historico del boton de editar de pagina:
   `top: -15px; right: -15px`, relativo a su pagina.
 
-- **Lectura de instrucciones técnicas:** Antes de modificar código fuente, leer el `SKILL.md` asociado a su tecnología (ej. `kumbiaphp` para MVC, `z_index_hierarchy` para capas). Si `view_file` no está disponible, usar directamente un lector equivalente, sin pedir permiso ni detener el trabajo por el nombre de una herramienta. No se asume el conocimiento de memoria.
-- **Diagnóstico de estilos:** Distinguir una variable CSS ausente de un conflicto entre reglas. Comprobar los estilos efectivos y el bundle publicado antes de atribuir la causa; usar las variables del tema existente en lugar de introducir una paleta duplicada.
+- **Lectura de instrucciones tÃ©cnicas:** Antes de modificar cÃ³digo fuente, leer el `SKILL.md` asociado a su tecnologÃ­a (ej. `kumbiaphp` para MVC, `z_index_hierarchy` para capas). Si `view_file` no estÃ¡ disponible, usar directamente un lector equivalente, sin pedir permiso ni detener el trabajo por el nombre de una herramienta. No se asume el conocimiento de memoria.
+- **DiagnÃ³stico de estilos:** Distinguir una variable CSS ausente de un conflicto entre reglas. Comprobar los estilos efectivos y el bundle publicado antes de atribuir la causa; usar las variables del tema existente en lugar de introducir una paleta duplicada.
 
-- **Impresión CSS (Chrome Bug):** Para que Chrome imprima los colores de fondo es necesario usar `-webkit-print-color-adjust: exact`. Sin embargo, si un contenedor con imagen de fondo (`background-image`) tiene `background-color: transparent`, Chrome descartará el canal alfa (transparencias) de todos sus elementos hijos al imprimir en PDF. Asegúrate siempre de que el contenedor padre mantenga un color de fondo sólido.
-- **Caché CSS:** Tras cualquier modificación de un archivo `.min.css`, es obligatorio incrementar la variable `$version` en `ev_controller.php` o similar, y realizar el despliegue al servidor, de lo contrario los cambios no se reflejarán. No intentes sobrescribir CSS personalizados del usuario sin consultarlo (ej. variables como `--table-zebra-bg`).
+- **ImpresiÃ³n CSS (Chrome Bug):** Para que Chrome imprima los colores de fondo es necesario usar `-webkit-print-color-adjust: exact`. Sin embargo, si un contenedor con imagen de fondo (`background-image`) tiene `background-color: transparent`, Chrome descartarÃ¡ el canal alfa (transparencias) de todos sus elementos hijos al imprimir en PDF. AsegÃºrate siempre de que el contenedor padre mantenga un color de fondo sÃ³lido.
+- **CachÃ© CSS:** Tras cualquier modificaciÃ³n de un archivo `.min.css`, es obligatorio incrementar la variable `$version` en `ev_controller.php` o similar, y realizar el despliegue al servidor, de lo contrario los cambios no se reflejarÃ¡n. No intentes sobrescribir CSS personalizados del usuario sin consultarlo (ej. variables como `--table-zebra-bg`).
 
-- **Entornos (Local vs Remoto):** Los archivos .htaccess, index.php y el contenido de la carpeta config tienen configuraciones y comportamientos espec�ficos que difieren entre el entorno local (oleplus.vh) y el servidor remoto de producci�n. Nunca se deben sobrescribir los de producci�n con los locales (ni viceversa) sin revisar cuidadosamente las implicaciones de seguridad, rutas o directivas HTTPS (como CSP).
+- **Entornos (Local vs Remoto):** Los archivos .htaccess, index.php y el contenido de la carpeta config tienen configuraciones y comportamientos específicos que difieren entre el entorno local (
+oleplus.vh) y el servidor remoto de producción. Nunca se deben sobrescribir los de producción con los locales (ni viceversa) sin revisar cuidadosamente las implicaciones de seguridad, rutas o directivas HTTPS (como CSP).
 
 - Las tarjetas de mamposteria deben respetar un maximo de 640px CSS y quedar
   centradas tambien con zoom al 125%. Conservar el zoom elegido por el usuario;
@@ -236,3 +237,10 @@
 - Diagnostico de IA (2026-10-13): no reducir maxOutputTokens como arreglo de latencia sin comprobar salida completa y tokens de razonamiento. Registrar el commit que introduce una regresion propia; e8614ea redujo 8192 a 2048 y 8b59479 lo restauro. Distinguir saturacion de PHP-FPM previa a ejecutar PHP de tiempo medido dentro de la llamada API.
 
 - Correccion antibots (2026-10-13): no proponer bloqueos de IP como solucion estructural ni cuotas de peticiones indiferenciadas. Una pagina con muchas imagenes rotas puede generar una rafaga legitima. Diagnosticar coste y origen por ruta, errores de imagenes, autenticacion verificada y concurrencia; priorizar respuestas baratas/cacheables, eliminar trabajo y redirecciones innecesarias y aislar recursos criticos. El volumen o User-Agent aislados no acreditan abuso.
+
+- Credenciales de pruebas (2026-10-14): generar valores sinteticos en memoria
+  durante el test; no guardar contrasenas o secretos ficticios como literales
+  que puedan disparar detectores. No silenciar el escaneo global ni reescribir
+  el historial por una alerta sin comprobar su contenido. Distinguir las
+  credenciales reales de los dobles de pruebas, y no afirmar que se ha cerrado
+  un incidente externo sin verificar su estado.
