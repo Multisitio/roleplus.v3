@@ -1,5 +1,10 @@
 # Instrucciones del proyecto RolePlus
 
+- Pie vacio del manual (2026-10-14): las ayudas de edicion no deben ocultar
+  footer::before ni footer::after ni cambiar la posicion, altura o margenes
+  del footer por no contener texto. Conservar imagen y numero de pagina
+  tanto en pantalla como en impresion.
+
 - Las bases de datos no comparten necesariamente fuente de verdad. Identificar
   la fuente correspondiente a cada conjunto de datos antes de modificarlo o
   sincronizarlo; la regla de copia local del cÃƒÆ’Ã‚Â³digo no determina la de los datos.

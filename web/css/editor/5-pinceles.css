@@ -307,11 +307,15 @@ nav[data-toolbar="contexto"] {
    Etiquetas vacías (outlines y badges dinámicos en editor)
    --------------------------------------------------------- */
 main div[contenteditable] [data-empty-helper="true"] {
-    position: relative;
     border-radius: 4px;
     display: block;
     box-sizing: border-box;
     outline: none;
+}
+
+/* El pie conserva la posicion absoluta y la altura de su plantilla. */
+main div[contenteditable] [data-empty-helper="true"]:not(footer) {
+    position: relative;
 }
 
 main div[contenteditable] [data-empty-helper="true"]:hover,
@@ -324,22 +328,6 @@ main div[contenteditable] th[data-empty-helper="true"] {
     min-height: 0;
     padding-right: 0 !important;
     display: table-cell;
-}
-
-main div[contenteditable] footer[data-empty-helper="true"] {
-    position: relative;
-    inset: auto;
-    margin: 0;
-    width: 100%;
-    min-width: 0;
-    height: auto;
-    min-height: 36px;
-    outline: 1px dashed rgba(200, 100, 100, 0.35);
-}
-
-main div[contenteditable] footer[data-empty-helper="true"]::before,
-main div[contenteditable] footer[data-empty-helper="true"]::after {
-    display: none;
 }
 
 /* El badge flotante arriba a la derecha */
