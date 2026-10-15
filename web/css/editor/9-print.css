@@ -65,7 +65,7 @@
         max-width: none;
     }
 
-    .booklet-mode::after {
+    body.booklet-mode main::after {
         content: "";
         display: table;
         clear: both;
@@ -75,6 +75,8 @@
     body.booklet-mode main {
         width: 100%;
         max-width: none;
+        /* Dos A5 suman 296mm: cubrir el milimetro restante del A4 con el fondo. */
+        background-color: var(--background-color, white) !important;
     }
 
     body.booklet-mode main > div {

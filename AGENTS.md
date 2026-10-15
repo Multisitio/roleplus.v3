@@ -265,3 +265,10 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   tampoco pueden conservar tokens o claves reales. Retirar un literal de
   HEAD no revoca la credencial expuesta en el historial; comprobar su uso
   y coordinar su rotacion sin cortar los accesos de mantenimiento.
+
+- Impresion en libreto (2026-10-15): conservar dos paginas A5 juntas por cada
+  hoja A4 apaisada. Al cambiar la impresion normal, verificar tambien el
+  libreto: dimensiones, parejas, numero de hojas y ausencia de hoja final vacia.
+- Borde del libreto (2026-10-15): dos A5 suman 296mm y el A4 apaisado mide
+  297mm. Cubrir el espacio residual con el fondo de la plantilla, conservando
+  el tamano A5. Revisar tambien los pixeles del borde exterior del PDF.

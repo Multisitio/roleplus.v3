@@ -12,7 +12,7 @@ const { PDFDocument } = require('pdf-lib');
             const page = await browser.newPage({ viewport: { width: 1123, height: 794 } });
             await page.route('https://editor.test/editor.css', route => route.fulfill({ contentType: 'text/css', body: css }));
             await page.route('https://editor.test/formato.css', route => route.fulfill({
-                contentType: 'text/css', body: '@page { size: ' + (booklet ? 'A4 landscape' : 'A5') + '; margin: 0; }'
+                contentType: 'text/css', body: 'main { --background-color: #333; } @page { size: ' + (booklet ? 'A4 landscape' : 'A5') + '; margin: 0; }'
             }));
             await page.route('https://editor.test/manual', route => route.fulfill({ contentType: 'text/html', body:
                 '<!doctype html><html><head><link rel="stylesheet" href="/editor.css"><link rel="stylesheet" href="/formato.css"></head>' +
@@ -35,6 +35,14 @@ const { PDFDocument } = require('pdf-lib');
                 assert.ok(boxes[1].x >= boxes[0].x + boxes[0].width);
                 assert.ok(Math.abs(boxes[0].width - 148 * 96 / 25.4) < 1);
                 assert.ok(Math.abs(boxes[0].height - 210 * 96 / 25.4) < 1);
+                const paper = await page.locator('main').evaluate(e => ({
+                    background: getComputedStyle(e).backgroundColor,
+                    height: e.getBoundingClientRect().height,
+                    width: e.getBoundingClientRect().width
+                }));
+                assert.equal(paper.background, 'rgb(51, 51, 51)');
+                assert.ok(paper.height >= boxes[0].height * 2);
+                assert.ok(paper.width > boxes[0].width * 2);
             }
             await page.close();
         }
