@@ -70,7 +70,7 @@ class _ia
             ]
         ];
 
-        $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-4-argon:generateContent?key=" . $key;
+        $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=" . $key;
 
         $res = self::postJson($apiUrl, ['Content-Type: application/json'], $payload);
 
@@ -91,7 +91,7 @@ class _ia
             return (object)[
                 'output_text' => $text,
                 '_source' => 'gemini_api',
-                '_model' => $res['json']->modelVersion ?? 'gemini-4-argon'
+                '_model' => $res['json']->modelVersion ?? 'gemini-flash-lite-latest'
             ];
         }
 

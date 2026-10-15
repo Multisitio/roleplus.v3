@@ -197,17 +197,3 @@ Ver `fpm-load-audit.md`: ráfagas de scraping desde una IP, avisos de
 saturación anteriores al 9 de octubre y comparación diaria. La muestra
 temporal actual midió 173 peticiones PHP, p95 de 88,308 ms y cola cero.
 La configuración del pool quedó restaurada exactamente, sin aumentar procesos.
-
-## Prueba de Gemini 4 Argon (2026-10-15)
-
-Por petición expresa se sustituye el modelo por `gemini-4-argon` en la
-librería compartida de IA. Se conservan los 8192 tokens, el razonamiento
-predeterminado, los 60 segundos de espera y las protecciones de respuesta.
-La prueba local del recorrido de IA y la sintaxis PHP pasan. La copia
-publicada coincide con el fuente local; no se sincronizan claves ni config.
-
-Desde producción, la consulta del modelo responde HTTP 200. La generación
-real responde HTTP 429 RESOURCE_EXHAUSTED: Google indica límite 0 para las
-peticiones y los tokens del nivel gratuito de este modelo con la clave
-actual. Argon queda seleccionado para la prueba solicitada, pero no se ha
-obtenido una generación correcta: requiere cuota habilitada para ese modelo.
