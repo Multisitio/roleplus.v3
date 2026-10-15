@@ -71,6 +71,16 @@
         clear: both;
     }
 
+    /* El flujo de impresion es de bloques: colocar las dos paginas en la misma fila. */
+    body.booklet-mode main {
+        width: 100%;
+        max-width: none;
+    }
+
+    body.booklet-mode main > div {
+        float: left;
+    }
+
     /* Restaurar dimensiones originales para que cabalguen dos A5 sobre el A4 apaisado */
     .booklet-mode main.a5 > div,
     .booklet-mode .a5 > div,
