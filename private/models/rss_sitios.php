@@ -33,7 +33,7 @@ class Rss_sitios extends LiteRecord
 		self::query($sql, $values);
 
 		$entradas = (new Rss_entradas)->cargarSitio($idu, $url, $idioma);
-		if ( ! $entradas) {
+		if ($entradas === null || $entradas === false) {
 			$sql = 'DELETE FROM rss_sitios WHERE idu=?';
 			self::query($sql, [$idu]);
 		}

@@ -9,9 +9,12 @@ class Rss_entradas extends LiteRecord
 		_var::flush("<h1>Cargando el Lector RSS...</h1>");
 		_mail::send('dj@roleplus.app', 'Cargando el Lector RSS.', 'Enjoy!');
 		$sitios = (new Rss_sitios)->obtenerSitios();
+		$body = [];
 		foreach ($sitios as $sit) {
-			$i = $this->cargarSitio($sit->idu, $sit->url, $sit->idioma) ?? 0;
-			$body[] = $log = "$sit->url: $i entrada/s nueva/s.";
+			$i = $this->cargarSitio($sit->idu, $sit->url, $sit->idioma);
+			$body[] = $log = $i === null
+				? "$sit->url: No se pudo cargar el feed; se conservan las entradas anteriores."
+				: "$sit->url: $i entrada/s nueva/s.";
 			_var::flush("<hr>$log");
 		}
 		_mail::send('dj@roleplus.app', 'Lector RSS cargado.', '<pre>'.print_r($body, 1));
@@ -22,10 +25,6 @@ class Rss_entradas extends LiteRecord
 	public function cargarSitio($rss_sitios_idu, $url, $idioma='ES')
 	{
 		#_var::flush("<h2>($rss_sitios_idu) $url</h2>");
-
-		# BORRADO ANTES DE LA CARGA
-		$sql = 'DELETE FROM rss_entradas WHERE rss_sitios_idu=?';
-		self::query($sql, [$rss_sitios_idu]);
 
 		# XML EN TEXTO
 		$texto = _link::curl_get_file_contents($url);
@@ -69,6 +68,7 @@ class Rss_entradas extends LiteRecord
 		}
 
 		$i = 0;
+		$enlaces_cargados = [];
 		foreach ($entradas as $ent) {
 			#_var::die($ent, 1);
 
@@ -179,6 +179,7 @@ class Rss_entradas extends LiteRecord
 				$publicado = _str::cut2('<published', '>', $ent, '</published>');
 			}
 			$values[] = $publicado = date('Y-m-d H:i:s', strtotime($publicado));
+			$enlaces_cargados[trim((string) $enlace)] = true;
 
 			++$i;			
 			if ($i == 10) {
@@ -192,11 +193,21 @@ class Rss_entradas extends LiteRecord
 			Session::setArray('toast', t('No se han obtenido entradas.'));
 			return;
 		}
+		$anteriores = self::all('SELECT url FROM rss_entradas WHERE rss_sitios_idu=?', [$rss_sitios_idu]);
+		$enlaces_anteriores = [];
+		foreach ($anteriores as $anterior) {
+			$enlaces_anteriores[trim((string) $anterior->url)] = true;
+		}
+		$nuevas = count(array_diff_key($enlaces_cargados, $enlaces_anteriores));
+
+		# Renovamos las últimas entradas; solo los enlaces desconocidos son nuevos.
+		$sql = 'DELETE FROM rss_entradas WHERE rss_sitios_idu=?';
+		self::query($sql, [$rss_sitios_idu]);
 		$sql = 'INSERT INTO rss_entradas (rss_sitios_idu, idioma, titulo, idu, contenido, fotos, url, publicado) VALUES ' . implode(', ', $keys);
 		self::query($sql, $values);
 
-		Session::setArray('toast', t('Entradas nuevas: ') . $i);
-		return $i;
+		Session::setArray('toast', t('Entradas nuevas: ') . $nuevas);
+		return $nuevas;
 	}
 
 	#
