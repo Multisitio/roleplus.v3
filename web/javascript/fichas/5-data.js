@@ -6,6 +6,7 @@ let ticking = false;
 function onScrollCompute(y) {
     if (y === 0) {
         showElements('nav, .scroll-down-hide');
+        prevScrollY = y;
         return;
     }
     if (y < prevScrollY) {
@@ -26,10 +27,10 @@ window.addEventListener('scroll', () => {
 });
 
 function showElements(selector) {
-    document.querySelectorAll(selector).forEach(el => el.style.display = '');
+    document.querySelectorAll(selector).forEach(el => Kumbia.fx.show(el));
 }
 function hideElements(selector) {
-    document.querySelectorAll(selector).forEach(el => el.style.display = 'none');
+    document.querySelectorAll(selector).forEach(el => Kumbia.fx.hide(el));
 }
 
 // data-change: hide/show based on value
@@ -38,8 +39,8 @@ document.body.addEventListener('change', e => {
     const hide = el.getAttribute('data-change');
     if (!hide) return;
     const show = el.value;
-    document.querySelectorAll(hide).forEach(n => n.style.display = 'none');
-    document.querySelectorAll('.' + show).forEach(n => n.style.display = '');
+    hideElements(hide);
+    showElements('.' + show);
 });
 
 // data-change_load: AJAX load + recalcular masonry

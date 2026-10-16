@@ -272,3 +272,12 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
 - Borde del libreto (2026-10-15): dos A5 suman 296mm y el A4 apaisado mide
   297mm. Cubrir el espacio residual con el fondo de la plantilla, conservando
   el tamano A5. Revisar tambien los pixeles del borde exterior del PDF.
+
+- Fichas de personajes (2026-10-16): no usar jQuery ni reintroducirlo para
+  corregir funciones antiguas. Conservar un unico manejador de desplazamiento
+  nativo. Normalizar los valores remotos como los controles del navegador
+  (especialmente CRLF/LF) antes de detectar cambios pendientes. Limitar la
+  espera de las peticiones y liberar su estado para reintentar sin F5.
+- Reutilizar Kumbia.fx y Kumbia.utils de la clase kumbia.js propia al
+  corregir interacciones y peticiones; ampliar esa API cuando sea necesario,
+  manteniendo sus consumidores y evitando dependencias o mecanismos paralelos.

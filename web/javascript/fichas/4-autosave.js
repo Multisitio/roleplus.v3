@@ -44,12 +44,26 @@
             files.forEach(el => { el.disabled = !allowed; });
         }
         permissions(editable);
+        async function requestJson(url, options) {
+            const abort = new AbortController();
+            const timeout = setTimeout(() => abort.abort(), 30000);
+            try {
+                const res = await Kumbia.utils.fetch(url, {...options, response:true, signal:abort.signal});
+                const data = res.ok && !res.redirected ? await res.json() : null;
+                return {res,data};
+            } finally { clearTimeout(timeout); }
+        }
         function apply(data, sent, sentFiles) {
             if (data.revision < revision) return;
             revision = data.revision;
             id.value = data.idu;
             fields.forEach(el => {
-                const remote = String(data.datos[el.name] ?? '');
+                let remote = String(data.datos[el.name] ?? '');
+                // Compare the same representation used by the browser's controls.
+                // Multipart/PHP may return CRLF while textarea.value always uses LF.
+                if (el.type === 'textarea') remote = remote.replace(/\r\n?/g, '\n');
+                else if (el.type === 'text') remote = remote.replace(/[\r\n]/g, '');
+                else if (el.type === 'checkbox') remote = remote !== '' && remote !== '0' ? el.value : '';
                 const local = value(el);
                 const unchanged = local === base[el.name] || (sent && local === sent[el.name]);
                 if (unchanged) {
@@ -83,6 +97,7 @@
             timer = setTimeout(save, 3000);
         }
         async function save(force) {
+            if (timer) clearTimeout(timer);
             timer = null;
             if (saving || !editable) return;
             let names = dirty();
@@ -94,32 +109,30 @@
             body.set('action','salvar'); body.set('campos',JSON.stringify(names));
             saving = true; message('Guardando…');
             try {
-                const res = await fetch(location.href, {method:'POST', headers:{'X-Requested-With':'XMLHttpRequest'},body,credentials:'same-origin',cache:'no-store'});
+                const {res,data} = await requestJson(location.href, {method:'POST',body});
                 if (!res.ok || res.redirected) throw new Error('No se ha podido guardar.');
-                const data = await res.json();
                 if (!data.success || !data.idu || !data.datos || !data.url) throw new Error('Guardado no confirmado.');
                 apply(data,sent,sentFiles);
                 history.replaceState(null,'',data.url);
                 message('Cambios guardados');
-                saving = false;
                 if (dirty().length) schedule();
             } catch (err) {
-                saving = false;
-                message('Error al guardar. Tus cambios siguen pendientes; pulsa Salvar para reintentar.');
-            }
+                message(err.name === 'AbortError'
+                    ? 'El guardado ha tardado demasiado. Tus cambios siguen pendientes; pulsa Salvar para reintentar.'
+                    : 'Error al guardar. Tus cambios siguen pendientes; pulsa Salvar para reintentar.');
+            } finally { saving = false; }
         }
         async function sync() {
             if (!revision || syncing || saving || stopped || document.hidden || initial.sincronizar === false) return;
             syncing = true;
             try {
-                const res = await fetch('/ev/personajes/estado/'+encodeURIComponent(ficha)+'/'+encodeURIComponent(id.value), {headers:{'X-Requested-With':'XMLHttpRequest'},credentials:'same-origin',cache:'no-store'});
+                const {res,data} = await requestJson('/ev/personajes/estado/'+encodeURIComponent(ficha)+'/'+encodeURIComponent(id.value), {});
                 if (res.status === 401 || res.status === 404) {
                     stopped = true;
                     message(res.status === 401 ? 'La sesión ha caducado. Conserva tus cambios antes de salir.' : 'El personaje ha sido eliminado. Conserva tus cambios antes de salir.');
                     return;
                 }
                 if (!res.ok) throw new Error('Sincronización interrumpida.');
-                const data = await res.json();
                 if (!data.success || !data.datos) throw new Error('Respuesta inválida.');
                 if (data.revision > revision) {
                     apply(data);

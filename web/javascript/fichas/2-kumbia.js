@@ -89,9 +89,11 @@
 				cache: CONFIG.cache,
 				headers: Object.assign({}, CONFIG.headers, opts.headers || {}),
 				body: opts.body,
-				credentials: CONFIG.credentials
+				credentials: CONFIG.credentials,
+				signal: opts.signal
 			});
 
+			if (opts.response === true) return res;
 			if (!res.ok) throw new Error(method + " " + full + " → " + res.status);
 			return res.text();
 		},
@@ -262,7 +264,8 @@
 
 		show: function (el) {
 			if (el.classList && el.classList.contains("hide")) el.classList.remove("hide");
-			FX.restoreState(el);
+			el.hidden = false;
+			if (el.style.display || el.style.opacity) FX.restoreState(el);
 			if (Overlay.isOverlayNode(el)) Overlay.lock();
 			if (el.hasAttribute("data-autoscroll")) AutoScroll.force(el);
 		},
@@ -270,7 +273,7 @@
 		hide: function (el) {
 			FX.saveState(el);
 			if (el.classList && !el.classList.contains("hide")) el.classList.add("hide");
-			el.style.display = "none";
+			el.hidden = true;
 			// no forzamos opacity si ya se guardó correctamente
 			if (Overlay.isOverlayNode(el)) Overlay.unlockIfNone();
 		},
@@ -300,6 +303,7 @@
 			ms = ms == null ? 200 : ms;
 			var cs = getComputedStyle(el);
 			if (cs.display === "none" || (el.classList && el.classList.contains("hide"))) {
+				el.hidden = false;
 				if (el.classList && el.classList.contains("hide")) el.classList.remove("hide");
 				FX.restoreState(el);
 			}

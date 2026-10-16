@@ -3,7 +3,7 @@ const path = require('node:path');
 const {chromium} = require('playwright');
 (async () => {
     const browser = await chromium.launch({headless:true,channel:'chrome'});
-    let state={idu:'same-id',revision:1,datos:{vida:'10',equipo:'espada'},editable:true}, requests=[],fail=false;
+    let state={idu:'same-id',revision:1,datos:{vida:'10',equipo:'espada',notas:'Primera línea\r\nSegunda línea'},editable:true}, requests=[],fail=false;
     const context=await browser.newContext();
     await context.route('https://character.test/**',async route => {
         const req=route.request();
@@ -17,18 +17,27 @@ const {chromium} = require('playwright');
             await route.fulfill({contentType:'application/json',body:JSON.stringify({...state,success:true})});
         } else {
             const initial=JSON.stringify(state).replaceAll('"','&quot;');
-            await route.fulfill({contentType:'text/html',body:`<main><form data-autosave="salvar"><input name="vida" type="text" value="${state.datos.vida}"><input name="equipo" type="text" value="${state.datos.equipo}"><input name="idu" type="hidden" value="same-id"><input name="fichas_idu" type="hidden" value="sheet"><input name="estado_inicial" type="hidden" value="${initial}"><div class="fixed-bottom-right"><span data-save-status></span><button type="submit" name="action" value="salvar">Salvar</button></div></form></main>`});
+            await route.fulfill({contentType:'text/html',body:`<main><form data-autosave="salvar"><input name="vida" type="text" value="${state.datos.vida}"><input name="equipo" type="text" value="${state.datos.equipo}"><textarea name="notas">${state.datos.notas}</textarea><input name="idu" type="hidden" value="same-id"><input name="fichas_idu" type="hidden" value="sheet"><input name="estado_inicial" type="hidden" value="${initial}"><div class="fixed-bottom-right"><span data-save-status></span><button type="submit" name="action" value="salvar">Salvar</button></div></form></main>`});
         }
     });
     const a=await context.newPage(),b=await context.newPage();
-    for(const page of [a,b]) {await page.goto('https://character.test/montar/sheet/same-id'); await page.addScriptTag({path:path.resolve(process.argv[2] || 'web/javascript/fichas/4-autosave.js')});}
+    for(const page of [a,b]) {
+        await page.goto('https://character.test/montar/sheet/same-id');
+        if (!process.argv[2]) await page.addScriptTag({path:path.resolve('web/javascript/fichas/2-kumbia.js')});
+        await page.addScriptTag({path:path.resolve(process.argv[2] || 'web/javascript/fichas/4-autosave.js')});
+    }
     const saved=page=>page.waitForFunction(()=>document.querySelector('[data-save-status]').textContent==='Cambios guardados');
     await a.fill('[name=vida]','9'); await a.click('[value=salvar]'); await saved(a);
+    // HTML normalizes textarea CRLF to LF; acknowledgements must do the same.
+    assert.equal(await a.locator('[data-save-status]').textContent(),'Cambios guardados');
+    await new Promise(resolve=>setTimeout(resolve,3500));
+    assert.equal(requests.length,1,'A saved textarea must not trigger repeated saves');
+    assert.equal(await b.locator('[data-save-status]').textContent(),'Datos actualizados','Remote multiline data left phantom pending changes');
     await b.waitForFunction(()=>document.querySelector('[name=vida]').value==='9');
     await b.fill('[name=equipo]','arco');
     await a.fill('[name=vida]','8'); await a.click('[value=salvar]'); await saved(a);
     await saved(b);
-    assert.deepEqual(state.datos,{vida:'8',equipo:'arco'});
+    assert.equal(state.datos.vida,'8'); assert.equal(state.datos.equipo,'arco');
     assert.ok(requests.every(names=>names.length===1),'Full snapshots sent');
     await a.fill('[name=vida]','7'); await a.click('[value=salvar]'); await saved(a);
     await b.fill('[name=vida]','6'); await b.click('[value=salvar]'); await saved(b);
@@ -40,6 +49,20 @@ const {chromium} = require('playwright');
     assert.equal(await b.evaluate(()=>{const e=new Event('beforeunload',{cancelable:true});window.dispatchEvent(e);return e.defaultPrevented;}),true);
     assert.equal(state.datos.vida,'6');
     fail=false; await b.click('[value=salvar]'); await saved(b); assert.equal(state.datos.vida,'5');
+    // A stalled request must release the saving flag, preserving changes for retry.
+    await b.clock.install();
+    await b.evaluate(()=>{
+        window.originalCharacterFetch=window.fetch;
+        window.fetch=(url,options)=>options?.method==='POST'
+            ? new Promise((resolve,reject)=>options.signal.addEventListener('abort',()=>reject(new DOMException('Timed out','AbortError'))))
+            : window.originalCharacterFetch(url,options);
+    });
+    await b.fill('[name=vida]','4'); await b.click('[value=salvar]');
+    await b.waitForFunction(()=>document.querySelector('[data-save-status]').textContent==='Guardando…');
+    await b.clock.fastForward(31000);
+    await b.waitForFunction(()=>document.querySelector('[data-save-status]').textContent.startsWith('El guardado ha tardado demasiado'));
+    await b.evaluate(()=>{window.fetch=window.originalCharacterFetch;});
+    await b.click('[value=salvar]'); await saved(b); assert.equal(state.datos.vida,'4');
     await browser.close();
     console.log('PASS: two open sheets, bidirectional updates, field merge, last save, failed save, exit warning, retry');
 })().catch(e=>{console.error(e);process.exit(1);});
