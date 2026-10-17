@@ -299,3 +299,8 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   Identificar con el usuario la fuente de verdad y contrastar todos los campos
   discrepantes antes de restaurar. Conservar la copia original de la ficha antes
   de sincronizarla o recargarla; una recuperacion parcial no valida esos restos.
+
+- Diagnostico de borrados (2026-10-17): separar la reproduccion de un riesgo de
+  la causa acreditada de una incidencia. Un POST y su redireccion no identifican
+  la tecla ni el boton usados; no atribuir el borrado a Enter sin esa evidencia.
+  Consultar el historial antes de atribuir al usuario o al agente un orden HTML.
