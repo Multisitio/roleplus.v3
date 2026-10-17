@@ -24,7 +24,8 @@
         const fileKey = el => Array.from(el.files || []).map(f => f.name+'|'+f.size+'|'+f.lastModified).join(';');
         let revision = initial.revision, editable = initial.editable;
         let timer = null, saving = false, submitting = false, syncing = false, stopped = false;
-        const message = text => { if (status) status.textContent = text; };
+        let syncFailed = false;
+        const message = (text, state = 'error') => { if (status) { status.dataset.saveState = state; status.title = text; status.setAttribute('aria-label', text); } };
         function dirty() {
             const names = fields.filter(el => value(el) !== base[el.name]).map(el => el.name);
             files.forEach((el,i) => { if (fileKey(el) !== fileBase.get(el) && fotos[i]) names.push(fotos[i].value); });
@@ -37,13 +38,14 @@
                 button.type = 'submit'; button.name = 'action'; button.value = 'salvar';
                 button.className = 'paper-btn btn-success-outline mh5';
                 button.textContent = '+ Salvar';
-                form.querySelector('.fixed-bottom-right').appendChild(button);
+                status.parentNode.appendChild(button);
             }
             if (button) button.disabled = !allowed;
             fields.forEach(el => { if (el.type === 'text' || el.type === 'textarea') el.readOnly = !allowed; });
             files.forEach(el => { el.disabled = !allowed; });
         }
         permissions(editable);
+        message(revision ? 'Cambios guardados' : 'Personaje pendiente de guardar', revision ? 'saved' : 'pending');
         async function requestJson(url, options) {
             const abort = new AbortController();
             const timeout = setTimeout(() => abort.abort(), 30000);
@@ -54,9 +56,9 @@
             } finally { clearTimeout(timeout); }
         }
         function apply(data, sent, sentFiles) {
+            if (data.idu !== id.value) throw new Error('La respuesta pertenece a otro personaje.');
             if (data.revision < revision) return;
             revision = data.revision;
-            id.value = data.idu;
             fields.forEach(el => {
                 let remote = String(data.datos[el.name] ?? '');
                 // Compare the same representation used by the browser's controls.
@@ -93,7 +95,7 @@
         function schedule() {
             if (!editable) return;
             if (timer) clearTimeout(timer);
-            message('Cambios pendientes de guardar…');
+            message('Cambios pendientes de guardar…', 'pending');
             timer = setTimeout(save, 3000);
         }
         async function save(force) {
@@ -102,19 +104,19 @@
             if (saving || !editable) return;
             let names = dirty();
             if (!names.length && force && !revision) names = fields.map(el => el.name);
-            if (!names.length) { message('Cambios guardados'); return; }
+            if (!names.length) { message('Cambios guardados', 'saved'); return; }
             const sent = Object.fromEntries(fields.map(el => [el.name,value(el)]));
             const sentFiles = new Map(files.map(el => [el,fileKey(el)]));
             const body = new FormData(form);
             body.set('action','salvar'); body.set('campos',JSON.stringify(names));
-            saving = true; message('Guardando…');
+            saving = true; message('Guardando…', 'pending');
             try {
                 const {res,data} = await requestJson(location.href, {method:'POST',body});
                 if (!res.ok || res.redirected) throw new Error('No se ha podido guardar.');
                 if (!data.success || !data.idu || !data.datos || !data.url) throw new Error('Guardado no confirmado.');
                 apply(data,sent,sentFiles);
                 history.replaceState(null,'',data.url);
-                message('Cambios guardados');
+                message('Cambios guardados', 'saved');
                 if (dirty().length) schedule();
             } catch (err) {
                 message(err.name === 'AbortError'
@@ -135,11 +137,19 @@
                 if (!res.ok) throw new Error('Sincronización interrumpida.');
                 if (!data.success || !data.datos) throw new Error('Respuesta inválida.');
                 if (data.revision > revision) {
+                    message('Aplicando cambios de otro editor…', 'pending');
+                    // Let the browser paint the pending indicator before applying remote fields.
+                    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                    if (saving) return;
                     apply(data);
-                    message(dirty().length ? 'Cambios pendientes de guardar…' : 'Datos actualizados');
+                    message(dirty().length ? 'Cambios pendientes de guardar…' : 'Datos actualizados', dirty().length ? 'pending' : 'saved');
+                } else if (syncFailed) {
+                    message(dirty().length ? 'Cambios pendientes de guardar…' : 'Datos actualizados', dirty().length ? 'pending' : 'saved');
                 }
+                syncFailed = false;
             } catch (err) {
-                if (!dirty().length) message('Sin conexión. Se reintentará la sincronización.');
+                syncFailed = true;
+                message('No se han podido recibir o aplicar los cambios remotos. Se reintentará la sincronización.');
             } finally { syncing = false; }
         }
         fields.forEach(el => {
@@ -147,8 +157,24 @@
             if (el.type === 'checkbox') el.addEventListener('click',e => { if (!editable) e.preventDefault(); });
         });
         files.forEach(el => el.addEventListener('change',schedule));
+        Kumbia.utils.on('click','[data-eliminar-personaje]',async function(e) {
+            if (!form.contains(this) || e.defaultPrevented) return;
+            e.preventDefault();
+            if (saving || !editable) { message('Espera a que termine el guardado antes de eliminar.'); return; }
+            this.disabled = true;
+            try {
+                const body = new FormData();
+                body.set('action','eliminar'); body.set('idu',id.value);
+                body.set('fichas_idu',ficha); body.set('confirmar_eliminacion',id.value);
+                const {res,data} = await requestJson(location.href,{method:'POST',body});
+                if (!res.ok || !data || !data.success) throw new Error('Eliminación no confirmada.');
+                submitting = true; stopped = true;
+                if (timer) clearTimeout(timer);
+                location.assign(data.url);
+            } catch (err) { message('No se ha podido eliminar el personaje. Sus datos se conservan.'); this.disabled = false; }
+        });
         form.addEventListener('submit',e => {
-            if (e.submitter && e.submitter.value === 'salvar') {
+            if (!e.submitter || e.submitter.value === 'salvar') {
                 e.preventDefault(); if (timer) clearTimeout(timer); timer = null; save(true);
             } else submitting = true;
         });

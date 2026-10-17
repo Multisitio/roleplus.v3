@@ -74,8 +74,24 @@ class PersonajesController extends EvController
     public function eliminar($personajes_idu='')
     {
         $_POST['personajes_idu'] = empty($personajes_idu) ? Input::post('idu') : $personajes_idu;
+        // Legacy tabs can implicitly submit their first button (Eliminar) on Enter.
+        if ( ! Input::post('confirmar_eliminacion') || Input::post('confirmar_eliminacion') !== $_POST['personajes_idu']) {
+            http_response_code(400);
+            View::select(null);
+            View::template(null);
+            echo 'El personaje no se ha eliminado: falta confirmar expresamente la eliminación.';
+            return;
+        }
 
         (new Personajes)->eliminar($_POST['personajes_idu']);
+
+        if (Input::isAjax()) {
+            View::select(null);
+            View::template(null);
+            header('Content-Type: application/json; charset=UTF-8');
+            echo json_encode(['success'=>true, 'url'=>'/ev/personajes/montados/' . Input::post('fichas_idu')]);
+            return;
+        }
 
         if (Input::post('fichas_idu')) {
             return Redirect::to("/ev/personajes/montar/" .  Input::post('fichas_idu'));
@@ -86,6 +102,14 @@ class PersonajesController extends EvController
     # https://roleplus.app/ev/personajes/montar/588bc2f2187e/565bead0eb4a
     public function montar($fichas_idu, $personajes_idu='')
     {
+        if ($personajes_idu) {
+            try { (new Personajes)->estado($fichas_idu, $personajes_idu); }
+            catch (RuntimeException $e) {
+                if ($e->getCode() !== 404) { throw $e; }
+                Session::setArray('toast', t('Este personaje no está disponible.'));
+                return Redirect::to('/ev/personajes/montados/' . $fichas_idu);
+            }
+        }
         $this->ficha = (new Fichas)->una($fichas_idu);
         $this->cajas = (new Fichas_cajas)->todas($this->ficha->idu);
         $this->personaje = (new Personajes)->uno($this->ficha->idu, $personajes_idu);

@@ -78,3 +78,18 @@ textarea {
     height: 120px;
     width: 100%;
 }
+
+.character-save-control { position: relative; display: inline-block; }
+.character-save-status {
+    position: absolute;
+    top: -16px;
+    left: calc(50% - 7px);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--main-background, white);
+    box-shadow: 0 1px 4px #0006;
+    background-color: var(--warning);
+}
+.character-save-status[data-save-state="saved"] { background-color: var(--success); }
+.character-save-status[data-save-state="error"] { background-color: var(--danger); }

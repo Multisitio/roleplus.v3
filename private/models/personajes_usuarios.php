@@ -25,7 +25,7 @@ class Personajes_usuarios extends LiteRecord
         parent::query('START TRANSACTION');
         try {
             $estado = parent::first('SELECT * FROM personajes_estado WHERE idu=? FOR UPDATE', [$personajes_idu]);
-            if ( ! $estado || $estado->fichas_idu !== $fichas_idu) { throw new RuntimeException('Personaje inexistente.', 404); }
+            if ( ! $estado || $estado->eliminado || $estado->fichas_idu !== $fichas_idu) { throw new RuntimeException('Personaje inexistente.', 404); }
             $vinculo = parent::first('SELECT usuarios_idu FROM personajes_usuarios WHERE personajes_idu=?', [$personajes_idu]);
             if ($vinculo) { throw new RuntimeException('Este personaje ya está vinculado. Debe desvincularse antes.', 409); }
             parent::query('INSERT INTO personajes_usuarios (fichas_idu,personajes_idu,usuarios_idu) VALUES (?,?,?)', [$fichas_idu,$personajes_idu,Session::get('idu')]);
