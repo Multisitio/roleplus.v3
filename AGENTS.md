@@ -293,3 +293,9 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
 
 - El mismo indicador de guardado muestra amarillo antes de aplicar cambios
   remotos, verde al aplicarlos y rojo si falla su recepcion o aplicacion.
+
+- Correccion de recuperacion de personajes (2026-10-17): no mezclar una ficha
+  abierta con restos de la BD suponiendo que estos son mas recientes o fiables.
+  Identificar con el usuario la fuente de verdad y contrastar todos los campos
+  discrepantes antes de restaurar. Conservar la copia original de la ficha antes
+  de sincronizarla o recargarla; una recuperacion parcial no valida esos restos.
