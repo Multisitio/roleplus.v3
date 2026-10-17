@@ -83,7 +83,7 @@ textarea {
 .character-save-status {
     position: absolute;
     top: 6px;
-    left: 11px;
+    right: 11px;
     width: 14px;
     height: 14px;
     border-radius: 50%;
