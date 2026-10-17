@@ -288,7 +288,8 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   Salvar nunca genera ni reemplaza un idu recibido. Recuperar datos de una hoja
   abierta antes de recargarla si su copia guardada esta incompleta.
 - Estado del guardado de personajes (2026-10-17): mostrar un circulo flotante
-  encima de Salvar: amarillo al escribir o guardar, verde tras confirmar el
+  dentro de la esquina superior izquierda de Salvar: amarillo al escribir o
+  guardar, verde tras confirmar el
   guardado y rojo si falla. Sin texto flotante; detalle accesible en el circulo.
 
 - El mismo indicador de guardado muestra amarillo antes de aplicar cambios
