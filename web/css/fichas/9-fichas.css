@@ -82,8 +82,8 @@ textarea {
 .character-save-control { position: relative; display: inline-block; }
 .character-save-status {
     position: absolute;
-    top: 6px;
-    right: 11px;
+    top: 3px;
+    right: 5px;
     width: 14px;
     height: 14px;
     border-radius: 50%;
