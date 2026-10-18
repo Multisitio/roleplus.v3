@@ -1,0 +1,55 @@
+[Unit]
+Description=Comprobacion manual del aislamiento del vigilante
+
+[Service]
+Type=oneshot
+User=vigilante-ai
+Group=vigilante-ai
+RootDirectory=/srv/vigilante-ai/root
+MountAPIVFS=yes
+WorkingDirectory=/workspace
+ExecStart=/usr/bin/python3 -I -B /probe.py
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+ProtectProc=invisible
+ProcSubset=pid
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+BindReadOnlyPaths=/usr/bin /usr/lib /usr/share /lib /lib64
+BindReadOnlyPaths=/usr/local/lib/vigilante/vigilante-isolation-probe.py:/probe.py
+BindReadOnlyPaths=/srv/vigilante-ai/input:/input
+BindReadOnlyPaths=/srv/vigilante-ai/readonly-canary:/readonly-canary
+BindPaths=/var/lib/vigilante-ai/workspace:/workspace
+ReadWritePaths=/workspace
+CPUQuota=25%
+MemoryMax=256M
+TasksMax=32
+TimeoutStartSec=30s
+TimeoutStopSec=5s
+LimitCORE=0
+LimitFSIZE=16M
+Nice=15
+IOWeight=10
+StandardOutput=journal
+StandardError=journal
+
+# Sin seccion Install: no se habilita en arranque ni tiene temporizador.
