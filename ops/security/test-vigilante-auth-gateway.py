@@ -5,6 +5,7 @@ from pathlib import Path
 import socket
 import ssl
 import unittest
+from unittest.mock import Mock, patch
 
 spec = importlib.util.spec_from_file_location('gateway', Path(__file__).with_name('vigilante-auth-gateway.py'))
 gateway = importlib.util.module_from_spec(spec)
@@ -12,6 +13,14 @@ spec.loader.exec_module(gateway)
 
 
 class GatewayTests(unittest.TestCase):
+    def test_login_tunnel_survives_three_minutes(self):
+        left, right = Mock(), Mock()
+        left.recv.side_effect = [b'continued-login', b'']
+        with patch.object(gateway.time, 'monotonic', side_effect=[0, 181, 182]), \
+                patch.object(gateway.select, 'select', return_value=([left], [], [])):
+            gateway.relay(left, right)
+        right.sendall.assert_called_once_with(b'continued-login')
+
     def hello(self, host):
         incoming, outgoing = ssl.MemoryBIO(), ssl.MemoryBIO()
         connection = ssl.create_default_context().wrap_bio(incoming, outgoing, server_hostname=host)

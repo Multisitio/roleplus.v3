@@ -54,6 +54,11 @@ Las fuentes locales se comparan con las copias instaladas por huella/contenido.
 
 ## Estado del acceso y siguientes condiciones
 
+La retransmision de ambos extremos del tunel permite hasta 900 segundos,
+dentro del limite temporal de la unidad. El anterior limite de 180 segundos
+cortaba una conexion reutilizada durante la espera del usuario. Una prueba
+comprueba que sigue transmitiendo despues de tres minutos.
+
 El codigo de dispositivo se ha solicitado mediante el flujo oficial. Completar
 el acceso requiere confirmacion del usuario en el navegador de OpenAI. No se
 deduce que haya sesion por iniciar la unidad ni por emitir el codigo: se exige

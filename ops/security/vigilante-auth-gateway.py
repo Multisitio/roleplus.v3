@@ -80,7 +80,7 @@ def public_addresses(resolver=socket.getaddrinfo):
     return addresses
 
 
-def relay(left, right, seconds=180, max_bytes=8 * 1024 * 1024):
+def relay(left, right, seconds=900, max_bytes=8 * 1024 * 1024):
     until, total = time.monotonic() + seconds, 0
     left.settimeout(5); right.settimeout(5)
     while time.monotonic() < until:
