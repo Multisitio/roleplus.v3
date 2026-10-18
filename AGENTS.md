@@ -1,5 +1,12 @@
 # Instrucciones del proyecto RolePlus
 
+- Vigilante del VPS (2026-10-18): su alcance incluye todas las webs y servicios
+  del servidor, no solo ROLEplus y MTGsearch. Descubrir los sitios activos y
+  conservar una ficha por sitio. Coordinar y centralizar las actuaciones con
+  el automatismo antipánico existente; no crear reiniciadores independientes.
+  Registrar los errores y permisos pendientes por sitio y corregir sus causas,
+  sin ocultar registros ni aplicar cambios recursivos indiscriminados.
+
 - Pie vacio del manual (2026-10-14): las ayudas de edicion no deben ocultar
   footer::before ni footer::after ni cambiar la posicion, altura o margenes
   del footer por no contener texto. Conservar imagen y numero de pagina
