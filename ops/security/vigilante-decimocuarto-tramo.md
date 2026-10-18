@@ -57,6 +57,26 @@ Apache, PHP-FPM, MariaDB y el temporizador del antipanico siguen activos.
 
 La activacion y una entrega real confirmada de WhatsApp siguen pendientes.
 
+## Decision posterior del usuario: coste adicional cero
+
+El usuario descarta cualquier gasto adicional. La dependencia del alta de Meta
+descrita arriba queda sustituida por preparar una vinculacion de dispositivo.
+OpenClaw documenta el uso de WhatsApp Web mediante Baileys y vinculacion por QR,
+incluido el uso de un numero personal. Baileys tiene licencia MIT y no requiere
+contratar la API de mensajes de Meta. Se puede estudiar el mismo transporte
+aislado para la bandeja existente, sin instalar todo OpenClaw.
+
+La biblioteca no esta autorizada ni respaldada por WhatsApp. La sesion puede
+desconectarse o requerir nueva vinculacion; no se promete disponibilidad ni
+ausencia de restricciones de cuenta. Sigue pendiente comprobar la notificacion
+real en el telefono, especialmente si se usa el chat propio, antes de declarar
+operativo el canal. Este cambio de decision no instala ni vincula sesiones.
+
+Fuentes primarias:
+
+- https://docs.openclaw.ai/channels/whatsapp
+- https://github.com/WhiskeySockets/Baileys
+
 Resultado del despliegue: 28 pruebas satisfactorias tanto en local como en el
 VPS. El siguiente ciclo natural creo la bandeja root:root 0600, sin avisos
 urgentes presentes ni entregas declaradas. El detector termino con estado 0;

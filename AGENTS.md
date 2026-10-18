@@ -328,3 +328,10 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   la causa acreditada de una incidencia. Un POST y su redireccion no identifican
   la tecla ni el boton usados; no atribuir el borrado a Enter sin esa evidencia.
   Consultar el historial antes de atribuir al usuario o al agente un orden HTML.
+
+- Vigilante del VPS (2026-10-18): coste adicional obligatorio de 0 EUR sobre
+  los servicios ya contratados y la cuota actual de OpenAI. No contratar APIs,
+  mensajeria, numeros, almacenamiento ni compras de credito de pago. Para
+  WhatsApp, investigar y reutilizar la vinculacion gratuita por dispositivo
+  que emplea OpenClaw antes de proponer proveedores de pago. Verificar la
+  recepcion y el aviso real en el movil, no solo la aceptacion del envio.

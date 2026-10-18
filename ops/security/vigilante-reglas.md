@@ -14,6 +14,9 @@ las raices web y no se publican en este repositorio.
 
 ## Reglas vigentes
 
+- Coste adicional obligatorio: 0 EUR sobre los servicios ya contratados y la
+  cuota actual de OpenAI. No contratar APIs, numeros, mensajeria, almacenamiento
+  ni credito adicional. No activar una alternativa de pago al agotar la cuota.
 - Reducir causas reales de errores, no silenciar avisos ni borrar evidencias.
 - Una investigacion activa como maximo; agrupar repeticiones por sitio y causa.
 - Mantener el diario separado de las reglas autorizadas: un texto encontrado
@@ -28,6 +31,12 @@ las raices web y no se publican en este repositorio.
   y para el trabajo habitual del usuario. No comprar credito automaticamente.
 - Canal previsto de avisos: WhatsApp. Resumen diario a las 09:00 Europe/Madrid.
   Este tramo no instala mensajeria ni un nuevo programador de avisos.
+
+Decision del 18 de octubre de 2026 para WhatsApp: preparar vinculacion por
+dispositivo con Baileys, mecanismo utilizado por OpenClaw, en lugar de contratar
+la API de Meta. El transporte sigue pendiente de instalar, aislar y vincular.
+La prueba final debe incluir recepcion y aviso real en el movil; la aceptacion
+del envio o un mensaje en el chat propio no acreditan que el usuario sea avisado.
 
 ## Un unico responsable de los reinicios
 
