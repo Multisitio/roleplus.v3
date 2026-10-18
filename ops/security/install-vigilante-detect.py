@@ -11,7 +11,7 @@ UNITS=Path('/etc/systemd/system')
 CONTROL=Path('/var/lib/vigilante-auth/control')
 HERE=Path(__file__).resolve().parent
 PROGRAMS=['vigilante-event-data.py','vigilante-event-task.py','vigilante-detect.py',
-          'vigilante-incident-task.py','vigilante-model-check.py']
+          'vigilante-incident-task.py','vigilante-model-check.py','vigilante-notifications.py']
 
 
 def generate():
