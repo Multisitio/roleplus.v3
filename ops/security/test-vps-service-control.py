@@ -92,6 +92,41 @@ class RestartControlTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             control.load_policy(path, uid=os.geteuid())
 
+    def reload(self, site='example.invalid', origin='ispconfig-acme', runner=None):
+        self.policy['tls_reload_sites'] = ['example.invalid']
+        return control.reload_tls(self.policy, site, origin, audit=self.audit, lock=self.lock,
+                                  runner=runner or self.runner, clock=lambda: 1000, uid=os.geteuid())
+
+    def test_tls_reload_uses_configtest_and_never_restart(self):
+        self.assertEqual(self.reload()['decision'], 'ejecutado')
+        self.assertEqual(self.calls[0], ['/usr/sbin/apache2ctl', 'configtest'])
+        self.assertEqual(self.calls[-1], ['/usr/bin/systemctl', 'reload', 'apache2.service'])
+        self.assertFalse(any('restart' in args for args in self.calls))
+
+    def test_tls_reload_cannot_select_other_site_or_origin(self):
+        for kwargs in ({'site': 'unknown.invalid'}, {'origin': 'agent'}, {'site': 'example.invalid;id'}):
+            with self.assertRaises(ValueError):
+                self.reload(**kwargs)
+        self.assertEqual(self.calls, [])
+
+    def test_bad_apache_configuration_prevents_reload(self):
+        def failed(args, **kwargs):
+            self.calls.append(args); return subprocess.CompletedProcess(args, 1)
+        self.assertEqual(self.reload(runner=failed)['decision'], 'configuracion_invalida')
+        self.assertEqual(len(self.calls), 1)
+
+    def test_tls_reload_shares_antipanic_lock(self):
+        with self.lock.open('w') as stream:
+            fcntl.flock(stream, fcntl.LOCK_EX|fcntl.LOCK_NB)
+            self.assertEqual(self.reload()['decision'], 'ocupado')
+        self.assertEqual(self.calls, [])
+
+    def test_inactive_apache_not_started_by_certificate_renewal(self):
+        def inactive(args, **kwargs):
+            self.calls.append(args); return subprocess.CompletedProcess(args, int('is-active' in args))
+        self.assertEqual(self.reload(runner=inactive)['decision'], 'servicio_inactivo')
+        self.assertFalse(any('reload' in args for args in self.calls))
+
 
 if __name__ == '__main__':
     unittest.main()

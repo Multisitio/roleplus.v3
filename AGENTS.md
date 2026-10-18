@@ -1,5 +1,11 @@
 # Instrucciones del proyecto RolePlus
 
+- Certificados del VPS (2026-10-18): ISPConfig debe reflejar el estado real
+  aunque la renovacion se ejecute por otra via. Conservar un unico responsable
+  de renovacion por certificado, verificar los consumidores y no regenerar
+  servidores virtuales del panel como efecto lateral de una reparacion TLS.
+  Coordinar las recargas con el control central del antipanico.
+
 - Vigilante y CLI (2026-10-18): antes de una prueba real de modelo, comprobar
   tambien los binarios auxiliares de su version en la unidad efectiva. La
   ayuda del CLI no valida herramientas. Exigir una llamada estructurada y la

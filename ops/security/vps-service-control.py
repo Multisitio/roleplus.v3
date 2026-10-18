@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Control unico de reinicios; no ejecuta instrucciones ni comandos del modelo."""
+"""Control unico de reinicios y recargas TLS; nunca ejecuta comandos del modelo."""
 import argparse
 import fcntl
 import json
@@ -50,6 +50,9 @@ def load_policy(path=POLICY, uid=0):
     excluded = policy.get('restart_excluded_sites', [])
     if not isinstance(excluded, list) or any(x not in sites for x in excluded):
         raise ValueError('Excepciones de reinicio invalidas')
+    reload_sites = policy.get('tls_reload_sites', [])
+    if not isinstance(reload_sites, list) or any(x not in sites for x in reload_sites):
+        raise ValueError('Catalogo de recarga TLS invalido')
     return policy
 
 
@@ -114,11 +117,47 @@ def restart(policy, unit, origin, state=STATE, audit=AUDIT, lock=LOCK,
         return event
 
 
+def reload_tls(policy, site, origin, audit=AUDIT, lock=LOCK,
+               runner=subprocess.run, clock=time.time, uid=0):
+    if origin != 'ispconfig-acme' or site not in policy.get('tls_reload_sites', []):
+        raise ValueError('Recarga TLS no autorizada')
+    trusted(audit.parent, directory=True, uid=uid)
+    if audit.exists():
+        trusted(audit, uid=uid)
+    if lock.exists():
+        trusted(lock, uid=uid)
+    fd = os.open(lock, os.O_RDWR|os.O_CREAT|os.O_NOFOLLOW, 0o600)
+    with os.fdopen(fd, 'a+') as handle:
+        event = {'time': clock(), 'origin': origin, 'site': site,
+                 'unit': 'apache2.service', 'action': 'reload_tls'}
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:
+            event['decision'] = 'ocupado'; append_event(audit, event); return event
+        try:
+            check = runner(['/usr/sbin/apache2ctl', 'configtest'], capture_output=True, timeout=15)
+            if check.returncode:
+                event['decision'] = 'configuracion_invalida'
+            elif runner(['/usr/bin/systemctl', 'is-active', '--quiet', 'apache2.service'],
+                        capture_output=True, timeout=10).returncode:
+                event['decision'] = 'servicio_inactivo'
+            else:
+                append_event(audit, dict(event, decision='intento'))
+                result = runner(['/usr/bin/systemctl', 'reload', 'apache2.service'],
+                                capture_output=True, timeout=30)
+                event['decision'] = 'ejecutado' if result.returncode == 0 else 'error'
+                event['exit_code'] = result.returncode
+        except subprocess.TimeoutExpired:
+            event['decision'] = 'plazo_agotado'
+        append_event(audit, event)
+        return event
+
+
 def main():
     if os.geteuid() != 0:
         raise PermissionError('Este control requiere administrador; no se concede sudo al agente')
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart'])
+    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart', 'reload-tls'])
     parser.add_argument('unit', nargs='?')
     parser.add_argument('--origin')
     args = parser.parse_args()
@@ -135,6 +174,10 @@ def main():
         allowed = site not in policy.get('restart_excluded_sites', [])
         print(json.dumps({'site': site, 'restart_allowed': allowed}))
         return 0 if allowed else 1
+    elif args.action == 'reload-tls':
+        event = reload_tls(policy, args.unit, args.origin)
+        print(json.dumps(event))
+        return 0 if event['decision'] == 'ejecutado' else 1
     else:
         if not args.unit:
             parser.error('Falta la unidad')
