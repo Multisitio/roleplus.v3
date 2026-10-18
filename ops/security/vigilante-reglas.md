@@ -14,6 +14,10 @@ las raices web y no se publican en este repositorio.
 
 ## Reglas vigentes
 
+- No instalar aplicaciones adicionales en el movil. Se descarta ntfy como
+  sustituto automatico. Las pruebas del chat propio de WhatsApp llegaron sin
+  aviso; la investigacion de SMS debe acreditar emision gratuita y sonido real,
+  sin confundir los SMS de la SIM con una API del operador para el VPS.
 - Coste adicional obligatorio: 0 EUR sobre los servicios ya contratados y la
   cuota actual de OpenAI. No contratar APIs, numeros, mensajeria, almacenamiento
   ni credito adicional. No activar una alternativa de pago al agotar la cuota.

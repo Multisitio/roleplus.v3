@@ -340,3 +340,9 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   comprobar su interfaz viva y su proceso nuevo. Un status.json conservado
   del proceso anterior no acredita disponibilidad ni reconexion. Esperar
   al socket del nuevo proceso antes de probarlo, sin repetir el reinicio.
+
+- Avisos del vigilante (2026-10-18): el usuario descarta instalar aplicaciones
+  adicionales en el movil. Respetar coste adicional cero y no reiterar ntfy
+  como solucion automatica. Al estudiar SMS, distinguir SMS incluidos en la
+  linea de una API accesible desde el VPS y probar la notificacion real de un
+  SMS propio con la pantalla bloqueada antes de montar otro conector.
