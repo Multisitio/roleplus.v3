@@ -1,5 +1,9 @@
 # Instrucciones del proyecto RolePlus
 
+- Registros del VPS (2026-10-18): resolver DocumentRoot y ErrorLog del servidor
+  virtual del dominio antes de analizar incidencias. No deducir el sitio a
+  partir de un numero webN ni atribuirle los registros de otra web.
+
 - Certificados del VPS (2026-10-18): ISPConfig debe reflejar el estado real
   aunque la renovacion se ejecute por otra via. Conservar un unico responsable
   de renovacion por certificado, verificar los consumidores y no regenerar

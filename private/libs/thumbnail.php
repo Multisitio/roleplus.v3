@@ -29,6 +29,10 @@ class Thumbnail
                 $this->metadata['format'] = 'WEBP';
                 $this->img                = imagecreatefromwebp($imgfile);
                 break;
+            case IMAGETYPE_AVIF:
+                $this->metadata['format'] = 'AVIF';
+                $this->img                = imagecreatefromavif($imgfile);
+                break;
             default:
                 throw new KumbiaException('Formato no soportado');
         }
@@ -99,6 +103,8 @@ class Thumbnail
                 return imagegif($this->imgDest, $file);
             case 'WEBP':
                 return imagewebp($this->imgDest, $file);
+            case 'AVIF':
+                return imageavif($this->imgDest, $file, $this->quality);
             default:
                 throw new KumbiaException('No es una imagen aceptada');
         }
@@ -111,6 +117,13 @@ class Thumbnail
         #_var::die($imagen_original);
         if ( ! file_exists($imagen_original)) {
             throw new KumbiaException('La imagen original no existe');
+        }
+
+        // Los SVG conservan su calidad vectorial y ya se sirven como originales.
+        // GD no los decodifica: la URL historica debe conducir al mismo archivo.
+        if (strtolower(pathinfo($imagen_original, PATHINFO_EXTENSION)) === 'svg'
+            && (new finfo(FILEINFO_MIME_TYPE))->file($imagen_original) === 'image/svg+xml') {
+            return $imagen_original;
         }
 
         // Una petición dinámica puede llegar aunque la miniatura ya esté creada.
