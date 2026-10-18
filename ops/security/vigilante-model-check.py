@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Un turno sintetico, sin entorno local y con una herramienta externa fija."""
+"""Un turno acotado, sin entorno local y con una herramienta externa fija."""
 import importlib.util
 import json
 import os
@@ -43,7 +43,7 @@ def tool_reply(params, thread_id, used):
     return {key: report[key] for key in ('passed', 'checks', 'uid', 'synthetic', 'credentials_accessible')}
 
 
-def run_check(rpc, quota):
+def run_check(rpc, quota, task=None):
     rpc.request('initialize', 1, {'clientInfo': {'name': 'vigilante_prueba', 'version': '1.0.0'},
                                   'capabilities': {'experimentalApi': True}})
     rpc.send({'method': 'initialized', 'params': {}})
@@ -63,13 +63,16 @@ def run_check(rpc, quota):
     thread = rpc.request('thread/start', 4, {
         'model': model, 'allowProviderModelFallback': False, 'ephemeral': True,
         'cwd': '/tmp', 'environments': [], 'permissions': ':read-only', 'approvalPolicy': 'never',
-        'developerInstructions': 'Prueba sintetica. Es obligatorio llamar una vez a comprobar_aislamiento y basar la respuesta en su resultado. Solo esta autorizada esa herramienta. No inventes valores ni solicites accesos.',
-        'dynamicTools': [{'type': 'function', 'name': 'comprobar_aislamiento', 'deferLoading': False,
-                          'description': 'Comprueba barreras de aislamiento con datos sinteticos. No recibe argumentos.',
+        'developerInstructions': task.INSTRUCTIONS if task else 'Prueba sintetica. Es obligatorio llamar una vez a comprobar_aislamiento y basar la respuesta en su resultado. Solo esta autorizada esa herramienta. No inventes valores ni solicites accesos.',
+        'dynamicTools': [{'type': 'function', 'name': task.TOOL if task else 'comprobar_aislamiento', 'deferLoading': False,
+                          'description': 'Lee una instantanea TLS minimizada.' if task else 'Comprueba barreras de aislamiento con datos sinteticos. No recibe argumentos.',
                           'inputSchema': {'type': 'object', 'properties': {}, 'additionalProperties': False}}]})
     thread_id = thread['thread']['id']
-    rpc.request('turn/start', 5, {'threadId': thread_id, 'effort': effort,
-        'input': [{'type': 'text', 'text': 'Comprueba el aislamiento con comprobar_aislamiento({}). Indica el UID real y el numero de comprobaciones que devuelve. No conoces esos datos sin llamar a la herramienta.'}]})
+    turn_input = {'threadId': thread_id, 'effort': effort,
+        'input': [{'type': 'text', 'text': task.PROMPT if task else 'Comprueba el aislamiento con comprobar_aislamiento({}). Indica el UID real y el numero de comprobaciones que devuelve. No conoces esos datos sin llamar a la herramienta.'}]}
+    if task:
+        turn_input['outputSchema'] = task.SCHEMA
+    rpc.request('turn/start', 5, turn_input)
     used = False
     report = None
     answer = ''
@@ -78,14 +81,16 @@ def run_check(rpc, quota):
         if 'id' in message and 'method' in message:
             if message['method'] != 'item/tool/call':
                 raise PermissionError('Solicitud no autorizada')
-            report = tool_reply(message.get('params', {}), thread_id, used)
+            report = (task.tool_reply if task else tool_reply)(message.get('params', {}), thread_id, used)
             used = True
             rpc.send({'id': message['id'], 'result': {'success': True,
                 'contentItems': [{'type': 'inputText', 'text': json.dumps(report)}]}})
         elif message.get('method') == 'item/completed':
             item = message.get('params', {}).get('item', {})
             if item.get('type') == 'agentMessage' and isinstance(item.get('text'), str):
-                answer = item['text'][:1000]
+                if len(item['text']) > (16384 if task else 1000) and task:
+                    raise ValueError('Respuesta excesiva')
+                answer = item['text'][:16384 if task else 1000]
         elif message.get('method') == 'turn/completed':
             params = message.get('params', {})
             if params.get('threadId') != thread_id or params.get('turn', {}).get('status') != 'completed' or not used:
@@ -96,12 +101,24 @@ def run_check(rpc, quota):
                         'error_kind': info if isinstance(info, str) else list(info) if isinstance(info, dict) else None,
                         'synthetic_reply': answer,
                         'automatic_repairs_enabled': False}
-            return {'completed': True, 'model_called': True, 'model': model, 'effort': effort,
+            diagnosis = {'diagnosis': task.finish(answer, report)} if task else {}
+            return dict(diagnosis, **{'completed': True, 'model_called': True, 'model': model, 'effort': effort,
                     'tool_calls': 1, 'tool': report, 'quota_before': snapshot,
-                    'automatic_repairs_enabled': False, 'local_environment_enabled': False}
+                    'automatic_repairs_enabled': False, 'local_environment_enabled': False})
 
 
-def main():
+def main(task=None):
+    import fcntl
+    descriptor = os.open('/auth/investigation.lock', os.O_RDWR|os.O_CREAT|os.O_NOFOLLOW, 0o600)
+    with os.fdopen(descriptor, 'a+') as lock:
+        metadata = os.fstat(lock.fileno())
+        if metadata.st_uid != os.geteuid() or metadata.st_mode & 0o077 or not stat.S_ISREG(metadata.st_mode):
+            raise PermissionError('Bloqueo no privado')
+        fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
+        return authenticated_main(task)
+
+
+def authenticated_main(task=None):
     metadata = Path('/auth/auth.json').lstat()
     if os.geteuid() == 0 or not stat.S_ISREG(metadata.st_mode) or metadata.st_uid != os.geteuid() or metadata.st_mode & 0o077:
         raise PermissionError('Perfil no privado')
@@ -133,7 +150,7 @@ def main():
                                    stderr=subprocess.DEVNULL, cwd='/tmp', env=environment, start_new_session=True)
         rpc = rpc_module.Rpc(process, seconds=100)
         try:
-            result = run_check(rpc, quota)
+            result = run_check(rpc, quota, task)
             print(json.dumps(result), flush=True)
             return 0 if result.get('completed') else 1
         except Exception as error:
