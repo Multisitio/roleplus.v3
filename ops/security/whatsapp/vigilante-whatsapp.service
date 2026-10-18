@@ -1,0 +1,56 @@
+[Unit]
+Description=Conexion privada de WhatsApp del vigilante
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/vigilante-wa/recipient.json
+StartLimitIntervalSec=1800
+StartLimitBurst=4
+
+[Service]
+Type=simple
+User=vigilante-wa
+Group=vigilante-wa
+WorkingDirectory=/opt/vigilante-whatsapp/app
+ExecStart=/opt/vigilante-whatsapp/node/bin/node --v8-pool-size=2 --max-old-space-size=192 /opt/vigilante-whatsapp/app/transport.mjs
+Environment=HOME=/var/lib/vigilante-wa
+Environment=UV_THREADPOOL_SIZE=2
+UMask=0077
+RuntimeDirectory=vigilante-wa
+RuntimeDirectoryMode=0700
+StateDirectory=vigilante-wa
+StateDirectoryMode=0700
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+RestrictRealtime=yes
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/vigilante-wa /run/vigilante-wa
+InaccessiblePaths=/var/www /var/lib/vigilante /var/lib/vigilante-auth /var/lib/vigilante-ai /etc/vigilante
+CPUQuota=10%
+MemoryMax=320M
+TasksMax=32
+LimitCORE=0
+LimitFSIZE=16M
+Nice=15
+IOWeight=10
+Restart=on-failure
+RestartSec=60s
+TimeoutStopSec=10s
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -34,7 +34,9 @@ las raices web y no se publican en este repositorio.
 
 Decision del 18 de octubre de 2026 para WhatsApp: preparar vinculacion por
 dispositivo con Baileys, mecanismo utilizado por OpenClaw, en lugar de contratar
-la API de Meta. El transporte sigue pendiente de instalar, aislar y vincular.
+la API de Meta. El transporte ya esta instalado, aislado y vinculado; el usuario
+ha confirmado la recepcion de dos pruebas sin sonido ni vibracion. El chat
+propio no esta validado como alarma nocturna. El envio automatico sigue pendiente.
 La prueba final debe incluir recepcion y aviso real en el movil; la aceptacion
 del envio o un mensaje en el chat propio no acreditan que el usuario sea avisado.
 

@@ -335,3 +335,8 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   WhatsApp, investigar y reutilizar la vinculacion gratuita por dispositivo
   que emplea OpenClaw antes de proponer proveedores de pago. Verificar la
   recepcion y el aviso real en el movil, no solo la aceptacion del envio.
+
+- Arranque del vigilante (2026-10-18): despues de reiniciar un conector,
+  comprobar su interfaz viva y su proceso nuevo. Un status.json conservado
+  del proceso anterior no acredita disponibilidad ni reconexion. Esperar
+  al socket del nuevo proceso antes de probarlo, sin repetir el reinicio.
