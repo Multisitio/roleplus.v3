@@ -69,7 +69,11 @@ def main():
     checks.update({name: unavailable(path) for name, path in forbidden.items()})
     checks['vista_raiz_limitada'] = set(os.listdir('/')) <= {
         'usr', 'lib', 'lib64', 'dev', 'proc', 'sys', 'tmp', 'etc', 'run', 'root',
-        'home', 'var', 'input', 'workspace', 'probe.py', 'readonly-canary'}
+        'home', 'var', 'bin', 'input', 'workspace', 'probe.py', 'readonly-canary'}
+    alias = Path('/bin')
+    checks['alias_bin_limitado_al_ejecutor'] = (not os.path.lexists(alias) or (
+        alias.is_symlink() and os.readlink(alias) == 'usr/bin'
+        and alias.samefile('/usr/bin')))
     try:
         os.setuid(0)
         checks['escalada_a_administrador_rechazada'] = False
