@@ -65,7 +65,7 @@ def run_check(rpc, quota, task=None):
         'cwd': '/tmp', 'environments': [], 'permissions': ':read-only', 'approvalPolicy': 'never',
         'developerInstructions': task.INSTRUCTIONS if task else 'Prueba sintetica. Es obligatorio llamar una vez a comprobar_aislamiento y basar la respuesta en su resultado. Solo esta autorizada esa herramienta. No inventes valores ni solicites accesos.',
         'dynamicTools': [{'type': 'function', 'name': task.TOOL if task else 'comprobar_aislamiento', 'deferLoading': False,
-                          'description': 'Lee una instantanea TLS minimizada.' if task else 'Comprueba barreras de aislamiento con datos sinteticos. No recibe argumentos.',
+                          'description': getattr(task, 'DESCRIPTION', 'Lee una instantanea TLS minimizada.') if task else 'Comprueba barreras de aislamiento con datos sinteticos. No recibe argumentos.',
                           'inputSchema': {'type': 'object', 'properties': {}, 'additionalProperties': False}}]})
     thread_id = thread['thread']['id']
     turn_input = {'threadId': thread_id, 'effort': effort,

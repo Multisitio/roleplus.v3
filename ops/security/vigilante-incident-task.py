@@ -36,12 +36,12 @@ def module(name, path):
     return result
 
 
-def tool_reply(params, thread_id, used):
-    if used or params.get('threadId') != thread_id or params.get('tool') != TOOL or params.get('arguments') != {}:
+def worker_reply(params, thread_id, used, tool=TOOL, action='read_incident', address='/run/incident.sock'):
+    if used or params.get('threadId') != thread_id or params.get('tool') != tool or params.get('arguments') != {}:
         raise PermissionError('Herramienta no autorizada')
     with socket.socket(socket.AF_UNIX) as stream:
-        stream.settimeout(25); stream.connect('/run/incident.sock')
-        stream.sendall(b'{"action":"read_incident"}\n')
+        stream.settimeout(25); stream.connect(address)
+        stream.sendall((json.dumps({'action':action})+'\n').encode())
         data = b''
         while b'\n' not in data and len(data) <= 32768:
             chunk = stream.recv(4096)
@@ -53,6 +53,11 @@ def tool_reply(params, thread_id, used):
     report = json.loads(data)
     if set(report) != {'uid', 'snapshot'} or report['uid'] != 999 or report['uid'] == os.geteuid():
         raise PermissionError('Identidad no autorizada')
+    return report
+
+
+def tool_reply(params, thread_id, used):
+    report = worker_reply(params, thread_id, used)
     module('incident', '/tools/incident.py').validate(report['snapshot'])
     return report
 
