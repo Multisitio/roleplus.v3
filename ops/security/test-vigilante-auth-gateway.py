@@ -13,6 +13,15 @@ spec.loader.exec_module(gateway)
 
 
 class GatewayTests(unittest.TestCase):
+    def test_quota_destination_remains_exclusive(self):
+        with patch.object(gateway, 'HOST', 'chatgpt.com'):
+            self.assertEqual(gateway.target(b'CONNECT chatgpt.com:443 HTTP/1.1\r\nHost: chatgpt.com:443\r\n\r\n'), 'chatgpt.com')
+            self.assertEqual(gateway.client_sni(self.hello('chatgpt.com')), 'chatgpt.com')
+            with self.assertRaises(ValueError):
+                gateway.target(b'CONNECT auth.openai.com:443 HTTP/1.1\r\n\r\n')
+            with self.assertRaises(ValueError):
+                gateway.client_sni(self.hello('auth.openai.com'))
+
     def test_login_tunnel_survives_three_minutes(self):
         left, right = Mock(), Mock()
         left.recv.side_effect = [b'continued-login', b'']

@@ -20,10 +20,11 @@ def target(header):
     if len(header) > 4096 or not header.endswith(b'\r\n\r\n'):
         raise ValueError('Cabecera no valida')
     lines = header.split(b'\r\n')
-    if lines[0] != b'CONNECT auth.openai.com:443 HTTP/1.1':
+    destination = (HOST + ':443').encode('ascii')
+    if lines[0] != b'CONNECT ' + destination + b' HTTP/1.1':
         raise ValueError('Destino o metodo no permitido')
     hosts = [line.split(b':', 1)[1].strip() for line in lines[1:] if line.lower().startswith(b'host:')]
-    if hosts and hosts != [b'auth.openai.com:443']:
+    if hosts and hosts != [destination]:
         raise ValueError('Host distinto del destino')
     return HOST
 
@@ -151,10 +152,13 @@ class Handler(socketserver.BaseRequestHandler):
 
 
 def main():
+    global HOST
     parser = argparse.ArgumentParser()
+    parser.add_argument('--host', choices=['auth.openai.com', 'chatgpt.com'], default='auth.openai.com')
     parser.add_argument('--uid', type=int, required=True)
     parser.add_argument('--gid', type=int, required=True)
     args = parser.parse_args()
+    HOST = args.host
     if args.uid <= 0 or args.gid <= 0 or Path(SOCKET).exists():
         raise ValueError('Identidad o socket no validos')
     with Server(SOCKET, Handler) as server:
