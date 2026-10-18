@@ -1,5 +1,11 @@
 # Instrucciones del proyecto RolePlus
 
+- Vigilante y CLI (2026-10-18): antes de una prueba real de modelo, comprobar
+  tambien los binarios auxiliares de su version en la unidad efectiva. La
+  ayuda del CLI no valida herramientas. Exigir una llamada estructurada y la
+  identidad real del ejecutor; un texto de exito no acredita ejecucion.
+  Mantener el motor de codigo y las herramientas fuera del perfil autenticado.
+
 - Vigilante del VPS (2026-10-18): su alcance incluye todas las webs y servicios
   del servidor, no solo ROLEplus y MTGsearch. Descubrir los sitios activos y
   conservar una ficha por sitio. Coordinar y centralizar las actuaciones con
