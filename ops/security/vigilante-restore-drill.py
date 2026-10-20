@@ -113,6 +113,21 @@ def main():
             run(['/usr/bin/mariadb-check', '--no-defaults',
                  '--socket=' + str(RUNTIME / 'db.sock'), '--user=root',
                  '--check', database], stdout=errors)
+            definers = run(client + ['-e', "SELECT DISTINCT DEFINER FROM information_schema.VIEWS "
+                           "WHERE TABLE_SCHEMA='" + database + "'"],
+                           stdout=subprocess.PIPE).stdout.decode().splitlines()
+            if len(definers) > 32:
+                raise RuntimeError('Demasiadas cuentas definidoras de vistas')
+            for definer in definers:
+                user, host = definer.rsplit('@', 1)
+                if not re.fullmatch(r'[a-zA-Z0-9_]{1,80}', user) or not re.fullmatch(r'[a-zA-Z0-9.%:_-]{1,255}', host):
+                    raise ValueError('Cuenta definidora requiere revision')
+                account = "'" + user + "'@'" + host + "'"
+                # Identidades nuevas solo en el servidor desechable: sin claves
+                # de produccion, bloqueadas y con SELECT exclusivamente aqui.
+                run(client + ['-e', 'CREATE USER IF NOT EXISTS ' + account + ' ACCOUNT LOCK; '
+                              'GRANT SELECT ON `' + database + '`.* TO ' + account], stdout=errors)
+            report['isolated_view_definers'] = len(definers)
             objects = run(client + ['-e', "SELECT TABLE_NAME,TABLE_TYPE FROM information_schema.tables "
                           "WHERE TABLE_SCHEMA='" + database + "' ORDER BY TABLE_NAME"],
                           stdout=subprocess.PIPE).stdout.decode().splitlines()
