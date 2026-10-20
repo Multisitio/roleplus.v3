@@ -15,6 +15,11 @@ import uuid
 def main():
     spec=importlib.util.spec_from_file_location('jobs',Path(__file__).with_name('vigilante-scheduled-job.py'))
     jobs=importlib.util.module_from_spec(spec);spec.loader.exec_module(jobs)
+    jobs.CONFIG=Path(__file__).with_name('vigilante-scheduled-jobs.json')
+    assert len(jobs.load()['jobs'])==9
+    try:jobs.run('unregistered')
+    except ValueError:pass
+    else:raise RuntimeError('Se acepto una tarea desconocida')
     name='fixture-'+uuid.uuid4().hex[:8]
     # El intermediario muere; systemd conserva plazo y grupo de procesos.
     fixture="import subprocess,time,os; p=subprocess.Popen(['/usr/bin/sleep','60']); print(str(os.getpid())+' '+str(p.pid),flush=True); time.sleep(60)"

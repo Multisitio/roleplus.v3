@@ -44,7 +44,7 @@ def load():
             raise ValueError('Ejecutable no permitido')
         if not re.fullmatch(r'/var/www/(?:clients/client1/(?:web\d+|roleplus.app)|roleplus.app|mtgsearch.kumbia.app)/private/bin/kcli.php', job['argv'][1]):
             raise ValueError('Ruta no permitida')
-        if not re.fullmatch(r'[a-z_]+/[a-z_/]+', job['argv'][2]):
+        if not re.fullmatch(r'[a-z_]+/[a-z0-9_/]+', job['argv'][2]):
             raise ValueError('Accion no permitida')
     return data
 
