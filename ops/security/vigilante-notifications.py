@@ -11,6 +11,7 @@ PATH=Path('/var/lib/vigilante/notifications.json')
 LABELS={
     'site_down':'Web no disponible',
     'service_down':'Servicio no disponible',
+    'automation_failed':'Tarea programada pendiente de revision',
     'php_fatal':'Error fatal de PHP',
     'memory_exhausted':'Memoria agotada en PHP',
     'disk_space':'Espacio de disco en nivel critico',

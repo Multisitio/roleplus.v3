@@ -12,7 +12,7 @@ import uuid
 
 KINDS = {'http_5xx','php_warning','php_fatal','invalid_image','memory_exhausted',
          'permission_denied','missing_controller','undefined_variable','site_down',
-         'service_down','disk_space','inodes'}
+         'service_down','disk_space','inodes','automation_failed'}
 ROUTES = {'img','usuarios','publicaciones','admin','mensajes','personajes','index','otras'}
 FAMILIES = ROUTES | {'ninguna','apache2','php_fpm','mariadb','watchdog'}
 SNAPSHOT = Path('/srv/vigilante-ai/input/events/current.json')
