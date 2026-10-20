@@ -81,7 +81,7 @@ def command(name, job):
                 '--property=TimeoutStopSec=5s', '--property=KillMode=control-group',
                 '--property=CPUQuota=100%', '--property=MemoryMax=1G',
                 '--property=TasksMax=128', '--property=Nice=10',
-                '--property=WorkingDirectory=/', '--setenv=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'] + (
+                '--property=WorkingDirectory='+job.get('working_directory','/root'), '--setenv=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'] + (
                     ['/usr/bin/flock','-n',job['legacy_lock']] if job.get('legacy_lock') else []) + job['argv']
 
 

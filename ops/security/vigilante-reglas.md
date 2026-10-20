@@ -113,9 +113,24 @@ anterior de un intento por episodio del antipánico, sumada a la espera comun.
 Un fallo de certificado conocido queda registrado y excluido de los reinicios
 de servicio: no se omite la validacion TLS para declararlo recuperado.
 
-El servicio existente que termina consultas SQL conserva su funcion por ahora.
-La politica lo identifica como unico responsable de esa accion, pendiente de
-auditar su criterio. La IA no recibe capacidad de terminar consultas.
+El terminador SQL generico fue retirado y enmascarado en el tramo 31. Ordenar
+o crear una tabla temporal durante un segundo no acredita abuso. Su script
+ya no contiene credenciales ni KILL; se sustituye por observacion agregada
+sin SQL completo, parametros ni usuarios. La IA no puede terminar consultas.
+
+El estado de decisiones del antipanico reside en /var/lib/vigilante/antipanico,
+privado de administrador. El panel conserva una replica de lectura; el detector
+consume el original privado. Una ventana valida de mantenimiento inhibe la
+acumulacion de fallos y los reinicios, con la caducidad del mecanismo existente.
+
+Las nueve tareas CLI heredadas conservan horarios, acciones e identidades de
+ejecucion existentes. Un catalogo cerrado impone unidad unica, limite de tiempo,
+grupo de procesos y recursos. Los dos bloqueos anteriores se toman dentro de
+la unidad. No se concede a la IA capacidad para ejecutar este catalogo.
+ISPConfig conserva sus trabajos internos y certificados, sin duplicar sus
+programadores. El generador externo AWStats tiene un limite de 180 segundos
+reflejado en la configuracion del panel. Una espera interna del panel se observa
+y escala; no se termina globalmente mientras pueda estar escribiendo.
 
 ## Validacion y limites
 

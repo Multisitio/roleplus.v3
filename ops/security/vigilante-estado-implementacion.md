@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 30. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 31. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -68,11 +68,21 @@ Actualizado: 20 de octubre de 2026, tramo 30. Implementacion NO finalizada.
 - Barrera de revision comun con GitHub en el preparador: bloquea trabajo local
   pendiente y divergencias; conserva los cambios ajenos. Pendiente integrar
   la comprobacion distribuida y el bloqueo antes de cualquier escritura real.
-- Cron de ISPConfig liberado de una espera de AWStats de mas de diez horas;
-  DNS de estadisticas desactivado y tareas atrasadas completadas. Pendientes
-  regeneracion de esas estadisticas y limites generales de los trabajos.
+- Automatismos heredados centralizados: terminador SQL generico retirado y
+  enmascarado, observacion agregada sin credenciales, estado del antipanico
+  privado y replica de lectura para el panel. Nueve tareas CLI conservan sus
+  horarios y dos bloqueos existentes, con unidad unica, limites de tiempo y
+  recursos. La desaparicion del intermediario no elimina el plazo ni permite
+  otra instancia. Las ventanas de mantenimiento inhiben fallos y reinicios.
+- ISPConfig conserva su programador y sus operaciones internas. Se limita solo
+  su generador externo AWStats a 180 segundos, reflejado en el panel. La prueba
+  real agota ese plazo y conserva la estadistica mensual anterior; su causa
+  sigue como incidencia operativa, sin declarar regeneracion correcta. Las
+  esperas internas prolongadas se detectan y escalan, sin matar globalmente
+  tareas que puedan estar escribiendo configuracion o copias. Once webs HTTP
+  200 y procesos principales de Apache, PHP-FPM y MariaDB sin reinicios.
 
-## Cuatro pasos pendientes para dar la implementacion por terminada
+## Tres pasos pendientes para dar la implementacion por terminada
 
 1. **SQL automatico seguro:** resolver la estrategia consistente de ROLEplus y
    MTGsearch frente a MyISAM, verificar copias nuevas y sus restauraciones e
@@ -83,14 +93,11 @@ Actualizado: 20 de octubre de 2026, tramo 30. Implementacion NO finalizada.
    integrar y comprobar el aviso previo de mantenimiento ya instalado. Falta
    conectar la barrera al ejecutor y su programacion unica; no se ha activado
    una ventana real ni se han obtenido aun copias nuevas de las dos grandes.
-2. **Automatismos heredados:** revisar el estado junto al panel web y el
-   ejecutor que termina consultas SQL; eliminar capacidades o decisiones
-   contradictorias y conservar un unico control de actuaciones.
-3. **Reparaciones acotadas:** conectar el ejecutor probado a destinos y
+2. **Reparaciones acotadas:** conectar el ejecutor probado a destinos y
    operaciones expresamente permitidos, con revision, bloqueo coordinado,
    copia previa, comprobaciones y recuperacion ante fallo. Probar su
    aislamiento efectivo antes de permitir escrituras reales de la IA.
-4. **Aceptacion conjunta:** comprobar el recorrido completo de una incidencia,
+3. **Aceptacion conjunta:** comprobar el recorrido completo de una incidencia,
    diagnostico, accion permitida o escalado, aviso y diario; verificar limites
    y continuidad de los servicios, incluido el aviso ante fallo de las nuevas
    copias de texto y SQL independientes, cerrar la lista y declarar expresamente

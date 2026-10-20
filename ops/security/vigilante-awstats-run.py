@@ -32,7 +32,8 @@ def main():
     executable=Path('/usr/share/awstats/tools/awstats_buildstaticpages.pl')
     jobs.trusted(executable)
     name='awstats-'+site.replace('.','-')
-    item={'seconds':180,'argv':[str(executable)]+sys.argv[1:]}
+    item={'seconds':180,'argv':[str(executable)]+sys.argv[1:],
+          'working_directory':'/usr/local/ispconfig/server'}
     status={'job':name,'started_at':int(time.time()),'seconds_limit':180,'completed':False,
             'owner':'ispconfig'}
     target=jobs.STATE/(name+'.json');jobs.save(target,status)

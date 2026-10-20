@@ -1,5 +1,14 @@
 # Instrucciones del proyecto RolePlus
 
+- Automatismos del VPS (2026-10-20): el terminador SQL generico esta retirado
+  y enmascarado; no restaurar KILL por tiempo o estado de ordenacion. Las
+  tareas CLI heredadas usan scheduled-jobs.json, sus horarios y bloqueos
+  originales. El estado de decisiones del antipanico es privado; el panel
+  web recibe solo una replica. Respetar las ventanas de mantenimiento antes
+  de contar fallos o reiniciar. ISPConfig mantiene sus trabajos internos;
+  limitar el generador externo de estadisticas, no matar el cron completo
+  mientras pueda escribir configuracion o copias.
+
 - Mantenimiento SQL (2026-10-20): antes de detener escrituras, mostrar un aviso
   de mantenimiento en modo de solo lectura con tiempo estimado. La proteccion
   debe impedir guardados realmente y caducar aunque falle el coordinador;
