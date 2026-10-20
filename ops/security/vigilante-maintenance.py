@@ -117,7 +117,14 @@ def cgi():
 
 
 if __name__ == '__main__':
-    if sys.argv[1:] == ['--map']:
+    if sys.argv[1:2] == ['--map'] and len(sys.argv) in (2, 3):
+        # Apache limpia el entorno de sus programas RewriteMap. La ruta se
+        # fija en su configuracion, nunca procede de la peticion HTTP.
+        if len(sys.argv) == 3:
+            STATE = Path(sys.argv[2])
+            if str(STATE) not in ('/run/vigilante-maintenance/state.json',
+                                  '/run/vigilante-maintenance-check/state.json'):
+                raise SystemExit(2)
         for key in sys.stdin:
             print('on' if current(key.strip()) else 'off', flush=True)
     elif sys.argv[1:] == ['--cgi']:

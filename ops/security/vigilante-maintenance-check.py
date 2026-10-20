@@ -39,7 +39,8 @@ def main():
     conf += 'ScriptSock ' + str(RUN / 'cgid.sock') + '\n'
     conf += '<VirtualHost 127.0.0.1:18089>\nServerName maintenance.test\nDocumentRoot ' + str(web) + '\n'
     conf += 'SetEnv VIGILANTE_MAINTENANCE_STATE ' + str(data_path) + '\n'
-    conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-apache.conf').read_text()
+    conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-apache.conf').read_text().replace(
+        '--map /run/vigilante-maintenance/state.json', '--map ' + str(data_path))
     conf += '\nScriptAlias /app ' + str(writer) + '\n<Directory ' + str(RUN) + '>\nOptions -Indexes\nRequire all granted\n</Directory>\n'
     conf += '<Directory /usr/local/lib/vigilante>\nOptions +ExecCGI -Indexes\nRequire all granted\n</Directory>\n</VirtualHost>\n'
     config = RUN / 'httpd.conf'
