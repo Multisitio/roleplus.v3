@@ -1,0 +1,40 @@
+[Unit]
+Description=Ensayo manual y aislado de restauracion de una copia revisada
+
+[Service]
+Type=oneshot
+DynamicUser=yes
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/vigilante-restore-drill.py
+StateDirectory=vigilante-restore-drill
+StateDirectoryMode=0700
+RuntimeDirectory=vigilante-restore-drill
+RuntimeDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+InaccessiblePaths=/var/lib/mysql /var/www /var/lib/vigilante-auth /var/lib/vigilante-wa
+InaccessiblePaths=/srv/vigilante-ai /run/mysqld /etc/mysql /var/backup
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+CPUQuota=25%
+IOWeight=10
+Nice=19
+MemoryMax=768M
+TasksMax=64
+TimeoutStartSec=10min
+TimeoutStopSec=35s
+LimitCORE=0
+LimitFSIZE=2G
+Restart=no

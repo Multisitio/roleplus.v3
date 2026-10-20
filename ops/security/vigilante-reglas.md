@@ -133,3 +133,12 @@ tramo se hace efectivo el control de reinicios y se mantienen deshabilitadas
 las acciones de IA. Los limites de despliegue, aislamiento y aprobacion se
 implantaran antes de habilitar al agente. Si se compromete administrador del
 VPS, tambien pueden alterarse estas protecciones locales.
+
+## Copias y recuperacion
+
+Una lectura correcta de gzip no acredita restauracion de una base de datos.
+Un ensayo de una base tampoco acredita recuperacion integral de una web ni
+de las demas webs. Probar las copias en un servicio aislado, sin red ni acceso
+a datos en uso, conservar evidencias privadas y mantener pendiente la tarea
+global mientras falten archivos, configuraciones, cobertura o restauraciones.
+No habilitar reparaciones autonomas apoyandose solo en copias del mismo disco.
