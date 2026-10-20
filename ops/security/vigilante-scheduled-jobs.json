@@ -59,7 +59,8 @@
         "cron/sync_arena_ids"
       ],
       "seconds": 2700,
-      "identity": "root_existing"
+      "identity": "root_existing",
+      "legacy_lock": "/var/lock/mtgsearch-arena-id-sync.lock"
     },
     "roleplus-rss": {
       "schedule": "0 6 * * *",
@@ -89,7 +90,8 @@
         "rolelocal/boletin/enviar"
       ],
       "seconds": 2700,
-      "identity": "root_existing"
+      "identity": "root_existing",
+      "legacy_lock": "/var/lock/roleplus-newsletter.lock"
     }
   },
   "native_owners": {

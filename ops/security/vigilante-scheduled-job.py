@@ -46,6 +46,8 @@ def load():
             raise ValueError('Ruta no permitida')
         if not re.fullmatch(r'[a-z_]+/[a-z0-9_/]+', job['argv'][2]):
             raise ValueError('Accion no permitida')
+        if job.get('legacy_lock') not in (None, '/var/lock/mtgsearch-arena-id-sync.lock', '/var/lock/roleplus-newsletter.lock'):
+            raise ValueError('Bloqueo heredado no permitido')
     return data
 
 
@@ -79,7 +81,8 @@ def command(name, job):
                 '--property=TimeoutStopSec=5s', '--property=KillMode=control-group',
                 '--property=CPUQuota=100%', '--property=MemoryMax=1G',
                 '--property=TasksMax=128', '--property=Nice=10',
-                '--property=WorkingDirectory=/', '--setenv=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'] + job['argv']
+                '--property=WorkingDirectory=/', '--setenv=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'] + (
+                    ['/usr/bin/flock','-n',job['legacy_lock']] if job.get('legacy_lock') else []) + job['argv']
 
 
 def maintenance(host):
@@ -107,7 +110,7 @@ def observe():
             faults.append(value['job'])
     # Consulta agregada: sin INFO, parametros, nombres, IP ni credenciales.
     query = ("SET SESSION max_statement_time=1; SELECT COUNT(*),"
-             "COALESCE(MAX(TIME),0),SUM(COMMAND='Query'),"
+             "COALESCE(MAX(TIME),0),COALESCE(SUM(COMMAND='Query'),0),"
              "COALESCE(SUM(STATE IN ('Creating sort index','Copying to tmp table')),0) "
              "FROM information_schema.PROCESSLIST WHERE ID<>CONNECTION_ID();")
     p = subprocess.run(['/usr/bin/mariadb','--no-defaults','--protocol=socket',

@@ -26,7 +26,7 @@ heartbeat_state_dir="/run/webwatchdog"
 panel_dir="/var/www/clients/client1/web17/web/webwatchdog"
 panel_json="${panel_dir}/status.json"
 
-# Estado: MISMA carpeta que el panel (open_basedir OK)
+# Estado de control privado; el panel recibe solo una replica de lectura.
 state_dir="/var/lib/vigilante/antipanico"
 private_panel_json="$state_dir/status.json"
 exec 9>/run/lock/vigilante-watchdog.lock
