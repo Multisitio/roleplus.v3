@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "jobs": {
+    "roleplus-publicidad": {
+      "schedule": "0 0 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/roleplus.app/private/bin/kcli.php",
+        "rolelocal/autorenovar_publi"
+      ],
+      "seconds": 900,
+      "identity": "root_existing"
+    },
+    "controlate-recurrentes": {
+      "schedule": "0 1 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/clients/client1/web26/private/bin/kcli.php",
+        "admin/index/crear_registros_recurrentes"
+      ],
+      "seconds": 900,
+      "identity": "root_existing"
+    },
+    "roleplus-sophia": {
+      "schedule": "0 2 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/clients/client1/roleplus.app/private/bin/kcli.php",
+        "rolelocal/sophia"
+      ],
+      "seconds": 2700,
+      "identity": "root_existing"
+    },
+    "mtgsearch-canales": {
+      "schedule": "0 3 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/mtgsearch.kumbia.app/private/bin/kcli.php",
+        "cron/load_channels"
+      ],
+      "seconds": 2700,
+      "identity": "root_existing"
+    },
+    "mtgsearch-torneos": {
+      "schedule": "0 4 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/mtgsearch.kumbia.app/private/bin/kcli.php",
+        "cron/get_mtgtop8/all"
+      ],
+      "seconds": 2700,
+      "identity": "root_existing"
+    },
+    "mtgsearch-arena": {
+      "schedule": "0 5 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/mtgsearch.kumbia.app/private/bin/kcli.php",
+        "cron/sync_arena_ids"
+      ],
+      "seconds": 2700,
+      "identity": "root_existing"
+    },
+    "roleplus-rss": {
+      "schedule": "0 6 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/roleplus.app/private/bin/kcli.php",
+        "rolelocal/rss"
+      ],
+      "seconds": 2700,
+      "identity": "root_existing"
+    },
+    "roleplus-roleflix": {
+      "schedule": "0 10 * * *",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/roleplus.app/private/bin/kcli.php",
+        "rolelocal/roleflix"
+      ],
+      "seconds": 2700,
+      "identity": "root_existing"
+    },
+    "roleplus-boletin": {
+      "schedule": "30 7 * * 1",
+      "argv": [
+        "/usr/bin/php",
+        "/var/www/roleplus.app/private/bin/kcli.php",
+        "rolelocal/boletin/enviar"
+      ],
+      "seconds": 2700,
+      "identity": "root_existing"
+    }
+  },
+  "native_owners": {
+    "ispconfig_server": "ISPConfig cron original, conserva bloqueo y escritura del panel",
+    "ispconfig_cron": "ISPConfig cron original; no terminacion global durante escrituras",
+    "certificates": "responsables existentes acme.sh/certbot por certificado",
+    "sessions": "roleplus-session-cleanup.timer y phpsessionclean.timer, alcances distintos",
+    "file_backups": "vigilante-text-backups.timer",
+    "independent_sql": "vigilante-independent-sql.timer",
+    "service_restarts": "webwatchdog mediante vps-service-control",
+    "sql_termination": "deshabilitada; solo observacion agregada"
+  },
+  "statistics": {
+    "mtgsearch.kumbia.app": "/var/www/clients/client1/web4/web/stats",
+    "roleplus.app": "/var/www/clients/client1/web6/web/stats",
+    "kumbiajs.com": "/var/www/clients/client1/web13/web/stats",
+    "kumbiasql.com": "/var/www/clients/client1/web14/web/stats",
+    "mansion.kumbia.app": "/var/www/clients/client1/web15/web/stats",
+    "sitios.kumbia.app": "/var/www/clients/client1/web17/web/stats",
+    "proto.roleplus.app": "/var/www/clients/client1/web18/web/stats",
+    "kumbia.app": "/var/www/clients/client1/web20/web/stats",
+    "js.kumbia.app": "/var/www/clients/client1/web22/web/stats",
+    "sql.kumbia.app": "/var/www/clients/client1/web23/web/stats",
+    "delixiomarket.com": "/var/www/clients/client1/web24/web/stats",
+    "delixiomarket.eu": "/var/www/clients/client1/web25/web/stats",
+    "controlate.kumbia.app": "/var/www/clients/client1/web26/web/stats"
+  }
+}

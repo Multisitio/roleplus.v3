@@ -22,7 +22,7 @@ notifications = importlib.util.module_from_spec(spec); spec.loader.exec_module(n
 STATE = Path('/var/lib/vigilante/automatic.json')
 POLICY = Path('/etc/vigilante/policy.json')
 OUTPUT = Path('/var/lib/vigilante-auth/control/event-analysis.jsonl')
-PANEL = Path('/var/www/clients/client1/web17/web/webwatchdog/status.json')
+PANEL = Path('/var/lib/vigilante/antipanico/status.json')
 LIMIT = 131072
 
 
@@ -137,7 +137,7 @@ def panel_events(sites,now):
     result=[]
     for row in rows:
         if row.get('status') not in ('up','down'):raise ValueError('Estado no valido')
-        if row['status']=='down':
+        if row['status']=='down' and not row.get('maintenance'):
             code=int(row.get('code','0'))
             result.append(event(row['url'][8:],'site_down',code=code if 500<=code<=599 else 0,severity='high'))
     return result
@@ -175,6 +175,15 @@ def collect(state,sites,now,global_log=None):
         if item['count']>=threshold:events.append(item)
     try:events+=panel_events(sites,now);coverage['panel_fresh']=True
     except (OSError,ValueError,KeyError,TypeError):coverage['panel_fresh']=False
+    legacy = Path('/var/lib/vigilante/legacy-automation.json')
+    if legacy.exists():
+        try:
+            data.trusted(legacy)
+            observation=json.loads(legacy.read_text())
+            coverage['legacy_fresh']=0<=now-observation['checked_at']<=180
+            if not coverage['legacy_fresh'] or observation['failed_jobs'] or not observation['sql_probe_ok']:
+                events.append(event('server','service_down','watchdog',severity='high'))
+        except (OSError,ValueError,KeyError,TypeError):coverage['legacy_fresh']=False
     for unit,family in [('apache2.service','apache2'),('php8.4-fpm.service','php_fpm'),('mariadb.service','mariadb'),('webwatchdog.service','watchdog')]:
         result=subprocess.run(['/usr/bin/systemctl','is-active',unit],capture_output=True,text=True,timeout=5)
         if result.stdout.strip()=='failed' or (unit!='webwatchdog.service' and result.stdout.strip()=='inactive'):

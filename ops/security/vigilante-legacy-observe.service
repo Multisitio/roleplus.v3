@@ -1,0 +1,18 @@
+[Unit]
+Description=Observacion central de SQL y tareas heredadas, sin terminar consultas
+After=webwatchdog.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/vigilante-scheduled-job.py observe
+TimeoutStartSec=15s
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictAddressFamilies=AF_UNIX
+ReadWritePaths=/var/lib/vigilante/jobs /var/lib/vigilante
+CPUQuota=25%
+MemoryMax=64M

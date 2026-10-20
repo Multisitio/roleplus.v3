@@ -2,6 +2,7 @@
 """Control unico de reinicios y recargas TLS; nunca ejecuta comandos del modelo."""
 import argparse
 import fcntl
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -15,6 +16,18 @@ POLICY = Path('/etc/vigilante/policy.json')
 STATE = Path('/var/lib/vigilante')
 AUDIT = Path('/var/log/vigilante/acciones.jsonl')
 LOCK = Path('/run/lock/vigilante-restarts.lock')
+
+
+def maintenance_active():
+    path = Path('/usr/local/lib/vigilante/vigilante-maintenance.py')
+    if not path.exists():return False
+    trusted(path.parent, directory=True);trusted(path)
+    spec = importlib.util.spec_from_file_location('maintenance_guard', path)
+    module = importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    if not module.STATE.exists():return False
+    trusted(module.STATE.parent, directory=True);trusted(module.STATE)
+    window = json.loads(module.STATE.read_text())
+    return any(module.current(host) for host in window.get('hosts', []))
 
 
 def trusted(path, directory=False, uid=0):
@@ -87,6 +100,10 @@ def restart(policy, unit, origin, state=STATE, audit=AUDIT, lock=LOCK,
         now = clock()
         saved = state / (unit + '.json')
         event = {'time': now, 'origin': origin, 'unit': unit}
+        if maintenance_active():
+            event['decision'] = 'mantenimiento'
+            append_event(audit, event)
+            return event
         if saved.exists():
             trusted(saved, uid=uid)
             last = json.loads(saved.read_text())['last_attempt']
