@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 27. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 28. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -45,6 +45,13 @@ Actualizado: 20 de octubre de 2026, tramo 27. Implementacion NO finalizada.
 - Bases grandes medidas en laboratorio: ROLEplus tarda 8.86 segundos en
   exportarse y MTGsearch 29.69; ambas se rechazan con el limite de 1.5 segundos.
   No son tiempos garantizados de produccion ni autorizan una pausa real.
+- Aviso de mantenimiento instalado e inactivo en las siete webs con bases
+  asociadas, con configuracion reflejada en ISPConfig. Informa de solo lectura
+  y tiempo estimado; rechaza peticiones dinamicas antes de PHP, mantiene
+  archivos estaticos existentes y caduca sin depender del coordinador.
+  Ensayo privado completo y activacion real solo en nombres ficticios de
+  ROLEplus y MTGsearch: paginas normales disponibles y ningun bloqueo SQL.
+  Recargas coordinadas con el control central, sin reiniciar servicios.
 - Barrera de revision comun con GitHub en el preparador: bloquea trabajo local
   pendiente y divergencias; conserva los cambios ajenos. Pendiente integrar
   la comprobacion distribuida y el bloqueo antes de cualquier escritura real.
@@ -60,7 +67,9 @@ Actualizado: 20 de octubre de 2026, tramo 27. Implementacion NO finalizada.
    cinco bases pequenas tienen copias nuevas verificadas, pero la programacion
    nativa no usa todavia el nuevo ejecutor acotado. El laboratorio acredita
    que no caben las grandes en 1.5 segundos; no aplicar esperas largas sin
-   preparar una ventana o una alternativa estructural compatible con el servicio.
+   integrar y comprobar el aviso previo de mantenimiento ya instalado. Falta
+   conectar la barrera al ejecutor y su programacion unica; no se ha activado
+   una ventana real ni se han obtenido aun copias nuevas de las dos grandes.
 2. **Tabla independiente ilegible:** recuperar y contrastar la tabla con error
    InnoDB 1932 en aislamiento antes de modificar originales; su candidato
    local distinto no es una fuente de verdad acreditada. Su cobertura sigue
