@@ -6,6 +6,8 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import pwd
+import stat
 import subprocess
 import time
 
@@ -63,8 +65,15 @@ def main():
             for name, expected in report['input_sha256'].items():
                 if sha((LIVE / name).read_bytes()) != expected:
                     raise RuntimeError('Los originales han cambiado')
+            status['originals_preserved'] = True
             if held.exists():
                 raise RuntimeError('Ya existe una conservacion de originales')
+            directory = LIVE.stat()
+            if directory.st_uid != pwd.getpwnam('mysql').pw_uid or stat.S_IMODE(directory.st_mode) != 0o555:
+                raise RuntimeError('Los permisos del directorio han cambiado')
+            status['directory_mode_before'] = '0555'
+            LIVE.chmod(0o750)
+            status['directory_mode_after'] = '0750'
             sql(exported.replace(b'`usuarios`', ('`'+STAGE+'`').encode()).decode('utf-8'))
             if sha(sql(VALUES.format(table=STAGE)).stdout) != report['all_values_sha256']:
                 raise RuntimeError('Los valores preparados difieren')
