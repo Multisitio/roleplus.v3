@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 28. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 29. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -52,6 +52,13 @@ Actualizado: 20 de octubre de 2026, tramo 28. Implementacion NO finalizada.
   Ensayo privado completo y activacion real solo en nombres ficticios de
   ROLEplus y MTGsearch: paginas normales disponibles y ningun bloqueo SQL.
   Recargas coordinadas con el control central, sin reiniciar servicios.
+- Aviso sobre el documento abierto: cliente cargado desde 50 plantillas de
+  produccion en las siete webs. Conserva formulario, texto, casillas y archivo
+  seleccionado; se retira sin recargar ni reenviar. Estado estatico sin PHP,
+  SQL ni cookies, con pausa de consultas en pestanas ocultas. Antelacion
+  predeterminada de ocho segundos antes de cerrar el acceso dinamico.
+  Las paginas anteriores al despliegue reciben el cliente en su siguiente
+  navegacion normal; no se modifica retroactivamente su JavaScript cargado.
 - Barrera de revision comun con GitHub en el preparador: bloquea trabajo local
   pendiente y divergencias; conserva los cambios ajenos. Pendiente integrar
   la comprobacion distribuida y el bloqueo antes de cualquier escritura real.
