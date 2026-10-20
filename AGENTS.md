@@ -358,3 +358,9 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   aceptacion del proveedor y entrega real. El transporte no ejecuta PHP como
   administrador, no espera al modelo ni a su cuota y no usa difusion general.
   Conservar excepciones privadas, deduplicacion y limites de reintentos.
+
+- Maquetado del vigilante (2026-10-20): seguir la estructura real de las
+  publicaciones: article, header, section.contenido con su envoltorio de texto
+  y footer para las acciones. Separar datos e historial y reutilizar las clases
+  existentes de espaciado. Verificar legibilidad, separacion y margenes en
+  movil; que una ficha se renderice no acredita que este bien maquetada.

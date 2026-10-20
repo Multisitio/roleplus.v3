@@ -4,48 +4,109 @@ $fecha = static fn($stamp) => (new DateTimeImmutable('@' . (int) $stamp))->setTi
 ?>
 <div class="w600 mha">
     <article>
-        <header><h1><?=t('Vigilante del VPS')?></h1></header>
-        <section>
-            <?php if ($aviso === null): ?>
-                <p><?=t('Aviso no disponible para este usuario.')?></p>
-            <?php else: ?>
-                <?php if ($aviso['reference'] === 'prueba'): ?>
+        <header class="pa15">
+            <h1><?=t('Vigilante del VPS')?></h1>
+        </header>
+
+        <section class="contenido pa15">
+            <span class="block">
+                <?php if ($aviso === null): ?>
+                    <p><?=t('Aviso no disponible para este usuario.')?></p>
+                <?php elseif ($aviso['reference'] === 'prueba'): ?>
                     <h2><?=t('Prueba de notificaciones')?></h2>
                     <p><?=t('Esta ficha comprueba el enlace de los avisos. No representa una caída ni un error del servidor.')?></p>
                     <?php if ($aviso['last_test']): ?>
-                        <p><strong><?=t('Última prueba')?>:</strong> <?=$esc($fecha($aviso['last_test']))?> (Madrid)</p>
+                        <p class="mt10">
+                            <strong><?=t('Última prueba')?></strong><br>
+                            <?=$esc($fecha($aviso['last_test']))?> (Madrid)
+                        </p>
                     <?php endif; ?>
                 <?php else: $detalle = $aviso['selected']; ?>
                     <h2><?=$esc($detalle['label'])?></h2>
-                    <dl>
-                        <dt><?=t('Sitio o ámbito')?></dt><dd><?=$esc($detalle['site'] === 'server' ? 'Servidor' : $detalle['site'])?></dd>
-                        <dt><?=t('Primera observación')?></dt><dd><?=$esc($fecha($detalle['first_seen']))?> (Madrid)</dd>
-                        <dt><?=t('Última observación')?></dt><dd><?=$esc($fecha($detalle['last_seen']))?> (Madrid)</dd>
-                        <dt><?=t('Estado observado')?></dt><dd><?=t($detalle['observed'] ? 'Se observó en la última comprobación.' : 'No se observó en la última comprobación; esto no acredita una reparación.')?></dd>
-                        <dt><?=t(in_array($detalle['kind'], ['disk_space', 'inodes'], true) ? 'Ocupación' : 'Recuento en la última lectura')?></dt>
-                        <dd><?=$esc(number_format($detalle['count'], 0, '.', $detalle['count'] >= 10000 ? ' ' : ''))?><?=in_array($detalle['kind'], ['disk_space', 'inodes'], true) ? '%' : ''?></dd>
-                        <?php if ($detalle['code']): ?><dt><?=t('Respuesta HTTP')?></dt><dd><?=$esc($detalle['code'])?></dd><?php endif; ?>
-                        <dt><?=t('Aviso al móvil')?></dt><dd><?=t($detalle['accepted'] ? 'El proveedor aceptó el envío; esta aceptación no confirma la recepción en el móvil.' : 'No consta aceptación del envío para este episodio.')?></dd>
-                        <dt><?=t('Referencia')?></dt><dd><code><?=$esc(substr($detalle['reference'], 0, 12))?></code></dd>
+                    <dl class="flex vertical gap10">
+                        <div>
+                            <dt><strong><?=t('Sitio o ámbito')?></strong></dt>
+                            <dd class="ml10"><?=$esc($detalle['site'] === 'server' ? 'Servidor' : $detalle['site'])?></dd>
+                        </div>
+                        <div>
+                            <dt><strong><?=t('Primera observación')?></strong></dt>
+                            <dd class="ml10"><?=$esc($fecha($detalle['first_seen']))?> (Madrid)</dd>
+                        </div>
+                        <div>
+                            <dt><strong><?=t('Última observación')?></strong></dt>
+                            <dd class="ml10"><?=$esc($fecha($detalle['last_seen']))?> (Madrid)</dd>
+                        </div>
+                        <div>
+                            <dt><strong><?=t('Estado observado')?></strong></dt>
+                            <dd class="ml10"><?=t($detalle['observed'] ? 'Se observó en la última comprobación.' : 'No se observó en la última comprobación; esto no acredita una reparación.')?></dd>
+                        </div>
+                        <div>
+                            <dt><strong><?=t(in_array($detalle['kind'], ['disk_space', 'inodes'], true) ? 'Ocupación' : 'Recuento en la última lectura')?></strong></dt>
+                            <dd class="ml10"><?=$esc(number_format($detalle['count'], 0, '.', $detalle['count'] >= 10000 ? ' ' : ''))?><?=in_array($detalle['kind'], ['disk_space', 'inodes'], true) ? '%' : ''?></dd>
+                        </div>
+                        <?php if ($detalle['code']): ?>
+                            <div>
+                                <dt><strong><?=t('Respuesta HTTP')?></strong></dt>
+                                <dd class="ml10"><?=$esc($detalle['code'])?></dd>
+                            </div>
+                        <?php endif; ?>
+                        <div>
+                            <dt><strong><?=t('Aviso al móvil')?></strong></dt>
+                            <dd class="ml10"><?=t($detalle['accepted'] ? 'El proveedor aceptó el envío; esta aceptación no confirma la recepción en el móvil.' : 'No consta aceptación del envío para este episodio.')?></dd>
+                        </div>
+                        <div>
+                            <dt><strong><?=t('Referencia')?></strong></dt>
+                            <dd class="ml10"><code><?=$esc(substr($detalle['reference'], 0, 12))?></code></dd>
+                        </div>
                     </dl>
-                    <p><?=t('Actuaciones: no hay una reparación verificada vinculada a esta ficha. El análisis de IA es de solo lectura; los reinicios los gestiona el control antipánico.')?></p>
+                    <h2><?=t('Actuaciones')?></h2>
+                    <p><?=t('No hay una reparación verificada vinculada a esta ficha. El análisis de IA es de solo lectura; los reinicios los gestiona el control antipánico.')?></p>
                 <?php endif; ?>
-                <p><strong><?=t('Última lectura del vigilante')?>:</strong> <?=$esc($fecha($aviso['observed_at']))?> (Madrid)</p>
-                <?php if (time() - $aviso['observed_at'] > 180): ?>
-                    <p><strong><?=t('La información lleva más de tres minutos sin actualizarse. No permite conocer el estado actual.')?></strong></p>
-                <?php endif; ?>
-                <p><a role="button" href="/registrados/vigilante/aviso/<?=$esc($aviso['reference'])?>"><?=t('Actualizar información')?></a></p>
-                <?php if ($aviso['items']): ?>
-                    <h2><?=t('Observaciones urgentes registradas')?></h2>
-                    <ul>
-                        <?php foreach ($aviso['items'] as $item): ?>
-                            <li><a href="/registrados/vigilante/aviso/<?=$esc($item['reference'])?>"><?=$esc($item['label'])?> · <?=$esc($item['site'])?></a> — <?=$esc($fecha($item['last_seen']))?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php else: ?>
-                    <p><?=t('No hay observaciones urgentes registradas en esta ficha.')?></p>
-                <?php endif; ?>
-            <?php endif; ?>
+            </span>
         </section>
+
+        <?php if ($aviso !== null): ?>
+            <footer class="pa15">
+                <div class="vertical gap10">
+                    <p>
+                        <strong><?=t('Última lectura del vigilante')?></strong><br>
+                        <?=$esc($fecha($aviso['observed_at']))?> (Madrid)
+                    </p>
+                    <?php if (time() - $aviso['observed_at'] > 180): ?>
+                        <p><strong><?=t('La información lleva más de tres minutos sin actualizarse. No permite conocer el estado actual.')?></strong></p>
+                    <?php endif; ?>
+                    <a role="button" class="w100" href="/registrados/vigilante/aviso/<?=$esc($aviso['reference'])?>"><?=t('Actualizar información')?></a>
+                </div>
+            </footer>
+        <?php endif; ?>
     </article>
+
+    <?php if ($aviso !== null): ?>
+        <article>
+            <header class="pa15">
+                <h2><?=t('Observaciones urgentes registradas')?></h2>
+            </header>
+            <section class="contenido pa15">
+                <span class="block">
+                    <?php if ($aviso['items']): ?>
+                        <ul>
+                            <?php foreach ($aviso['items'] as $item): ?>
+                                <li class="flex gap10 mb10">
+                                    <span class="grow">
+                                        <a class="block w100 align-left" href="/registrados/vigilante/aviso/<?=$esc($item['reference'])?>">
+                                            <?=$esc($item['label'])?><br>
+                                            <small><?=$esc($item['site'])?></small>
+                                        </a>
+                                        <small class="block"><?=$esc($fecha($item['last_seen']))?> (Madrid)</small>
+                                    </span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php else: ?>
+                        <p><?=t('No hay observaciones urgentes registradas en esta ficha.')?></p>
+                    <?php endif; ?>
+                </span>
+            </section>
+        </article>
+    <?php endif; ?>
 </div>
