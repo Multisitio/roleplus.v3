@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 23. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 24. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -11,7 +11,11 @@ Actualizado: 20 de octubre de 2026, tramo 23. Implementacion NO finalizada.
 - Comprobacion automatica de cuota y renovaciones sin llamadas al modelo.
 - Avisos de ROLEplus recibidos con sonido y ficha ampliada para el operador.
 - Informe diario a las 09:00 de Madrid, con envio inicial recibido.
-- Ensayo aislado de restauracion de ROLEplus y comprobacion de ocho gzip.
+- Restauracion aislada de los siete volcados de bases asociadas a webs:
+  197 tablas, dos vistas operativas y 992 600 filas. Se conserva la evidencia
+  de cada archivo; los de Controlate y Delixio son de abril y no acreditan
+  copias actuales. Los temporales SQL y binarios de los ensayos se eliminan,
+  tambien ante fallo comprobado; retirados los 488 MiB del ensayo inicial.
 - Correspondencias reparadas de dos bases y retencion ampliada de las siete
   bases cuya web esta identificada.
 - Copia SQL semanal de una base independiente, restaurada en aislamiento:
@@ -36,8 +40,10 @@ Actualizado: 20 de octubre de 2026, tramo 23. Implementacion NO finalizada.
 
 1. **Recuperacion:** verificar recuperacion de los textos seleccionados y SQL
    de todas las webs, recuperar la tabla independiente ilegible y completar
-   una ejecucion de copias grandes compatible con MyISAM y el servicio en uso, verificar nuevas copias
-   y restauraciones. Los binarios quedan fuera del alcance autorizado. Las limitaciones de conservarlas en el mismo VPS deben
+   una ejecucion de copias grandes compatible con MyISAM y el servicio en uso,
+   verificar esas copias nuevas y sus restauraciones; las restauraciones de
+   los siete archivos historicos ya estan comprobadas. Los binarios quedan
+   fuera del alcance autorizado. Las limitaciones de conservarlas en el mismo VPS deben
    quedar expresas; no se promete recuperacion tras perdida total de ese VPS.
 2. **Automatismos heredados:** revisar el estado junto al panel web y el
    ejecutor que termina consultas SQL; eliminar capacidades o decisiones
