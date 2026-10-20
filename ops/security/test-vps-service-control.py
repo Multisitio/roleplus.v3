@@ -121,6 +121,23 @@ class RestartControlTests(unittest.TestCase):
             self.assertEqual(self.reload()['decision'], 'ocupado')
         self.assertEqual(self.calls, [])
 
+    def test_maintenance_reload_is_separate_and_coordinated(self):
+        self.policy['maintenance_reload_sites'] = ['example.invalid']
+        kwargs = dict(audit=self.audit, lock=self.lock, runner=self.runner, uid=os.geteuid())
+        for origin in ('agent', 'ispconfig-acme'):
+            with self.assertRaises(ValueError):
+                control.reload_maintenance(self.policy, 'example.invalid', origin, **kwargs)
+        with self.lock.open('w') as stream:
+            fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            result = control.reload_maintenance(self.policy, 'example.invalid', 'sql-maintenance-install', **kwargs)
+            self.assertEqual(result['decision'], 'ocupado')
+        self.assertEqual(self.calls, [])
+        result = control.reload_maintenance(self.policy, 'example.invalid', 'sql-maintenance-install', **kwargs)
+        self.assertEqual(result['decision'], 'ejecutado')
+        self.assertEqual(result['action'], 'reload_maintenance')
+        self.assertEqual(self.calls[0], ['/usr/sbin/apache2ctl', 'configtest'])
+        self.assertEqual(self.calls[-1], ['/usr/bin/systemctl', 'reload', 'apache2.service'])
+
     def test_inactive_apache_not_started_by_certificate_renewal(self):
         def inactive(args, **kwargs):
             self.calls.append(args); return subprocess.CompletedProcess(args, int('is-active' in args))

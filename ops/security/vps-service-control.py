@@ -53,6 +53,9 @@ def load_policy(path=POLICY, uid=0):
     reload_sites = policy.get('tls_reload_sites', [])
     if not isinstance(reload_sites, list) or any(x not in sites for x in reload_sites):
         raise ValueError('Catalogo de recarga TLS invalido')
+    maintenance_sites = policy.get('maintenance_reload_sites', [])
+    if not isinstance(maintenance_sites, list) or any(x not in sites for x in maintenance_sites):
+        raise ValueError('Catalogo de recarga de mantenimiento invalido')
     return policy
 
 
@@ -121,6 +124,17 @@ def reload_tls(policy, site, origin, audit=AUDIT, lock=LOCK,
                runner=subprocess.run, clock=time.time, uid=0):
     if origin != 'ispconfig-acme' or site not in policy.get('tls_reload_sites', []):
         raise ValueError('Recarga TLS no autorizada')
+    return reload_apache(site, origin, 'reload_tls', audit, lock, runner, clock, uid)
+
+
+def reload_maintenance(policy, site, origin, audit=AUDIT, lock=LOCK,
+                       runner=subprocess.run, clock=time.time, uid=0):
+    if origin != 'sql-maintenance-install' or site not in policy.get('maintenance_reload_sites', []):
+        raise ValueError('Recarga de mantenimiento no autorizada')
+    return reload_apache(site, origin, 'reload_maintenance', audit, lock, runner, clock, uid)
+
+
+def reload_apache(site, origin, action, audit, lock, runner, clock, uid):
     trusted(audit.parent, directory=True, uid=uid)
     if audit.exists():
         trusted(audit, uid=uid)
@@ -129,7 +143,7 @@ def reload_tls(policy, site, origin, audit=AUDIT, lock=LOCK,
     fd = os.open(lock, os.O_RDWR|os.O_CREAT|os.O_NOFOLLOW, 0o600)
     with os.fdopen(fd, 'a+') as handle:
         event = {'time': clock(), 'origin': origin, 'site': site,
-                 'unit': 'apache2.service', 'action': 'reload_tls'}
+                 'unit': 'apache2.service', 'action': action}
         try:
             fcntl.flock(handle, fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError:
@@ -157,7 +171,7 @@ def main():
     if os.geteuid() != 0:
         raise PermissionError('Este control requiere administrador; no se concede sudo al agente')
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart', 'reload-tls'])
+    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart', 'reload-tls', 'reload-maintenance'])
     parser.add_argument('unit', nargs='?')
     parser.add_argument('--origin')
     args = parser.parse_args()
@@ -174,8 +188,9 @@ def main():
         allowed = site not in policy.get('restart_excluded_sites', [])
         print(json.dumps({'site': site, 'restart_allowed': allowed}))
         return 0 if allowed else 1
-    elif args.action == 'reload-tls':
-        event = reload_tls(policy, args.unit, args.origin)
+    elif args.action in ('reload-tls', 'reload-maintenance'):
+        fn = reload_tls if args.action == 'reload-tls' else reload_maintenance
+        event = fn(policy, args.unit, args.origin)
         print(json.dumps(event))
         return 0 if event['decision'] == 'ejecutado' else 1
     else:

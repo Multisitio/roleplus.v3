@@ -37,10 +37,11 @@ def main():
     conf += 'TypesConfig /etc/mime.types\nUser www-data\nGroup www-data\n'
     conf += 'LogLevel warn rewrite:trace5\n'
     conf += 'ScriptSock ' + str(RUN / 'cgid.sock') + '\n'
+    conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-map.conf').read_text().replace(
+        '--map /run/vigilante-maintenance/state.json', '--map ' + str(data_path))
     conf += '<VirtualHost 127.0.0.1:18089>\nServerName maintenance.test\nDocumentRoot ' + str(web) + '\n'
     conf += 'SetEnv VIGILANTE_MAINTENANCE_STATE ' + str(data_path) + '\n'
-    conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-apache.conf').read_text().replace(
-        '--map /run/vigilante-maintenance/state.json', '--map ' + str(data_path))
+    conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-apache.conf').read_text()
     conf += '\nScriptAlias /app ' + str(writer) + '\n<Directory ' + str(RUN) + '>\nOptions -Indexes\nRequire all granted\n</Directory>\n'
     conf += '<Directory /usr/local/lib/vigilante>\nOptions +ExecCGI -Indexes\nRequire all granted\n</Directory>\n</VirtualHost>\n'
     config = RUN / 'httpd.conf'
@@ -84,7 +85,10 @@ def main():
             for path, method in [('/app', 'GET'), ('/app', 'POST'), ('/index.php', 'POST'), ('/missing.png', 'GET')]:
                 status, headers, body = request(path, method)
                 assert status == 503 and headers.get('X-Vigilante-Maintenance') == data['window'], (path, status)
-                assert b'Modo de solo lectura' in body and b'Tiempo estimado' in body
+                if method == 'GET':
+                    assert b'Modo de solo lectura' in body and b'Tiempo estimado' in body
+                else:
+                    assert json.loads(body)['active']
                 assert b'<style' not in body and b' style=' not in body
             assert (RUN / 'counter').read_text() == '0'
             report['checks'].append('dynamic_get_post_and_direct_php_blocked_before_writer')

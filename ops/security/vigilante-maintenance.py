@@ -61,7 +61,9 @@ def current(host):
         boot = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
         remaining = float(data['monotonic_until']) - time.monotonic()
         if (data['boot_id'] != boot or not math.isfinite(remaining) or not 0 < remaining <= 120
-                or host not in data['hosts']):
+                or not any(host == pattern or (pattern.startswith('*.')
+                    and host.endswith(pattern[1:]) and len(host) > len(pattern) - 1)
+                    for pattern in data['hosts'])):
             return None
         data['max_seconds'] = math.ceil(remaining)
         data['estimated_seconds'] = max(0, math.ceil(float(data['estimated_until']) - time.time()))
@@ -82,7 +84,8 @@ def cgi():
     data = current(os.environ.get('HTTP_HOST', ''))
     reply = payload(data)
     status_query = os.environ.get('QUERY_STRING') == 'status=1'
-    ajax = ('application/json' in os.environ.get('HTTP_ACCEPT', '')
+    ajax = (os.environ.get('REQUEST_METHOD', 'GET') not in ('GET', 'HEAD')
+            or 'application/json' in os.environ.get('HTTP_ACCEPT', '')
             or os.environ.get('HTTP_X_REQUESTED_WITH', '').lower() == 'xmlhttprequest')
     code = '200 OK' if status_query or not data else '503 Service Unavailable'
     headers = ['Status: ' + code, 'Cache-Control: no-store, max-age=0',
@@ -106,7 +109,7 @@ def cgi():
 <script src="/__vigilante_assets/maintenance.js" defer></script></head>
 <body class="vigilante-maintenance"><main><article>
 <header><p>Servicio temporalmente protegido</p><h1>Estamos en mantenimiento</h1></header>
-<section class="contenido"><div><h2>Modo de solo lectura</h2>
+<section class="contenido"><div class="vertical"><h2>Modo de solo lectura</h2>
 <p>Los cambios no se pueden guardar durante este intervalo. Puedes seguir leyendo lo que ya tienes abierto.</p>
 <p>La navegación y los guardados se reanudarán automáticamente al terminar.</p>
 <p class="maintenance-time" aria-live="polite">Tiempo estimado: <strong data-estimate>''' + html.escape(estimate) + ''' segundos</strong>.</p>

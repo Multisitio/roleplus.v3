@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const detail = document.querySelector('[data-maintenance-detail]');
     let timer;
     let running = false;
+    let finished = false;
     async function check() {
         if (running) return;
         running = true;
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('No se pudo comprobar el servicio');
             const data = await response.json();
             if (!data.active) {
+                finished = true;
                 estimate.textContent = 'finalizado';
                 detail.textContent = 'El servicio vuelve a estar disponible.';
                 if (!location.pathname.startsWith('/__vigilante_maintenance')) location.reload();
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             clearTimeout(timeout);
             running = false;
-            timer = setTimeout(check, 3000);
+            if (!finished) timer = setTimeout(check, 3000);
         }
     }
     document.querySelector('[data-maintenance-retry]').addEventListener('click', check);
