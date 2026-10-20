@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 22. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 23. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -14,6 +14,13 @@ Actualizado: 20 de octubre de 2026, tramo 22. Implementacion NO finalizada.
 - Ensayo aislado de restauracion de ROLEplus y comprobacion de ocho gzip.
 - Correspondencias reparadas de dos bases y retencion ampliada de las siete
   bases cuya web esta identificada.
+- Copia SQL semanal de una base independiente, restaurada en aislamiento:
+  una tabla y 67 filas. Bloqueo de lectura acotado y liberacion comprobada
+  al cancelar, matar o suspender su controlador. Proxima ejecucion:
+  25 de octubre a las 04:30 de Madrid.
+- Segunda base independiente bloqueada por error InnoDB 1932, registrada como
+  incidencia de recuperacion de prioridad alta. Originales intactos; cobertura
+  SQL expresamente incompleta, sin sustitucion por el candidato local distinto.
 - Copias semanales solo de texto para once webs, ROLEplus incluida, y las
   dependencias compartidas core/vendor; dos versiones por raiz. Las copias
   completas web anteriores quedan desactivadas. Binarios fuera de cobertura
@@ -28,8 +35,8 @@ Actualizado: 20 de octubre de 2026, tramo 22. Implementacion NO finalizada.
 ## Bloques pendientes para dar la implementacion por terminada
 
 1. **Recuperacion:** verificar recuperacion de los textos seleccionados y SQL
-   de todas las webs, resolver las bases sin correspondencia, definir una ejecucion de
-   copias compatible con MyISAM y el servicio en uso, verificar nuevas copias
+   de todas las webs, recuperar la tabla independiente ilegible y completar
+   una ejecucion de copias grandes compatible con MyISAM y el servicio en uso, verificar nuevas copias
    y restauraciones. Los binarios quedan fuera del alcance autorizado. Las limitaciones de conservarlas en el mismo VPS deben
    quedar expresas; no se promete recuperacion tras perdida total de ese VPS.
 2. **Automatismos heredados:** revisar el estado junto al panel web y el
@@ -42,7 +49,7 @@ Actualizado: 20 de octubre de 2026, tramo 22. Implementacion NO finalizada.
 4. **Aceptacion conjunta:** comprobar el recorrido completo de una incidencia,
    diagnostico, accion permitida o escalado, aviso y diario; verificar limites
    y continuidad de los servicios, incluido el aviso ante fallo de las nuevas
-   copias de texto, cerrar la lista y declarar expresamente
+   copias de texto y SQL independientes, cerrar la lista y declarar expresamente
    finalizada la implementacion.
 
 Los errores PHP y otras incidencias que se descubran despues pertenecen a la

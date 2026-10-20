@@ -76,9 +76,15 @@ hace que rechace el trabajo antes de copiar. No se crean registros web_backup
 con un dominio ficticio o cero; los resultados quedan en el catalogo privado
 del vigilante, vinculados a los identificadores reales de las bases.
 
-La politica prevista es semanal, domingos a las 04:30 de Madrid, con siete
-versiones propias por base accesible. El temporizador se activa solo despues de generar
-y restaurar las primeras copias reales. El servicio exige mas de 20 GiB libres,
+La politica activada es semanal, domingos a las 04:30 de Madrid, con siete
+versiones propias por base accesible. El temporizador se activo despues de generar
+y restaurar la primera copia real; proxima ejecucion el 25 de octubre de 2026.
+La restauracion aislada recupero una tabla y sus 67 filas, coincidentes con
+el recuento bajo bloqueo. El volcado tardo 0.36 segundos. Repetir el servicio
+antes del vencimiento no genero otra copia. Se verificaron los servicios
+activos, las politicas SQL de ISPConfig sin cambios y las huellas originales
+de la tabla ilegible intactas. La cobertura global sigue siendo incompleta.
+El servicio exige mas de 20 GiB libres,
 limita los archivos a 32 MiB y acepta hasta 16 MiB de SQL por base. Los limites
 corresponden a estas bases pequenas, no autorizan exportar grandes bases
 con el mismo procedimiento sin ensayos previos.
