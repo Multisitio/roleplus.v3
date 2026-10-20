@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "databases": [
+    {"id": 5, "name": "c1_carmenarnaumuro"},
+    {"id": 7, "name": "c1_deportes"}
+  ],
+  "blocked": []
+}

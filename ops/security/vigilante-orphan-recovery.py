@@ -138,6 +138,15 @@ def main():
             result['sql_sha256'] = digest(exported)
             result['schema_sha256'] = digest(structure)
             result['second_restore_identical'] = True
+            fresh_path = INPUT / 'fresh.sql.gz'
+            if fresh_path.exists():
+                fresh = gzip.decompress(fresh_path.read_bytes())
+                sql('CREATE DATABASE fresh_restore;', 'mysql')
+                sql(fresh.decode('utf-8'), 'fresh_restore')
+                if sql(query, 'fresh_restore') != values or sql('SHOW CREATE TABLE usuarios;', 'fresh_restore') != structure:
+                    raise RuntimeError('La copia nueva de produccion difiere')
+                result['fresh_production_sql_sha256'] = digest(fresh)
+                result['fresh_production_restore_identical'] = True
             with gzip.open(STATE / 'recovered.sql.gz', 'wb') as stream:
                 stream.write(exported)
             (STATE / 'schema.sql').write_bytes(structure)
