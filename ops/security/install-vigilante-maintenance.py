@@ -36,7 +36,12 @@ def main():
         meta = p.lstat()
         if p.is_symlink() or meta.st_uid != 0 or meta.st_mode & 0o022:
             raise ValueError('Ruta no fiable')
-    CASE.mkdir(mode=0o700)  # Aplicacion unica; nunca repetir una instalacion parcial.
+    if CASE.exists():
+        previous_result = json.loads((CASE / 'result.json').read_text())
+        if not previous_result.get('rolled_back'):
+            raise ValueError('No repetir una instalacion parcial sin conciliar')
+        CASE.rename(CASE.with_name(CASE.name + '.returned-' + str(time.time_ns())))
+    CASE.mkdir(mode=0o700)
     check = json.loads(Path('/var/lib/vigilante-maintenance-check/report.json').read_text())
     if not check.get('completed') or check.get('uid') != 33:
         raise ValueError('Falta ensayo privado satisfactorio')
@@ -49,7 +54,7 @@ def main():
     entries = []
     for line in rows.splitlines():
         ident, host, root, user, group, previous = line.split('\t')
-        previous = previous[1:]
+        previous = previous[1:].upper()
         ident = int(ident)
         if SITES.get(ident) != host or not re.fullmatch(r'web[0-9]+', user) or group != 'client1':
             raise ValueError('Cambio en las correspondencias del panel')
@@ -76,7 +81,7 @@ def main():
                                   lambda m: m[1] + include + '\n' + m[0], text)
         if count != 2: raise ValueError('Se esperaban los dos VirtualHost HTTP y HTTPS')
         entries.append(dict(id=ident, host=host, root=str(root), vhost=str(vhost), old=previous,
-            new=(old.rstrip() + '\n' + include + '\n').encode().hex(), before=text, after=new_text,
+            new=(old.rstrip() + '\n' + include + '\n').encode().hex().upper(), before=text, after=new_text,
             wrapper=str(wrapper), uid=directory.st_uid, gid=directory.st_gid))
     if len(entries) != len(SITES): raise ValueError('Catalogo incompleto')
     map_target = Path('/etc/apache2/conf-available/vigilante-maintenance-map.conf')
@@ -120,8 +125,18 @@ def main():
             command = ['/usr/bin/curl', '--silent', '--show-error', '--fail', '--noproxy', '*',
                 '--resolve', entry['host'] + ':443:127.0.0.1', '--connect-timeout', '3', '--max-time', '8',
                 'https://' + entry['host'] + '/__vigilante_maintenance?status=1']
-            reply = subprocess.run(command, capture_output=True, timeout=10)
-            if reply.returncode or json.loads(reply.stdout)['active'] is not False:
+            attempts = []
+            for attempt in range(6):
+                reply = subprocess.run(command, capture_output=True, timeout=10)
+                try:
+                    ready = reply.returncode == 0 and json.loads(reply.stdout)['active'] is False
+                except (ValueError, KeyError): ready = False
+                attempts.append(dict(exit_code=reply.returncode, response_bytes=len(reply.stdout), ready=ready))
+                if ready: break
+                time.sleep(1)  # La recarga gradual puede conservar trabajadores de la generacion anterior.
+            save(CASE / (entry['host'] + '-probe.json'), json.dumps(attempts).encode())
+            if not ready:
+                save(CASE / (entry['host'] + '-probe-private.txt'), reply.stderr + b'\n' + reply.stdout[:8192])
                 raise ValueError('El CGI no responde inactivo: ' + entry['host'])
             result['sites'].append(dict(host=entry['host'], inactive_endpoint_verified=True,
                 vhost_sha256=hashlib.sha256(Path(entry['vhost']).read_bytes()).hexdigest()))
