@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 20. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 21. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -14,6 +14,12 @@ Actualizado: 20 de octubre de 2026, tramo 20. Implementacion NO finalizada.
 - Ensayo aislado de restauracion de ROLEplus y comprobacion de ocho gzip.
 - Correspondencias reparadas de dos bases y retencion ampliada de las siete
   bases cuya web esta identificada.
+- Copias semanales de archivos configuradas en diez webs, con dos versiones.
+  Copia real de CSS registrada en ISPConfig y recuperacion de tres archivos
+  con contenido y metadatos comprobados. ROLEplus sigue pendiente por capacidad.
+- Cron de ISPConfig liberado de una espera de AWStats de mas de diez horas;
+  DNS de estadisticas desactivado y tareas atrasadas completadas. Pendientes
+  regeneracion de esas estadisticas y limites generales de los trabajos.
 
 ## Bloques pendientes para dar la implementacion por terminada
 
