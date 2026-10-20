@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 24. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 25. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -18,6 +18,10 @@ Actualizado: 20 de octubre de 2026, tramo 24. Implementacion NO finalizada.
   tambien ante fallo comprobado; retirados los 488 MiB del ensayo inicial.
 - Correspondencias reparadas de dos bases y retencion ampliada de las siete
   bases cuya web esta identificada.
+- Copias SQL nuevas y restauradas de Controlate, Delixio, Mansion y Multisitio:
+  30 tablas y 127 437 filas coinciden con los recuentos bajo bloqueo. Registradas
+  en ISPConfig, conservando su programacion nativa. El plan de cinco bases queda
+  parcial: Rola requiere representar fielmente dos caracteres U+0003 en su SQL.
 - Copia SQL semanal de una base independiente, restaurada en aislamiento:
   una tabla y 67 filas. Bloqueo de lectura acotado y liberacion comprobada
   al cancelar, matar o suspender su controlador. Proxima ejecucion:
@@ -41,8 +45,10 @@ Actualizado: 20 de octubre de 2026, tramo 24. Implementacion NO finalizada.
 1. **Recuperacion:** verificar recuperacion de los textos seleccionados y SQL
    de todas las webs, recuperar la tabla independiente ilegible y completar
    una ejecucion de copias grandes compatible con MyISAM y el servicio en uso,
-   verificar esas copias nuevas y sus restauraciones; las restauraciones de
-   los siete archivos historicos ya estan comprobadas. Los binarios quedan
+   verificar copias nuevas de ROLEplus y MTGsearch y resolver la representacion
+   textual del SQL de Rola. Las cuatro bases pequenas restantes ya tienen
+   copias nuevas restauradas; las restauraciones de los siete archivos
+   historicos tambien estan comprobadas. Los binarios quedan
    fuera del alcance autorizado. Las limitaciones de conservarlas en el mismo VPS deben
    quedar expresas; no se promete recuperacion tras perdida total de ese VPS.
 2. **Automatismos heredados:** revisar el estado junto al panel web y el
