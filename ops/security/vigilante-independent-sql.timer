@@ -1,0 +1,11 @@
+[Unit]
+Description=Copias semanales de bases independientes
+
+[Timer]
+OnCalendar=Sun *-*-* 04:30:00 Europe/Madrid
+Persistent=true
+AccuracySec=1min
+Unit=vigilante-independent-sql.service
+
+[Install]
+WantedBy=timers.target

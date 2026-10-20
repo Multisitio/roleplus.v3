@@ -1,5 +1,10 @@
 # Instrucciones del proyecto RolePlus
 
+- Inventario SQL (2026-10-20): comprobar TABLE_TYPE ademas de ENGINE.
+  Un motor sin informar no acredita una vista, una base vacia ni desuso.
+  Las bases sin dominio siguen protegidas como independientes, sin asignar
+  una web por suposicion ni borrar sus datos.
+
 - Copias del vigilante (2026-10-20): por indicacion del usuario, guardar solo
   contenido de texto; excluir binarios por contenido, no solo por extension.
   No programar archivos completos de webs que incluyan imagenes, fuentes,
