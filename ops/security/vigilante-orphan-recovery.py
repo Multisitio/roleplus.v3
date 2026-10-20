@@ -112,6 +112,28 @@ def main():
                 raise RuntimeError('La segunda restauracion difiere en estructura o valores')
             if dump('restored') != exported:
                 raise RuntimeError('Los volcados completos no coinciden')
+            # Reproducir la sustitucion sin diccionario antes de permitirla
+            # en produccion. Conservar los archivos simulados, sin DROP.
+            sql('CREATE DATABASE orphan_sim;', 'mysql')
+            for name in EXPECTED:
+                shutil.copyfile(INPUT / name, data / 'orphan_sim' / name)
+            probe = subprocess.run(client + ['orphan_sim', '-e', 'SHOW CREATE TABLE usuarios'],
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
+            if probe.returncode == 0 or b'1932' not in probe.stderr:
+                raise RuntimeError('No se reprodujo el error 1932 en aislamiento')
+            staged = exported.replace(b'`usuarios`', b'`usuarios_vigilante_20261020`')
+            sql(staged.decode('utf-8'), 'orphan_sim')
+            if sql(query.replace('FROM usuarios ', 'FROM usuarios_vigilante_20261020 '), 'orphan_sim') != values:
+                raise RuntimeError('La tabla preparada difiere')
+            sql('FLUSH TABLES usuarios;', 'orphan_sim')
+            held = BASE / 'originals-simulated';held.mkdir(mode=0o700)
+            for name in EXPECTED:
+                (data / 'orphan_sim' / name).rename(held / name)
+            sql('RENAME TABLE usuarios_vigilante_20261020 TO usuarios;', 'orphan_sim')
+            if sql(query, 'orphan_sim') != values or sql('SHOW CREATE TABLE usuarios;', 'orphan_sim') != structure:
+                raise RuntimeError('La sustitucion aislada difiere')
+            result['orphan_1932_reproduced'] = True
+            result['preserving_replacement_verified'] = True
             result['all_values_sha256'] = digest(values)
             result['sql_sha256'] = digest(exported)
             result['schema_sha256'] = digest(structure)
