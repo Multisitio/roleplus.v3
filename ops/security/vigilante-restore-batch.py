@@ -69,10 +69,20 @@ def main(plan_path):
             metadata = folder / 'input.json'
             metadata.write_text(json.dumps(item) + '\n')
             metadata.chmod(0o644)
+            extra_bind = ''
+            reference = None
+            if item.get('verify_sql_controls') is True:
+                original = Path('/var/lib/vigilante-mapped-sql') / (item['database'] + '.sql')
+                if original.is_symlink() or digest(original) != item['source_sql_sha256']:
+                    raise RuntimeError('Referencia original no contrastada')
+                reference = folder / 'original.sql'
+                shutil.copyfile(original, reference)
+                reference.chmod(0o644)
+                extra_bind = 'BindReadOnlyPaths=' + str(reference) + ':/run/vigilante-restore-drill/original.sql\n'
             DROPIN.write_text('[Service]\nBindReadOnlyPaths=' + str(archive)
                               + ':/run/vigilante-restore-drill/input.sql.gz\n'
                               + 'BindReadOnlyPaths=' + str(metadata)
-                              + ':/run/vigilante-restore-drill/input.json\n')
+                              + ':/run/vigilante-restore-drill/input.json\n' + extra_bind)
             subprocess.run(['systemctl', 'daemon-reload'], check=True, timeout=30)
             subprocess.run(['systemctl', 'reset-failed', UNIT], check=False, timeout=10)
             result = subprocess.run(['systemctl', 'start', UNIT], timeout=780)
@@ -92,6 +102,10 @@ def main(plan_path):
             if digest(archive) != item['gzip_sha256']:
                 raise RuntimeError('Entrada propia alterada')
             archive.unlink()
+            if reference is not None:
+                if digest(reference) != item['source_sql_sha256']:
+                    raise RuntimeError('Referencia de ensayo alterada')
+                reference.unlink()
             (stage / 'progress.json').write_text(json.dumps(report, indent=2) + '\n')
         report['completed'] = True
     finally:

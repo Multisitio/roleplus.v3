@@ -35,6 +35,10 @@ def main():
         '/usr/local/lib/vigilante/vigilante-sql-backup.py')
     backup = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(backup)
+    spec = importlib.util.spec_from_file_location('sqltext',
+        '/usr/local/lib/vigilante/vigilante-sql-text.py')
+    sqltext = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sqltext)
     # Contrastar toda la seleccion antes de reservar el resultado o tomar READ.
     catalogue_queries = {}
     for item in items:
@@ -81,7 +85,8 @@ def main():
             elapsed = backup.dump(item['name'], raw, counts=counts)
             if raw.stat().st_size > backup.MAX_RAW_BYTES:
                 raise ValueError('Base fuera del presupuesto revisado')
-            data = raw.read_bytes()
+            original = raw.read_bytes()
+            data, controls = sqltext.encode_controls(original)
             if re.search(r'[\x00-\x08\x0b\x0e-\x1f\x7f-\x9f]', data.decode('utf-8-sig')):
                 raise ValueError('El volcado requiere revisar su codificacion')
             now = int(time.time())
@@ -101,6 +106,8 @@ def main():
                      'row_counts_under_lock': counts, 'dump_seconds': round(elapsed, 4),
                      'strict_read_guard': True, 'global_read_lock_used': False,
                      'registered_in_panel': False}
+            entry.update(source_sql_sha256=hashlib.sha256(original).hexdigest(),
+                         escaped_control_characters=controls)
             result['databases'].append(entry)
             if backup.query(catalogue_queries[item['id']]) != '1':
                 raise ValueError('El catalogo cambio antes de registrar')
@@ -109,7 +116,10 @@ def main():
                 + str(item['domain_id']) + ",'mysql','sqlgz','gzip'," + str(now) + ",'"
                 + filename + "','" + str(target.stat().st_size) + "','');")
             entry['registered_in_panel'] = True
-            raw.unlink()  # Temporal propio, despues de verificar su copia y el registro.
+            if not controls:
+                raw.unlink()
+            # Si se representaron controles, conservar el temporal solo hasta
+            # contrastar todos los valores en la restauracion aislada.
         result['completed'] = True
     finally:
         with result_path.open('w') as stream:

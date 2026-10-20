@@ -171,6 +171,39 @@ def main():
                             raise RuntimeError('La segunda restauracion no coincide')
                     report['bounded_redump'].update(completed=True,
                         seconds=round(elapsed, 4), row_counts_under_lock=counts)
+            if metadata.get('verify_sql_controls') is True:
+                if report['views']:
+                    raise RuntimeError('Comparacion de valores con vistas requiere revision')
+                reference = RUNTIME / 'original.sql'
+                original = reference.read_bytes()
+                if hashlib.sha256(original).hexdigest() != metadata['source_sql_sha256']:
+                    raise RuntimeError('Referencia original alterada')
+                spec = importlib.util.spec_from_file_location('sqltext',
+                    '/usr/local/lib/vigilante/vigilante-sql-text.py')
+                sqltext = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(sqltext)
+                encoded, controls = sqltext.encode_controls(original)
+                if encoded != sql.read_bytes() or controls != metadata['escaped_control_characters']:
+                    raise RuntimeError('La representacion SQL no coincide con la referencia')
+                run(client + ['-e', 'CREATE DATABASE vigilante_original'], stdout=errors)
+                with reference.open('rb') as src:
+                    run(client + ['vigilante_original'], stdin=src, stdout=errors)
+                digests = []
+                for name in ['vigilante_original', database]:
+                    path = WORK / (name + '-values.sql')
+                    with path.open('xb') as out:
+                        run(['/usr/bin/mariadb-dump', '--no-defaults',
+                            '--socket=' + str(RUNTIME / 'db.sock'), '--user=root',
+                            '--default-character-set=utf8mb4', '--no-create-info',
+                            '--skip-comments', '--skip-add-locks', '--skip-disable-keys',
+                            '--skip-triggers', '--hex-blob', '--skip-extended-insert',
+                            '--order-by-primary', name], stdout=out)
+                    digests.append(hashlib.sha256(path.read_bytes()).hexdigest())
+                if digests[0] != digests[1]:
+                    raise RuntimeError('Los datos restaurados difieren de la referencia')
+                report['sql_controls_verification'] = {
+                    'original_and_encoded_data_dump_sha256': digests[0],
+                    'all_data_equal': True, 'escaped_control_characters': controls}
             report['completed'] = True
         finally:
             if server is not None and server.poll() is None:
