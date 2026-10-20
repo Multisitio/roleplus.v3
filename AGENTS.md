@@ -346,3 +346,15 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   como solucion automatica. Al estudiar SMS, distinguir SMS incluidos en la
   linea de una API accesible desde el VPS y probar la notificacion real de un
   SMS propio con la pantalla bloqueada antes de montar otro conector.
+
+- Fin de la via SMS (2026-10-18): el usuario descarta expresamente SMS porque
+  lo tiene silenciado, igual que las demas redes. Detener esta via y no pedir
+  mas pruebas ni vincular Mensajes de Google. No reutilizar SMS, Telegram u
+  otras redes silenciadas como respuesta automatica al fallo del aviso de
+  WhatsApp. Mantener coste adicional cero y ninguna aplicacion movil nueva.
+
+- Alarmas del vigilante (2026-10-20): reutilizar las notificaciones de ROLEplus
+  al Android del operador, cuya recepcion y sonido estan confirmados. Separar
+  aceptacion del proveedor y entrega real. El transporte no ejecuta PHP como
+  administrador, no espera al modelo ni a su cuota y no usa difusion general.
+  Conservar excepciones privadas, deduplicacion y limites de reintentos.

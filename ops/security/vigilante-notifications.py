@@ -44,10 +44,16 @@ def reconcile(previous,events,sites,now):
             if len(result['items'])>=4096:
                 raise ValueError('Bandeja llena; requiere revision administrativa')
             result['items'][identifier]={
-                'first_seen':now,'status':'pending_transport','channel':'whatsapp',
+                'first_seen':now,'episode_started':now,'status':'pending_transport','channel':'roleplus',
                 'delivery_confirmed':False,
             }
         item=result['items'][identifier]
+        # Diez minutos sin observar la causa abren otro episodio, sin afirmar
+        # que el servicio se haya recuperado durante ese intervalo.
+        if now-item.get('last_seen',now)>=600:
+            item['episode_started']=now
+        item.setdefault('episode_started',item['first_seen'])
+        item['channel']='roleplus'
         item.update(last_seen=now,currently_observed=True,event=dict(event))
         suffix=' ('+SERVICES[event['family']]+')' if event['family'] in SERVICES else ''
         item['text']=LABELS[event['kind']]+': '+event['site']+suffix+'. Referencia '+identifier[:12]+'.'

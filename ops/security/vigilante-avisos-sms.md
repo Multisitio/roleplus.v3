@@ -1,9 +1,15 @@
 # Avisos SMS sin gasto adicional: estado de la investigacion
 
+Estado final: via descartada expresamente por el usuario porque los SMS estan
+silenciados, igual que las demas redes. Cancelar la prueba manual pendiente y
+no continuar con la vinculacion de Mensajes de Google. Lo que sigue conserva
+el contexto de la investigacion, no una tarea autorizada pendiente.
+
 Requisitos del operador: no instalar otra aplicacion en el movil, no contratar
 otra linea ni servicios de pago. El canal de WhatsApp esta vinculado, pero las
 dos pruebas al chat propio llegaron sin sonido ni vibracion. Sigue pendiente
-validar un canal capaz de avisar con la pantalla bloqueada.
+validar un canal capaz de avisar con la pantalla bloqueada. Actualizacion:
+el operador confirmo recepcion y sonido en ROLEplus; esta es la via elegida.
 
 ## Proveedor externo gratuito
 

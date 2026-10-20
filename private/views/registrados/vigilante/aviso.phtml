@@ -1,0 +1,51 @@
+<?php
+$esc = static fn($value) => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+$fecha = static fn($stamp) => (new DateTimeImmutable('@' . (int) $stamp))->setTimezone(new DateTimeZone('Europe/Madrid'))->format('d/m/Y H:i:s');
+?>
+<div class="w600 mha">
+    <article>
+        <header><h1><?=t('Vigilante del VPS')?></h1></header>
+        <section>
+            <?php if ($aviso === null): ?>
+                <p><?=t('Aviso no disponible para este usuario.')?></p>
+            <?php else: ?>
+                <?php if ($aviso['reference'] === 'prueba'): ?>
+                    <h2><?=t('Prueba de notificaciones')?></h2>
+                    <p><?=t('Esta ficha comprueba el enlace de los avisos. No representa una caída ni un error del servidor.')?></p>
+                    <?php if ($aviso['last_test']): ?>
+                        <p><strong><?=t('Última prueba')?>:</strong> <?=$esc($fecha($aviso['last_test']))?> (Madrid)</p>
+                    <?php endif; ?>
+                <?php else: $detalle = $aviso['selected']; ?>
+                    <h2><?=$esc($detalle['label'])?></h2>
+                    <dl>
+                        <dt><?=t('Sitio o ámbito')?></dt><dd><?=$esc($detalle['site'] === 'server' ? 'Servidor' : $detalle['site'])?></dd>
+                        <dt><?=t('Primera observación')?></dt><dd><?=$esc($fecha($detalle['first_seen']))?> (Madrid)</dd>
+                        <dt><?=t('Última observación')?></dt><dd><?=$esc($fecha($detalle['last_seen']))?> (Madrid)</dd>
+                        <dt><?=t('Estado observado')?></dt><dd><?=t($detalle['observed'] ? 'Se observó en la última comprobación.' : 'No se observó en la última comprobación; esto no acredita una reparación.')?></dd>
+                        <dt><?=t(in_array($detalle['kind'], ['disk_space', 'inodes'], true) ? 'Ocupación' : 'Recuento en la última lectura')?></dt>
+                        <dd><?=$esc(number_format($detalle['count'], 0, '.', $detalle['count'] >= 10000 ? ' ' : ''))?><?=in_array($detalle['kind'], ['disk_space', 'inodes'], true) ? '%' : ''?></dd>
+                        <?php if ($detalle['code']): ?><dt><?=t('Respuesta HTTP')?></dt><dd><?=$esc($detalle['code'])?></dd><?php endif; ?>
+                        <dt><?=t('Aviso al móvil')?></dt><dd><?=t($detalle['accepted'] ? 'El proveedor aceptó el envío; esta aceptación no confirma la recepción en el móvil.' : 'No consta aceptación del envío para este episodio.')?></dd>
+                        <dt><?=t('Referencia')?></dt><dd><code><?=$esc(substr($detalle['reference'], 0, 12))?></code></dd>
+                    </dl>
+                    <p><?=t('Actuaciones: no hay una reparación verificada vinculada a esta ficha. El análisis de IA es de solo lectura; los reinicios los gestiona el control antipánico.')?></p>
+                <?php endif; ?>
+                <p><strong><?=t('Última lectura del vigilante')?>:</strong> <?=$esc($fecha($aviso['observed_at']))?> (Madrid)</p>
+                <?php if (time() - $aviso['observed_at'] > 180): ?>
+                    <p><strong><?=t('La información lleva más de tres minutos sin actualizarse. No permite conocer el estado actual.')?></strong></p>
+                <?php endif; ?>
+                <p><a role="button" href="/registrados/vigilante/aviso/<?=$esc($aviso['reference'])?>"><?=t('Actualizar información')?></a></p>
+                <?php if ($aviso['items']): ?>
+                    <h2><?=t('Observaciones urgentes registradas')?></h2>
+                    <ul>
+                        <?php foreach ($aviso['items'] as $item): ?>
+                            <li><a href="/registrados/vigilante/aviso/<?=$esc($item['reference'])?>"><?=$esc($item['label'])?> · <?=$esc($item['site'])?></a> — <?=$esc($fecha($item['last_seen']))?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p><?=t('No hay observaciones urgentes registradas en esta ficha.')?></p>
+                <?php endif; ?>
+            <?php endif; ?>
+        </section>
+    </article>
+</div>

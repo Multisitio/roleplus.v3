@@ -259,7 +259,11 @@ def main(validate_current=False):
         if now<state.get('last_poll',0):raise ValueError('Reloj anterior al estado persistido')
         events=collect(state,sites,now,policy.get('global_error_log'))
         # Los avisos no esperan al modelo ni dependen de su cuota.
-        try:notifications.record(events,sites,now,atomic)
+        try:
+            notifications.record(events,sites,now,atomic)
+            if Path('/etc/systemd/system/vigilante-notify.service').is_file():
+                subprocess.run(['/usr/bin/systemctl','--no-block','start','vigilante-notify.service'],
+                               capture_output=True,timeout=5)
         except Exception as error:
             print(json.dumps({'notification_queue':'error','error_type':type(error).__name__}),flush=True)
         selected=eligible(state,events,now)

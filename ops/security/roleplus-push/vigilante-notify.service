@@ -1,0 +1,42 @@
+[Unit]
+Description=Avisos urgentes del vigilante mediante ROLEplus
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/roleplus-push-sender.py
+UMask=0077
+RuntimeDirectory=vigilante-push
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+InaccessiblePaths=/var/lib/vigilante-auth /var/lib/vigilante-wa /srv/vigilante-ai
+InaccessiblePaths=/var/www/clients/client1/web6/private/config
+InaccessiblePaths=/var/www/clients/client1/core /var/www/clients/client1/vendor
+ReadWritePaths=/var/lib/vigilante
+ReadWritePaths=/var/www/clients/client1/web6/private/temp/vigilante
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+CPUQuota=5%
+MemoryMax=128M
+TasksMax=16
+TimeoutStartSec=110s
+TimeoutStopSec=5s
+LimitCORE=0
+LimitFSIZE=4M
+Restart=no

@@ -18,6 +18,11 @@ las raices web y no se publican en este repositorio.
   sustituto automatico. Las pruebas del chat propio de WhatsApp llegaron sin
   aviso; la investigacion de SMS debe acreditar emision gratuita y sonido real,
   sin confundir los SMS de la SIM con una API del operador para el VPS.
+- Actualizacion posterior del 18 de octubre: el operador descarta SMS por
+  estar silenciado, igual que las demas redes. Cancelar su investigacion y
+  las pruebas pendientes. No vincular Mensajes de Google ni proponer esas
+  redes como alternativa automatica. Esta decision prevalece sobre los
+  parrafos anteriores que describen la investigacion de SMS.
 - Coste adicional obligatorio: 0 EUR sobre los servicios ya contratados y la
   cuota actual de OpenAI. No contratar APIs, numeros, mensajeria, almacenamiento
   ni credito adicional. No activar una alternativa de pago al agotar la cuota.
@@ -33,8 +38,11 @@ las raices web y no se publican en este repositorio.
   de habilitar intervenciones que dependan de ella.
 - Mostrar porcentajes y renovaciones de cuota; reservar uso para emergencias
   y para el trabajo habitual del usuario. No comprar credito automaticamente.
-- Canal previsto de avisos: WhatsApp. Resumen diario a las 09:00 Europe/Madrid.
-  Este tramo no instala mensajeria ni un nuevo programador de avisos.
+- Canal urgente: notificaciones de ROLEplus al Android del operador. Recepcion
+  y sonido confirmados el 18 y el 20 de octubre. El chat propio de WhatsApp
+  queda vinculado, pero no es una alarma validada. SMS descartado.
+  El resumen diario a las 09:00 Europe/Madrid sigue siendo un requisito
+  independiente; activar alarmas urgentes no acredita su implantacion.
 
 Decision del 18 de octubre de 2026 para WhatsApp: preparar vinculacion por
 dispositivo con Baileys, mecanismo utilizado por OpenClaw, en lugar de contratar
@@ -43,6 +51,34 @@ ha confirmado la recepcion de dos pruebas sin sonido ni vibracion. El chat
 propio no esta validado como alarma nocturna. El envio automatico sigue pendiente.
 La prueba final debe incluir recepcion y aviso real en el movil; la aceptacion
 del envio o un mensaje en el chat propio no acreditan que el usuario sea avisado.
+
+## Alarmas mediante ROLEplus (20 de octubre de 2026)
+
+vigilante-detect solicita vigilante-notify.service sin esperarlo, despues de
+guardar observaciones y antes de llamar al modelo. No hay otro reiniciador
+ni otro temporizador. No depende de cuota, analisis, Apache ni PHP-FPM.
+El coordinador no tiene acceso de red ni a las claves de la aplicacion; solicita un
+transporte PHP separado con el usuario de la web, sin privilegios y sin
+escrituras. Reutiliza Config, Minishlink y la notificacion existente de R+.
+
+Solo se avisa al Android del usuario configurado en el archivo privado
+/etc/vigilante/roleplus-push.json. Sin destinatario no se envia nada; nunca
+se usa la opcion de difusion de la aplicacion. No se copian claves entre
+entornos ni se rotan las VAPID. Su valor reside en keys.php de cada entorno.
+
+Solo se envian causas urgentes del contrato cerrado, observadas en los ultimos
+180 segundos. El texto se construye desde categorias, dominio y referencia,
+nunca desde registros originales ni salida de IA. Se agrupan hasta cinco
+causas por aviso; maximo tres envios en quince minutos y seis en una hora.
+Hasta tres intentos por episodio, separados al menos cinco minutos. No se
+repite un episodio aceptado. Tras diez minutos sin observacion puede abrirse
+otro episodio; la ausencia no se anuncia como recuperacion comprobada.
+
+Una copia privada de la suscripcion Android, renovada como maximo cada hora,
+permite intentar el envio si falla MariaDB. Caduca a los siete dias. No se
+borran suscripciones al fallar el transporte. La aceptacion del proveedor se
+registra separada de la recepcion real; no se presenta HTTP 201 como entrega.
+Si el VPS se apaga o pierde la salida a Internet no puede avisar por si mismo.
 
 ## Un unico responsable de los reinicios
 
