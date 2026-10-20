@@ -79,6 +79,11 @@ def main():
                 raise ValueError('Activo ya existente o directorio enlazado')
             owner = web.stat()
             additions.append((target, (CASE / source).read_bytes(), owner.st_uid, owner.st_gid))
+    shared = Path('/usr/share/vigilante-maintenance/maintenance.js')
+    if shared.read_bytes() != (CASE / 'old-maintenance.js').read_bytes():
+        raise ValueError('Script de aviso divergente')
+    edits.append((shared, shared.read_bytes(), (CASE / 'new-maintenance.js').read_bytes()))
+    infrastructure_count = len(edits)
     for item in plan:
         if 'remote' not in item: continue  # No instalar plantillas locales antiguas en produccion.
         path = Path(item['remote'])
@@ -107,7 +112,7 @@ def main():
             with path.open('xb') as stream:
                 os.fchmod(stream.fileno(), 0o644); os.fchown(stream.fileno(), uid, gid); stream.write(content)
             created.append((path, content))
-        for index, edit in enumerate(edits[:len(IDS)]): apply_edit(index, edit)
+        for index, edit in enumerate(edits[:infrastructure_count]): apply_edit(index, edit)
         reload()
         # Esperar a la generacion nueva antes de acreditar el Alias estatico.
         import time
@@ -119,8 +124,8 @@ def main():
                 time.sleep(1)
             else: raise ValueError('Estado estatico no disponible en ' + host)
         # El cliente solo se carga cuando sus recursos y el estado ya responden.
-        for index, edit in enumerate(edits[len(IDS):], start=len(IDS)): apply_edit(index, edit)
-        result.update(completed=True, changed_templates=len(changed)-len(IDS),
+        for index, edit in enumerate(edits[infrastructure_count:], start=infrastructure_count): apply_edit(index, edit)
+        result.update(completed=True, changed_templates=len(changed)-infrastructure_count,
             sites=len(IDS), static_assets=len(created), automatic_navigation=False,
             targets=[dict(path=str(path),before_sha256=sha(before),after_sha256=sha(after))
                      for path,before,after,_ in changed])
