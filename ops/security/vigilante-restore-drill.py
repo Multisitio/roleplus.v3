@@ -144,6 +144,8 @@ def main():
                     count = run(client + [database, '-e', 'SELECT COUNT(*) FROM ' + quoted],
                                 stdout=subprocess.PIPE).stdout
                     report['row_counts'][table] = int(count.strip())
+            if 'expected_rows' in metadata and report['row_counts'] != metadata['expected_rows']:
+                raise RuntimeError('La restauracion no coincide con los recuentos bajo bloqueo')
             if metadata.get('bounded_redump') is True:
                 spec = importlib.util.spec_from_file_location('bounded_backup',
                     '/usr/local/lib/vigilante/vigilante-sql-backup.py')
