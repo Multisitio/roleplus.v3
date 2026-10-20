@@ -171,6 +171,34 @@ def main():
                             raise RuntimeError('La segunda restauracion no coincide')
                     report['bounded_redump'].update(completed=True,
                         seconds=round(elapsed, 4), row_counts_under_lock=counts)
+            if metadata.get('benchmark_large_sql') is True:
+                if database not in {'c1_roleplus', 'c1_mtgsearch'}:
+                    raise RuntimeError('Base fuera del ensayo de volumen revisado')
+                spec = importlib.util.spec_from_file_location('bounded_backup',
+                    '/usr/local/lib/vigilante/vigilante-sql-backup.py')
+                backup = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(backup)
+                probe = {'production_limits_changed': False, 'isolated_database_only': True,
+                         'bounded_limit_seconds': backup.MAX_SECONDS, 'bounded_copy_completed': False}
+                try:
+                    elapsed = backup.dump(database, WORK / 'bounded-large.sql', RUNTIME / 'db.sock', counts={})
+                    probe.update(bounded_copy_completed=True, bounded_seconds=round(elapsed, 4))
+                except backup.BackupFailure:
+                    probe['bounded_copy_rejected'] = True
+                target = WORK / 'measured-large.sql'
+                args = backup.command(database, RUNTIME / 'db.sock', target)
+                args.remove('--max-statement-time=0.5')
+                started = time.monotonic()
+                # Solo la instancia sin escritores del laboratorio. No es una
+                # autorizacion para usar estos limites sobre la base real.
+                run(args, stdout=errors, timeout=90)
+                probe.update(full_export_seconds=round(time.monotonic() - started, 4),
+                             full_export_bytes=target.stat().st_size)
+                with target.open('rb') as stream:
+                    stream.seek(max(0, target.stat().st_size - 4096))
+                    if b'-- Dump completed on ' not in stream.read():
+                        raise RuntimeError('Exportacion de laboratorio incompleta')
+                report['large_sql_benchmark'] = probe
             if metadata.get('verify_sql_controls') is True:
                 if report['views']:
                     raise RuntimeError('Comparacion de valores con vistas requiere revision')
