@@ -21,13 +21,13 @@ class BackupFailure(RuntimeError):
     pass
 
 
-def command(database, socket=SOCKET, output=None):
+def command(database, socket=SOCKET, output=None, statement_seconds=0.5):
     if not re.fullmatch(r'[a-z][a-z0-9_]{0,63}', database):
         raise ValueError('Nombre de base no permitido')
     args = ['/usr/bin/mariadb-dump', '--no-defaults', '--protocol=socket',
             '--socket=' + str(socket), '--user=root', '--default-character-set=utf8mb4',
             '--skip-lock-tables', '--single-transaction', '--quick', '--routines', '--events', '--triggers',
-            '--hex-blob', '--max-statement-time=0.5']
+            '--hex-blob', '--max-statement-time=' + str(statement_seconds)]
     if output is not None:
         args.append('--result-file=' + str(output))
     return args + [database]
@@ -86,7 +86,7 @@ def strict_read(database, socket, seconds, errors):
         holder.stdout.close()
 
 
-def dump(database, output, socket=SOCKET, seconds=MAX_SECONDS, counts=None):
+def dump(database, output, socket=SOCKET, seconds=MAX_SECONDS, counts=None, statement_seconds=0.5):
     if output.exists():
         raise ValueError('No sobrescribir una copia previa')
     start = time.monotonic()
@@ -96,7 +96,7 @@ def dump(database, output, socket=SOCKET, seconds=MAX_SECONDS, counts=None):
             remaining = seconds - (time.monotonic() - locked_at)
             if remaining <= 0:
                 raise BackupFailure('Se agoto el plazo de bloqueo')
-            process = spawn(command(database, socket, output), remaining,
+            process = spawn(command(database, socket, output, statement_seconds), remaining,
                             stdout=subprocess.DEVNULL, stderr=errors)
             try:
                 process.wait(timeout=remaining + 0.3)

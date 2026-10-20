@@ -1,0 +1,28 @@
+[Unit]
+Description=Ensayo privado del cartel y de la barrera anterior a PHP
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/vigilante-maintenance-check.py
+StateDirectory=vigilante-maintenance-check
+StateDirectoryMode=0700
+RuntimeDirectory=vigilante-maintenance-check
+RuntimeDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX AF_INET
+InaccessiblePaths=/var/www /var/lib/mysql /run/mysqld /etc/mysql /var/backup
+InaccessiblePaths=/var/lib/vigilante-auth /var/lib/vigilante-wa /srv/vigilante-ai
+CPUQuota=25%
+MemoryMax=192M
+TasksMax=96
+TimeoutStartSec=90s
+Restart=no

@@ -2,12 +2,12 @@
 import re
 
 
-def encode_controls(data):
+def encode_controls(data, verified_dump_mode=False):
     data.decode('utf-8-sig')
     count = data.count(b'\x03')
     if not count:
         return data, 0
-    if b"SQL_MODE='NO_AUTO_VALUE_ON_ZERO'" not in data[:8192]:
+    if not verified_dump_mode and b"SQL_MODE='NO_AUTO_VALUE_ON_ZERO'" not in data[:8192]:
         raise ValueError('Modo SQL del volcado no acreditado')
     output = []
     changed = 0
@@ -21,12 +21,15 @@ def encode_controls(data):
         pieces = [line[:match.end()]]
         i = match.end()
         while i < len(line):
-            if line[i] == 3:
+            start_quote = line.find(b"'", i)
+            end_plain = len(line) if start_quote < 0 else start_quote
+            plain = line[i:end_plain]
+            if b'\x03' in plain:
                 raise ValueError('Control fuera de literal')
-            if line[i] != 39:
-                pieces.append(line[i:i + 1])
-                i += 1
-                continue
+            pieces.append(plain)
+            i = end_plain
+            if start_quote < 0:
+                break
             start = i
             i += 1
             while i < len(line):
