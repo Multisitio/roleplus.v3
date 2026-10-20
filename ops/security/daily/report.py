@@ -22,6 +22,7 @@ def load(name,filename):
 data=load('daily_data','vigilante-event-data.py')
 detector=load('daily_atomic','vigilante-detect.py')
 notifications=detector.notifications
+quota_reader=load('daily_quota','vigilante-quota.py')
 STATE=Path('/var/lib/vigilante-daily')
 QUOTA=Path('/var/lib/vigilante-auth/control/quota-output.jsonl')
 MADRID=ZoneInfo('Europe/Madrid')
@@ -106,17 +107,7 @@ def compose(now,quota,queue,work,automatic,resources):
 
 
 def quota_query():
-    # Leer solo el resultado nuevo; nunca dar por actual una salida anterior.
-    data.trusted(QUOTA);before=QUOTA.stat().st_size;started=int(time.time())
-    subprocess.run(['/usr/bin/systemctl','start','vigilante-quota.service'],capture_output=True,timeout=70)
-    if QUOTA.stat().st_size-before>131072 or QUOTA.stat().st_size<before:return None
-    with QUOTA.open('rb') as stream:stream.seek(before);lines=stream.read(131073).splitlines()
-    for line in reversed(lines):
-        try:value=json.loads(line)
-        except (ValueError,UnicodeDecodeError):continue
-        if isinstance(value,dict) and type(value.get('checked_at')) is int and value['checked_at']>=started and value.get('model_called') is False:
-            return value
-    return None
+    return quota_reader.host_snapshot()
 
 
 def transport(request):

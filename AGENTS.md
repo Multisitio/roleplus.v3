@@ -373,3 +373,9 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   el montaje de solo lectura autorizado, sin abrir el resto de la raiz web.
   Porcentajes de cuota compartida, datos desconocidos y recuentos parciales
   deben distinguirse; no presentarlos como consumo propio o totales diarios.
+
+- Renovaciones de cuota (2026-10-20): no conservar una espera antigua por
+  cuota cuando una consulta posterior reciente acredita disponibilidad.
+  Retirar solo esperas cuyo origen en cuota este acreditado, sin borrar
+  intentos, historial ni limites de analisis. No inferir renovacion por reloj,
+  por datos caducados ni a partir de una consulta fallida.

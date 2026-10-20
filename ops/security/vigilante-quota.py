@@ -128,6 +128,26 @@ def query(process):
         selector.close()
 
 
+def host_snapshot():
+    """Consulta desde el coordinador; solo la unidad autenticada toca el perfil."""
+    if os.geteuid()!=0:raise PermissionError('Solo administrador')
+    path=Path('/var/lib/vigilante-auth/control/quota-output.jsonl')
+    for target,directory in ((path.parent,True),(path,False)):
+        meta=target.lstat()
+        if meta.st_uid!=0 or meta.st_mode&0o022 or not (stat.S_ISDIR if directory else stat.S_ISREG)(meta.st_mode):
+            raise PermissionError('Salida de cuota no confiable')
+    before=path.stat().st_size;started=int(time.time())
+    subprocess.run(['/usr/bin/systemctl','start','vigilante-quota.service'],capture_output=True,timeout=70)
+    if not 0<=path.stat().st_size-before<=131072:return None
+    with path.open('rb') as stream:stream.seek(before);lines=stream.read(131073).splitlines()
+    for line in reversed(lines):
+        try:value=json.loads(line)
+        except (ValueError,UnicodeDecodeError):continue
+        if isinstance(value,dict) and type(value.get('checked_at')) is int and started<=value['checked_at']<=int(time.time()) and value.get('model_called') is False:
+            return value
+    return None
+
+
 def main():
     profile = Path('/auth')
     meta = (profile/'auth.json').lstat()

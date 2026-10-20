@@ -1,0 +1,36 @@
+[Unit]
+Description=Comprobacion acotada de renovaciones de cuota
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/vigilante-quota-refresh.py
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+InaccessiblePaths=/var/www /var/lib/vigilante-auth/profile /var/lib/vigilante-wa /srv/vigilante-ai
+ReadWritePaths=/var/lib/vigilante
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+CPUQuota=10%
+MemoryMax=128M
+TasksMax=16
+TimeoutStartSec=90s
+TimeoutStopSec=5s
+LimitCORE=0
+LimitFSIZE=4M
+Restart=no

@@ -80,6 +80,15 @@ borran suscripciones al fallar el transporte. La aceptacion del proveedor se
 registra separada de la recepcion real; no se presenta HTTP 201 como entrega.
 Si el VPS se apaga o pierde la salida a Internet no puede avisar por si mismo.
 
+## Comprobacion de renovaciones de cuota
+
+La comprobacion independiente de cuota queda activa en el tramo 18, mediante
+el ciclo existente del detector y un coordinador sin inferencias. Comprueba
+renovaciones anunciadas o cada seis horas como maximo, con ocho intentos
+independientes por 24 horas y esperas crecientes al fallar. Una confirmacion
+reciente puede retirar solo bloqueos acreditados por cuota; nunca borra el
+presupuesto de analisis ni habilita reparaciones o compras de credito.
+
 ## Un unico responsable de los reinicios
 
 Se conserva webwatchdog.timer y su logica antipánico como unico solicitante

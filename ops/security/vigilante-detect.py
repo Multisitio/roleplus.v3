@@ -224,8 +224,13 @@ def dispatch(state,events,sites,now,origin='automatic'):
         state.setdefault('informed',{}).update({e['id']:{'time':now,'severity':e['severity']} for e in events})
         decision='diagnosed_proposal_pending'
     else:
-        reset=reply.get('admission',{}).get('next_reset_check_at')
+        gate=reply.get('admission',{})
+        reset=gate.get('next_reset_check_at')
         state['blocked_until']=max(now+3600,reset if type(reset) is int else 0)
+        reasons={'reserva_del_usuario','agotada','cuota_desconocida','datos_caducados','requiere_nueva_consulta'}
+        state['quota_block_reason']=gate.get('state') if reply.get('model_called') is False and gate.get('routine_allowed') is False and gate.get('state') in reasons else None
+        if state['quota_block_reason']:
+            state.update(quota_blocked_at=now,quota_retry_at=reset if type(reset) is int else now+3600)
         decision='pending_analysis'
     atomic(report_path,reply)
     queue_path=STATE.parent/'work-queue.json';data.trusted(queue_path)
@@ -266,6 +271,14 @@ def main(validate_current=False):
                                capture_output=True,timeout=5)
         except Exception as error:
             print(json.dumps({'notification_queue':'error','error_type':type(error).__name__}),flush=True)
+        if policy.get('automatic_quota_refresh_enabled') is True:
+            try:
+                spec=importlib.util.spec_from_file_location('quota_refresh',HERE/'vigilante-quota-refresh.py')
+                refresh=importlib.util.module_from_spec(spec);spec.loader.exec_module(refresh)
+                if refresh.request_if_due(state,now):
+                    print(json.dumps({'quota_wait_released':True,'model_called':False}),flush=True)
+            except Exception as error:
+                print(json.dumps({'quota_refresh':'error','error_type':type(error).__name__}),flush=True)
         selected=eligible(state,events,now)
         if validate_current:
             # Ensayo administrativo con observaciones reales, sin inflar recuentos.
