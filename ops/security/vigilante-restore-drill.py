@@ -2,6 +2,7 @@
 """Ensayo manual de un volcado en MariaDB desechable, dentro de su unidad aislada."""
 import gzip
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -143,6 +144,31 @@ def main():
                     count = run(client + [database, '-e', 'SELECT COUNT(*) FROM ' + quoted],
                                 stdout=subprocess.PIPE).stdout
                     report['row_counts'][table] = int(count.strip())
+            if metadata.get('bounded_redump') is True:
+                spec = importlib.util.spec_from_file_location('bounded_backup',
+                    '/usr/local/lib/vigilante/vigilante-sql-backup.py')
+                backup = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(backup)
+                raw = WORK / 'bounded.sql'
+                counts = {}
+                report['bounded_redump'] = {'completed': False, 'limit_seconds': backup.MAX_SECONDS}
+                try:
+                    elapsed = backup.dump(database, raw, RUNTIME / 'db.sock', counts=counts)
+                except backup.BackupFailure:
+                    report['bounded_redump']['reason'] = 'bounded_dump_rejected'
+                else:
+                    if counts != report['row_counts'] or raw.stat().st_size > backup.MAX_RAW_BYTES:
+                        raise RuntimeError('Copia acotada con recuento o tamano inesperado')
+                    run(client + ['-e', 'CREATE DATABASE vigilante_roundtrip'], stdout=errors)
+                    with raw.open('rb') as src:
+                        run(client + ['vigilante_roundtrip'], stdin=src, stdout=errors)
+                    for table, expected in counts.items():
+                        count = run(client + ['vigilante_roundtrip', '-e',
+                            'SELECT COUNT(*) FROM `' + table + '`'], stdout=subprocess.PIPE).stdout
+                        if int(count.strip()) != expected:
+                            raise RuntimeError('La segunda restauracion no coincide')
+                    report['bounded_redump'].update(completed=True,
+                        seconds=round(elapsed, 4), row_counts_under_lock=counts)
             report['completed'] = True
         finally:
             if server is not None and server.poll() is None:
