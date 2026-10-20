@@ -1,0 +1,19 @@
+#vigilante-maintenance-notice,
+#important #vigilante-maintenance-notice {
+    box-sizing: border-box;
+    width: min(560px, calc(100% - 40px));
+    max-height: calc(100svh - 40px);
+    margin: auto;
+    padding: clamp(24px, 5vw, 36px);
+    border: 2px solid var(--primary, currentColor);
+    border-radius: 12px;
+    color: var(--color, #222);
+    background: var(--background-card, #fff);
+    overflow: auto;
+}
+#vigilante-maintenance-notice::backdrop { background: rgb(0 0 0 / 45%); }
+html.vigilante-maintenance-open,
+html.vigilante-maintenance-open body { overflow: hidden; }
+#vigilante-maintenance-notice h2 { margin: 0 0 24px; font-size: 1.3rem; line-height: 1.35; }
+#vigilante-maintenance-notice p { margin: 20px 0 0; line-height: 1.5; }
+@media print { #vigilante-maintenance-notice { display: none; } }

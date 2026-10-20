@@ -29,18 +29,22 @@ def publish(data):
     os.replace(temporary, STATE)
 
 
-def activate(hosts, estimate, limit):
+def activate(hosts, estimate, limit, lead_seconds=8):
     if not hosts or not 0 < limit <= 45 or not 0 < estimate <= 45:
         raise ValueError('Ventana fuera de los limites autorizados')
     if STATE.exists():
         previous = json.loads(STATE.read_text())
         if previous.get('hosts') and current(previous['hosts'][0]):
             raise ValueError('Ya hay otra ventana activa')
+    if not 0 <= lead_seconds <= 15:
+        raise ValueError('Antelacion no valida')
     window = uuid.uuid4().hex
     publish({'window': window, 'hosts': hosts,
              'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
-             'estimated_until': time.time() + estimate + 3,
-             'monotonic_until': time.monotonic() + limit + 8})
+             'estimated_until': time.time() + lead_seconds + estimate + 3,
+             'expires_at': time.time() + lead_seconds + limit + 8,
+             'guard_starts_monotonic': time.monotonic() + lead_seconds,
+             'monotonic_until': time.monotonic() + lead_seconds + limit + 8})
     return window
 
 
@@ -66,6 +70,7 @@ def current(host):
                     for pattern in data['hosts'])):
             return None
         data['max_seconds'] = math.ceil(remaining)
+        data['guard_active'] = time.monotonic() >= data.get('guard_starts_monotonic', 0)
         data['estimated_seconds'] = max(0, math.ceil(float(data['estimated_until']) - time.time()))
         return data
     except (OSError, ValueError, KeyError, TypeError):
@@ -133,7 +138,8 @@ if __name__ == '__main__':
                                   '/run/vigilante-maintenance-check/state.json'):
                 raise SystemExit(2)
         for key in sys.stdin:
-            print('on' if current(key.strip()) else 'off', flush=True)
+            data = current(key.strip())
+            print('on' if data and data['guard_active'] else 'off', flush=True)
     elif sys.argv[1:] == ['--cgi']:
         cgi()
     else:

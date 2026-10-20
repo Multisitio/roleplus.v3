@@ -4,6 +4,12 @@
   de mantenimiento en modo de solo lectura con tiempo estimado. La proteccion
   debe impedir guardados realmente y caducar aunque falle el coordinador;
   no activar bloqueos largos mientras esta barrera no este comprobada.
+- Correccion del usuario (2026-10-20): el mantenimiento debe avisar tambien
+  en paginas ya cargadas, sin recargarlas ni sustituir su contenido. Conservar
+  los nodos del formulario, sus valores y archivos seleccionados. Al terminar,
+  retirar el aviso y permitir continuar con solo esperar; nunca recargar ni
+  reenviar automaticamente un formulario. Anunciar antes de bloquear y usar
+  un estado servido sin PHP, SQL ni renovacion de sesion.
 
 - Inventario SQL (2026-10-20): comprobar TABLE_TYPE ademas de ENGINE.
   Un motor sin informar no acredita una vista, una base vacia ni desuso.

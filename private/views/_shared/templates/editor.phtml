@@ -19,6 +19,7 @@
         <?php endif; ?>
         <?php $editable = ($manual->usuarios_idu === Session::get('idu') || $manual->alcance === 'editor'); ?>
         <link href="/css/print-formats/<?= str_replace(' ', '-', $format_page) ?>.css" rel="stylesheet" media="print">
+	<script src="/javascript/vigilante-maintenance-client.js?v=20261020a" defer></script>
 	</head>
 	<body>
 		<button class="button-floating top right" data-show=".index">

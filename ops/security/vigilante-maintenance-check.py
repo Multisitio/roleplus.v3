@@ -26,7 +26,8 @@ def main():
     data_path = RUN / 'state.json'
     data = {'window': uuid.uuid4().hex, 'hosts': ['maintenance.test'],
             'boot_id': Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
-            'monotonic_until': time.monotonic() + 60, 'estimated_until': time.time() + 30}
+            'monotonic_until': time.monotonic() + 60, 'estimated_until': time.time() + 30,
+            'expires_at': time.time() + 60}
     data_path.write_text(json.dumps(data))
     data_path.chmod(0o644)
     modules = ['mpm_event', 'authz_core', 'authz_host', 'alias', 'mime', 'env', 'headers', 'rewrite', 'cgid']
@@ -41,7 +42,8 @@ def main():
         '--map /run/vigilante-maintenance/state.json', '--map ' + str(data_path))
     conf += '<VirtualHost 127.0.0.1:18089>\nServerName maintenance.test\nDocumentRoot ' + str(web) + '\n'
     conf += 'SetEnv VIGILANTE_MAINTENANCE_STATE ' + str(data_path) + '\n'
-    conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-apache.conf').read_text()
+    conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-apache.conf').read_text().replace(
+        '/run/vigilante-maintenance', str(RUN))
     conf += '\nScriptAlias /app ' + str(writer) + '\n<Directory ' + str(RUN) + '>\nOptions -Indexes\nRequire all granted\n</Directory>\n'
     conf += '<Directory /usr/local/lib/vigilante>\nOptions +ExecCGI -Indexes\nRequire all granted\n</Directory>\n</VirtualHost>\n'
     config = RUN / 'httpd.conf'
@@ -99,10 +101,22 @@ def main():
             status, headers, body = request('/__vigilante_maintenance?status=1')
             assert status == 200 and json.loads(body)['active']
             report['checks'].append('status_200_only_on_reserved_get_endpoint')
+            status, headers, body = request('/__vigilante_status')
+            assert status == 200 and json.loads(body)['window'] == data['window']
+            assert 'no-store' in headers.get('Cache-Control', '') and 'Set-Cookie' not in headers
+            report['checks'].append('static_status_json_without_php_or_session_cookie')
             assert request('/static.js')[0] == 200
             assert request('/static.js', 'POST')[0] == 503
             assert request('/app', host='unaffected.test')[0] == 200
             report['checks'].append('static_reads_and_other_hosts_preserved')
+            data['guard_starts_monotonic'] = time.monotonic() + 20
+            data_path.write_text(json.dumps(data))
+            assert request('/app')[0] == 200
+            assert json.loads(request('/__vigilante_status')[2])['hosts'] == ['maintenance.test']
+            data['guard_starts_monotonic'] = time.monotonic() - 1
+            data_path.write_text(json.dumps(data))
+            assert request('/app')[0] == 503
+            report['checks'].append('advance_notice_precedes_dynamic_request_barrier')
             data['monotonic_until'] = time.monotonic() - 1
             data_path.write_text(json.dumps(data))
             assert request('/app')[0] == 200

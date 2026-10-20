@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 finished = true;
                 estimate.textContent = 'finalizado';
                 detail.textContent = 'El servicio vuelve a estar disponible.';
-                if (!location.pathname.startsWith('/__vigilante_maintenance')) location.reload();
+                document.querySelector('[data-maintenance-retry]').textContent = 'Continuar';
                 return;
             }
             estimate.textContent = data.estimated_seconds > 0 ? `${data.estimated_seconds} segundos` : 'finalizando';
-            detail.textContent = data.estimated_seconds > 0 ? 'Esta página se actualizará automáticamente.'
+            detail.textContent = data.estimated_seconds > 0 ? 'El aviso se actualizará automáticamente.'
                 : `El modo de solo lectura continúa. Límite de esta fase: ${data.max_seconds} segundos.`;
         } catch (error) {
             detail.textContent = 'Estamos esperando confirmación del servicio. No cierres tu trabajo.';
@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!finished) timer = setTimeout(check, 3000);
         }
     }
-    document.querySelector('[data-maintenance-retry]').addEventListener('click', check);
+    document.querySelector('[data-maintenance-retry]').addEventListener('click', () => {
+        if (finished) location.assign(location.pathname.startsWith('/__vigilante_maintenance') ? '/' : location.href);
+        else check();
+    });
     check();
 });
