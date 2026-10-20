@@ -4,11 +4,23 @@ Fecha: 20 de octubre de 2026.
 
 ## Alcance
 
-Se incorporan las dos bases activas sin dominio como bases independientes.
+Se catalogan las dos bases activas sin dominio como bases independientes.
 No se inventa una correspondencia en ISPConfig ni se declara que esten en
 desuso. La comprobacion explicita de TABLE_TYPE y SHOW FULL TABLES confirma
 una tabla MyISAM y otra InnoDB. El motor sin informar de la primera lectura
 no acreditaba una vista; se registra la regla para evitar esa deduccion.
+
+Una admite copia SQL. La otra devuelve el error 1932: sus archivos existen,
+pero no tiene entrada en el diccionario interno de InnoDB. SHOW CREATE TABLE
+tambien falla y la consulta al diccionario no devuelve esa tabla. Se conservan
+los archivos originales intactos y sus huellas en el informe privado. Los
+archivos candidatos de R2-D2 no coinciden con los del VPS y no se toman como
+fuente de verdad ni se sustituyen. No se recrea ni se vacia la tabla.
+
+La base ilegible queda como incidencia de recuperacion de prioridad alta.
+El catalogo la mantiene expresamente bloqueada: no se repite semanalmente
+una operacion conocida imposible ni se declara completa la cobertura SQL.
+El informe separa el exito de la base legible y coverage_complete=false.
 
 Las siete bases asociadas a webs conservan su politica nativa de ISPConfig.
 No se cambia el motor de ninguna tabla, permisos de usuarios ni datos de las
@@ -65,10 +77,10 @@ con un dominio ficticio o cero; los resultados quedan en el catalogo privado
 del vigilante, vinculados a los identificadores reales de las bases.
 
 La politica prevista es semanal, domingos a las 04:30 de Madrid, con siete
-versiones propias por base. El temporizador se activa solo despues de generar
+versiones propias por base accesible. El temporizador se activa solo despues de generar
 y restaurar las primeras copias reales. El servicio exige mas de 20 GiB libres,
 limita los archivos a 32 MiB y acepta hasta 16 MiB de SQL por base. Los limites
-corresponden a estas dos bases pequenas, no autorizan exportar grandes bases
+corresponden a estas bases pequenas, no autorizan exportar grandes bases
 con el mismo procedimiento sin ensayos previos.
 
 Se conservan solo SQL de texto UTF-8, comprimido y verificado, con modo 0600

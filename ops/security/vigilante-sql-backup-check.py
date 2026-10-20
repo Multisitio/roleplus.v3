@@ -109,7 +109,13 @@ def main():
             if run('SELECT COUNT(*) FROM t;', 'restored') != '257':raise RuntimeError('Restauracion incompleta')
             result['mixed_engine_restore_verified'] = True
             result['production_restores'] = []
-            for number, name in [(1, 'c1_carmenarnaumuro'), (2, 'c1_deportes')]:
+            inputs = json.loads((BASE / 'inputs.json').read_text()) if (BASE / 'inputs.json').exists() else []
+            if len(inputs) > 2:raise RuntimeError('Demasiadas entradas de ensayo')
+            import re
+            for item in inputs:
+                number, name = item['number'], item['name']
+                if number not in (1, 2) or not re.fullmatch(r'c1_[a-z0-9_]+', name):
+                    raise RuntimeError('Entrada no valida')
                 path = BASE / ('input' + str(number) + '.sql.gz')
                 if not path.exists():continue
                 run('CREATE DATABASE ' + name + ';')
@@ -122,6 +128,7 @@ def main():
                 for table in run('SHOW TABLES;', name).splitlines():
                     if not table.replace('_', '').isalnum():raise RuntimeError('Identificador no valido')
                     rows[table] = int(run('SELECT COUNT(*) FROM `' + table + '`;', name))
+                if rows != item['expected_rows']:raise RuntimeError('Los recuentos recuperados no coinciden')
                 result['production_restores'].append({'name': name, 'tables': count, 'row_counts': rows})
             result['completed'] = True
         finally:

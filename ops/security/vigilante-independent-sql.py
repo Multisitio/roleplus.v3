@@ -64,6 +64,8 @@ def main():
             result_path = case / 'sql-result.json'
             if result_path.exists():
                 result = json.loads(result_path.read_text())
+                result['blocked_databases'] = plan.get('blocked', [])
+                result['coverage_complete'] = result.get('completed') is True and not result['blocked_databases']
                 ledger['archives'].extend(result.get('databases', []))
                 ledger['last_result'] = str(result_path)
                 if result.get('completed'):
