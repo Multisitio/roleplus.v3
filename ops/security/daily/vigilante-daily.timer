@@ -1,0 +1,12 @@
+[Unit]
+Description=Resumen del vigilante a las 09:00 de Madrid
+
+[Timer]
+OnCalendar=*-*-* 09:00:00 Europe/Madrid
+Persistent=true
+AccuracySec=1s
+RandomizedDelaySec=0
+Unit=vigilante-daily.service
+
+[Install]
+WantedBy=timers.target

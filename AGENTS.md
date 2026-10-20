@@ -367,3 +367,9 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
 - Observaciones del vigilante (2026-10-20): mostrarlas solo en parrafos,
   sin listas, vinetas ni cajas de enlace. Conservar separacion entre cada
   observacion y sus datos.
+
+- Correo del vigilante (2026-10-20): comprobar una vista previa bajo la unidad
+  aislada antes de enviar o activar un nuevo informe. Leer el panel mediante
+  el montaje de solo lectura autorizado, sin abrir el resto de la raiz web.
+  Porcentajes de cuota compartida, datos desconocidos y recuentos parciales
+  deben distinguirse; no presentarlos como consumo propio o totales diarios.

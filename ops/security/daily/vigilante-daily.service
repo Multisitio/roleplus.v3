@@ -1,0 +1,40 @@
+[Unit]
+Description=Resumen diario del vigilante sin inferencias de IA
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/daily-report.py
+RuntimeDirectory=vigilante-daily
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+InaccessiblePaths=/var/www /var/lib/vigilante-auth/profile /var/lib/vigilante-wa /srv/vigilante-ai
+ReadWritePaths=/var/lib/vigilante-daily
+BindReadOnlyPaths=/var/www/clients/client1/web17/web/webwatchdog/status.json:/run/vigilante-daily/panel.json
+MemoryDenyWriteExecute=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+CPUQuota=10%
+MemoryMax=128M
+TasksMax=16
+TimeoutStartSec=180s
+TimeoutStopSec=5s
+LimitCORE=0
+LimitFSIZE=4M
+Restart=no

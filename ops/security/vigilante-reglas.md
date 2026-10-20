@@ -41,8 +41,8 @@ las raices web y no se publican en este repositorio.
 - Canal urgente: notificaciones de ROLEplus al Android del operador. Recepcion
   y sonido confirmados el 18 y el 20 de octubre. El chat propio de WhatsApp
   queda vinculado, pero no es una alarma validada. SMS descartado.
-  El resumen diario a las 09:00 Europe/Madrid sigue siendo un requisito
-  independiente; activar alarmas urgentes no acredita su implantacion.
+  El resumen diario a las 09:00 Europe/Madrid se implanta en el tramo 17,
+  independiente de las alarmas urgentes y sin llamar a un modelo.
 
 Decision del 18 de octubre de 2026 para WhatsApp: preparar vinculacion por
 dispositivo con Baileys, mecanismo utilizado por OpenClaw, en lugar de contratar

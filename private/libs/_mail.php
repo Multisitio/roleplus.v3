@@ -36,7 +36,18 @@ class _mail
         $mail = new PHPMailer(true);
 
         try {
-            $mail->isMail();
+            if (PHP_SAPI === 'cli' && !empty($headers['LocalSMTP'])) {
+                // Procesos aislados sin setgid: entregar al mismo Postfix local
+                // por SMTP, sin usar postdrop ni abrir servicios adicionales.
+                $mail->isSMTP();
+                $mail->Host = '127.0.0.1';
+                $mail->Port = 25;
+                $mail->SMTPAuth = false;
+                $mail->SMTPAutoTLS = false;
+                $mail->Timeout = 10;
+            } else {
+                $mail->isMail();
+            }
             $mail->setLanguage('es');
             $mail->CharSet = PHPMailer::CHARSET_UTF8;
             $mail->Encoding = PHPMailer::ENCODING_QUOTED_PRINTABLE;
