@@ -36,6 +36,7 @@ def main():
     backup = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(backup)
     # Contrastar toda la seleccion antes de reservar el resultado o tomar READ.
+    catalogue_queries = {}
     for item in items:
         if (type(item['id']) is not int or item['id'] not in (1, 6, 8, 9, 10)
                 or type(item['domain_id']) is not int or item['domain_id'] < 1
@@ -58,12 +59,15 @@ def main():
                  "AND d.active='y' AND d.type='vhost' AND d.server_id=1;")
         if backup.query(query) != '1':
             raise ValueError('La correspondencia o politica del panel ha cambiado')
+        catalogue_queries[item['id']] = query
     result = {'completed': False, 'databases': [], 'native_schedule_changed': False}
     result_path = STATE / 'result.json'
     with result_path.open('x') as stream:
         stream.write(json.dumps(result) + '\n')
     try:
         for item in items:
+            if backup.query(catalogue_queries[item['id']]) != '1':
+                raise ValueError('El catalogo cambio antes de copiar')
             if shutil.disk_usage('/var/backup').free < 20 * 1024 ** 3 + 32 * 1024 ** 2:
                 raise ValueError('Reserva de disco insuficiente')
             dest = Path('/var/backup') / ('web' + str(item['domain_id']))
@@ -98,6 +102,8 @@ def main():
                      'strict_read_guard': True, 'global_read_lock_used': False,
                      'registered_in_panel': False}
             result['databases'].append(entry)
+            if backup.query(catalogue_queries[item['id']]) != '1':
+                raise ValueError('El catalogo cambio antes de registrar')
             backup.query('INSERT INTO web_backup(server_id,parent_domain_id,backup_type,backup_mode,'
                 'backup_format,tstamp,filename,filesize,backup_password) VALUES(1,'
                 + str(item['domain_id']) + ",'mysql','sqlgz','gzip'," + str(now) + ",'"
