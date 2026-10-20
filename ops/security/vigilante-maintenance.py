@@ -83,7 +83,11 @@ def payload(data):
 def cgi():
     data = current(os.environ.get('HTTP_HOST', ''))
     reply = payload(data)
-    status_query = os.environ.get('QUERY_STRING') == 'status=1'
+    # La consulta de estado solo pertenece al punto reservado. Una peticion
+    # de la aplicacion con esa misma consulta debe seguir recibiendo 503.
+    status_query = (os.environ.get('QUERY_STRING') == 'status=1'
+        and os.environ.get('REQUEST_URI', '').split('?', 1)[0] == '/__vigilante_maintenance'
+        and os.environ.get('REQUEST_METHOD', 'GET') in ('GET', 'HEAD'))
     ajax = (os.environ.get('REQUEST_METHOD', 'GET') not in ('GET', 'HEAD')
             or 'application/json' in os.environ.get('HTTP_ACCEPT', '')
             or os.environ.get('HTTP_X_REQUESTED_WITH', '').lower() == 'xmlhttprequest')

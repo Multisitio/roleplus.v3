@@ -82,7 +82,8 @@ def main():
                     time.sleep(.1)
             else:
                 raise RuntimeError('Puerto privado no disponible')
-            for path, method in [('/app', 'GET'), ('/app', 'POST'), ('/index.php', 'POST'), ('/missing.png', 'GET')]:
+            for path, method in [('/app', 'GET'), ('/app', 'POST'), ('/index.php', 'POST'),
+                                  ('/missing.png', 'GET'), ('/app?status=1', 'GET'), ('/app?status=1', 'POST')]:
                 status, headers, body = request(path, method)
                 assert status == 503 and headers.get('X-Vigilante-Maintenance') == data['window'], (path, status)
                 if method == 'GET':
@@ -95,6 +96,9 @@ def main():
             status, headers, body = request('/app', 'POST', ajax=True)
             assert status == 503 and json.loads(body)['active'] and b'<html' not in body
             report['checks'].append('ajax_gets_json_and_retry_after')
+            status, headers, body = request('/__vigilante_maintenance?status=1')
+            assert status == 200 and json.loads(body)['active']
+            report['checks'].append('status_200_only_on_reserved_get_endpoint')
             assert request('/static.js')[0] == 200
             assert request('/static.js', 'POST')[0] == 503
             assert request('/app', host='unaffected.test')[0] == 200
