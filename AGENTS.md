@@ -1,5 +1,10 @@
 # Instrucciones del proyecto RolePlus
 
+- Mantenimiento SQL (2026-10-20): antes de detener escrituras, mostrar un aviso
+  de mantenimiento en modo de solo lectura con tiempo estimado. La proteccion
+  debe impedir guardados realmente y caducar aunque falle el coordinador;
+  no activar bloqueos largos mientras esta barrera no este comprobada.
+
 - Inventario SQL (2026-10-20): comprobar TABLE_TYPE ademas de ENGINE.
   Un motor sin informar no acredita una vista, una base vacia ni desuso.
   Las bases sin dominio siguen protegidas como independientes, sin asignar

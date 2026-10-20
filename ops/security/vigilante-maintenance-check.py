@@ -21,12 +21,7 @@ def main():
     web.mkdir(mode=0o700)
     (web / 'static.js').write_text('/* recurso de ensayo */\n')
     (web / 'index.php').write_text('entrada simulada; no es PHP ejecutable\n')
-    writer = RUN / 'app.cgi'
-    writer.write_text('#!/usr/bin/python3\nimport os\nfrom pathlib import Path\n'
-        "p=Path('" + str(RUN / 'counter') + "')\n"
-        "if os.environ.get('REQUEST_METHOD')=='POST':p.write_text(str(int(p.read_text())+1))\n"
-        "print('Content-Type: text/plain\\r\\n\\r\\nlectura de ensayo')\n")
-    writer.chmod(0o700)
+    writer = Path('/usr/local/lib/vigilante/vigilante-maintenance-writer-check.cgi')
     (RUN / 'counter').write_text('0')
     data_path = RUN / 'state.json'
     data = {'window': uuid.uuid4().hex, 'hosts': ['maintenance.test'],
@@ -40,11 +35,13 @@ def main():
     conf += 'Listen 127.0.0.1:18089\nServerName maintenance.test\n'
     conf += 'PidFile ' + str(RUN / 'httpd.pid') + '\nErrorLog ' + str(STATE / 'apache-errors.log') + '\n'
     conf += 'TypesConfig /etc/mime.types\nUser www-data\nGroup www-data\n'
+    conf += 'LogLevel warn rewrite:trace5\n'
     conf += 'ScriptSock ' + str(RUN / 'cgid.sock') + '\n'
     conf += '<VirtualHost 127.0.0.1:18089>\nServerName maintenance.test\nDocumentRoot ' + str(web) + '\n'
     conf += 'SetEnv VIGILANTE_MAINTENANCE_STATE ' + str(data_path) + '\n'
     conf += Path('/usr/local/lib/vigilante/vigilante-maintenance-apache.conf').read_text()
-    conf += '\nScriptAlias /app ' + str(writer) + '\n<Directory ' + str(RUN) + '>\nOptions +ExecCGI -Indexes\nRequire all granted\n</Directory>\n</VirtualHost>\n'
+    conf += '\nScriptAlias /app ' + str(writer) + '\n<Directory ' + str(RUN) + '>\nOptions -Indexes\nRequire all granted\n</Directory>\n'
+    conf += '<Directory /usr/local/lib/vigilante>\nOptions +ExecCGI -Indexes\nRequire all granted\n</Directory>\n</VirtualHost>\n'
     config = RUN / 'httpd.conf'
     config.write_text(conf)
     report = {'completed': False, 'uid': os.geteuid(), 'public_network': False, 'checks': []}
@@ -66,6 +63,11 @@ def main():
         try:
             subprocess.run(['/usr/sbin/apache2', '-t', '-f', str(config)], env=env,
                 stderr=errors, stdout=errors, check=True, timeout=10)
+            probe = subprocess.run(['/usr/local/lib/vigilante/vigilante-maintenance.py', '--map'],
+                input='maintenance.test\nunaffected.test\n', capture_output=True, text=True,
+                env=env, check=True, timeout=5)
+            assert probe.stdout.splitlines() == ['on', 'off']
+            report['checks'].append('public_state_reader_on_off')
             server = subprocess.Popen(['/usr/sbin/apache2', '-X', '-f', str(config)],
                 env=env, stderr=errors, stdout=errors)
             for _ in range(100):
@@ -80,7 +82,7 @@ def main():
                 raise RuntimeError('Puerto privado no disponible')
             for path, method in [('/app', 'GET'), ('/app', 'POST'), ('/index.php', 'POST'), ('/missing.png', 'GET')]:
                 status, headers, body = request(path, method)
-                assert status == 503 and headers.get('X-Vigilante-Maintenance') == data['window']
+                assert status == 503 and headers.get('X-Vigilante-Maintenance') == data['window'], (path, status)
                 assert b'Modo de solo lectura' in body and b'Tiempo estimado' in body
                 assert b'<style' not in body and b' style=' not in body
             assert (RUN / 'counter').read_text() == '0'
