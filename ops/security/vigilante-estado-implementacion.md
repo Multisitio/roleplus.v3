@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 29. Implementacion NO finalizada.
+Actualizado: 20 de octubre de 2026, tramo 30. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -31,9 +31,15 @@ Actualizado: 20 de octubre de 2026, tramo 29. Implementacion NO finalizada.
   una tabla y 67 filas. Bloqueo de lectura acotado y liberacion comprobada
   al cancelar, matar o suspender su controlador. Proxima ejecucion:
   25 de octubre a las 04:30 de Madrid.
-- Segunda base independiente bloqueada por error InnoDB 1932, registrada como
-  incidencia de recuperacion de prioridad alta. Originales intactos; cobertura
-  SQL expresamente incompleta, sin sustitucion por el candidato local distinto.
+- Segunda base independiente recuperada: c1_deportes.usuarios, nueve columnas
+  y una fila. Definicion extraida del .frm original y datos del .ibd original;
+  importacion, integridad, segunda restauracion y copia nueva de produccion
+  contrastadas en aislamiento, comparando todos los valores y la estructura.
+  Originales conservados sin modificar su contenido; directorio corregido de
+  0555 a 0750, sin cambios recursivos. Sin reiniciar MariaDB ni otros servicios.
+  Ambas bases independientes cubiertas por el programador semanal existente,
+  con siete versiones por base; no se crea otro programador ni se usa el
+  candidato local distinto. Laboratorio y copias binarias temporales retirados.
 - Copias semanales solo de texto para once webs, ROLEplus incluida, y las
   dependencias compartidas core/vendor; dos versiones por raiz. Las copias
   completas web anteriores quedan desactivadas. Binarios fuera de cobertura
@@ -66,7 +72,7 @@ Actualizado: 20 de octubre de 2026, tramo 29. Implementacion NO finalizada.
   DNS de estadisticas desactivado y tareas atrasadas completadas. Pendientes
   regeneracion de esas estadisticas y limites generales de los trabajos.
 
-## Cinco pasos pendientes para dar la implementacion por terminada
+## Cuatro pasos pendientes para dar la implementacion por terminada
 
 1. **SQL automatico seguro:** resolver la estrategia consistente de ROLEplus y
    MTGsearch frente a MyISAM, verificar copias nuevas y sus restauraciones e
@@ -77,18 +83,14 @@ Actualizado: 20 de octubre de 2026, tramo 29. Implementacion NO finalizada.
    integrar y comprobar el aviso previo de mantenimiento ya instalado. Falta
    conectar la barrera al ejecutor y su programacion unica; no se ha activado
    una ventana real ni se han obtenido aun copias nuevas de las dos grandes.
-2. **Tabla independiente ilegible:** recuperar y contrastar la tabla con error
-   InnoDB 1932 en aislamiento antes de modificar originales; su candidato
-   local distinto no es una fuente de verdad acreditada. Su cobertura sigue
-   bloqueada y no puede darse por protegida.
-3. **Automatismos heredados:** revisar el estado junto al panel web y el
+2. **Automatismos heredados:** revisar el estado junto al panel web y el
    ejecutor que termina consultas SQL; eliminar capacidades o decisiones
    contradictorias y conservar un unico control de actuaciones.
-4. **Reparaciones acotadas:** conectar el ejecutor probado a destinos y
+3. **Reparaciones acotadas:** conectar el ejecutor probado a destinos y
    operaciones expresamente permitidos, con revision, bloqueo coordinado,
    copia previa, comprobaciones y recuperacion ante fallo. Probar su
    aislamiento efectivo antes de permitir escrituras reales de la IA.
-5. **Aceptacion conjunta:** comprobar el recorrido completo de una incidencia,
+4. **Aceptacion conjunta:** comprobar el recorrido completo de una incidencia,
    diagnostico, accion permitida o escalado, aviso y diario; verificar limites
    y continuidad de los servicios, incluido el aviso ante fallo de las nuevas
    copias de texto y SQL independientes, cerrar la lista y declarar expresamente
