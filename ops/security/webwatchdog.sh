@@ -348,11 +348,15 @@ restart_unit(){
 }
 
 restart_units(){
-        local unit
+        local unit result=0
         for unit in "$@"; do
                 log "REINICIO unit=$unit"
-                restart_unit "$unit" || log "REINICIO_ERROR unit=$unit"
+                if ! restart_unit "$unit"; then
+                        log "REINICIO_APLAZADO_O_ERROR unit=$unit"
+                        result=1
+                fi
         done
+        return "$result"
 }
 
 json_escape(){
@@ -467,6 +471,9 @@ URL: $base
 
         if [ "$st" = "down" ]; then
                 log "FALLO url=$base estado=down code=$(get_code "$base")"
+                if [ "$(get_restart_done "$base")" -eq 0 ] && /usr/local/sbin/vps-service-control site-restart-allowed "$base" >/dev/null; then
+                        need_restart=1
+                fi
                 continue
         fi
 
@@ -485,7 +492,6 @@ URL: $base
                 if [ "$(get_restart_done "$base")" -eq 1 ]; then
                         continue
                 fi
-                set_restart_done "$base" 1
         fi
 
         action_label="revision requerida; sin reinicio"
@@ -509,10 +515,11 @@ if [ "${#PANEL_URLS[@]}" -eq 0 ]; then
 fi
 
 if [ "$need_restart" -eq 1 ]; then
+        restart_accepted=0
         if [ "$total_hosts" -gt 0 ] && [ "$failing_now" -ge "$total_hosts" ]; then
-                restart_units "${restart_units_global[@]}"
+                if restart_units "${restart_units_global[@]}"; then restart_accepted=1; fi
         else
-                restart_units "${restart_units_single[@]}"
+                if restart_units "${restart_units_single[@]}"; then restart_accepted=1; fi
         fi
 
         for base in "${PANEL_URLS[@]}"; do
@@ -531,7 +538,7 @@ if [ "$need_restart" -eq 1 ]; then
                 set_last_fail_madrid "$base" "$(now_madrid)"
                 set_status "$base" "down"
 
-                if [ "$st" = "up" ] && [ "$restart_once_per_outage" -eq 1 ]; then
+                if [ "$restart_accepted" -eq 1 ] && [ "$restart_once_per_outage" -eq 1 ]; then
                         set_restart_done "$base" 1
                 fi
         done
