@@ -364,3 +364,6 @@ oleplus.vh) y el servidor remoto de producciÃƒÂ³n. Nunca se deben sobrescrib
   y footer para las acciones. Separar datos e historial y reutilizar las clases
   existentes de espaciado. Verificar legibilidad, separacion y margenes en
   movil; que una ficha se renderice no acredita que este bien maquetada.
+- Observaciones del vigilante (2026-10-20): mostrarlas solo en parrafos,
+  sin listas, vinetas ni cajas de enlace. Conservar separacion entre cada
+  observacion y sus datos.

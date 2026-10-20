@@ -89,19 +89,13 @@ $fecha = static fn($stamp) => (new DateTimeImmutable('@' . (int) $stamp))->setTi
             <section class="contenido pa15">
                 <span class="block">
                     <?php if ($aviso['items']): ?>
-                        <ul>
-                            <?php foreach ($aviso['items'] as $item): ?>
-                                <li class="flex gap10 mb10">
-                                    <span class="grow">
-                                        <a class="block w100 align-left" href="/registrados/vigilante/aviso/<?=$esc($item['reference'])?>">
-                                            <?=$esc($item['label'])?><br>
-                                            <small><?=$esc($item['site'])?></small>
-                                        </a>
-                                        <small class="block"><?=$esc($fecha($item['last_seen']))?> (Madrid)</small>
-                                    </span>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <?php foreach ($aviso['items'] as $item): ?>
+                            <p>
+                                <strong><?=$esc($item['label'])?></strong><br>
+                                <?=$esc($item['site'])?><br>
+                                <small><?=$esc($fecha($item['last_seen']))?> (Madrid)</small>
+                            </p>
+                        <?php endforeach; ?>
                     <?php else: ?>
                         <p><?=t('No hay observaciones urgentes registradas en esta ficha.')?></p>
                     <?php endif; ?>
