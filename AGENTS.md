@@ -1,5 +1,11 @@
 # Instrucciones del proyecto RolePlus
 
+- Cierre del vigilante (2026-10-20): mantener la lista explicita de criterios
+  pendientes en ops/security/vigilante-estado-implementacion.md. Avisar cuando
+  se cumplan todos y la implementacion este finalizada. No confundir operacion
+  continua o incidencias futuras con nuevos requisitos indefinidos de puesta
+  en marcha; no declarar finalizacion mientras falten barreras efectivas.
+
 - Registros del VPS (2026-10-18): resolver DocumentRoot y ErrorLog del servidor
   virtual del dominio antes de analizar incidencias. No deducir el sitio a
   partir de un numero webN ni atribuirle los registros de otra web.
