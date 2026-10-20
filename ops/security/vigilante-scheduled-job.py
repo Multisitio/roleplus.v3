@@ -130,6 +130,7 @@ def observe():
     else: faults.extend('ispconfig-'+n for n,since in running.items() if now-since>900)
     result = {'checked_at':now, 'sql_observation_only':True, 'query_termination_enabled':False,
               'sql_aggregate':sql, 'failed_jobs':faults, 'sql_probe_ok':p.returncode==0,
+              'urgent_failed_jobs':[name for name in faults if name.startswith('ispconfig-')],
               'native_owners':config['native_owners'], 'native_running_since':running}
     save(STATE.parent / 'legacy-automation.json',result)
     print(json.dumps(result));return 0

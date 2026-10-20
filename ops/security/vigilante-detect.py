@@ -182,7 +182,8 @@ def collect(state,sites,now,global_log=None):
             observation=json.loads(legacy.read_text())
             coverage['legacy_fresh']=0<=now-observation['checked_at']<=180
             if not coverage['legacy_fresh'] or observation['failed_jobs'] or not observation['sql_probe_ok']:
-                events.append(event('server','automation_failed',severity='high'))
+                urgent=not coverage['legacy_fresh'] or not observation['sql_probe_ok'] or observation.get('urgent_failed_jobs',[])
+                events.append(event('server','automation_failed',severity='high' if urgent else 'normal'))
         except (OSError,ValueError,KeyError,TypeError):coverage['legacy_fresh']=False
     for unit,family in [('apache2.service','apache2'),('php8.4-fpm.service','php_fpm'),('mariadb.service','mariadb'),('webwatchdog.service','watchdog')]:
         result=subprocess.run(['/usr/bin/systemctl','is-active',unit],capture_output=True,text=True,timeout=5)

@@ -74,5 +74,12 @@ class NotificationsTests(unittest.TestCase):
             event=d.event('server',kind,severity='high')
             self.assertEqual(len(self.run_events([event])['items']),1)
 
+    def test_automation_failure_does_not_claim_service_down(self):
+        event=d.event('server','automation_failed',severity='high')
+        item=self.run_events([event])['items'][event['id']]
+        self.assertTrue(item['text'].startswith('Tarea programada pendiente de revision:'))
+        event=d.event('server','automation_failed',severity='normal')
+        self.assertEqual(self.run_events([event])['items'],{})
+
 
 if __name__=='__main__':unittest.main()
