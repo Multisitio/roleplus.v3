@@ -31,6 +31,7 @@ function validate_web_backups(array $plan): array
 
 function apply_web_backups(string $path): void
 {
+    throw new RuntimeException('Retirado: usar exclusivamente vigilante-text-backups.service');
     if (PHP_SAPI !== 'cli' || posix_geteuid() !== 0 || is_link($path)
         || fileowner($path) !== 0 || (fileperms($path) & 0077) !== 0
         || fileowner(dirname($path)) !== 0 || (fileperms(dirname($path)) & 0077) !== 0) {

@@ -1,0 +1,11 @@
+[Unit]
+Description=Copias semanales de texto del vigilante
+
+[Timer]
+OnCalendar=Sun *-*-* 04:15:00 Europe/Madrid
+Persistent=true
+AccuracySec=1min
+Unit=vigilante-text-backups.service
+
+[Install]
+WantedBy=timers.target

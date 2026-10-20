@@ -1,5 +1,16 @@
 # Instrucciones del proyecto RolePlus
 
+- Copias del vigilante (2026-10-20): por indicacion del usuario, guardar solo
+  contenido de texto; excluir binarios por contenido, no solo por extension.
+  No programar archivos completos de webs que incluyan imagenes, fuentes,
+  audio o ejecutables. Los contenedores comprimidos pueden guardar texto.
+  Los originales binarios de usuarios permanecen en produccion y no quedan
+  protegidos por estas copias: expresar ese limite sin ampliar la politica.
+- Coordinacion Git (2026-10-20): las operaciones de codigo de R2-D2 y del VPS
+  deben contrastar la misma revision publicada en GitHub antes de desplegar.
+  Detenerse ante cambios locales, remotos o huellas divergentes; no usar
+  sincronizacion bidireccional ciega, force-push ni resets de trabajo ajeno.
+
 - Cierre del vigilante (2026-10-20): mantener la lista explicita de criterios
   pendientes en ops/security/vigilante-estado-implementacion.md. Avisar cuando
   se cumplan todos y la implementacion este finalizada. No confundir operacion

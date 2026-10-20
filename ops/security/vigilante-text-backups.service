@@ -1,0 +1,30 @@
+[Unit]
+Description=Copias de texto del vigilante, sin binarios
+After=mariadb.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/vigilante-text-backups.py
+User=root
+UMask=0077
+StateDirectory=vigilante-text-backups
+StateDirectoryMode=0700
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateNetwork=yes
+PrivateDevices=yes
+RestrictAddressFamilies=AF_UNIX
+NoNewPrivileges=yes
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH
+InaccessiblePaths=/var/lib/vigilante-auth /var/lib/vigilante-wa /srv/vigilante-ai
+ReadWritePaths=/var/backup
+Nice=19
+IOWeight=10
+CPUQuota=25%
+MemoryMax=256M
+TasksMax=16
+TimeoutStartSec=15min
+TimeoutStopSec=10s
+LimitCORE=0
+Restart=no

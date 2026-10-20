@@ -2,11 +2,13 @@
 """Prepara archivos de un commit explicito. No escribe en las webs ni reinicia."""
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
+import time
 
 
 def digest(data):
@@ -97,7 +99,16 @@ def main():
     parser.add_argument('files', nargs='+')
     args = parser.parse_args()
     try:
+        spec = importlib.util.spec_from_file_location('sync_guard', Path(__file__).with_name('vigilante-git-guard.py'))
+        guard = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(guard)
+        guard.verify(args.repository, args.commit)
         result = prepare(args.repository, args.commit, args.files, args.output)
+        guard.verify(args.repository, args.commit)
+        result['git_sync'] = {'verified_at': int(time.time()), 'remote_head': args.commit,
+                              'local_head': args.commit, 'must_recheck_before_write': True}
+        (Path(args.output) / 'manifest.json').write_text(
+            json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     except (ValueError, OSError) as error:
         parser.exit(1, str(error) + '\n')
     print(json.dumps({'commit': result['commit'], 'file_count': len(result['files']),

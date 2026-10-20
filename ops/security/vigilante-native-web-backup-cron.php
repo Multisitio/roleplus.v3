@@ -1,4 +1,5 @@
 <?php
+throw new RuntimeException('Retirado: la copia completa admite binarios; usar el ejecutor de texto');
 /** Una copia manual del sitio revisado, usando el ejecutor instalado de ISPConfig. */
 if (PHP_SAPI !== 'cli' || posix_geteuid() !== 0 || $argc !== 2
     || !ctype_digit($argv[1]) || (int) $argv[1] < 1) {
