@@ -84,10 +84,14 @@ def prepare_source():
     for service in ['mail','web','dns','xmpp','firewall','vserver','db']:
         config+='svc_detect_change_'+service+'_server=no\n'
     (CASE/'update.ini').write_text(config)
+    commands=CASE/'commands';commands.mkdir(mode=0o700,exist_ok=True)
+    mysql=commands/'mysql'
+    mysql.write_text('#!/bin/sh\nexec /usr/bin/mysql --init-command="SET SESSION max_statement_time=60" "$@"\n')
+    mysql.chmod(0o700)
     subprocess.run(['/usr/bin/php8.4','-n','-l',str(SOURCE/'install/update-coordinated.php')],check=True,capture_output=True)
     save('installer-adaptations.json',{'release_sha256':RELEASE_SHA,'acme_preserved':True,'existing_ca_rows_preserved':True,
         'recursive_log_patch_replaced_by_review':True,'service_reconfiguration':False,
-        'native_binary_backups_disabled':True,'native_crontab_reconfiguration':False})
+        'native_binary_backups_disabled':True,'migration_session_limit_seconds':60,'native_crontab_reconfiguration':False})
 
 
 def trial():
@@ -113,7 +117,7 @@ def trial():
                 if quoted in content:
                     assert p.name=='upd_0103.sql' and content.count(quoted)==1
                     content=content.replace(quoted,chr(96)+LAB+chr(96))
-                subprocess.run(['mysql','--defaults-extra-file='+str(client),'--default-character-set=utf8mb4',LAB],
+                subprocess.run(['mysql','--defaults-extra-file='+str(client),'--init-command=SET SESSION max_statement_time=60','--default-character-set=utf8mb4',LAB],
                     input=content.encode(),stdout=log,stderr=log,check=True,timeout=180)
                 patches.append(p.name)
         critical=['web_domain','web_database','web_database_user','server_php','remote_user','mail_domain','mail_user','dns_soa','sys_user']
