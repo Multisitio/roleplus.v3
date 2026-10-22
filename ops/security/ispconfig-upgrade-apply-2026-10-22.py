@@ -75,6 +75,16 @@ def restore_custom(old):
         with path.open('a') as out:
             out.write('\n// Ajustes anteriores conservados por el coordinador.\n')
             out.write("foreach(json_decode(base64_decode('"+encoded+"'),true) as $key=>$value){$conf[$key]=$value;}\n")
+    if changes:
+        manifests=sorted(Path('/usr/local/ispconfig/security/data').glob('file_checksums_*.md5'),key=lambda p:p.stat().st_mtime)
+        assert manifests
+        manifest=manifests[-1];lines=manifest.read_text().splitlines(keepends=True)
+        changed=0
+        for i,line in enumerate(lines):
+            if line.rstrip().endswith('  '+str(path)):
+                lines[i]=hashlib.md5(path.read_bytes()).hexdigest()+'  '+str(path)+'\n';changed+=1
+        assert changed==1
+        manifest.write_text(''.join(lines))
     save('custom-config-preserved.json',{'keys':sorted(changes),'connection_values_preserved':True})
 
 
@@ -134,6 +144,8 @@ def main():
     assert os.geteuid()==0;os.umask(0o077)
     assert json.loads((CASE/'prepared.json').read_text())['completed']
     assert json.loads((CASE/'trial-verification.json').read_text())['completed']
+    certs={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('/usr/local/ispconfig/interface/ssl').glob('*') if p.is_file()}
+    auth_before=hashlib.sha256(prep.sql('SELECT username,passwort,typ FROM dbispconfig.sys_user ORDER BY userid').encode()).hexdigest()
     old_config=config('/usr/local/ispconfig/interface/lib/config.inc.php')
     assert old_config['app_version']=='3.2.12p1'
     cron=subprocess.check_output(['crontab','-l'],text=True)
@@ -172,6 +184,8 @@ def main():
         assert prep.sql('SELECT dbversion FROM dbispconfig.server WHERE server_id=1').strip()=='107'
         assert config('/usr/local/ispconfig/interface/lib/config.inc.php')['app_version']=='3.3.2p1'
         restore_custom(old_config)
+        assert auth_before==hashlib.sha256(prep.sql('SELECT username,passwort,typ FROM dbispconfig.sys_user ORDER BY userid').encode()).hexdigest(),'Han cambiado credenciales del panel'
+        assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in certs.items()),'Un certificado ha cambiado'
         assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in sites.items()),'Una web ha cambiado'
         # La plantilla oficial ya sustituyo la pausa en disco; permanece activa
         # en Apache hasta esta recarga coordinada tras comprobar todo.
