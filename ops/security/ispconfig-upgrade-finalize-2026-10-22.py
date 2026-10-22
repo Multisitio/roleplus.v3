@@ -11,6 +11,7 @@ import grp
 import re
 import stat
 import subprocess
+import tempfile
 
 CASE=Path('/root/codex-vigilante/ispconfig-php84-2026-10-22')
 spec=importlib.util.spec_from_file_location('migration',CASE/'ispconfig-php84-migrate-2026-10-22.py')
@@ -19,6 +20,13 @@ upgrade=migration.upgrade
 POLICY=Path('/etc/vigilante/policy.json')
 RC=Path('/usr/sbin/policy-rc.d')
 RC_BODY=b'#!/bin/sh\n# Retirada coordinada de PHP 8.1 sin consumidores.\nexit 101\n'
+
+
+def write_policy(data):
+    fd,tmp=tempfile.mkstemp(dir=POLICY.parent)
+    with os.fdopen(fd,'w') as out:
+        os.fchmod(out.fileno(),0o600);json.dump(data,out,indent=2);out.write('\n');out.flush();os.fsync(out.fileno())
+    os.replace(tmp,POLICY)
 
 
 def log_permissions():
@@ -100,7 +108,7 @@ def retire81():
         except OSError:continue
         if name.endswith(('/php8.1','/php-cgi8.1')):busy.append(p.parent.name)
     assert not busy,'Quedan procesos CLI/CGI 8.1; no se fuerza su cierre'
-    fmt=chr(36)+'{binary:Package}\t'+chr(36)+'{db:Status-Status}\n'
+    fmt=chr(36)+'{Package}\t'+chr(36)+'{db:Status-Status}\n'
     raw=subprocess.check_output(['dpkg-query','-W','-f='+fmt],text=True)
     names=[l.split('\t')[0] for l in raw.splitlines() if l.endswith('\tinstalled') and re.fullmatch(r'php8\.1(?:-[a-z0-9-]+)?',l.split('\t')[0])]
     assert 5<len(names)<40
@@ -112,7 +120,7 @@ def retire81():
     policy=json.loads(POLICY.read_text());assert not policy.get('php_security_retirement_units')
     policy['php_security_retirement_units']=['php8.1-fpm.service']
     policy['php_security_retirement_verified_branches']=['8.1']
-    POLICY.write_text(json.dumps(policy,indent=2)+'\n')
+    write_policy(policy)
     try:
         result=subprocess.run(['/usr/local/sbin/vps-service-control','retire-php-security','php8.1-fpm.service',
             '--origin','security-php-update'],capture_output=True,text=True,check=True,timeout=30)
@@ -128,8 +136,11 @@ def retire81():
                 if RC.exists() and not RC.is_symlink() and RC.read_bytes()==RC_BODY:RC.unlink()
     finally:
         policy=json.loads(POLICY.read_text());policy.pop('php_security_retirement_units',None)
-        policy.pop('php_security_retirement_verified_branches',None);POLICY.write_text(json.dumps(policy,indent=2)+'\n')
+        policy.pop('php_security_retirement_verified_branches',None);write_policy(policy)
     assert not subprocess.check_output(['dpkg','--audit'],text=True).strip()
+    remaining=subprocess.check_output(['dpkg-query','-W','-f='+fmt],text=True)
+    assert not any(l.endswith('\tinstalled') and re.match(r'php8\.1(?:-|\t)',l) for l in remaining.splitlines())
+    assert os.path.realpath('/usr/bin/php-cgi')=='/usr/bin/php-cgi8.4'
     return len(names)
 
 

@@ -31,7 +31,7 @@ def php(code):
 PREFIX='require "/usr/local/ispconfig/server/lib/config.inc.php";require "/usr/local/ispconfig/server/lib/app.inc.php";$app->uses("ini_parser");'
 
 
-def migrate_profile(restore=False):
+def migrate_profile(restore=False,check_only=False):
     target=str(CASE/'server-config-before-php84.txt')
     if restore:
         code=PREFIX+'$app->db->query("UPDATE server SET config=? WHERE server_id=1",file_get_contents("'+target+'"));'
@@ -46,15 +46,19 @@ $changes=[
 "php_ini_path_apache"=>"/etc/php/8.4/apache2/php.ini"],
 "fastcgi"=>["fastcgi_bin"=>"/usr/bin/php-cgi8.4","fastcgi_phpini_path"=>"/etc/php/8.4/cgi/"]];
 foreach($changes as $section=>$values){foreach($values as $key=>$value){$cfg[$section][$key]=$value;}}
-$app->db->query("UPDATE server SET config=? WHERE server_id=1",$app->ini_parser->array_to_ini($cfg));
+$writer=new ini_parser();$writer->config=$cfg;
+$encoded=addslashes($writer->get_ini_string($cfg));
+$roundtrip=new ini_parser();if($roundtrip->parse_ini_string(stripslashes($encoded))!==$cfg)exit(5);
+if(CHECK_ONLY){echo "Formato del perfil comprobado sin escribir en la base.";return;}
+$app->db->query("UPDATE server SET config=? WHERE server_id=1",$encoded);
 $read=$app->db->queryOneRecord("SELECT config FROM server WHERE server_id=1");
-$after=$app->ini_parser->parse_ini_string(stripslashes($read["config"]));
+$reader=new ini_parser();$after=$reader->parse_ini_string(stripslashes($read["config"]));
 foreach($changes as $section=>$values){foreach($values as $key=>$value){if($after[$section][$key]!==$value)exit(3);}}
 foreach($before as $section=>$values){foreach($values as $key=>$value){
 if(!isset($changes[$section][$key]) && ($after[$section][$key]??null)!==$value)exit(4);
 }}
 echo "Perfil PHP actualizado y resto de valores conservados.";
-'''.replace('TARGET',target)
+'''.replace('TARGET',target).replace('CHECK_ONLY','true' if check_only else 'false')
     result=php(code)
     if result:print(result,flush=True)
 
@@ -122,6 +126,7 @@ def main():
     upgrade.save('php84-files-before.json',before)
     old_active=upgrade.prep.sql('SELECT active FROM dbispconfig.server_php WHERE server_php_id=8').strip()
     assert upgrade.prep.sql('SELECT COUNT(*) FROM dbispconfig.web_domain WHERE server_php_id=8').strip()=='0'
+    migrate_profile(check_only=True)
     upgrade.policy_units(True);profile=False
     try:
         upgrade.phase('preparando_grupo_general_php84')
