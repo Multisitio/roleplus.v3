@@ -50,7 +50,7 @@ def log_permissions():
         if not error.is_absolute() or not error.exists():continue
         error=error.resolve();root=error.parent
         if not str(root).startswith('/var/log/ispconfig/httpd/'):continue
-        assert root==((Path(base)/'log').resolve()),'Registro no coincide con el sitio resuelto'
+        assert os.path.samefile(root,Path(base)/'log'),'Registro no coincide con el sitio resuelto'
         assert root.stat().st_uid==0 and not root.stat().st_mode&0o022
         roots[str(root)]=(user,group,vhost.name,doc)
     for name,(user,group,vhost,doc) in roots.items():

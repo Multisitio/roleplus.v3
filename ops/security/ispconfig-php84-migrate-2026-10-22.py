@@ -28,7 +28,7 @@ def php(code):
     return p.stdout
 
 
-PREFIX='require "/usr/local/ispconfig/server/lib/config.inc.php";require "/usr/local/ispconfig/server/lib/app.inc.php";$app->uses("ini_parser");'
+PREFIX='require "/usr/local/ispconfig/server/lib/config.inc.php";require "/usr/local/ispconfig/server/lib/app.inc.php";require_once "/root/codex-vigilante/ispconfig-php84-2026-10-22/native-install.lib.php";'
 
 
 def migrate_profile(restore=False,check_only=False):
@@ -39,20 +39,19 @@ def migrate_profile(restore=False,check_only=False):
         code=PREFIX+'''
 $row=$app->db->queryOneRecord("SELECT config FROM server WHERE server_id=1");
 file_put_contents("TARGET",$row["config"]);chmod("TARGET",0600);
-$cfg=$app->ini_parser->parse_ini_string(stripslashes($row["config"]));$before=$cfg;
+$cfg=ini_to_array(stripslashes($row["config"]));$before=$cfg;
 $changes=[
 "web"=>["php_fpm_init_script"=>"php8.4-fpm","php_fpm_ini_path"=>"/etc/php/8.4/fpm/php.ini",
 "php_fpm_pool_dir"=>"/etc/php/8.4/fpm/pool.d","php_ini_path_cgi"=>"/etc/php/8.4/cgi/php.ini",
 "php_ini_path_apache"=>"/etc/php/8.4/apache2/php.ini"],
 "fastcgi"=>["fastcgi_bin"=>"/usr/bin/php-cgi8.4","fastcgi_phpini_path"=>"/etc/php/8.4/cgi/"]];
 foreach($changes as $section=>$values){foreach($values as $key=>$value){$cfg[$section][$key]=$value;}}
-$writer=new ini_parser();$writer->config=$cfg;
-$encoded=addslashes($writer->get_ini_string($cfg));
-$roundtrip=new ini_parser();if($roundtrip->parse_ini_string(stripslashes($encoded))!==$cfg)exit(5);
+$encoded=addslashes(array_to_ini($cfg));
+if(ini_to_array(stripslashes($encoded))!==$cfg)exit(5);
 if(CHECK_ONLY){echo "Formato del perfil comprobado sin escribir en la base.";return;}
 $app->db->query("UPDATE server SET config=? WHERE server_id=1",$encoded);
 $read=$app->db->queryOneRecord("SELECT config FROM server WHERE server_id=1");
-$reader=new ini_parser();$after=$reader->parse_ini_string(stripslashes($read["config"]));
+$after=ini_to_array(stripslashes($read["config"]));
 foreach($changes as $section=>$values){foreach($values as $key=>$value){if($after[$section][$key]!==$value)exit(3);}}
 foreach($before as $section=>$values){foreach($values as $key=>$value){
 if(!isset($changes[$section][$key]) && ($after[$section][$key]??null)!==$value)exit(4);
@@ -126,6 +125,8 @@ def main():
     upgrade.save('php84-files-before.json',before)
     old_active=upgrade.prep.sql('SELECT active FROM dbispconfig.server_php WHERE server_php_id=8').strip()
     assert upgrade.prep.sql('SELECT COUNT(*) FROM dbispconfig.web_domain WHERE server_php_id=8').strip()=='0'
+    native=CASE/'native-install.lib.php'
+    native.write_bytes((upgrade.prep.SOURCE/'install/lib/install.lib.php').read_bytes());native.chmod(0o600)
     migrate_profile(check_only=True)
     upgrade.policy_units(True);profile=False
     try:
