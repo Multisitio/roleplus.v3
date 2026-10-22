@@ -28,6 +28,14 @@ def sql(query):
     return subprocess.check_output(['mysql','--batch','--skip-column-names','dbispconfig','-e',query],text=True)
 
 
+def disable_choices():
+    selected=','.join(map(str,IDS))
+    assert (CASE/'ispconfig-php-choices-before.sql').exists()
+    assert sql('SELECT COUNT(*) FROM web_domain WHERE server_php_id IN ('+selected+')').strip()=='0'
+    sql('UPDATE server_php SET active="n" WHERE server_php_id IN ('+selected+') AND NOT EXISTS (SELECT 1 FROM web_domain WHERE web_domain.server_php_id=server_php.server_php_id)')
+    assert sql('SELECT COUNT(*) FROM server_php WHERE server_php_id IN ('+selected+') AND active="y"').strip()=='0'
+
+
 def main():
     assert os.geteuid()==0
     os.umask(0o077)
@@ -53,6 +61,7 @@ def main():
     before=update.health();assert all(p['exit']==0 and p['code']=='200' for p in before.values())
     with (CASE/'ispconfig-php-choices-before.sql').open('w') as out:
         subprocess.run(['mysqldump','--skip-lock-tables','--no-create-info','dbispconfig','server_php'],stdout=out,check=True)
+    disable_choices()
     if RC.exists() or RC.is_symlink():raise RuntimeError('Existe politica de paquetes')
     units=['php'+v+'-fpm.service' for v in BRANCHES]
     policy=json.loads(POLICY.read_text());assert not policy.get('php_security_retirement_units')
@@ -83,4 +92,10 @@ def main():
         policy=json.loads(POLICY.read_text());policy.pop('php_security_retirement_units',None);store(POLICY,policy)
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    import sys
+    if sys.argv[1:]==['disable-choices']:
+        assert os.geteuid()==0
+        disable_choices()
+    elif not sys.argv[1:]:main()
+    else:raise SystemExit(2)
