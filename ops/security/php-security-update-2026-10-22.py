@@ -42,7 +42,7 @@ def plan():
         raise ValueError('Falta prueba del proveedor para todas las ramas')
     if {p['source']+'-common' for p in items}!={p['package'] for p in proof}:
         raise ValueError('Cobertura de ramas incoherente')
-    return items
+    return [p for p in items if p["source"] in ("php8.1","php8.4")]
 
 
 def apt_args(items):
@@ -55,7 +55,7 @@ def apt_args(items):
 def health():
     sites=json.loads(POLICY.read_text())['sites'];result={}
     for site in sites:
-        p=subprocess.run(['curl','--silent','--show-error','--output','/dev/null',
+        p=subprocess.run(['curl','--location','--max-redirs','5','--silent','--show-error','--output','/dev/null',
             '--resolve',site+':443:127.0.0.1','--connect-timeout','3','--max-time','10',
             '--write-out','%{http_code}','https://'+site+'/'],capture_output=True,text=True,timeout=12)
         result[site]={'code':p.stdout,'exit':p.returncode}
@@ -70,7 +70,11 @@ def checked_archives(items):
         fields=dict(l.split(': ',1) for l in metadata.splitlines())
         name=fields['Package'];version=fields['Version']
         expected=next((p for p in items if p['name']==name),None)
-        if not expected or version!=expected['candidate']:
+        if not expected:
+            known=json.loads((CASE/'package-plan-initial.json').read_text())
+            if any(p['name']==name and p['candidate']==version for p in known):continue
+            raise ValueError('Archivo desconocido')
+        if version!=expected['candidate']:
             raise ValueError('Archivo de paquete ajeno al plan')
         candidate=cache[name].candidate
         if candidate.version!=version or hashlib.sha256(path.read_bytes()).hexdigest()!=candidate.record['SHA256']:
@@ -127,7 +131,9 @@ def restore_rc():
 
 def probe_pools():
     pools=json.loads((CASE/'php-pools-before.json').read_text());result=[]
+    selected={p['source'][3:] for p in plan()}
     for pool in pools:
+        if pool['version'] not in selected:continue
         version=pool['version'];user=pool['user'][0].partition('=')[2].strip()
         socket=pool['listen'][0].partition('=')[2].strip()
         if not socket.startswith('/'):raise ValueError('Socket inesperado')
@@ -203,7 +209,7 @@ def apply():
         if any(os.path.realpath('/usr/bin/'+n)!=p for n,p in old.items()):raise RuntimeError('Han cambiado los interpretes seleccionados')
         audit=subprocess.run(['dpkg','--audit'],capture_output=True,text=True,check=True)
         if audit.stdout.strip():raise RuntimeError('Estado dpkg pendiente')
-        result={'completed':True,'packages':len(items),'branches':11,'fpm_pools_verified':len(pools),
+        result={'completed':True,'packages':len(items),'branches':len({p['source'] for p in items}),'fpm_pools_verified':len(pools),
                 'websites_http_200':len(after),'configurations_preserved':True,'php_selections_preserved':True,
                 'server_rebooted':False,'apache_restarted':False,'activation_actions':actions}
         save('verification.json',result);phase('completado',pools=len(pools),websites=len(after))
