@@ -54,12 +54,16 @@ def run():
     override="\n$conf['db_host']='localhost';$conf['db_database']='"+DB+"';$conf['db_user']='"+USER+"';$conf['db_password']='"+password+"';\n"
     for section in ['server','interface']:
         p=software/section/'lib/config.inc.php'
-        with p.open('a') as out:out.write(override)
+        text=p.read_text().rstrip()
+        assert text.endswith('?>')
+        p.write_text(text[:-2]+override+'\n?>\n')
+        result=subprocess.check_output(['/usr/bin/php8.4','-r','$conf=[];include $argv[1];echo json_encode([$conf["db_host"],$conf["db_database"],$conf["db_user"]]);',str(p)],text=True)
+        assert json.loads(result)==['localhost',DB,USER]
     (software/'server/lib/mysql_clientdb.conf').write_text("<?php $clientdb_host='localhost';$clientdb_user='"+USER+"';$clientdb_password='"+password+"';\n")
     sqlfile=source/'install/sql/incremental/upd_0103.sql'
     sqlfile.write_text(sqlfile.read_text().replace(chr(96)+'dbispconfig'+chr(96),chr(96)+DB+chr(96)))
     template=source/'install/tpl/config.inc.php.master'
-    template.write_text(template.read_text().replace("$conf['db_host'] = '127.0.0.1';","$conf['db_host'] = 'localhost';"))
+    template.write_text(template.read_text().replace('127.0.0.1','localhost'))
     binds=[]
     for host in ['/etc/apache2','/etc/logrotate.d','/etc/systemd/system','/var/www/php-fcgi-scripts']:
         copy=LAB/host.lstrip('/');copy.parent.mkdir(parents=True,exist_ok=True)
@@ -70,7 +74,7 @@ def run():
     commands=LAB/'commands';commands.mkdir()
     for command in ['mysql','mysqlcheck']:
         p=commands/command
-        p.write_text('#!/bin/sh\nexec /usr/bin/'+command+' --defaults-extra-file='+str(client)+' "$@" --protocol=SOCKET\n');p.chmod(0o700)
+        p.write_text('#!/bin/sh\nexec /usr/bin/'+command+' --defaults-extra-file='+str(client)+' "$@" --protocol=SOCKET --user='+USER+'\n');p.chmod(0o700)
     # mysqldump del fabricante recibe las mismas credenciales temporales.
     localbin=LAB/'local-bin';localbin.mkdir()
     src=Path('/usr/local/bin/run-getmail.sh')

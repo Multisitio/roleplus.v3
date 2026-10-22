@@ -72,9 +72,10 @@ def restore_custom(old):
     if changes:
         import base64
         encoded=base64.b64encode(json.dumps(changes).encode()).decode()
-        with path.open('a') as out:
-            out.write('\n// Ajustes anteriores conservados por el coordinador.\n')
-            out.write("foreach(json_decode(base64_decode('"+encoded+"'),true) as $key=>$value){$conf[$key]=$value;}\n")
+        text=path.read_text().rstrip();assert text.endswith('?>')
+        text=text[:-2]+'\n// Ajustes anteriores conservados por el coordinador.\n'
+        text+="foreach(json_decode(base64_decode('"+encoded+"'),true) as $key=>$value){$conf[$key]=$value;}\n?>\n"
+        path.write_text(text)
     if changes:
         manifests=sorted(Path('/usr/local/ispconfig/security/data').glob('file_checksums_*.md5'),key=lambda p:p.stat().st_mtime)
         assert manifests
