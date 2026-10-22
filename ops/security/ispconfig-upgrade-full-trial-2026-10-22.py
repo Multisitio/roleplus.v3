@@ -113,4 +113,38 @@ def run():
         client.unlink(missing_ok=True)
 
 
-if __name__=='__main__':run()
+def check_service_branch():
+    assert os.geteuid()==0
+    assert LAB.exists()
+    commands=LAB/'service-commands';commands.mkdir(exist_ok=True)
+    log=LAB/'service-actions-deferred.log';log.unlink(missing_ok=True)
+    wrapper=commands/'systemctl'
+    wrapper.write_text('#!/bin/sh\ncase "$1" in\nlist-unit-files) printf "php8.1-fpm.service enabled\\nphp8.4-fpm.service enabled\\n"; exit 0 ;;\nshow) printf "ProtectSystem=full\\n"; exit 0 ;;\nis-active|daemon-reload) exit 0 ;;\n*) printf "%s\\n" "$*" >> '+str(log)+'; exit 0 ;;\nesac\n')
+    wrapper.chmod(0o700)
+    units=['apache2.service','php8.1-fpm.service','php8.4-fpm.service']
+    before={u:subprocess.check_output(['systemctl','show',u,'--property=MainPID','--value'],text=True).strip() for u in units}
+    code='require "lib/install.lib.php";require "lib/installer_base.lib.php";$conf=["ispconfig_install_dir"=>"/usr/local/ispconfig","apache"=>["installed"=>true,"init_script"=>"apache2"]];$inst=new installer_base();$inst->configure_php_fpm_systemd_overrides();'
+    args=['systemd-run','--unit=codex-ispconfig-service-branch-trial-20261022','--wait','--pipe','--collect',
+          '--property=ProtectSystem=strict','--property=ProtectHome=read-only',
+          '--property=PrivateNetwork=yes','--property=PrivateTmp=yes','--property=ReadWritePaths='+str(LAB),
+          '--property=BindPaths='+str(LAB/'ispconfig')+':/usr/local/ispconfig',
+          '--property=BindPaths='+str(LAB/'etc/systemd/system')+':/etc/systemd/system',
+          '--property=WorkingDirectory='+str(LAB/'source/install'),
+          '--setenv=PATH='+str(commands)+':/usr/sbin:/usr/bin:/sbin:/bin',
+          '/usr/bin/php8.4','-d','disable_functions=','-d','disable_classes=','-d','open_basedir=','-r',code]
+    with (CASE/'service-branch-trial.log').open('w') as out:subprocess.run(args,stdout=out,stderr=out,check=True)
+    actions=log.read_text().splitlines()
+    assert set(actions)=={'restart '+u for u in units},actions
+    after={u:subprocess.check_output(['systemctl','show',u,'--property=MainPID','--value'],text=True).strip() for u in units}
+    assert before==after
+    prep.save('service-branch-verification.json',{'completed':True,'active_services_simulated':units,
+        'native_restart_calls_intercepted':actions,'real_service_pids_unchanged':True,'filesystem_separated':True})
+    print('Rama nativa de reinicios ejercitada e interceptada sin modificar servicios reales.')
+
+
+if __name__=='__main__':
+    import sys
+    if sys.argv[1:]==['service-control-check']:check_service_branch()
+    elif not sys.argv[1:]:run()
+    else:raise SystemExit(2)
+

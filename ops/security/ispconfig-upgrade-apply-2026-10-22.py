@@ -146,6 +146,7 @@ def main():
     assert json.loads((CASE/'prepared.json').read_text())['completed']
     assert json.loads((CASE/'trial-verification.json').read_text())['completed']
     assert json.loads((CASE/'full-trial-verification.json').read_text())['completed']
+    assert json.loads((CASE/'service-branch-verification.json').read_text())['completed']
     certs={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('/usr/local/ispconfig/interface/ssl').glob('*') if p.is_file()}
     auth_before=hashlib.sha256(prep.sql('SELECT username,passwort,typ FROM dbispconfig.sys_user ORDER BY userid').encode()).hexdigest()
     old_config=config('/usr/local/ispconfig/interface/lib/config.inc.php')
@@ -158,7 +159,7 @@ def main():
     paused=''.join(MARKER+l if l in chosen else l for l in lines)
     (CASE/'root-crontab-before.txt').write_text(cron)
     save('pid-before.json',{u:subprocess.check_output(['systemctl','show',u,'--property=MainPID','--value'],text=True).strip()
-        for u in ['apache2.service','php8.4-fpm.service','mariadb.service','postfix.service','rspamd.service','dovecot.service']})
+        for u in ['apache2.service','php8.4-fpm.service','php8.1-fpm.service','mariadb.service','postfix.service','rspamd.service','dovecot.service']})
     sites={str(p.resolve()):hashlib.sha256(p.read_bytes()).hexdigest()
         for p in Path('/etc/apache2/sites-enabled').glob('*') if p.is_file() and p.resolve()!=PANEL}
     save('websites-before.json',sites)
@@ -195,6 +196,7 @@ def main():
         activate('apache2.service')
         after={u:subprocess.check_output(['systemctl','show',u,'--property=MainPID','--value'],text=True).strip()
                for u in json.loads((CASE/'pid-before.json').read_text())}
+        save('pid-after.json',after)
         assert after==json.loads((CASE/'pid-before.json').read_text()),'Se ha reiniciado un servicio'
         save('upgrade-verification.json',{'completed':True,'version':'3.3.2p1','schema':107,
             'websites_vhosts_preserved':len(sites),'service_main_pids_preserved':True,

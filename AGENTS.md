@@ -1,5 +1,12 @@
 # Instrucciones del proyecto RolePlus
 
+- Actualizaciones ISPConfig (2026-10-22): no confiar solo en reconfigure_services=no;
+  el instalador reinicia FPM desde configure_php_fpm_systemd_overrides. Interceptar
+  sus mutaciones de servicios y reservarlas al control central. Probar tambien
+  esa rama con servicios activos simulados, ademas del instalador aislado.
+  Usar las opciones administrativas nativas de server.sh solo en ese proceso,
+  conservar el transporte de la aplicacion y usar socket para administrar SQL.
+
 - Automatismos del VPS (2026-10-20): el terminador SQL generico esta retirado
   y enmascarado; no restaurar KILL por tiempo o estado de ordenacion. Las
   tareas CLI heredadas usan scheduled-jobs.json, sus horarios y bloqueos

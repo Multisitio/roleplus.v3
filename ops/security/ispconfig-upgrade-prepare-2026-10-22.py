@@ -103,6 +103,9 @@ def prepare_source():
     mysql.chmod(0o700)
     checker=commands/'mysqlcheck'
     checker.write_text('#!/bin/sh\nexec /usr/bin/mysqlcheck "$@" --protocol=SOCKET\n');checker.chmod(0o700)
+    service=commands/'systemctl'
+    service.write_text('#!/bin/sh\ncase "$1" in\nlist-unit-files|list-units|show|is-active|is-enabled|status|cat|daemon-reload) exec /usr/bin/systemctl "$@" ;;\n*) printf "%s\\n" "$*" >> '+str(CASE/'service-actions-deferred.log')+'; exit 0 ;;\nesac\n')
+    service.chmod(0o700)
     prefix=original.split('\nupdateDbAndIni();',1)[0]
     assert prefix!=original
     prefix=prefix.replace('prepareDBDump();','/* Comprobacion previa sin volcado ni cambios. */').replace('checkDbHealth();','/* Conexion comprobada por la orden exacta del actualizador. */')
@@ -113,7 +116,7 @@ def prepare_source():
     assert 'READONLY_ADMIN_PREFLIGHT_OK' in (CASE/'admin-preflight.log').read_text()
     subprocess.run(['/usr/bin/php8.4','-n','-l',str(SOURCE/'install/update-coordinated.php')],check=True,capture_output=True)
     save('installer-adaptations.json',{'release_sha256':RELEASE_SHA,'acme_preserved':True,'admin_socket_transport_only':True,'existing_ca_rows_preserved':True,
-        'recursive_log_patch_replaced_by_review':True,'service_reconfiguration':False,
+        'recursive_log_patch_replaced_by_review':True,'service_reconfiguration':False,'native_service_mutations_deferred':True,
         'native_binary_backups_disabled':True,'migration_session_limit_seconds':60,'native_crontab_reconfiguration':False})
 
 
