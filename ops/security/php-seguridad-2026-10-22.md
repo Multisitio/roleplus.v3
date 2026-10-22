@@ -71,3 +71,13 @@ La primera comprobacion posterior agoto el tiempo de espera de Contrólate.
 Se conservo el resultado y se repitio exclusivamente la verificacion, sin
 reinstalar ni recargar otra vez: once respuestas HTTP 200 y dpkg sin pendientes.
 No se atribuye una causa al agotamiento puntual sin evidencia adicional.
+
+## Resultado comprobado de la retirada
+
+Las nueve ramas y sus 200 paquetes quedaron retirados. Las nueve opciones
+correspondientes permanecen desactivadas en ISPConfig, conservando sus fichas.
+La comprobacion posterior acredito once webs HTTP 200, los 17 pools nuevos,
+ninguna rama retirada activa y dpkg sin operaciones pendientes. No se utilizo
+autoremove. Se conservan PHP 8.4 y PHP 8.1 porque ambos tienen consumidores.
+La migracion del manejador general y del panel a 8.4 sigue pendiente de la
+actualizacion y validacion de ISPConfig; no se declara realizada.
