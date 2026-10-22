@@ -63,6 +63,7 @@ def prepare_source():
     assert hashlib.sha256((CASE/'release.tar.gz').read_bytes()).hexdigest()==RELEASE_SHA
     original=(SOURCE/'install/update.php').read_text()
     replacements={
+        '$conf["mysql"]["host"] = $conf_old["db_host"];':'$conf["mysql"]["host"] = "localhost";',
         "$inst->make_acme_vhost('nginx');":"/* ACME existente conservado por el coordinador. */",
         "$inst->make_acme_vhost('apache');":"/* ACME existente conservado por el coordinador. */",
         '$inst->update_acme();':'/* Renovacion existente conservada; no actualizar ACME aqui. */'}
@@ -84,12 +85,24 @@ def prepare_source():
     for service in ['mail','web','dns','xmpp','firewall','vserver','db']:
         config+='svc_detect_change_'+service+'_server=no\n'
     (CASE/'update.ini').write_text(config)
+    # Separar la conexion administrativa local de la conexion habitual
+    # del panel, que conserva su direccion en ambos archivos generados.
+    host=subprocess.check_output(['/usr/bin/php8.4','-r','include "/usr/local/ispconfig/server/lib/config.inc.php";echo $conf["db_host"];'],text=True)
+    assert host in ('127.0.0.1','localhost')
+    subprocess.run(['/usr/bin/php8.4','-r','mysqli_report(MYSQLI_REPORT_OFF);include "/usr/local/ispconfig/server/lib/config.inc.php";exit(@mysqli_connect("localhost",$conf["db_user"],$conf["db_password"],$conf["db_database"])?0:1);'],check=True,capture_output=True)
+    template=SOURCE/'install/tpl/config.inc.php.master'
+    content=template.read_text()
+    if '{mysql_server_host}' in content:template.write_text(content.replace('{mysql_server_host}',host))
+    import base64
+    options=dict(line.split('=',1) for line in config.splitlines() if '=' in line)
+    payload=base64.b64encode(json.dumps(options).encode()).decode()
+    (CASE/'update-options.php').write_text("<?php $autoinstall=json_decode(base64_decode('"+payload+"'),true);\n")
     commands=CASE/'commands';commands.mkdir(mode=0o700,exist_ok=True)
     mysql=commands/'mysql'
     mysql.write_text('#!/bin/sh\nexec /usr/bin/mysql --init-command="SET SESSION max_statement_time=60" "$@"\n')
     mysql.chmod(0o700)
     subprocess.run(['/usr/bin/php8.4','-n','-l',str(SOURCE/'install/update-coordinated.php')],check=True,capture_output=True)
-    save('installer-adaptations.json',{'release_sha256':RELEASE_SHA,'acme_preserved':True,'existing_ca_rows_preserved':True,
+    save('installer-adaptations.json',{'release_sha256':RELEASE_SHA,'acme_preserved':True,'admin_socket_transport_only':True,'existing_ca_rows_preserved':True,
         'recursive_log_patch_replaced_by_review':True,'service_reconfiguration':False,
         'native_binary_backups_disabled':True,'migration_session_limit_seconds':60,'native_crontab_reconfiguration':False})
 

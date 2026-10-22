@@ -177,7 +177,7 @@ def main():
         with open('/run/lock/vigilante-restarts.lock','a') as lock:
             fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);started=True
             with (CASE/'native-update.log').open('w') as log:
-                subprocess.run(['/usr/bin/php8.4','-q','update-coordinated.php','--autoinstall='+str(CASE/'update.ini')],
+                subprocess.run(['/usr/bin/php8.4','-q','update-coordinated.php','--autoinstall='+str(CASE/'update-options.php')],
                     cwd=prep.SOURCE/'install',env=dict(os.environ,PATH=str(CASE/'commands')+':'+os.environ['PATH']),stdin=subprocess.DEVNULL,stdout=log,stderr=log,check=True)
         content=(CASE/'native-update.log').read_text(errors='replace')
         assert 'Update finished.' in content and 'Fatal error' not in content
