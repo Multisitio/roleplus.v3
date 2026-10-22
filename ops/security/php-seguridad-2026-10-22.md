@@ -57,3 +57,17 @@ Referencias oficiales:
 El resultado real se recoge tras cada ejecucion en verification.json y
 retirement-verification.json privados; este documento describe las barreras
 y no sustituye esos resultados.
+
+## Resultado comprobado del parche
+
+Actualizadas las 39 versiones fijadas: PHP 8.4.27 para las webs y PHP
+8.1.34-9 para el panel y el manejador general. Los 17 pools ejecutan las
+versiones nuevas, las once webs responden HTTP 200 y ROLEplus y MTGsearch
+responden tambien desde el PC del operador. Las configuraciones de sitios,
+los pools personalizados y los interpretes seleccionados se conservaron.
+Apache se recargo; no se reinicio el VPS ni MariaDB.
+
+La primera comprobacion posterior agoto el tiempo de espera de Contrólate.
+Se conservo el resultado y se repitio exclusivamente la verificacion, sin
+reinstalar ni recargar otra vez: once respuestas HTTP 200 y dpkg sin pendientes.
+No se atribuye una causa al agotamiento puntual sin evidencia adicional.
