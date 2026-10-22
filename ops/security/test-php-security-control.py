@@ -45,3 +45,17 @@ with tempfile.TemporaryDirectory() as raw:
         except ValueError:pass
         else:raise RuntimeError('Se retiro una rama utilizada')
 print('Retirada acotada sin afectar a las ramas utilizadas comprobada.')
+
+with tempfile.TemporaryDirectory() as raw:
+    root=Path(raw);root.chmod(0o700);calls=[]
+    policy={'php_security_retirement_units':['php8.1-fpm.service']}
+    def runner(args,**kw):calls.append(args);return subprocess.CompletedProcess(args,0)
+    with patch.object(control,'maintenance_active',return_value=False):
+        try:control.activate_php_security(policy,'php8.1-fpm.service','security-php-update',root/'audit',root/'lock',runner,uid=os.getuid(),retirement=True)
+        except ValueError:pass
+        else:raise RuntimeError('Se retiro 8.1 sin acreditar su migracion')
+        assert not calls
+        policy['php_security_retirement_verified_branches']=['8.1']
+        result=control.activate_php_security(policy,'php8.1-fpm.service','security-php-update',root/'audit',root/'lock',runner,uid=os.getuid(),retirement=True)
+        assert result['decision']=='ejecutado' and calls[-1]==['/usr/bin/systemctl','stop','php8.1-fpm.service']
+print('PHP 8.1 solo se retira con acreditacion administrativa de migracion.')

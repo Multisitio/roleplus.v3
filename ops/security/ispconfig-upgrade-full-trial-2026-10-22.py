@@ -50,7 +50,7 @@ def run():
     updater=source/'install/update-coordinated.php'
     updater.write_text(updater.read_text().replace('$inst->check_prerequisites();', '$inst->check_prerequisites();\n$conf[\"backup_path\"] = \"'+str(LAB/'logs')+'\";'))
     password=secrets.token_urlsafe(30)
-    client=LAB/'client.cnf';client.write_text('[client]\nuser='+USER+'\npassword='+password+'\nhost=localhost\nprotocol=SOCKET\ninit-command=SET SESSION max_statement_time=60\n');client.chmod(0o600)
+    client=LAB/'client.cnf';client.write_text('[client]\nuser='+USER+'\npassword='+password+'\nhost=localhost\nprotocol=SOCKET\n[mysql]\ninit-command=SET SESSION max_statement_time=60\n');client.chmod(0o600)
     override="\n$conf['db_host']='localhost';$conf['db_database']='"+DB+"';$conf['db_user']='"+USER+"';$conf['db_password']='"+password+"';\n"
     for section in ['server','interface']:
         p=software/section/'lib/config.inc.php'

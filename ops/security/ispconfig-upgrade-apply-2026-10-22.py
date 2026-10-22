@@ -65,7 +65,7 @@ def restore_custom(old):
     path=Path('/usr/local/ispconfig/interface/lib/config.inc.php');new=config(path)
     # Las credenciales se contrastan en memoria y no se escriben en informes.
     for key in old:
-        if key.startswith(('db_','dbmaster_')):assert old[key]==new.get(key),'Configuracion de conexion divergente'
+        if key in ('db_host','db_database','db_user','db_password','db_port') or key.startswith('dbmaster_'):assert old[key]==new.get(key),'Configuracion de conexion divergente'
     keys=['logo','language','timezone','theme','html_content_encoding','interface_logout_url',
           'interface_base_url','db_log_message_max_length','language_file_import_enabled','debug_language']
     changes={k:old[k] for k in keys if k in old and old[k]!=new.get(k)}
@@ -145,6 +145,7 @@ def main():
     assert os.geteuid()==0;os.umask(0o077)
     assert json.loads((CASE/'prepared.json').read_text())['completed']
     assert json.loads((CASE/'trial-verification.json').read_text())['completed']
+    assert json.loads((CASE/'full-trial-verification.json').read_text())['completed']
     certs={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('/usr/local/ispconfig/interface/ssl').glob('*') if p.is_file()}
     auth_before=hashlib.sha256(prep.sql('SELECT username,passwort,typ FROM dbispconfig.sys_user ORDER BY userid').encode()).hexdigest()
     old_config=config('/usr/local/ispconfig/interface/lib/config.inc.php')
@@ -161,7 +162,7 @@ def main():
     sites={str(p.resolve()):hashlib.sha256(p.read_bytes()).hexdigest()
         for p in Path('/etc/apache2/sites-enabled').glob('*') if p.is_file() and p.resolve()!=PANEL}
     save('websites-before.json',sites)
-    policy_units(True);started=False;backed=False
+    policy_units(True);started=False;backed=False;safe=True
     try:
         phase('esperando_tareas_internas')
         subprocess.run(['crontab','-'],input=paused,text=True,check=True)
@@ -176,7 +177,7 @@ def main():
         activate('apache2.service')
         phase('actualizando_ispconfig')
         with open('/run/lock/vigilante-restarts.lock','a') as lock:
-            fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);started=True
+            fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);started=True;safe=False
             with (CASE/'native-update.log').open('w') as log:
                 subprocess.run(['/usr/bin/php8.4','-d','disable_functions=','-d','disable_classes=','-d','open_basedir=','-q','update-coordinated.php','--autoinstall='+str(CASE/'update-options.php')],
                     cwd=prep.SOURCE/'install',env=dict(os.environ,PATH=str(CASE/'commands')+':'+os.environ['PATH']),stdin=subprocess.DEVNULL,stdout=log,stderr=log,check=True)
@@ -198,9 +199,10 @@ def main():
         save('upgrade-verification.json',{'completed':True,'version':'3.3.2p1','schema':107,
             'websites_vhosts_preserved':len(sites),'service_main_pids_preserved':True,
             'acme_and_certificates_not_renewed':True,'native_cron_paused_without_killing':True})
-        phase('ispconfig_actualizado')
+        safe=True;phase('ispconfig_actualizado')
     except BaseException:
-        if started and backed:rollback()
+        if started and backed:
+            rollback();safe=True
         elif backed:
             with tarfile.open(CASE/'before-apply-text.tar.gz') as archive:
                 m=archive.getmember(str(PANEL).lstrip('/'));PANEL.write_bytes(archive.extractfile(m).read())
@@ -209,7 +211,8 @@ def main():
     finally:
         current=subprocess.check_output(['crontab','-l'],text=True)
         restored=''.join(l[len(MARKER):] if l.startswith(MARKER) else l for l in current.splitlines(keepends=True))
-        subprocess.run(['crontab','-'],input=restored,text=True,check=True)
+        if safe:subprocess.run(['crontab','-'],input=restored,text=True,check=True)
+        else:phase('recuperacion_pendiente_cron_del_panel_pausado')
         policy_units(False)
 
 

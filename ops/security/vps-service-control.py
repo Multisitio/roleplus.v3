@@ -192,7 +192,7 @@ def activate_php_security(policy, unit, origin, audit=AUDIT, lock=LOCK,
         raise ValueError('Activacion de seguridad no autorizada')
     match = re.fullmatch(r'php([5-8]\.\d)-fpm\.service', unit)
     if retirement:
-        if not match or match[1] in ('8.1','8.4'):
+        if not match or match[1]=='8.4' or (match[1]=='8.1' and '8.1' not in policy.get('php_security_retirement_verified_branches',[])):
             raise ValueError('No se puede retirar una rama utilizada')
         check=None;method='stop'
     elif match:

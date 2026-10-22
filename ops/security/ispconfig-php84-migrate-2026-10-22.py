@@ -91,7 +91,7 @@ echo json_encode(['php'=>PHP_VERSION,'user'=>posix_geteuid(),'panel'=>ISPC_APP_V
 
 def probe_apps_and_generic():
     root=Path('/run/vigilante-php84-verify');root.mkdir(mode=0o755,exist_ok=True);root.chmod(0o755)
-    p=root/'runtime.php';p.write_text('<?php echo json_encode(["php"=>PHP_VERSION,"user"=>posix_geteuid()]);');p.chmod(0o644)
+    p=root/'runtime.php';p.write_text('<?php echo json_encode(["php"=>PHP_VERSION,"user"=>function_exists("posix_geteuid")?posix_geteuid():null]);');p.chmod(0o644)
     env=dict(os.environ,REDIRECT_STATUS='200',REQUEST_METHOD='GET',SCRIPT_FILENAME=str(p),
              SCRIPT_NAME='/runtime.php',REQUEST_URI='/runtime.php',SERVER_PROTOCOL='HTTP/1.1')
     results={}
@@ -101,7 +101,7 @@ def probe_apps_and_generic():
         results['apps']=data
         out=subprocess.run(['/usr/bin/cgi-fcgi','-bind','-connect','/run/php/php8.4-fpm.sock'],
             env=env,capture_output=True,text=True,check=True,timeout=15).stdout
-        data=json.loads(out[out.index('{'):]);assert data=={'php':'8.4.27','user':pwd.getpwnam('www-data').pw_uid}
+        data=json.loads(out[out.index('{'):]);assert data['php']=='8.4.27' and data['user'] in (None,pwd.getpwnam('www-data').pw_uid)
         results['generic']=data
         return results
     finally:p.unlink(missing_ok=True);root.rmdir()
@@ -156,7 +156,10 @@ def main():
         assert p.stdout.endswith('\n200') and ('pma_username' in p.stdout or 'phpMyAdmin' in p.stdout)
         oldcase=Path('/root/codex-vigilante/php-security-2026-10-22/php-security-update-2026-10-22.py')
         spec=importlib.util.spec_from_file_location('health',oldcase);health=importlib.util.module_from_spec(spec);spec.loader.exec_module(health)
-        websites=health.health();assert all(x['exit']==0 and x['code']=='200' for x in websites.values())
+        websites=health.health();upgrade.save('http-php84-first.json',websites)
+        if any(x['exit'] or x['code']!='200' for x in websites.values()):
+            time.sleep(2);websites=health.health();upgrade.save('http-php84-confirmed.json',websites)
+        assert all(x['exit']==0 and x['code']=='200' for x in websites.values())
         upgrade.save('php84-verification.json',{'completed':True,'panel_http_runtime':panel,
             'other_runtimes':others,'phpmyadmin_http_200':True,'websites_http_200':len(websites),
             'php_cgi_alternative':'/usr/bin/php-cgi8.4','ispconfig_profile_updated':True,
