@@ -195,24 +195,7 @@ def apply():
                               '--origin','security-php-update'],capture_output=True,text=True,timeout=100)
             if p.returncode:raise RuntimeError('No se activo '+unit)
             actions.append(json.loads(p.stdout));save('activation-results.json',actions)
-        phase('verificando_pools')
-        pools=probe_pools();save('runtime-pools-after.json',pools)
-        after=health();save('http-after.json',after)
-        if any(v['exit'] or v['code']!='200' for v in after.values()):raise RuntimeError('Revisar respuesta HTTP tras actualizar')
-        old=json.loads((CASE/'apache-before.json').read_text())
-        if any(hashlib.sha256(Path(p).read_bytes()).hexdigest()!=s for p,s in old.items()):
-            raise RuntimeError('La configuracion de sitios ha cambiado')
-        for path,info in json.loads((CASE/'php-config-text-before.json').read_text()).items():
-            if re.search(r'/pool.d/web\d+\.conf$',path) and hashlib.sha256(Path(path).read_bytes()).hexdigest()!=info['sha256']:
-                raise RuntimeError('Se ha modificado un pool de una web')
-        old=json.loads((CASE/'alternatives-before.json').read_text())
-        if any(os.path.realpath('/usr/bin/'+n)!=p for n,p in old.items()):raise RuntimeError('Han cambiado los interpretes seleccionados')
-        audit=subprocess.run(['dpkg','--audit'],capture_output=True,text=True,check=True)
-        if audit.stdout.strip():raise RuntimeError('Estado dpkg pendiente')
-        result={'completed':True,'packages':len(items),'branches':len({p['source'] for p in items}),'fpm_pools_verified':len(pools),
-                'websites_http_200':len(after),'configurations_preserved':True,'php_selections_preserved':True,
-                'server_rebooted':False,'apache_restarted':False,'activation_actions':actions}
-        save('verification.json',result);phase('completado',pools=len(pools),websites=len(after))
+        verify_completed()
     finally:
         current=json.loads(POLICY.read_text());current.pop('php_security_activation_units',None)
         fd,tmp=tempfile.mkstemp(dir=POLICY.parent)
@@ -220,10 +203,37 @@ def apply():
         os.replace(tmp,POLICY)
 
 
+def verify_completed():
+    import apt
+    items=plan();cache=apt.Cache()
+    if any(cache[p['name']].installed.version!=p['candidate'] for p in items):raise ValueError('Faltan paquetes del parche')
+    actions=json.loads((CASE/'activation-results.json').read_text())
+    if {a.get('unit') for a in actions}!=set(json.loads((CASE/'activation-units.json').read_text())) or any(a.get('decision')!='ejecutado' for a in actions):raise ValueError('Activacion incompleta')
+    phase('verificando_pools')
+    pools=probe_pools();save('runtime-pools-after.json',pools)
+    after=health();save('http-verification.json',after)
+    if any(v['exit'] or v['code']!='200' for v in after.values()):raise RuntimeError('Revisar respuesta HTTP tras actualizar')
+    old=json.loads((CASE/'apache-before.json').read_text())
+    if any(hashlib.sha256(Path(p).read_bytes()).hexdigest()!=s for p,s in old.items()):
+        raise RuntimeError('La configuracion de sitios ha cambiado')
+    for path,info in json.loads((CASE/'php-config-text-before.json').read_text()).items():
+        if re.search(r'/pool.d/web\d+\.conf$',path) and hashlib.sha256(Path(path).read_bytes()).hexdigest()!=info['sha256']:
+            raise RuntimeError('Se ha modificado un pool de una web')
+    old=json.loads((CASE/'alternatives-before.json').read_text())
+    if any(os.path.realpath('/usr/bin/'+n)!=p for n,p in old.items()):raise RuntimeError('Han cambiado los interpretes seleccionados')
+    audit=subprocess.run(['dpkg','--audit'],capture_output=True,text=True,check=True)
+    if audit.stdout.strip():raise RuntimeError('Estado dpkg pendiente')
+    result={'completed':True,'packages':len(items),'branches':len({p['source'] for p in items}),'fpm_pools_verified':len(pools),
+            'websites_http_200':len(after),'configurations_preserved':True,'php_selections_preserved':True,
+            'server_rebooted':False,'apache_restarted':False,'activation_actions':actions}
+    save('verification.json',result);phase('completado',pools=len(pools),websites=len(after))
+
+
 if __name__=='__main__':
     if os.geteuid()!=0:raise PermissionError('Solo administrador')
     os.umask(0o077)
     if sys.argv[1:]==['prepare']:prepare()
     elif sys.argv[1:]==['apply']:apply()
+    elif sys.argv[1:]==['verify']:verify_completed()
     elif sys.argv[1:]==['probe']:save('runtime-pools-after.json',probe_pools())
     else:raise SystemExit(2)
