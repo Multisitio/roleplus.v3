@@ -69,6 +69,15 @@ def prepare_source():
     for before,after in replacements.items():
         assert original.count(before)==1;original=original.replace(before,after)
     (SOURCE/'install/update-coordinated.php').write_text(original)
+    # Una CA ya presente hace fallar el INSERT multiple oficial de 0107.
+    # Conservar esa fila; agregar las restantes sin borrar ni reemplazar datos.
+    ca=SOURCE/'install/sql/incremental/upd_0107.sql'
+    content=ca.read_text();tick=chr(96)
+    if 'ON DUPLICATE KEY UPDATE ca_issue=dns_ssl_ca.ca_issue' not in content:
+        pattern=r'(INSERT INTO '+tick+'dns_ssl_ca'+tick+r'[\s\S]+?)(;\n-- The public key comment)'
+        content,count=re.subn(pattern,r'\1 ON DUPLICATE KEY UPDATE ca_issue=dns_ssl_ca.ca_issue\2',content)
+        assert count==1
+        ca.write_text(content)
     patch=SOURCE/'install/patches/upd_0103.php'
     if patch.exists():patch.rename(patch.with_suffix('.php.reviewed-not-run'))
     config='[update]\ndo_backup=no\nreconfigure_services=no\nreconfigure_crontab=no\nreconfigure_permissions_in_master_database=no\nispconfig_port=8080\ncreate_new_ispconfig_ssl_cert=no\ncreate_ssl_server_certs=n\nignore_hostname_dns=n\n'
@@ -76,7 +85,7 @@ def prepare_source():
         config+='svc_detect_change_'+service+'_server=no\n'
     (CASE/'update.ini').write_text(config)
     subprocess.run(['/usr/bin/php8.4','-n','-l',str(SOURCE/'install/update-coordinated.php')],check=True,capture_output=True)
-    save('installer-adaptations.json',{'release_sha256':RELEASE_SHA,'acme_preserved':True,
+    save('installer-adaptations.json',{'release_sha256':RELEASE_SHA,'acme_preserved':True,'existing_ca_rows_preserved':True,
         'recursive_log_patch_replaced_by_review':True,'service_reconfiguration':False,
         'native_binary_backups_disabled':True,'native_crontab_reconfiguration':False})
 
