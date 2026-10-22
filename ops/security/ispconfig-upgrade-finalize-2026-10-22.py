@@ -144,9 +144,49 @@ def retire81():
     return len(names)
 
 
+def audit_configuration():
+    name='codex_ispconfig_cfg_audit_20261023'
+    assert upgrade.prep.sql("SELECT COUNT(*) FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='"+name+"'").strip()=='0'
+    upgrade.prep.sql('CREATE DATABASE '+name)
+    try:
+        statements=[]
+        with (CASE/'dbispconfig-before-apply.sql').open() as snapshot:
+            for line in snapshot:
+                if any(line.startswith('INSERT INTO '+chr(96)+table+chr(96)+' ') for table in ['server','sys_ini']):
+                    statements.append(line)
+        assert len(statements)==2
+        upgrade.prep.sql('CREATE TABLE '+name+'.server LIKE dbispconfig.server;CREATE TABLE '+name+'.sys_ini LIKE dbispconfig.sys_ini')
+        p=subprocess.run(['mysql','--default-character-set=utf8mb4',name],input=''.join(statements),capture_output=True,text=True)
+        if p.returncode:raise RuntimeError('No se ha podido contrastar la copia de configuracion')
+        payload={}
+        for table,key in [('server','server_id'),('sys_ini','sysini_id')]:
+            payload[table]={
+                'before':upgrade.prep.sql('SELECT HEX(config) FROM '+name+'.'+table+' WHERE '+key+'=1').strip(),
+                'after':upgrade.prep.sql('SELECT HEX(config) FROM dbispconfig.'+table+' WHERE '+key+'=1').strip()}
+        code='''require "/root/codex-vigilante/ispconfig-php84-2026-10-22/native-install.lib.php";
+$data=json_decode(stream_get_contents(STDIN),true);$result=[];
+$expected=["web.php_fpm_init_script","web.php_fpm_ini_path","web.php_fpm_pool_dir","web.php_ini_path_cgi","web.php_ini_path_apache","fastcgi.fastcgi_bin","fastcgi.fastcgi_phpini_path"];
+foreach($data as $table=>$row){
+ $before=ini_to_array(stripslashes(hex2bin($row["before"])));
+ $after=ini_to_array(stripslashes(hex2bin($row["after"])));
+ foreach($before as $section=>$values){foreach($values as $key=>$value){
+  if(($after[$section][$key]??null)!==$value && !($table==="server" && in_array($section.".".$key,$expected,true)))$result[]=$table.".".$section.".".$key;
+ }}
+}
+echo json_encode($result);
+'''
+        p=subprocess.run(['/usr/bin/php8.4','-r',code],input=json.dumps(payload),capture_output=True,text=True,check=True)
+        unexpected=json.loads(p.stdout)
+        upgrade.save('configuration-preservation-verification.json',{'compared_original_snapshot':True,
+            'unexpected_changed_keys':unexpected,'php_profile_changes_only':True,'values_not_logged':True})
+        assert not unexpected,unexpected
+    finally:upgrade.prep.sql('DROP DATABASE '+name)
+
+
 def main():
     assert os.geteuid()==0;os.umask(0o077)
     assert json.loads((CASE/'php84-verification.json').read_text())['completed']
+    audit_configuration()
     upgrade.phase('revisando_permisos_de_registros')
     count=log_permissions();update_known_checksums()
     upgrade.phase('retirando_php81_sin_consumidores')

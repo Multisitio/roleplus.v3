@@ -70,7 +70,7 @@ def editable(path,content):
 
 def probe_panel():
     root=Path('/usr/local/ispconfig/interface/web')/('codex-verify-'+uuid.uuid4().hex)
-    owner=pwd.getpwnam('ispconfig');root.mkdir(mode=0o750);os.chown(root,owner.pw_uid,owner.pw_gid)
+    owner=pwd.getpwnam('ispconfig');root.mkdir(mode=0o750);root.chmod(0o750);os.chown(root,owner.pw_uid,owner.pw_gid)
     try:
         (root/'.htaccess').write_text('Require local\n')
         (root/'index.php').write_text('''<?php
