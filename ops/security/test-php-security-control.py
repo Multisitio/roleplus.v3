@@ -33,3 +33,15 @@ with tempfile.TemporaryDirectory() as raw:
         result=control.activate_php_security(policy,'php8.4-fpm.service','security-php-update',audit,lock,invalid,uid=os.getuid())
         assert result['decision']=='configuracion_invalida' and len(calls)==before+1
 print('Recarga tras validar configuracion; rechazos de unidad, origen, mantenimiento y configuracion invalida comprobados.')
+
+with tempfile.TemporaryDirectory() as raw:
+    root=Path(raw);root.chmod(0o700);calls=[]
+    policy={'php_security_retirement_units':['php7.4-fpm.service','php8.4-fpm.service']}
+    def runner(args,**kw):calls.append(args);return subprocess.CompletedProcess(args,0)
+    with patch.object(control,'maintenance_active',return_value=False):
+        result=control.activate_php_security(policy,'php7.4-fpm.service','security-php-update',root/'audit',root/'lock',runner,uid=os.getuid(),retirement=True)
+        assert result['decision']=='ejecutado' and calls[-1]==['/usr/bin/systemctl','stop','php7.4-fpm.service']
+        try:control.activate_php_security(policy,'php8.4-fpm.service','security-php-update',root/'audit',root/'lock',runner,uid=os.getuid(),retirement=True)
+        except ValueError:pass
+        else:raise RuntimeError('Se retiro una rama utilizada')
+print('Retirada acotada sin afectar a las ramas utilizadas comprobada.')

@@ -185,12 +185,17 @@ def reload_apache(site, origin, action, audit, lock, runner, clock, uid):
 
 
 def activate_php_security(policy, unit, origin, audit=AUDIT, lock=LOCK,
-                          runner=subprocess.run, clock=time.time, uid=0):
+                          runner=subprocess.run, clock=time.time, uid=0, retirement=False):
     """Activacion administrativa acotada; nunca procede del modelo."""
-    if origin != 'security-php-update' or unit not in policy.get('php_security_activation_units', []):
+    key='php_security_retirement_units' if retirement else 'php_security_activation_units'
+    if origin != 'security-php-update' or unit not in policy.get(key, []):
         raise ValueError('Activacion de seguridad no autorizada')
     match = re.fullmatch(r'php([5-8]\.\d)-fpm\.service', unit)
-    if match:
+    if retirement:
+        if not match or match[1] in ('8.1','8.4'):
+            raise ValueError('No se puede retirar una rama utilizada')
+        check=None;method='stop'
+    elif match:
         check = ['/usr/sbin/php-fpm'+match[1], '--test']
         method = 'reload'
     elif unit == 'apache2.service':
@@ -204,7 +209,7 @@ def activate_php_security(policy, unit, origin, audit=AUDIT, lock=LOCK,
     if lock.exists():trusted(lock, uid=uid)
     fd=os.open(lock,os.O_RDWR|os.O_CREAT|os.O_NOFOLLOW,0o600)
     with os.fdopen(fd,'a+') as handle:
-        event={'time':clock(),'origin':origin,'unit':unit,'action':'php_security_activation','method':method}
+        event={'time':clock(),'origin':origin,'unit':unit,'action':'php_security_retirement' if retirement else 'php_security_activation','method':method}
         try:fcntl.flock(handle,fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError:
             event['decision']='ocupado';append_event(audit,event);return event
@@ -226,7 +231,7 @@ def main():
     if os.geteuid() != 0:
         raise PermissionError('Este control requiere administrador; no se concede sudo al agente')
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart', 'reload-tls', 'reload-maintenance', 'activate-php-security'])
+    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart', 'reload-tls', 'reload-maintenance', 'activate-php-security', 'retire-php-security'])
     parser.add_argument('unit', nargs='?')
     parser.add_argument('--origin')
     args = parser.parse_args()
@@ -248,8 +253,8 @@ def main():
         event = fn(policy, args.unit, args.origin)
         print(json.dumps(event))
         return 0 if event['decision'] == 'ejecutado' else 1
-    elif args.action == 'activate-php-security':
-        event=activate_php_security(policy,args.unit,args.origin)
+    elif args.action in ('activate-php-security','retire-php-security'):
+        event=activate_php_security(policy,args.unit,args.origin,retirement=args.action=='retire-php-security')
         print(json.dumps(event));return 0 if event['decision']=='ejecutado' else 1
     else:
         if not args.unit:
