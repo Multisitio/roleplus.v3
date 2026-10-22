@@ -184,11 +184,49 @@ def reload_apache(site, origin, action, audit, lock, runner, clock, uid):
         return event
 
 
+def activate_php_security(policy, unit, origin, audit=AUDIT, lock=LOCK,
+                          runner=subprocess.run, clock=time.time, uid=0):
+    """Activacion administrativa acotada; nunca procede del modelo."""
+    if origin != 'security-php-update' or unit not in policy.get('php_security_activation_units', []):
+        raise ValueError('Activacion de seguridad no autorizada')
+    match = re.fullmatch(r'php([5-8]\.\d)-fpm\.service', unit)
+    if match:
+        check = ['/usr/sbin/php-fpm'+match[1], '--test']
+        method = 'reload'
+    elif unit == 'apache2.service':
+        check = ['/usr/sbin/apache2ctl','configtest'];method = 'reload'
+    elif unit in ('adapterman-sse.service','adapterman-ws.service'):
+        check = None;method = 'restart'
+    else:
+        raise ValueError('Unidad ajena a la actualizacion PHP')
+    trusted(audit.parent, directory=True, uid=uid)
+    if audit.exists():trusted(audit, uid=uid)
+    if lock.exists():trusted(lock, uid=uid)
+    fd=os.open(lock,os.O_RDWR|os.O_CREAT|os.O_NOFOLLOW,0o600)
+    with os.fdopen(fd,'a+') as handle:
+        event={'time':clock(),'origin':origin,'unit':unit,'action':'php_security_activation','method':method}
+        try:fcntl.flock(handle,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:
+            event['decision']='ocupado';append_event(audit,event);return event
+        if maintenance_active():
+            event['decision']='mantenimiento'
+        elif check and runner(check,capture_output=True,timeout=20).returncode:
+            event['decision']='configuracion_invalida'
+        elif runner(['/usr/bin/systemctl','is-active','--quiet',unit],capture_output=True,timeout=10).returncode:
+            event['decision']='servicio_inactivo'
+        else:
+            append_event(audit,dict(event,decision='intento'))
+            outcome=runner(['/usr/bin/systemctl',method,unit],capture_output=True,timeout=90)
+            event['decision']='ejecutado' if outcome.returncode==0 else 'error'
+            event['exit_code']=outcome.returncode
+        append_event(audit,event);return event
+
+
 def main():
     if os.geteuid() != 0:
         raise PermissionError('Este control requiere administrador; no se concede sudo al agente')
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart', 'reload-tls', 'reload-maintenance'])
+    parser.add_argument('action', choices=['check', 'list-sites', 'site-restart-allowed', 'restart', 'reload-tls', 'reload-maintenance', 'activate-php-security'])
     parser.add_argument('unit', nargs='?')
     parser.add_argument('--origin')
     args = parser.parse_args()
@@ -210,6 +248,9 @@ def main():
         event = fn(policy, args.unit, args.origin)
         print(json.dumps(event))
         return 0 if event['decision'] == 'ejecutado' else 1
+    elif args.action == 'activate-php-security':
+        event=activate_php_security(policy,args.unit,args.origin)
+        print(json.dumps(event));return 0 if event['decision']=='ejecutado' else 1
     else:
         if not args.unit:
             parser.error('Falta la unidad')
