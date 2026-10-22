@@ -82,6 +82,14 @@ Actualizado: 20 de octubre de 2026, tramo 31. Implementacion NO finalizada.
   tareas que puedan estar escribiendo configuracion o copias. Once webs HTTP
   200 y procesos principales de Apache, PHP-FPM y MariaDB sin reinicios.
 
+## Mantenimiento previo cerrado el 23 de octubre de 2026
+
+ISPConfig actualizado y validado en 3.3.2p1. Panel, aplicaciones y manejador
+general en PHP 8.4.27; PHP 8.1 retirado. Once webs comprobadas, configuracion
+y coordinacion de certificados conservadas. Detalles e incidencia del
+primer intento en ispconfig-php84-2026-10-23.md. Este mantenimiento no cambia
+los tres criterios de cierre pendientes que siguen a continuacion.
+
 ## Tres pasos pendientes para dar la implementacion por terminada
 
 1. **SQL automatico seguro:** resolver la estrategia consistente de ROLEplus y

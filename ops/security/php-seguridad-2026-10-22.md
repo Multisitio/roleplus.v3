@@ -81,3 +81,10 @@ ninguna rama retirada activa y dpkg sin operaciones pendientes. No se utilizo
 autoremove. Se conservan PHP 8.4 y PHP 8.1 porque ambos tienen consumidores.
 La migracion del manejador general y del panel a 8.4 sigue pendiente de la
 actualizacion y validacion de ISPConfig; no se declara realizada.
+
+## Cierre posterior: 23 de octubre de 2026
+
+La situacion provisional anterior queda superada: ISPConfig 3.3.2p1 ya
+esta actualizado y validado; panel y manejadores generales ejecutan PHP
+8.4.27. Retirados los 20 paquetes restantes de PHP 8.1. Solo queda PHP 8.4.
+Resultado y evidencias en ispconfig-php84-2026-10-23.md.
