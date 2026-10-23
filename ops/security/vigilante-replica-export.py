@@ -164,6 +164,9 @@ def get(ident,offset,length):
     with open_archive(Path(entry['path'])) as stream:
         if fingerprint(os.fstat(stream.fileno()))!=entry['fingerprint'] or offset+length>entry['bytes']:
             raise ValueError('La captura ha cambiado')
+        # No basta el tamano/mtime: algunos sistemas agrupan marcas de tiempo.
+        # Contrastar tambien el contenido antes de entregar cualquier rango.
+        if digest(stream)!=entry['id']:raise ValueError('La captura ha cambiado de contenido')
         stream.seek(offset);chunk=stream.read(length)
         if len(chunk)!=length or fingerprint(os.fstat(stream.fileno()))!=entry['fingerprint']:
             raise ValueError('Lectura interrumpida')
