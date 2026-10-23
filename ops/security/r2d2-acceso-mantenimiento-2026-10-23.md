@@ -46,6 +46,10 @@ con -E a un registro privado y DenyUsers=*; no permite sesiones. Al finalizar
 restaura ambos valores, para el servicio si arranco y acredita ese estado.
 No cambia ACL ni reglas de red, no reinstala y no modifica servicios web.
 La causa original sigue pendiente de esa traza como servicio.
+El primer intento de traza fallo antes de modificar el servicio porque
+System.ServiceProcess no estaba cargado. Se carga explicitamente y se
+verifica la creacion/lectura de un ServiceController en una sesion limpia
+de Windows PowerShell 5.1. Esa comprobacion no arranca servicios.
 
 Se prepara `install-r2d2-maintenance-ssh.ps1` para una activacion humana
 unica en PowerShell como administrador de R2-D2. La herramienta de control

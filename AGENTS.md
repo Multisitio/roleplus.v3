@@ -1,5 +1,11 @@
 # Instrucciones del proyecto RolePlus
 
+- Herramientas PowerShell de R2-D2 (2026-10-23): comprobar en una sesion
+  limpia de Windows PowerShell 5.1 las dependencias y API que use el
+  instalador, no solo la sintaxis o los argumentos. Cargar explicitamente
+  System.ServiceProcess antes de crear ServiceController; no depender de
+  modulos o ensamblados cargados por comandos anteriores del operador.
+
 - Diagnosticos en R2-D2 (2026-10-23): guardar cada resultado y la seccion
   en curso antes de terminar la recogida. Limitar desde un supervisor la
   espera total de consultas del sistema que pueden atascarse. Un informe

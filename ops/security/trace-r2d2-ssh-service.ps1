@@ -6,6 +6,7 @@ $taskPrincipal = New-Object System.Security.Principal.WindowsPrincipal($taskIden
 if (-not $taskPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
     throw 'Ejecutar en PowerShell como administrador.'
 }
+Add-Type -AssemblyName System.ServiceProcess
 $taskService = New-Object System.ServiceProcess.ServiceController('sshd')
 if ($taskService.Status -ne [System.ServiceProcess.ServiceControllerStatus]::Stopped) {
     throw 'SSH no esta detenido: no se interrumpe una sesion activa.'
