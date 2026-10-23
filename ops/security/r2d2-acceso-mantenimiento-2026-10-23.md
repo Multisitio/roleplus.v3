@@ -18,6 +18,12 @@ La primera recogida no produjo informe mientras esperaba. Se corrige para
 guardar cada seccion y su punto en curso; un supervisor limita la recogida
 a 25 segundos y termina solo el proceso recolector que acaba de crear y
 sus hijos. El resultado parcial se conserva. sshd no se termina ni reinicia.
+El siguiente intento detecto otro fallo del recolector: Windows PowerShell
+5.1 convirtio el tercer argumento `$null` de File.Replace en una ruta
+vacia. Se usa `[NullString]::Value`; guardado inicial y reemplazo del mismo
+informe comprobados realmente con Windows PowerShell 5.1 en C-3PO. El
+supervisor exige tambien salida cero y estado `terminado` antes de mostrar
+exito. La causa del fallo original de sshd sigue sin acreditarse.
 
 Se prepara `install-r2d2-maintenance-ssh.ps1` para una activacion humana
 unica en PowerShell como administrador de R2-D2. La herramienta de control

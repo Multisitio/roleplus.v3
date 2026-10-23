@@ -21,7 +21,14 @@ if (-not $Collect) {
             $taskPartial | Add-Member -NotePropertyName limite_superado -NotePropertyValue $true -Force
             [System.IO.File]::WriteAllText($taskOutput, ($taskPartial | ConvertTo-Json -Depth 8), $taskUtf8)
             Write-Output 'Limite alcanzado. Guardado el resultado parcial y la comprobacion que se atasco.'
-        } else { Write-Output 'Comprobacion terminada. Codex puede leer el informe y sus posibles errores.' }
+        } else {
+            if ($taskChild.ExitCode -ne 0) {
+                throw 'El recolector fallo. Codex puede leer maintenance-ssh-diagnostic.err.txt; no es una comprobacion terminada.'
+            }
+            $taskFinished = Get-Content -LiteralPath $taskOutput -Raw | ConvertFrom-Json
+            if ($taskFinished.estado -ne 'terminado') { throw 'El recolector no confirmo un informe completo.' }
+            Write-Output 'Comprobacion terminada. Codex puede leer el informe y sus posibles errores.'
+        }
     } finally { $taskChild.Dispose() }
     return
 }
@@ -34,7 +41,7 @@ function Save-DiagnosticReport {
     $taskTemporary = $taskOutput + '.collect.tmp'
     [System.IO.File]::WriteAllText($taskTemporary, ($taskReport | ConvertTo-Json -Depth 8), $taskUtf8)
     if ([System.IO.File]::Exists($taskOutput)) {
-        [System.IO.File]::Replace($taskTemporary, $taskOutput, $null)
+        [System.IO.File]::Replace($taskTemporary, $taskOutput, [NullString]::Value)
     } else { [System.IO.File]::Move($taskTemporary, $taskOutput) }
 }
 function Read-DiagnosticSection([string]$Name, [scriptblock]$Read) {
