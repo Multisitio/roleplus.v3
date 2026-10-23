@@ -71,7 +71,7 @@ def validate(manifest):
         if (not re.fullmatch(r'[a-f0-9]{64}',e['id']) or e['sha256']!=e['id']
                 or e['kind'] not in ('text','sql') or type(e['bytes']) is not int
                 or not 0<e['bytes']<=MAX_OBJECT or e.get('text_verified') is not True
-                or not re.fullmatch(r'(text:(?:web[0-9]+|shared-(?:core|vendor))|sql:c1_[a-z0-9_]+)',e['dataset'])):
+                or not re.fullmatch(r'(text:(?:web[0-9]+|shared-(?:core|vendor)|system-(?:etc|ispconfig))|sql:(?:c1_[a-z0-9_]+|dbispconfig))',e['dataset'])):
             raise ValueError('Objeto fuera del alcance')
     if sum(e['bytes'] for e in entries)>MAX_STORE:raise ValueError('Catalogo fuera de presupuesto')
 

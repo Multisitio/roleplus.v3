@@ -103,7 +103,8 @@
     "independent_sql": "ISPConfig cron -> vigilante-sql-schedule.service; temporizador independiente deshabilitado",
     "mapped_sql": "ISPConfig cron -> vigilante-sql-schedule.service; domingo 04:45 Europe/Madrid",
     "service_restarts": "webwatchdog mediante vps-service-control",
-    "sql_termination": "deshabilitada; solo observacion agregada"
+    "sql_termination": "deshabilitada; solo observacion agregada",
+    "panel_backups": "ISPConfig sysbackup, diario 03:00 -> vigilante-panel-backups.service; tres versiones de texto y SQL InnoDB"
   },
   "statistics": {
     "mtgsearch.kumbia.app": "/var/www/clients/client1/web4/web/stats",

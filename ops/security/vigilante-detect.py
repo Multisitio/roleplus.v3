@@ -197,6 +197,18 @@ def collect(state,sites,now,global_log=None):
         except (OSError,ValueError,KeyError,TypeError):
             coverage['sql_backups']={'failed':True,'state_unavailable':True}
             events.append(event('server','automation_failed',severity='high'))
+    if Path('/etc/vigilante/panel-backups.json').exists():
+        try:
+            spec=importlib.util.spec_from_file_location('panel_backups',HERE/'vigilante-panel-backups.py')
+            panel_backups=importlib.util.module_from_spec(spec);spec.loader.exec_module(panel_backups)
+            coverage['panel_backups']=panel_backups.observation(now)
+            unit=subprocess.run(['/usr/bin/systemctl','is-active','vigilante-panel-backups.service'],
+                                capture_output=True,text=True,timeout=5)
+            if coverage['panel_backups']['failed'] or unit.stdout.strip()=='failed':
+                events.append(event('server','automation_failed',severity='high'))
+        except (OSError,ValueError,KeyError,TypeError):
+            coverage['panel_backups']={'failed':True,'state_unavailable':True}
+            events.append(event('server','automation_failed',severity='high'))
     for unit,family in [('apache2.service','apache2'),('php8.4-fpm.service','php_fpm'),('mariadb.service','mariadb'),('webwatchdog.service','watchdog')]:
         result=subprocess.run(['/usr/bin/systemctl','is-active',unit],capture_output=True,text=True,timeout=5)
         if result.stdout.strip()=='failed' or (unit!='webwatchdog.service' and result.stdout.strip()=='inactive'):

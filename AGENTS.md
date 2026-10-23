@@ -1,5 +1,13 @@
 # Instrucciones del proyecto RolePlus
 
+- Copias del panel (2026-10-23): 500-sysbackup.inc.php conserva el horario
+  diario de las 03:00 y delega en vigilante-panel-backups.service, con tres
+  generaciones textuales y SQL transaccional solo si dbispconfig sigue siendo
+  InnoDB. Revalidar esta delegacion junto con 500-backup.inc.php al actualizar
+  ISPConfig. No restaurar archivos completos con binarios ni eliminar las
+  copias heredadas como efecto lateral de la migracion. Los enlaces se
+  conservan como metadatos de texto y nunca se siguen durante la captura.
+
 - Copias SQL y alias (2026-10-23): la barrera cubre ServerName y todos los
   ServerAlias de cada consumidor, incluidos comodines y subdominios
   anidados. No activar una copia si cambia ese inventario. ISPConfig delega

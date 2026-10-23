@@ -106,6 +106,30 @@ def sources():
             yield {'dataset':'text:'+ident,'kind':'text','path':str(TEXT_BACKUPS/ident/name),
                    'created_at':int(datetime.strptime(name[len('text-'+ident+'_'):-len('.tar.gz')],'%Y-%m-%d_%H-%M-%S').replace(tzinfo=ZoneInfo('Europe/Madrid')).timestamp()),'expected_sha256':archive['sha256'],
                    'text_manifest':str(TEXT_STATE/(name+'.json'))}
+    # Configuracion y SQL del panel: catalogo privado del productor, sin rutas elegidas por el cliente.
+    panel_state = Path('/var/lib/vigilante-panel-backups/ledger.json')
+    if panel_state.exists():
+        private(panel_state)
+        panel = json.loads(panel_state.read_text())
+        for generation in panel['generations']:
+            name = generation['name']
+            if not re.fullmatch(r'\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}-[a-f0-9]{8}', name):
+                raise ValueError('Generacion del panel no valida')
+            folder = BACKUPS / 'vigilante-panel-text' / name
+            allowed = {'sql:dbispconfig': ('sql', 'dbispconfig.sql.gz'),
+                'text:system-etc': ('text', 'etc.tar.gz'),
+                'text:system-ispconfig': ('text', 'ispconfig.tar.gz')}
+            for item in generation['artifacts']:
+                if allowed.get(item['dataset']) != (item['kind'], item['name']):
+                    raise ValueError('Conjunto del panel no revisado')
+                source = {'dataset': item['dataset'], 'kind': item['kind'],
+                    'path': str(folder / item['name']), 'created_at': generation['created_at'],
+                    'expected_sha256': item['sha256']}
+                if item['kind'] == 'text':
+                    expected = item['name'].replace('.tar.gz', '.manifest.json')
+                    if item['manifest'] != expected: raise ValueError('Manifiesto no valido')
+                    source['text_manifest'] = str(folder / expected)
+                yield source
     yield from mapped_sources()
     ledger=json.loads((INDEPENDENT_STATE/'ledger.json').read_text())
     for item in ledger['archives']:
@@ -153,6 +177,8 @@ def catalogue():
     if len(entries)>100 or len({e['id'] for e in entries})!=len(entries):raise ValueError('Catalogo fuera de alcance')
     expected={'sql:'+n for n in set(MAPPED)|INDEPENDENT}
     expected|={'text:'+site['id'] for site in json.loads(Path('/etc/vigilante/text-backups.json').read_text())['sites']}
+    if Path('/etc/vigilante/panel-backups.json').exists():
+        expected |= {'sql:dbispconfig', 'text:system-etc', 'text:system-ispconfig'}
     present={e['dataset'] for e in entries}
     for missing in sorted(expected-present):
         if not any(o['dataset']==missing for o in omitted):omitted.append({'dataset':missing,'reason':'sin_copia_exportable'})

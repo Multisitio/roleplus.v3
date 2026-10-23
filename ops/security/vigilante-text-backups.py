@@ -21,6 +21,7 @@ STATE = Path('/var/lib/vigilante-text-backups')
 DEST = Path('/var/backup/vigilante-text')
 MAX_FILE = 16 * 1024 ** 2
 MAX_ARCHIVE = 512 * 1024 ** 2
+SYSTEM_ROOTS = (Path('/etc'), Path('/usr/local/ispconfig'))
 EXCLUDED = {'.git', '.svn', 'node_modules', '__pycache__', '.venv', 'backup', 'backups',
             'cache', 'temp', 'tmp', 'log', 'logs', 'stats', 'img', 'images', 'audio',
             'mp3', 'fonts', 'uploads', 'upload', 'scratch'}
@@ -81,8 +82,11 @@ def read_regular(path):
     return data, info
 
 
-def archive(root, destination):
+def archive(root, destination, *, system_config=False):
     """Seleccion positiva mas comprobacion del contenido completo; sin seguir enlaces."""
+    if system_config and root not in SYSTEM_ROOTS:
+        raise ValueError('Raiz de configuracion no revisada')
+    metadata = {'directories': [], 'links': []}
     total = 0
     files = []
     skipped = {'binary': 0, 'unsupported': 0}
@@ -90,12 +94,22 @@ def archive(root, destination):
         os.fchmod(out.fileno(), 0o600)
         with tarfile.open(fileobj=out, mode='w:gz', compresslevel=1) as tar:
             for folder, dirs, names in os.walk(root, followlinks=False):
+                if system_config:
+                    meta = Path(folder).lstat()
+                    metadata['directories'].append({'path': Path(folder).relative_to(root).as_posix(),
+                        'uid': meta.st_uid, 'gid': meta.st_gid, 'mode': stat.S_IMODE(meta.st_mode)})
+                    for name in sorted(dirs + names):
+                        path = Path(folder) / name
+                        if path.is_symlink():
+                            meta = path.lstat()
+                            metadata['links'].append({'path': path.relative_to(root).as_posix(),
+                                'target': os.readlink(path), 'uid': meta.st_uid, 'gid': meta.st_gid})
                 dirs[:] = sorted(d for d in dirs if d.lower() not in EXCLUDED
                                  and not (Path(folder) / d).is_symlink())
                 for name in sorted(names):
                     path = Path(folder) / name
                     relative = path.relative_to(root).as_posix()
-                    if not candidate(relative) or path.is_symlink():
+                    if (not system_config and not candidate(relative)) or path.is_symlink():
                         skipped['unsupported'] += 1
                         continue
                     data, meta = read_regular(path)
@@ -111,6 +125,20 @@ def archive(root, destination):
                     tar.addfile(item, io.BytesIO(data))
                     files.append({'path': relative, 'sha256': hashlib.sha256(data).hexdigest(),
                                   'bytes': len(data), 'uid': item.uid, 'gid': item.gid, 'mode': item.mode})
+            if system_config:
+                # Los enlaces se describen como texto; nunca se siguen ni se crean al verificar.
+                data = (json.dumps(metadata, ensure_ascii=True, sort_keys=True) + '\n').encode()
+                total += len(data)
+                if len(data) > MAX_FILE or total > MAX_ARCHIVE:
+                    raise ValueError('Metadatos fuera de presupuesto')
+                name = '.vigilante-metadata.json'
+                if any(x['path'] == name for x in files):
+                    raise ValueError('Nombre reservado ocupado')
+                item = tarfile.TarInfo('./' + name)
+                item.size, item.uid, item.gid, item.mode = len(data), 0, 0, 0o600
+                tar.addfile(item, io.BytesIO(data))
+                files.append({'path': name, 'sha256': hashlib.sha256(data).hexdigest(),
+                              'bytes': len(data), 'uid': 0, 'gid': 0, 'mode': 0o600})
         out.flush()
         os.fsync(out.fileno())
     if not files:
