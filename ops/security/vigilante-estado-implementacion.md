@@ -127,6 +127,10 @@ programador original. Detalles en vigilante-replica-r2d2-2026-10-23.md.
 
 ## Tres pasos pendientes para dar la implementacion por terminada
 
+Acceso de R2-D2: instalador SSH nativo preparado el 23 de octubre, pendiente
+de activacion local y conexion real. No cambia el estado pendiente de la
+tarea de replicas. Ver r2d2-acceso-mantenimiento-2026-10-23.md.
+
 1. **SQL automatico seguro:** resolver la estrategia consistente de ROLEplus y
    MTGsearch frente a MyISAM, verificar copias nuevas y sus restauraciones e
    integrar la ejecucion recurrente con un unico responsable por base y las

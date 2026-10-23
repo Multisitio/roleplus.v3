@@ -1,5 +1,12 @@
 # Instrucciones del proyecto RolePlus
 
+- Acceso a R2-D2 (2026-10-23): antes de pedir un PIN de Chrome remoto,
+  localizar la sesion ya conectada entre los perfiles disponibles. Una
+  peticion de PIN en una sesion nueva no acredita que el usuario deba
+  autenticarse otra vez en la suya. Para mantenimiento se prepara OpenSSH
+  nativo con clave y origen privado limitado; no darlo por activo hasta
+  verificar una conexion real. No confundir preparacion con instalacion.
+
 - Actualizaciones ISPConfig (2026-10-22): no confiar solo en reconfigure_services=no;
   el instalador reinicia FPM desde configure_php_fpm_systemd_overrides. Interceptar
   sus mutaciones de servicios y reservarlas al control central. Probar tambien
