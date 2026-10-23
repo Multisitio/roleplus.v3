@@ -1,9 +1,19 @@
 # Acceso de mantenimiento de R2-D2
 
-Estado: preparado, NO instalado ni conectado por SSH. La sesion existente
+Estado: activacion parcial; SSH NO disponible ni verificado. La sesion existente
 de Chrome remoto en el perfil ROLEplus ya esta conectada; una segunda
 sesion abierta desde otro perfil pedia PIN. No era necesario repetir el
 inicio de sesion del usuario.
+
+Primer intento de activacion: el operador ejecuto el instalador elevado;
+ssh-keygen genero claves y sshd -t no detuvo la instalacion, pero
+Start-Service fallo. El manejo del fallo solicita detener/deshabilitar el
+servicio y desactivar su regla nueva; falta verificar el estado real.
+No se atribuye causa al mensaje generico de PowerShell ni se reintenta
+la instalacion sobre su estado parcial. `diagnose-r2d2-ssh.ps1` recoge
+eventos, estado de servicio, configuracion y permisos (sin contenido de
+claves), y repite solo la validacion estatica -t. No inicia servicios ni
+escucha puertos. El informe queda en la carpeta compartida privada.
 
 Se prepara `install-r2d2-maintenance-ssh.ps1` para una activacion humana
 unica en PowerShell como administrador de R2-D2. La herramienta de control
