@@ -1,5 +1,10 @@
 # Instrucciones del proyecto RolePlus
 
+- Diagnosticos en R2-D2 (2026-10-23): guardar cada resultado y la seccion
+  en curso antes de terminar la recogida. Limitar desde un supervisor la
+  espera total de consultas del sistema que pueden atascarse. Un informe
+  que solo se escribe al final deja al operador esperando sin evidencia.
+
 - Acceso a R2-D2 (2026-10-23): antes de pedir un PIN de Chrome remoto,
   localizar la sesion ya conectada entre los perfiles disponibles. Una
   peticion de PIN en una sesion nueva no acredita que el usuario deba

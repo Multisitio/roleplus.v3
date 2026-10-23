@@ -14,6 +14,10 @@ la instalacion sobre su estado parcial. `diagnose-r2d2-ssh.ps1` recoge
 eventos, estado de servicio, configuracion y permisos (sin contenido de
 claves), y repite solo la validacion estatica -t. No inicia servicios ni
 escucha puertos. El informe queda en la carpeta compartida privada.
+La primera recogida no produjo informe mientras esperaba. Se corrige para
+guardar cada seccion y su punto en curso; un supervisor limita la recogida
+a 25 segundos y termina solo el proceso recolector que acaba de crear y
+sus hijos. El resultado parcial se conserva. sshd no se termina ni reinicia.
 
 Se prepara `install-r2d2-maintenance-ssh.ps1` para una activacion humana
 unica en PowerShell como administrador de R2-D2. La herramienta de control

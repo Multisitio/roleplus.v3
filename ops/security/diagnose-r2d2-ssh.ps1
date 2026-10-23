@@ -1,18 +1,50 @@
+param([switch]$Collect)
 $ErrorActionPreference = 'Stop'
 if ($env:COMPUTERNAME -ine 'R2-D2') { throw 'Ejecutar solo en R2-D2.' }
 $taskRoot = 'C:\xampp\var\vigilante-replicas'
+$taskOutput = Join-Path $taskRoot 'maintenance-ssh-diagnostic-v2.json'
+$taskUtf8 = New-Object System.Text.UTF8Encoding($false)
+if (-not $Collect) {
+    # Solo supervisa su proceso nuevo; no toca sshd ni procesos del usuario.
+    $taskInitial = @{ equipo = $env:COMPUTERNAME; estado = 'iniciando'; limite_segundos = 25 }
+    [System.IO.File]::WriteAllText($taskOutput, ($taskInitial | ConvertTo-Json), $taskUtf8)
+    $taskShell = Join-Path $PSHOME 'powershell.exe'
+    $taskArgs = '-NoProfile -NonInteractive -File "' + $PSCommandPath + '" -Collect'
+    $taskChild = Start-Process -FilePath $taskShell -ArgumentList $taskArgs -WindowStyle Hidden -PassThru `
+        -RedirectStandardOutput (Join-Path $taskRoot 'maintenance-ssh-diagnostic.out.txt') `
+        -RedirectStandardError (Join-Path $taskRoot 'maintenance-ssh-diagnostic.err.txt')
+    try {
+        Write-Output 'Recogiendo datos; limite total de 25 segundos. Los resultados parciales ya se guardan.'
+        if (-not $taskChild.WaitForExit(25000)) {
+            & (Join-Path $env:WINDIR 'System32\taskkill.exe') /PID $taskChild.Id /T /F | Out-Null
+            $taskPartial = Get-Content -LiteralPath $taskOutput -Raw | ConvertFrom-Json
+            $taskPartial | Add-Member -NotePropertyName limite_superado -NotePropertyValue $true -Force
+            [System.IO.File]::WriteAllText($taskOutput, ($taskPartial | ConvertTo-Json -Depth 8), $taskUtf8)
+            Write-Output 'Limite alcanzado. Guardado el resultado parcial y la comprobacion que se atasco.'
+        } else { Write-Output 'Comprobacion terminada. Codex puede leer el informe y sus posibles errores.' }
+    } finally { $taskChild.Dispose() }
+    return
+}
 $taskReport = [ordered]@{
     equipo = $env:COMPUTERNAME
     fecha = [DateTimeOffset]::Now.ToString('o')
     solo_lectura_del_sistema = $true
 }
+function Save-DiagnosticReport {
+    $taskTemporary = $taskOutput + '.collect.tmp'
+    [System.IO.File]::WriteAllText($taskTemporary, ($taskReport | ConvertTo-Json -Depth 8), $taskUtf8)
+    if ([System.IO.File]::Exists($taskOutput)) {
+        [System.IO.File]::Replace($taskTemporary, $taskOutput, $null)
+    } else { [System.IO.File]::Move($taskTemporary, $taskOutput) }
+}
 function Read-DiagnosticSection([string]$Name, [scriptblock]$Read) {
+    $taskReport['seccion_en_curso'] = $Name
+    $taskReport['estado'] = 'recogiendo'
+    Save-DiagnosticReport
     try { $taskReport[$Name] = @(& $Read) }
     catch { $taskReport[$Name] = @{ error = $_.Exception.Message } }
-}
-Read-DiagnosticSection 'servicio' {
-    Get-CimInstance Win32_Service -Filter "Name='sshd'" |
-        Select-Object Name, State, StartMode, StartName, PathName, ExitCode, ServiceSpecificExitCode
+    $taskReport['seccion_en_curso'] = $null
+    Save-DiagnosticReport
 }
 foreach ($taskLog in @('OpenSSH/Admin','OpenSSH/Operational')) {
     $taskLogName = $taskLog
@@ -25,6 +57,10 @@ Read-DiagnosticSection 'eventos_servicio' {
     Get-WinEvent -FilterHashtable @{ LogName = 'System'; ProviderName = 'Service Control Manager' } -MaxEvents 150 |
         Where-Object { $_.Message -match 'sshd|OpenSSH' } |
         Select-Object -First 15 TimeCreated, Id, Message
+}
+Read-DiagnosticSection 'servicio' {
+    Get-CimInstance Win32_Service -Filter "Name='sshd'" -OperationTimeoutSec 5 |
+        Select-Object Name, State, StartMode, StartName, PathName, ExitCode, ServiceSpecificExitCode
 }
 Read-DiagnosticSection 'configuracion' {
     Get-Content -LiteralPath (Join-Path $env:ProgramData 'ssh\sshd_config')
@@ -63,7 +99,6 @@ Read-DiagnosticSection 'reglas_ssh' {
     Get-NetFirewallRule -Name 'Codex-R2D2-SSH-C3PO','OpenSSH-Server-In-TCP' -ErrorAction SilentlyContinue |
         Select-Object Name, Enabled, Direction, Action
 }
-$taskOutput = Join-Path $taskRoot 'maintenance-ssh-diagnostic.json'
-$taskUtf8 = New-Object System.Text.UTF8Encoding($false)
-[System.IO.File]::WriteAllText($taskOutput, ($taskReport | ConvertTo-Json -Depth 8), $taskUtf8)
+$taskReport['estado'] = 'terminado'
+Save-DiagnosticReport
 Write-Output 'Diagnostico guardado. Codex puede leerlo por la carpeta compartida; no hace falta copiarlo aqui.'
