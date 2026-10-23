@@ -38,6 +38,19 @@
   audio o ejecutables. Los contenedores comprimidos pueden guardar texto.
   Los originales binarios de usuarios permanecen en produccion y no quedan
   protegidos por estas copias: expresar ese limite sin ampliar la politica.
+- Copias en tres destinos (2026-10-23): por indicacion expresa del usuario,
+  conservar copias de los textos seleccionados y del SQL en VPS, R2-D2 y
+  GitHub. Son tres ubicaciones, no tres versiones dentro del mismo servidor.
+  No declarar cobertura completa hasta verificar integridad y recuperacion
+  de cada destino. Si R2-D2 queda sin Internet, registrar la replica pendiente
+  y reanudar al recuperar conexion, sin presentar la copia como transferida.
+  Cifrar los SQL y textos privados antes de enviarlos a GitHub; no publicar
+  claves ni secretos y conservar una via de recuperacion de las claves fuera
+  del VPS. Respetar coste adicional cero y comprobar limites del destino.
+  Las replicas de copia en R2-D2 se guardan separadas de sus webs y bases
+  activas: copiar no autoriza restaurarlas, mezclarlas ni sobrescribirlas.
+  Este requisito se integra en los bloques de copias y aceptacion pendientes.
+
 - Coordinacion Git (2026-10-20): las operaciones de codigo de R2-D2 y del VPS
   deben contrastar la misma revision publicada en GitHub antes de desplegar.
   Detenerse ante cambios locales, remotos o huellas divergentes; no usar

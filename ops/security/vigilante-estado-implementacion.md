@@ -1,6 +1,6 @@
 # Estado de implementacion del vigilante
 
-Actualizado: 20 de octubre de 2026, tramo 31. Implementacion NO finalizada.
+Actualizado: 23 de octubre de 2026. Implementacion NO finalizada.
 
 ## Implantado y comprobado
 
@@ -90,11 +90,32 @@ y coordinacion de certificados conservadas. Detalles e incidencia del
 primer intento en ispconfig-php84-2026-10-23.md. Este mantenimiento no cambia
 los tres criterios de cierre pendientes que siguen a continuacion.
 
+## Copias en tres destinos: requisito confirmado el 23 de octubre
+
+Tanto los textos seleccionados como el SQL deben tener copia en VPS, R2-D2
+y GitHub. Esta cobertura triple aun NO esta implantada ni verificada. Las
+copias de codigo publicadas no acreditan una copia SQL ni de todos los textos
+privados seleccionados. Tres destinos no sustituye la retencion de versiones.
+
+R2-D2 esta encendido habitualmente; su conexion depende del movil del
+operador. Si queda sin Internet, la transferencia debe quedar pendiente y
+reanudarse cuando vuelva, mostrando fecha de ultima copia verificada y
+antiguedad por destino. No exigir Internet nocturno para generar la copia
+local del VPS; tampoco contar como completa una transferencia pendiente.
+
+Los SQL y textos privados se cifran antes de GitHub; las claves no se
+publican y deben poder recuperarse sin depender solo del VPS. Comprobar
+capacidad y limites del destino sin introducir gasto adicional. La replica
+de R2-D2 se guarda fuera de sus webs y bases activas, sin sustituir su fuente
+de verdad. La aceptacion exige recuperar y contrastar las mismas capturas
+desde los tres destinos. No se habilita ninguna transferencia en este cambio.
+
 ## Tres pasos pendientes para dar la implementacion por terminada
 
 1. **SQL automatico seguro:** resolver la estrategia consistente de ROLEplus y
    MTGsearch frente a MyISAM, verificar copias nuevas y sus restauraciones e
-   integrar la ejecucion recurrente con un unico responsable por base. Las
+   integrar la ejecucion recurrente con un unico responsable por base y las
+   replicas verificadas en VPS, R2-D2 y GitHub descritas arriba. Las
    cinco bases pequenas tienen copias nuevas verificadas, pero la programacion
    nativa no usa todavia el nuevo ejecutor acotado. El laboratorio acredita
    que no caben las grandes en 1.5 segundos; no aplicar esperas largas sin
@@ -111,12 +132,14 @@ los tres criterios de cierre pendientes que siguen a continuacion.
 3. **Aceptacion conjunta:** comprobar el recorrido completo de una incidencia,
    diagnostico, accion permitida o escalado, aviso y diario; verificar limites
    y continuidad de los servicios, incluido el aviso ante fallo de las nuevas
-   copias de texto y SQL independientes, cerrar la lista y declarar expresamente
+   copias de texto y SQL, la recuperacion desde los tres destinos y la
+   reanudacion tras perder Internet en R2-D2; cerrar la lista y declarar expresamente
    finalizada la implementacion.
 
 La recuperacion de los textos seleccionados ya esta verificada. Los binarios
 quedan fuera del alcance autorizado y las copias conservadas en el mismo VPS
-no protegen de su perdida total. Esos limites no se convierten en nuevos pasos.
+no protegen de su perdida total. El usuario exige ahora replicarlas tambien
+en R2-D2 y GitHub; esa proteccion queda pendiente dentro de los bloques existentes.
 
 Los errores PHP y otras incidencias que se descubran despues pertenecen a la
 operacion normal del vigilante: no amplian indefinidamente esta implementacion.
