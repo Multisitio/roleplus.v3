@@ -1,0 +1,30 @@
+[Unit]
+Description=Ensayo conjunto aislado del aviso y del bloqueo SQL acotado
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/sql-window-candidate/vigilante-sql-window-check.py
+StateDirectory=vigilante-sql-window-check
+StateDirectoryMode=0700
+RuntimeDirectory=vigilante-maintenance-check
+RuntimeDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX AF_INET
+InaccessiblePaths=/var/www /var/lib/mysql /run/mysqld /etc/mysql /var/backup
+InaccessiblePaths=/var/lib/vigilante-auth /var/lib/vigilante-wa /srv/vigilante-ai
+CPUQuota=75%
+MemoryMax=512M
+TasksMax=128
+TimeoutStartSec=180s
+TimeoutStopSec=35s
+LimitCORE=0
+Restart=no

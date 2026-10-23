@@ -12,6 +12,7 @@ import uuid
 
 STATE = Path('/var/lib/vigilante-maintenance-check')
 RUN = Path('/run/vigilante-maintenance-check')
+EXTRA_CHECKS = None
 
 
 def main():
@@ -123,6 +124,8 @@ def main():
             assert request('/app', 'POST')[0] == 200
             assert (RUN / 'counter').read_text() == '1'
             report['checks'].append('expired_window_restores_reads_and_writes_without_reload')
+            if EXTRA_CHECKS is not None:
+                EXTRA_CHECKS(request, data_path, errors, report)
             report['completed'] = True
         finally:
             if server is not None and server.poll() is None:

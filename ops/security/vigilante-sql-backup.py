@@ -53,7 +53,7 @@ def client(socket):
 
 
 @contextmanager
-def strict_read(database, socket, seconds, errors):
+def strict_read(database, socket, seconds, errors, guard=None):
     if not re.fullmatch(r'[a-z][a-z0-9_]{0,63}', database):
         raise ValueError('Nombre no permitido')
     p = spawn(client(socket) + ['-e', "SELECT TABLE_NAME FROM information_schema.TABLES "
@@ -62,6 +62,8 @@ def strict_read(database, socket, seconds, errors):
     tables = p.communicate(timeout=3)[0].splitlines()
     if p.returncode or not 1 <= len(tables) <= 256 or any(not re.fullmatch(r'[a-zA-Z0-9_]{1,64}', t) for t in tables):
         raise BackupFailure('No se pudieron acreditar las tablas de la base')
+    if guard is not None:
+        guard(seconds)  # Despues del inventario, antes de solicitar READ.
     start = time.monotonic()
     holder = spawn(client(socket), seconds, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                    stderr=errors, text=True)
@@ -86,13 +88,17 @@ def strict_read(database, socket, seconds, errors):
         holder.stdout.close()
 
 
-def dump(database, output, socket=SOCKET, seconds=MAX_SECONDS, counts=None, statement_seconds=0.5):
+def dump(database, output, socket=SOCKET, seconds=MAX_SECONDS, counts=None, statement_seconds=0.5, guard=None):
     if output.exists():
         raise ValueError('No sobrescribir una copia previa')
     start = time.monotonic()
     with output.with_suffix('.errors').open('xb') as errors:
         os.chmod(errors.name, 0o600)
-        with strict_read(database, socket, seconds, errors) as (holder, locked_at):
+        if guard is not None:
+            guard(seconds)
+        with strict_read(database, socket, seconds, errors, guard=guard) as (holder, locked_at):
+            if guard is not None:
+                guard(seconds)
             remaining = seconds - (time.monotonic() - locked_at)
             if remaining <= 0:
                 raise BackupFailure('Se agoto el plazo de bloqueo')
