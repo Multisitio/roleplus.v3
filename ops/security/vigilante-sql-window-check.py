@@ -80,6 +80,12 @@ def integration(request, data_path, errors, report):
             assert sql('SELECT value FROM t', 'restored') == 'texto'
             report['checks'].append('notice_http_barrier_read_lock_dump_restore_and_clear')
             raw.unlink()
+            with connector.window(['roleplus.app','*.roleplus.app','.roleplus.app'],15):
+                for alias in ['editor.roleplus.app','anidado.editor.roleplus.app','.roleplus.app']:
+                    code,headers,_=http(alias,'/app','POST')
+                    assert code==503 and 'x-vigilante-maintenance' in headers
+                assert http('unaffected.test','/app','POST')[0]==200
+            report['checks'].append('wildcard_nested_and_dot_aliases_guarded_without_affecting_other_sites')
             sql('CREATE DATABASE c1_mtgsearch; CREATE TABLE c1_mtgsearch.t(id INT) ENGINE=MyISAM; INSERT INTO c1_mtgsearch.t VALUES(1);')
             counts={};raw=run/'mtg.sql'
             connector.dump('c1_mtgsearch',raw,['mtgsearch.kumbia.app'],45,counts,socket)

@@ -1,5 +1,14 @@
 # Instrucciones del proyecto RolePlus
 
+- Copias SQL y alias (2026-10-23): la barrera cubre ServerName y todos los
+  ServerAlias de cada consumidor, incluidos comodines y subdominios
+  anidados. No activar una copia si cambia ese inventario. ISPConfig delega
+  la programacion de las nueve bases revisadas en vigilante-sql-schedule;
+  no rehabilitar su temporizador independiente ni el volcado SQL nativo
+  ilimitado. Al actualizar ISPConfig, revalidar la delegacion del trabajo
+  500-backup.inc.php antes de liberar cron. Las restauraciones reales y
+  cobertura triple siguen pendientes hasta acreditarse expresamente.
+
 - Herramientas PowerShell de R2-D2 (2026-10-23): comprobar en una sesion
   limpia de Windows PowerShell 5.1 las dependencias y API que use el
   instalador, no solo la sintaxis o los argumentos. Cargar explicitamente

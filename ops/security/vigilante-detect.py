@@ -185,6 +185,18 @@ def collect(state,sites,now,global_log=None):
                 urgent=not coverage['legacy_fresh'] or not observation['sql_probe_ok'] or observation.get('urgent_failed_jobs',[])
                 events.append(event('server','automation_failed',severity='high' if urgent else 'normal'))
         except (OSError,ValueError,KeyError,TypeError):coverage['legacy_fresh']=False
+    if Path('/etc/vigilante/sql-schedule.json').exists():
+        try:
+            spec=importlib.util.spec_from_file_location('sql_schedule',HERE/'vigilante-sql-schedule.py')
+            sql_schedule=importlib.util.module_from_spec(spec);spec.loader.exec_module(sql_schedule)
+            coverage['sql_backups']=sql_schedule.observation(now)
+            unit=subprocess.run(['/usr/bin/systemctl','is-active','vigilante-sql-schedule.service'],
+                                capture_output=True,text=True,timeout=5)
+            if coverage['sql_backups']['failed'] or unit.stdout.strip()=='failed':
+                events.append(event('server','automation_failed',severity='high'))
+        except (OSError,ValueError,KeyError,TypeError):
+            coverage['sql_backups']={'failed':True,'state_unavailable':True}
+            events.append(event('server','automation_failed',severity='high'))
     for unit,family in [('apache2.service','apache2'),('php8.4-fpm.service','php_fpm'),('mariadb.service','mariadb'),('webwatchdog.service','watchdog')]:
         result=subprocess.run(['/usr/bin/systemctl','is-active',unit],capture_output=True,text=True,timeout=5)
         if result.stdout.strip()=='failed' or (unit!='webwatchdog.service' and result.stdout.strip()=='inactive'):

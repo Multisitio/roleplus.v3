@@ -1,0 +1,32 @@
+[Unit]
+Description=Ejecutor SQL semanal unico solicitado por ISPConfig
+After=mariadb.service apache2.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/vigilante/vigilante-sql-schedule.py
+User=root
+UMask=0077
+StateDirectory=vigilante-sql-schedule
+StateDirectoryMode=0700
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+IPAddressDeny=any
+IPAddressAllow=localhost
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+InaccessiblePaths=/var/www /var/lib/mysql /etc/mysql /var/lib/vigilante-auth /var/lib/vigilante-wa /srv/vigilante-ai
+ReadWritePaths=/var/backup /run/lock /run/vigilante-maintenance /var/lib/vigilante-independent-sql
+CPUQuota=75%
+MemoryMax=256M
+TasksMax=32
+Nice=15
+IOWeight=10
+TimeoutStartSec=600s
+TimeoutStopSec=5s
+LimitFSIZE=1100M
+LimitCORE=0
+Restart=no

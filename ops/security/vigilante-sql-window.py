@@ -51,13 +51,16 @@ def check_status(host, window):
 @contextmanager
 def window(hosts, seconds):
     if (not hosts or len(hosts) > 8 or len(set(hosts)) != len(hosts)
-            or any(not re.fullmatch(r'[a-z0-9]+(?:[.-][a-z0-9]+)*', h) for h in hosts)):
+            or any(not re.fullmatch(r'(?:\*\.|\.)?[a-z0-9]+(?:[.-][a-z0-9]+)*', h) for h in hosts)
+            or hosts[0].startswith(('*.', '.'))
+            or any(h.lstrip('*.') not in hosts for h in hosts if h.startswith(('*.', '.')))):
         raise ValueError('Nombres de sitio no validos')
     with LOCK.open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         ident = maintenance.activate(hosts, estimate=seconds, limit=seconds, lead_seconds=LEAD)
         try:
-            for host in hosts:check_status(host, ident)
+            concrete = [h for h in hosts if not h.startswith(('*.', '.'))]
+            for host in concrete:check_status(host, ident)
             until = time.monotonic() + LEAD
             while time.monotonic() < until:time.sleep(max(0, min(0.1, until - time.monotonic())))
 
@@ -69,7 +72,7 @@ def window(hosts, seconds):
                         raise backup.BackupFailure('El aviso ha caducado o no cubre el plazo de copia')
 
             guard(seconds)
-            for host in hosts:
+            for host in concrete:
                 check_status(host, ident)
                 code, headers, _ = request(host, '/__vigilante_sql_probe_' + uuid.uuid4().hex, 'POST')
                 if code != 503 or headers.get('x-vigilante-maintenance') != ident:
