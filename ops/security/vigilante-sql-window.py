@@ -59,7 +59,7 @@ def window(hosts, seconds):
         try:
             for host in hosts:check_status(host, ident)
             until = time.monotonic() + LEAD
-            while time.monotonic() < until:time.sleep(min(0.1, until - time.monotonic()))
+            while time.monotonic() < until:time.sleep(max(0, min(0.1, until - time.monotonic())))
 
             def guard(required):
                 for host in hosts:
@@ -97,4 +97,4 @@ def dump(database, output, hosts, seconds, counts=None, socket=backup.SOCKET):
     if output.exists():raise ValueError('No sobrescribir un volcado anterior')
     with window(hosts, seconds) as guard:
         return backup.dump(database, output, socket=socket, seconds=seconds, counts=counts,
-                           statement_seconds=min(seconds, 5), guard=guard)
+                           statement_seconds=seconds, guard=guard)

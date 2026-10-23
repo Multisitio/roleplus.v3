@@ -99,8 +99,11 @@ los tres criterios de cierre pendientes que siguen a continuacion.
    nativa no usa todavia el nuevo ejecutor acotado. El laboratorio acredita
    que no caben las grandes en 1.5 segundos; no aplicar esperas largas sin
    integrar y comprobar el aviso previo de mantenimiento ya instalado. Falta
-   conectar la barrera al ejecutor y su programacion unica; no se ha activado
-   una ventana real ni se han obtenido aun copias nuevas de las dos grandes.
+   integrar su programacion unica y verificar las primeras copias grandes.
+   El conector entre aviso HTTP, barrera Apache y ejecutor SQL ya esta probado
+   en aislamiento con restauracion MyISAM/InnoDB, caducidad y fallos del aviso.
+   Los bloqueos largos solo se admiten de 03:00 a 06:00 de Madrid. No se ha
+   activado una ventana real ni obtenido aun copias nuevas de las dos grandes.
 2. **Reparaciones acotadas:** conectar el ejecutor probado a destinos y
    operaciones expresamente permitidos, con revision, bloqueo coordinado,
    copia previa, comprobaciones y recuperacion ante fallo. Probar su
