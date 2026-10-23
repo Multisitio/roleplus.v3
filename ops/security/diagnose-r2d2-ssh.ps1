@@ -45,32 +45,45 @@ function Save-DiagnosticReport {
     } else { [System.IO.File]::Move($taskTemporary, $taskOutput) }
 }
 function Read-DiagnosticSection([string]$Name, [scriptblock]$Read) {
+    $taskClock = [System.Diagnostics.Stopwatch]::StartNew()
     $taskReport['seccion_en_curso'] = $Name
     $taskReport['estado'] = 'recogiendo'
     Save-DiagnosticReport
     try { $taskReport[$Name] = @(& $Read) }
     catch { $taskReport[$Name] = @{ error = $_.Exception.Message } }
+    $taskReport[$Name + '_segundos'] = [Math]::Round($taskClock.Elapsed.TotalSeconds, 3)
     $taskReport['seccion_en_curso'] = $null
     Save-DiagnosticReport
 }
-foreach ($taskLog in @('OpenSSH/Admin','OpenSSH/Operational')) {
-    $taskLogName = $taskLog
-    Read-DiagnosticSection $taskLogName {
-        Get-WinEvent -LogName $taskLogName -MaxEvents 20 |
-            Select-Object TimeCreated, Id, LevelDisplayName, Message
-    }
-}
-Read-DiagnosticSection 'eventos_servicio' {
-    Get-WinEvent -FilterHashtable @{ LogName = 'System'; ProviderName = 'Service Control Manager' } -MaxEvents 150 |
-        Where-Object { $_.Message -match 'sshd|OpenSSH' } |
-        Select-Object -First 15 TimeCreated, Id, Message
-}
-Read-DiagnosticSection 'servicio' {
-    Get-CimInstance Win32_Service -Filter "Name='sshd'" -OperationTimeoutSec 5 |
-        Select-Object Name, State, StartMode, StartName, PathName, ExitCode, ServiceSpecificExitCode
-}
 Read-DiagnosticSection 'configuracion' {
-    Get-Content -LiteralPath (Join-Path $env:ProgramData 'ssh\sshd_config')
+    [System.IO.File]::ReadAllText((Join-Path $env:ProgramData 'ssh\sshd_config'))
+}
+Read-DiagnosticSection 'arranque_directo' {
+    if ((Get-Service sshd).Status -ne 'Stopped') { throw 'Servicio activo: no se ejecuta otra instancia.' }
+    $taskDebugOut = Join-Path $taskRoot 'maintenance-ssh-native.out.txt'
+    $taskDebugErr = Join-Path $taskRoot 'maintenance-ssh-native.err.txt'
+    $taskBinary = Join-Path $env:WINDIR 'System32\OpenSSH\sshd.exe'
+    # Instancia temporal: DenyUsers=* impide cualquier inicio de sesion.
+    # No arranca el servicio, no modifica su configuracion ni el cortafuegos.
+    $taskArgs = '-ddd -e -f "' + (Join-Path $env:ProgramData 'ssh\sshd_config') + '" -o "DenyUsers=*"'
+    $taskNative = Start-Process -FilePath $taskBinary -ArgumentList $taskArgs -WindowStyle Hidden -PassThru `
+        -RedirectStandardOutput $taskDebugOut -RedirectStandardError $taskDebugErr
+    try {
+        $taskEnded = $taskNative.WaitForExit(4000)
+        if (-not $taskEnded) {
+            & (Join-Path $env:WINDIR 'System32\taskkill.exe') /PID $taskNative.Id /T /F | Out-Null
+        }
+        [pscustomobject]@{
+            termino_solo = $taskEnded
+            salida = [System.IO.File]::ReadAllText($taskDebugOut)
+            detalle = [System.IO.File]::ReadAllText($taskDebugErr)
+            servicio_reiniciado = $false
+            sesiones_permitidas = $false
+        }
+    } finally {
+        if (-not $taskNative.HasExited) { $taskNative.Kill() }
+        $taskNative.Dispose()
+    }
 }
 Read-DiagnosticSection 'permisos' {
     foreach ($taskRelative in @('ssh','ssh\sshd_config','ssh\ssh_host_ed25519_key','ssh\codex_c3po_authorized_keys')) {
@@ -84,27 +97,6 @@ Read-DiagnosticSection 'permisos' {
 Read-DiagnosticSection 'version_binario' {
     (Get-Item -LiteralPath (Join-Path $env:WINDIR 'System32\OpenSSH\sshd.exe')).VersionInfo |
         Select-Object FileVersion, ProductVersion, FileName
-}
-Read-DiagnosticSection 'validacion_configuracion' {
-    # -t solo valida configuracion y claves: no escucha, arranca ni reinicia servicios.
-    $taskPreviousPreference = $ErrorActionPreference
-    try {
-        $ErrorActionPreference = 'Continue'
-        $taskMessages = & (Join-Path $env:WINDIR 'System32\OpenSSH\sshd.exe') -t -f (Join-Path $env:ProgramData 'ssh\sshd_config') 2>&1
-        $taskNativeCode = $LASTEXITCODE
-        [pscustomobject]@{ salida = @($taskMessages | ForEach-Object { [string]$_ }); codigo = $taskNativeCode }
-    } finally { $ErrorActionPreference = $taskPreviousPreference }
-}
-Read-DiagnosticSection 'direcciones_ipv4' {
-    Get-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceAlias, IPAddress, AddressState
-}
-Read-DiagnosticSection 'escucha_22' {
-    Get-NetTCPConnection -LocalPort 22 -State Listen -ErrorAction SilentlyContinue |
-        Select-Object LocalAddress, LocalPort, OwningProcess
-}
-Read-DiagnosticSection 'reglas_ssh' {
-    Get-NetFirewallRule -Name 'Codex-R2D2-SSH-C3PO','OpenSSH-Server-In-TCP' -ErrorAction SilentlyContinue |
-        Select-Object Name, Enabled, Direction, Action
 }
 $taskReport['estado'] = 'terminado'
 Save-DiagnosticReport

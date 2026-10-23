@@ -24,6 +24,16 @@ vacia. Se usa `[NullString]::Value`; guardado inicial y reemplazo del mismo
 informe comprobados realmente con Windows PowerShell 5.1 en C-3PO. El
 supervisor exige tambien salida cero y estado `terminado` antes de mostrar
 exito. La causa del fallo original de sshd sigue sin acreditarse.
+La siguiente recogida agoto el limite tras obtener eventos y estado:
+servicio detenido/deshabilitado, LocalSystem, salida 1067; canales OpenSSH
+sin eventos. El punto en curso era configuracion, sin tiempos parciales
+que permitan culpar a esa lectura. Se retiran las consultas generales ya
+obtenidas y se prioriza configuracion y arranque nativo temporal -ddd -e,
+con DenyUsers=* (ninguna sesion admitida) y limite propio de cuatro segundos.
+No se reinicia ni habilita el servicio ni se cambia el cortafuegos. Esta
+instancia de prueba puede intentar escuchar en la direccion configurada;
+solo se termina el proceso temporal propio. Se guarda su salida antes de
+continuar con permisos y version. Cada seccion registra su duracion.
 
 Se prepara `install-r2d2-maintenance-ssh.ps1` para una activacion humana
 unica en PowerShell como administrador de R2-D2. La herramienta de control
