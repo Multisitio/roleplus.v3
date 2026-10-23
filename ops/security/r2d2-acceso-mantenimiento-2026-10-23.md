@@ -51,6 +51,28 @@ System.ServiceProcess no estaba cargado. Se carga explicitamente y se
 verifica la creacion/lectura de un ServiceController en una sesion limpia
 de Windows PowerShell 5.1. Esa comprobacion no arranca servicios.
 
+## Causa acreditada y reparacion preparada
+
+La traza real como LocalSystem del 23 de octubre registra `Bad owner on
+C:/ProgramData/ssh/ssh_host_ed25519_key`, rechaza la clave por permisos y
+termina con `no hostkeys available`. La clave generada por ssh-keygen tenia
+como propietario al usuario interactivo; bajo ese usuario funcionaba, bajo
+LocalSystem no. No es un fallo de puerto ni de sintaxis de sshd_config.
+
+`repair-r2d2-ssh.ps1` valida instalacion, configuracion y regla propias.
+Guarda solo los metadatos ACL anteriores, asigna propietario Administradores
+y acceso exclusivo SYSTEM/Administradores a esa unica clave y comprueba que
+su contenido no cambio. No copia binarios ni regenera la identidad SSH.
+Inicia el servicio y habilita solo la regla original restringida a C-3PO.
+En caso de fallo solicita parada, deshabilita servicio y su regla. Escribe
+la clave publica de servidor en el estado privado para fijarla desde C-3PO.
+El instalador inicial incorpora la misma correccion tras generar la clave.
+
+Comprobados realmente en Windows PowerShell 5.1: carga de ensamblado,
+controlador de servicio de lectura, construccion de ACL y controles de
+configuracion; sintaxis correcta. La reparacion y conexion en R2-D2 siguen
+pendientes de ejecutar y verificar. No se declara acceso operativo.
+
 Se prepara `install-r2d2-maintenance-ssh.ps1` para una activacion humana
 unica en PowerShell como administrador de R2-D2. La herramienta de control
 grafico prohibe ejecutar ordenes de terminal directa o indirectamente.

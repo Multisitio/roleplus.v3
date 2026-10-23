@@ -104,6 +104,9 @@ Subsystem sftp sftp-server.exe
     $taskKeygen = Join-Path $env:WINDIR 'System32\OpenSSH\ssh-keygen.exe'
     & $taskKeygen -A
     if ($LASTEXITCODE -ne 0) { throw 'No se pudieron generar las claves de servidor.' }
+    # ssh-keygen elevado puede dejar como propietario al usuario interactivo.
+    # LocalSystem exige propietario SYSTEM o Administradores, no ese usuario.
+    Set-Acl -LiteralPath (Join-Path $taskConfigRoot 'ssh_host_ed25519_key') -AclObject $taskAcl
     & $taskSshd -t -f $taskConfig
     if ($LASTEXITCODE -ne 0) { throw 'La configuracion SSH no pasa su validador nativo.' }
     New-NetFirewallRule -Name $taskRule -DisplayName 'Codex: R2-D2 solo desde C-3PO' `
