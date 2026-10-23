@@ -18,7 +18,7 @@ class ExportTests(unittest.TestCase):
         self.path=self.root/'fixture.gz';self.path.write_bytes(b'fixture data')
         self.ident=hashlib.sha256(self.path.read_bytes()).hexdigest()
         self.entry={'id':self.ident,'path':str(self.path),'bytes':self.path.stat().st_size,
-                    'fingerprint':m.fingerprint(self.path.stat())}
+                    'fingerprint':m.fingerprint(self.path.stat()),'chunk_sha256':[self.ident]}
         (self.root/'catalog.json').write_text(json.dumps({'entries':[self.entry]}))
 
     def test_only_catalogued_id(self):

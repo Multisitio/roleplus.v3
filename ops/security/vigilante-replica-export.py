@@ -71,6 +71,13 @@ def digest(stream):
     return h.hexdigest()
 
 
+def block_digest(stream):
+    value=hashlib.sha256();chunks=[]
+    while block:=stream.read(MAX_RANGE):
+        value.update(block);chunks.append(hashlib.sha256(block).hexdigest())
+    return value.hexdigest(),chunks
+
+
 def mapped_sources():
     q="SELECT d.database_name,d.parent_domain_id,b.filename,b.tstamp FROM web_database d JOIN web_backup b ON b.parent_domain_id=d.parent_domain_id AND b.backup_type='mysql' WHERE d.active='y' AND d.parent_domain_id>0 AND b.filename LIKE CONCAT('db_',d.database_name,'_%') ORDER BY b.tstamp DESC"
     result=subprocess.run(['/usr/bin/mysql','--no-defaults','--protocol=socket',
@@ -122,10 +129,10 @@ def catalogue():
             path=Path(source['path'])
             with open_archive(path) as stream:
                 before=fingerprint(os.fstat(stream.fileno()));previous=cache.get(str(path))
-                if previous and previous['fingerprint']==before:
+                if previous and previous['fingerprint']==before and 'chunk_sha256' in previous:
                     entry=dict(previous)
                 else:
-                    sha=digest(stream);stream.seek(0)
+                    sha,chunks=block_digest(stream);stream.seek(0)
                     if source.get('expected_sha256',sha)!=sha:raise ValueError('Huella inesperada')
                     if source['kind']=='sql':sql_text(stream)
                     else:
@@ -133,7 +140,7 @@ def catalogue():
                         module('vigilante-text-backups').verify(path,manifest)
                     if fingerprint(os.fstat(stream.fileno()))!=before:raise ValueError('Cambio durante lectura')
                     entry={k:source[k] for k in ['dataset','kind','created_at','path']}
-                    entry.update(id=sha,sha256=sha,bytes=before[2],fingerprint=before,name=path.name,text_verified=True)
+                    entry.update(id=sha,sha256=sha,bytes=before[2],fingerprint=before,name=path.name,text_verified=True,chunk_sha256=chunks)
                     if source['kind']=='text':
                         entry['tree_sha256']=hashlib.sha256(json.dumps(manifest['files'],sort_keys=True,separators=(',',':')).encode()).hexdigest()
                         entry['files']=len(manifest['files'])
@@ -152,7 +159,7 @@ def catalogue():
 
 def public(data):
     return {**{k:v for k,v in data.items() if k!='entries'},'entries':[
-        {k:v for k,v in entry.items() if k not in ('path','fingerprint')} for entry in data['entries']]}
+        {k:v for k,v in entry.items() if k not in ('path','fingerprint','chunk_sha256')} for entry in data['entries']]}
 
 
 def get(ident,offset,length):
@@ -164,10 +171,15 @@ def get(ident,offset,length):
     with open_archive(Path(entry['path'])) as stream:
         if fingerprint(os.fstat(stream.fileno()))!=entry['fingerprint'] or offset+length>entry['bytes']:
             raise ValueError('La captura ha cambiado')
-        # No basta el tamano/mtime: algunos sistemas agrupan marcas de tiempo.
-        # Contrastar tambien el contenido antes de entregar cualquier rango.
-        if digest(stream)!=entry['id']:raise ValueError('La captura ha cambiado de contenido')
-        stream.seek(offset);chunk=stream.read(length)
+        # Verificar solo los bloques implicados evita releer todo el archivo
+        # en cada rango y detecta cambios incluso con las mismas fechas.
+        first=offset//MAX_RANGE;last=(offset+length-1)//MAX_RANGE;blocks=[]
+        for index in range(first,last+1):
+            stream.seek(index*MAX_RANGE);block=stream.read(MAX_RANGE)
+            if hashlib.sha256(block).hexdigest()!=entry['chunk_sha256'][index]:
+                raise ValueError('La captura ha cambiado de contenido')
+            blocks.append(block)
+        start=offset-first*MAX_RANGE;chunk=b''.join(blocks)[start:start+length]
         if len(chunk)!=length or fingerprint(os.fstat(stream.fileno()))!=entry['fingerprint']:
             raise ValueError('Lectura interrumpida')
     return chunk
