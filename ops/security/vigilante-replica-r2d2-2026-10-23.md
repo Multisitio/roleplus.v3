@@ -56,7 +56,7 @@ permite acceso solo al usuario autorizado, administradores y SYSTEM.
 Las copias se transfieren en bloques de hasta 4 MiB y se verifican por bloque
 y SHA-256 completo. El cliente comprueba el cierre gzip, el SQL textual y
 cada archivo y metadato del tar frente a la huella del manifiesto original.
-No ejecuta ni extrae codigo sobre las webs. Seis pruebas del cliente, cinco
+No ejecuta ni extrae codigo sobre las webs. Siete pruebas del cliente, cinco
 del exportador y siete del productor pasan; tambien la reproduccion aislada
 de la limpieza nativa. La reanudacion real por SSH empieza en el byte 65 536
 de una copia de 20 161 092 bytes y termina con la misma huella y metadatos.

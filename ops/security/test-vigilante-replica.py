@@ -80,6 +80,20 @@ class ReplicaTests(unittest.TestCase):
             self.assertEqual(status['last_success'],123);self.assertTrue(status['pending'])
             self.assertEqual(status['last_verified']['sql:c1_fixture']['verified_at'],123)
 
+    @unittest.skipUnless(m.os.name=='nt','Bloqueos de metadatos de Windows')
+    def test_metadata_sharing_violation_is_bounded(self):
+        with tempfile.TemporaryDirectory() as path:
+            original=m.os.replace;calls=[]
+            def transient(source,target):
+                calls.append(1)
+                if len(calls)<3:
+                    error=PermissionError(13,'sharing');error.winerror=32;raise error
+                return original(source,target)
+            with patch.object(m.os,'replace',transient),patch.object(m.time,'sleep'):
+                m.save(Path(path)/'status.json',{'completed':True})
+            self.assertEqual(len(calls),3)
+            self.assertTrue(json.loads((Path(path)/'status.json').read_text())['completed'])
+
     def test_missing_source_is_not_complete(self):
         data,entry=self.sql();remote=self.remote(data,entry)
         def omitted(command):

@@ -31,7 +31,14 @@ def save(path,data):
     temporary=path.with_suffix('.new')
     with temporary.open('w',encoding='utf-8') as out:
         json.dump(data,out,ensure_ascii=True,indent=2);out.write('\n');out.flush();os.fsync(out.fileno())
-    os.replace(temporary,path)
+    for attempt in range(6):
+        try:
+            os.replace(temporary,path);break
+        except PermissionError as error:
+            # Lectores/antivirus pueden mantener un bloqueo breve de metadatos
+            # en SMB. No se cambian permisos ni se evitan protecciones.
+            if os.name!='nt' or getattr(error,'winerror',None) not in (5,32,33) or attempt==5:raise
+            time.sleep(0.1*(attempt+1))
 
 
 def directory(path):
