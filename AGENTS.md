@@ -1,5 +1,12 @@
 # Instrucciones del proyecto RolePlus
 
+- Autorizacion InnoDB (2026-10-23): el usuario permite convertir las tablas
+  donde sea la opcion adecuada. Revisar primero indices, compatibilidad,
+  espacio, datos y coste del cambio; probar la conversion en aislamiento
+  y respetar las fuentes de verdad de cada base. La autorizacion no acredita
+  que las tablas esten convertidas ni permite alterar en caliente sin las
+  protecciones de mantenimiento y recuperacion ya exigidas.
+
 - Copias del panel (2026-10-23): 500-sysbackup.inc.php conserva el horario
   diario de las 03:00 y delega en vigilante-panel-backups.service, con tres
   generaciones textuales y SQL transaccional solo si dbispconfig sigue siendo

@@ -5,7 +5,7 @@ Actualizado: 23 de octubre de 2026. Implementacion NO finalizada.
 ## Implantado y comprobado
 
 - Descubrimiento de sitios y servicios, detector y cola de causas pendientes.
-- Control central de reinicios con el antipánico existente.
+- Control central de reinicios con el antipÃ¡nico existente.
 - Diagnostico de IA aislado, autenticacion separada, limites de investigaciones
   y reserva de cuota para el operador.
 - Comprobacion automatica de cuota y renovaciones sin llamadas al modelo.
@@ -172,3 +172,22 @@ Los errores PHP y otras incidencias que se descubran despues pertenecen a la
 operacion normal del vigilante: no amplian indefinidamente esta implementacion.
 Un bloqueo concreto que impida satisfacer estos criterios debe explicitarse,
 en lugar de marcarlo como terminado o agregar tramos sin criterio de cierre.
+
+
+## Copias del panel corregidas el 23 de octubre
+
+El trabajo sysbackup de ISPConfig ya no genera archivos completos con
+binarios: conserva las 03:00 y tres generaciones textuales, con SQL InnoDB
+transaccional sin bloquear escrituras. Primera captura verificada y las
+79 tablas restauradas en aislamiento; monitor del panel ok y once webs
+HTTP 200. Mismos tres archivos recogidos y verificados por la tarea propia
+de R2-D2, que ahora acredita 24 archivos en total. Sus dos bases grandes
+siguen pendientes y GitHub cifrado tambien. No se eliminan copias antiguas.
+Detalles: vigilante-panel-copias-2026-10-23.md. Se mantienen los tres bloques
+de cierre anteriores; este ajuste cumple la politica textual existente.
+
+Autorizada la conversion de tablas a InnoDB donde resulte adecuada, previa
+prueba de compatibilidad, copia y proteccion del servicio. Hay 182 tablas
+MyISAM en bases activas, incluidas 68 de ROLEplus y 28 de MTGsearch. Aun no
+se han convertido. Esta alternativa se evaluara dentro del trabajo SQL
+pendiente; no se declara resuelto el bloqueo de las grandes por inventariarlo.
