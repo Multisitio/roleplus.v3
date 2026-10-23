@@ -37,12 +37,13 @@ def integration(request, data_path, errors, report):
         if p.returncode:raise RuntimeError('Fallo SQL en el laboratorio')
         return p.stdout.strip()
 
-    publish = connector.maintenance.publish
-
     def laboratory_publish(value):
-        # Solo sustituye la comprobacion de identidad del publicador en este
-        # proceso sin privilegios y sin acceso al estado ni al SQL reales.
-        with patch.object(connector.maintenance.os, 'geteuid', return_value=0):publish(value)
+        # El publicador real exige root. En la unidad sin privilegios se
+        # escribe solo el estado del laboratorio, conservando su formato
+        # y sustitucion atomica. No se modifica el publicador de produccion.
+        temporary=data_path.with_suffix('.new')
+        temporary.write_text(json.dumps(value));temporary.chmod(0o644)
+        os.replace(temporary,data_path)
 
     def http(host, path, method='GET'):
         code, headers, body = request(path, method, host=host)
@@ -69,7 +70,7 @@ def integration(request, data_path, errors, report):
         sql("CREATE DATABASE c1_roleplus; CREATE TABLE c1_roleplus.t(id INT PRIMARY KEY,value TEXT) ENGINE=MyISAM;"
             "INSERT INTO c1_roleplus.t VALUES(1,'texto'); CREATE TABLE c1_roleplus.i(id INT) ENGINE=InnoDB;"
             "INSERT INTO c1_roleplus.i VALUES(2);")
-        with patch.object(connector.maintenance, 'publish', laboratory_publish), patch.object(connector, 'request', http):
+        with patch.object(connector.maintenance, 'publish', laboratory_publish), patch.object(connector, 'request', http), patch.object(connector, 'night_window', return_value=True):
             raw = run / 'normal.sql';counts={}
             connector.dump('c1_roleplus', raw, ['roleplus.app'], 15, counts, socket)
             assert counts == {'i':1,'t':1} and json.loads(data_path.read_text()) == {}

@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """Conecta el aviso existente al volcado acotado; no programa ni activa copias."""
 from contextlib import contextmanager
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import fcntl
 import importlib.util
 import json
@@ -79,9 +81,15 @@ def window(hosts, seconds):
             maintenance.clear(ident)
 
 
+def night_window():
+    return 3 <= datetime.now(ZoneInfo('Europe/Madrid')).hour < 6
+
+
 def dump(database, output, hosts, seconds, counts=None, socket=backup.SOCKET):
     if database in LIMITS:
         canonical, limit = LIMITS[database]
+        if not night_window():
+            raise ValueError('Las bases grandes solo se copian en la ventana de madrugada')
         if not hosts or hosts[0] != canonical or seconds != limit:
             raise ValueError('Base grande fuera del alcance revisado')
     elif seconds != backup.MAX_SECONDS:
