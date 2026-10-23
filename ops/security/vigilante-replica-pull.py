@@ -122,6 +122,11 @@ def collect(root,remote):
         previous=json.loads((root/'status.json').read_text()) if (root/'status.json').exists() else {}
         status={'checked_at':int(time.time()),'completed':False,'restoration_tested':False,'verified':[]}
         if previous.get('last_success'):status['last_success']=previous['last_success']
+        status['last_verified']=dict(previous.get('last_verified',{}))
+        for item in previous.get('verified',[]):
+            dataset=item['dataset'];known=status['last_verified'].get(dataset)
+            if not known or known['source_created_at']<=item['source_created_at']:
+                status['last_verified'][dataset]=item
         try:
             manifest=json.loads(remote('manifest'));validate(manifest)
             save(root/'source-manifest.json',manifest)
@@ -146,7 +151,12 @@ def collect(root,remote):
                             out.write(block);out.flush();os.fsync(out.fileno());offset+=length
                     verify(partial,entry);os.replace(partial,target);used+=missing
                 else:verify(target,entry)
-                status['verified'].append({'id':entry['id'],'dataset':entry['dataset'],'source_created_at':entry['created_at']})
+                item={'id':entry['id'],'dataset':entry['dataset'],'source_created_at':entry['created_at'],
+                      'verified_at':int(time.time())}
+                status['verified'].append(item)
+                known=status['last_verified'].get(entry['dataset'])
+                if not known or known['source_created_at']<=entry['created_at']:
+                    status['last_verified'][entry['dataset']]=item
                 save(root/'status.json',status)
             status['completed']=not manifest.get('omitted');status['omitted']=manifest.get('omitted',[])
             if status['completed']:status['last_success']=int(time.time())

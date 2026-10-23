@@ -73,11 +73,12 @@ class ReplicaTests(unittest.TestCase):
 
     def test_offline_retains_last_success(self):
         with tempfile.TemporaryDirectory() as path:
-            root=Path(path);m.save(root/'status.json',{'last_success':123})
+            root=Path(path);m.save(root/'status.json',{'last_success':123,'last_verified':{'sql:c1_fixture':{'source_created_at':1,'verified_at':123}}})
             def offline(command):raise ConnectionError('sin red')
             with self.assertRaises(ConnectionError):m.collect(root,offline)
             status=json.loads((root/'status.json').read_text())
             self.assertEqual(status['last_success'],123);self.assertTrue(status['pending'])
+            self.assertEqual(status['last_verified']['sql:c1_fixture']['verified_at'],123)
 
     def test_missing_source_is_not_complete(self):
         data,entry=self.sql();remote=self.remote(data,entry)

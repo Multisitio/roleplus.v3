@@ -38,6 +38,16 @@
   audio o ejecutables. Los contenedores comprimidos pueden guardar texto.
   Los originales binarios de usuarios permanecen en produccion y no quedan
   protegidos por estas copias: expresar ese limite sin ampliar la politica.
+- Almacen textual (2026-10-23): las copias de texto pertenecen al vigilante
+  y viven en /var/backup/vigilante-text/<id>, fuera de /var/backup/webN.
+  No registrarlas como archivos nativos en web_backup: la limpieza de
+  ISPConfig no reconoce text- en get_files y puede borrar esas copias al
+  revisar las de SQL. Mantener propietarios separados para captura y
+  retencion. Comprobar archivos y huellas, no solo resultados historicos:
+  se detectaron siete capturas ausentes, registradas y regeneradas sin
+  afirmar que se recupero su contenido historico. No confiar solo en
+  tamano y fechas para validar rangos; contrastar bloques y huella final.
+
 - Copias en tres destinos (2026-10-23): por indicacion expresa del usuario,
   conservar copias de los textos seleccionados y del SQL en VPS, R2-D2 y
   GitHub. Son tres ubicaciones, no tres versiones dentro del mismo servidor.
