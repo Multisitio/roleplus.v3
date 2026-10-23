@@ -36,8 +36,12 @@ temporales desaparecen al terminar; no se crean copias binarias permanentes.
 
 ## Pendiente del bloque SQL
 
-Todavia no se sustituye la ejecucion SQL nativa de ISPConfig ni se modifica
-el temporizador de bases independientes. Falta la programacion unica y
-obtener/restaurar las primeras copias grandes durante la ventana autorizada.
-No se ha activado mantenimiento ni bloqueo de produccion en este paso.
+El trabajo de ISPConfig ya delega en el ejecutor unico vigilante-sql-schedule;
+el temporizador independiente se ha deshabilitado sin retirar sus copias.
+La barrera cubre tambien los alias y subdominios anidados comprobados en
+aislamiento. Programada la primera ventana para 25/10/2026 a las 04:45 de
+Madrid. Falta obtener/restaurar las primeras copias grandes durante esa
+ventana y comprobar la cobertura triple. El ciclo de produccion de hoy se
+ha aplazado por horario sin mantenimiento ni bloqueos.
+Detalles en vigilante-sql-programacion-2026-10-23.md.
 La implementacion completa del vigilante sigue pendiente de tres bloques.

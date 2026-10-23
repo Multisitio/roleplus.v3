@@ -137,15 +137,21 @@ no es cobertura completa. Ver r2d2-acceso-mantenimiento-2026-10-23.md.
    MTGsearch frente a MyISAM, verificar copias nuevas y sus restauraciones e
    integrar la ejecucion recurrente con un unico responsable por base y las
    replicas verificadas en VPS, R2-D2 y GitHub descritas arriba. Las
-   cinco bases pequenas tienen copias nuevas verificadas, pero la programacion
-   nativa no usa todavia el nuevo ejecutor acotado. El laboratorio acredita
+   cinco bases pequenas tienen copias verificadas. La programacion de ISPConfig
+   ya delega en el ejecutor acotado para las nueve bases revisadas; el
+   temporizador independiente anterior esta deshabilitado. El laboratorio acredita
    que no caben las grandes en 1.5 segundos; no aplicar esperas largas sin
-   integrar y comprobar el aviso previo de mantenimiento ya instalado. Falta
-   integrar su programacion unica y verificar las primeras copias grandes.
+   el aviso previo de mantenimiento ya instalado. Falta verificar las primeras
+   copias grandes, restaurarlas y completar las replicas.
    El conector entre aviso HTTP, barrera Apache y ejecutor SQL ya esta probado
    en aislamiento con restauracion MyISAM/InnoDB, caducidad y fallos del aviso.
    Los bloqueos largos solo se admiten de 03:00 a 06:00 de Madrid. No se ha
    activado una ventana real ni obtenido aun copias nuevas de las dos grandes.
+   Primera ventana prevista: domingo 25/10/2026 a las 04:45 de Madrid.
+   Ocho pruebas del programador y quince del conjunto HTTP/SQL pasan; en
+   produccion el nuevo ejecutor se aplaza por horario sin bloquear ni reiniciar.
+   El detector incluye fallos y ventanas perdidas. Detalles en
+   vigilante-sql-programacion-2026-10-23.md.
 2. **Reparaciones acotadas:** conectar el ejecutor probado a destinos y
    operaciones expresamente permitidos, con revision, bloqueo coordinado,
    copia previa, comprobaciones y recuperacion ante fallo. Probar su
