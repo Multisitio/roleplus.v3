@@ -1,6 +1,31 @@
 # Acceso de mantenimiento de R2-D2
 
-Estado: activacion parcial; SSH NO disponible ni verificado. La sesion existente
+## Estado actual verificado
+
+Acceso SSH operativo desde C-3PO a R2-D2, con clave de servidor fijada desde
+el recurso compartido autenticado y rechazo de cambios de identidad.
+Orden estructurada real confirma equipo R2-D2, usuario R2-D2\Lobo Blanco
+y token administrador. Clave privada solo en el directorio privado de
+C-3PO; `maintenance_r2d2_known_hosts` en ese mismo directorio conserva
+la identidad publica fijada. No aceptar automaticamente otra clave.
+
+Tarea `Vigilante-Replica-VPS` registrada y ejecutada en R2-D2: S4U, nivel
+Limited, arranque y repeticion PT15M, sin instancias simultaneas ni
+contrasena guardada. Procesos reales de Python observados como el usuario
+de R2-D2. Ejecucion terminada, estado Ready y 21 archivos verificados
+recientemente; sin fallo de transporte ni pendiente de conexion. Resultado
+1 intencionado porque faltan sql:c1_roleplus y sql:c1_mtgsearch. No acredita
+cobertura SQL completa, restauracion desde tres destinos ni GitHub cifrado.
+
+Pruebas privadas de R2-D2: maintenance-ssh-status.json,
+scheduled-task-proof.json y status.json bajo C:/xampp/var/vigilante-replicas.
+La tarea no depende de C-3PO ni de Chrome remoto. Sus transferencias
+requieren Internet de R2-D2; las IP privadas fijadas para administracion
+deben revisarse si cambia la red del punto de acceso.
+
+## Evolucion tecnica anterior a la activacion
+
+La sesion existente
 de Chrome remoto en el perfil ROLEplus ya esta conectada; una segunda
 sesion abierta desde otro perfil pedia PIN. No era necesario repetir el
 inicio de sesion del usuario.

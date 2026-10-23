@@ -115,8 +115,9 @@ actuales se detallan en el avance siguiente.
 
 Primera copia real en R2-D2: 21 archivos, trece conjuntos de texto y siete
 bases distintas, verificados por huella y contenido. Reanudacion real por
-SSH comprobada. Aun NO esta activada la tarea en R2-D2; la primera recogida
-se ejecuto desde C-3PO. GitHub cifrado y las nuevas copias grandes siguen
+SSH comprobada. La primera recogida se ejecuto desde C-3PO; despues se ha
+activado y verificado una ejecucion de la tarea propia de R2-D2, al arrancar
+y cada quince minutos, sin depender de C-3PO. GitHub cifrado y las nuevas copias grandes siguen
 pendientes. No confundir esta transferencia con cobertura triple completa.
 
 Detectadas siete capturas de texto ausentes del almacen anterior. La
@@ -127,9 +128,10 @@ programador original. Detalles en vigilante-replica-r2d2-2026-10-23.md.
 
 ## Tres pasos pendientes para dar la implementacion por terminada
 
-Acceso de R2-D2: instalador SSH nativo preparado el 23 de octubre, pendiente
-de activacion local y conexion real. No cambia el estado pendiente de la
-tarea de replicas. Ver r2d2-acceso-mantenimiento-2026-10-23.md.
+Acceso de R2-D2: SSH nativo activado y conexion real desde C-3PO verificada
+el 23 de octubre. Tarea de replicas activa, con ejecucion reciente terminada
+y 21 archivos comprobados. Salida 1 porque faltan las dos bases grandes;
+no es cobertura completa. Ver r2d2-acceso-mantenimiento-2026-10-23.md.
 
 1. **SQL automatico seguro:** resolver la estrategia consistente de ROLEplus y
    MTGsearch frente a MyISAM, verificar copias nuevas y sus restauraciones e

@@ -67,14 +67,18 @@ tiene limite de 4 GiB y exige margen adicional de 2 GiB; si no cabe, conserva
 lo anterior y registra pendiente, sin borrar archivos ajenos ni llenar el disco.
 No se ha instalado otro generador de copias ni contratado servicio alguno.
 
-## Activacion pendiente en R2-D2
+## Activacion comprobada en R2-D2
 
 El instalador tools/install-vigilante-replica-r2d2.ps1 verifica nombre del
 equipo y dependencias, y prepara una sola tarea: al arrancar y cada quince
 minutos, sin instancias simultaneas y sin guardar contrasenas de Windows.
-Debe ejecutarse y comprobarse en R2-D2; no basta registrar una tarea ni que
-una transferencia desde C-3PO funcione. Tampoco se da por instalado Python
-u OpenSSH en R2-D2 sin verificar sus procesos reales.
+Registrada y ejecutada en R2-D2: procesos reales Python observados como
+R2-D2\Lobo Blanco, S4U y nivel limitado. Una ejecucion reciente termina
+con 21 archivos verificados y sin fallo de transporte. Codigo 1 porque
+siguen omitidas las dos bases grandes; no acredita cobertura total.
+OpenSSH nativo y Python se han utilizado realmente en R2-D2. La recogida
+ya no depende de C-3PO ni de Chrome remoto. Evidencia adicional privada:
+scheduled-task-proof.json y maintenance-ssh-status.json.
 
 La aceptacion final incluye esa ejecucion, perder/recuperar Internet y
 recuperar las mismas capturas desde los tres destinos. Estos criterios
