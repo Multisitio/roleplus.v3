@@ -22,7 +22,7 @@ if (-not $Collect) {
             [System.IO.File]::WriteAllText($taskOutput, ($taskPartial | ConvertTo-Json -Depth 8), $taskUtf8)
             Write-Output 'Limite alcanzado. Guardado el resultado parcial y la comprobacion que se atasco.'
         } else {
-            if ($taskChild.ExitCode -ne 0) {
+            if ($null -ne $taskChild.ExitCode -and $taskChild.ExitCode -ne 0) {
                 throw 'El recolector fallo. Codex puede leer maintenance-ssh-diagnostic.err.txt; no es una comprobacion terminada.'
             }
             $taskFinished = Get-Content -LiteralPath $taskOutput -Raw | ConvertFrom-Json

@@ -34,6 +34,18 @@ No se reinicia ni habilita el servicio ni se cambia el cortafuegos. Esta
 instancia de prueba puede intentar escuchar en la direccion configurada;
 solo se termina el proceso temporal propio. Se guarda su salida antes de
 continuar con permisos y version. Cada seccion registra su duracion.
+La traza directa termina en escucha correcta (cuatro segundos); configuracion,
+clave y enlace al puerto funcionan bajo el usuario administrador. No acredita
+arranque como LocalSystem. Informe completo en cinco segundos; la alerta
+del supervisor era una lectura de ExitCode nula de Start-Process. Se exige
+estado terminado y se rechazan codigos no cero solo si estan disponibles.
+
+Preparada `trace-r2d2-ssh-service.ps1`: valida la instalacion propia detenida
+y deshabilitada, conserva ImagePath/Start y ejecuta una prueba del servicio
+con -E a un registro privado y DenyUsers=*; no permite sesiones. Al finalizar
+restaura ambos valores, para el servicio si arranco y acredita ese estado.
+No cambia ACL ni reglas de red, no reinstala y no modifica servicios web.
+La causa original sigue pendiente de esa traza como servicio.
 
 Se prepara `install-r2d2-maintenance-ssh.ps1` para una activacion humana
 unica en PowerShell como administrador de R2-D2. La herramienta de control
