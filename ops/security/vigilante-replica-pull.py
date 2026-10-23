@@ -105,10 +105,10 @@ class SSH:
         if not re.fullmatch(r'[a-z_][a-z0-9_-]*',config['user']):raise ValueError('Cuenta no valida')
         ssh=shutil.which('ssh')
         if not ssh:raise RuntimeError('Falta el cliente OpenSSH')
-        self.args=[ssh,'-F',str(root/'access/ssh_config'),'-T','-o','BatchMode=yes','-o','IdentitiesOnly=yes','-o','StrictHostKeyChecking=yes',
+        self.args=[ssh,'-F',(root/'access/ssh_config').as_posix(),'-T','-o','BatchMode=yes','-o','IdentitiesOnly=yes','-o','StrictHostKeyChecking=yes',
             '-o','ConnectTimeout=8','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',
-            '-o','ClearAllForwardings=yes','-o','LogLevel=ERROR','-o','UserKnownHostsFile='+str(root/'access/known_hosts'),
-            '-i',str(identity or root/'access/id_ed25519'),'-p',str(config.get('port',22)),
+            '-o','ClearAllForwardings=yes','-o','LogLevel=ERROR','-o','UserKnownHostsFile="'+(root/'access/known_hosts').as_posix()+'"',
+            '-i',(identity or root/'access/id_ed25519').as_posix(),'-p',str(config.get('port',22)),
             '-l',config['user'],config['host']]
     def __call__(self,command):
         p=subprocess.run(self.args+[command],capture_output=True,timeout=180)

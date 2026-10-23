@@ -18,6 +18,7 @@ import time
 
 CONFIG = Path('/etc/vigilante/text-backups.json')
 STATE = Path('/var/lib/vigilante-text-backups')
+DEST = Path('/var/backup/vigilante-text')
 MAX_FILE = 16 * 1024 ** 2
 MAX_ARCHIVE = 512 * 1024 ** 2
 EXCLUDED = {'.git', '.svn', 'node_modules', '__pycache__', '.venv', 'backup', 'backups',
@@ -167,6 +168,10 @@ def run():
         raise ValueError('Catalogo privado no fiable')
     config = json.loads(CONFIG.read_text())
     STATE.mkdir(mode=0o700, exist_ok=True)
+    DEST.mkdir(mode=0o700, exist_ok=True)
+    meta=DEST.lstat()
+    if DEST.is_symlink() or meta.st_uid!=0 or meta.st_mode&0o077:
+        raise ValueError('Almacen textual privado no fiable')
     with (STATE / 'operations.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         now = int(time.time())
@@ -185,7 +190,7 @@ def run():
                 continue
             if shutil.disk_usage('/var/backup').free < 20 * 1024 ** 3 + MAX_ARCHIVE:
                 raise ValueError('Espacio libre insuficiente')
-            dest = Path('/var/backup') / ident
+            dest = DEST / ident
             dest.mkdir(mode=0o700, exist_ok=True)
             meta = dest.lstat()
             if not stat.S_ISDIR(meta.st_mode) or meta.st_uid != 0 or meta.st_mode & 0o022:
@@ -205,8 +210,6 @@ def run():
                 domain = int(ident[3:])
                 if sql(f"SELECT COUNT(*) FROM web_domain WHERE domain_id={domain} AND document_root='{root}' AND active='y';").strip() != '1':
                     raise ValueError('El dominio del panel ha cambiado')
-                sql("INSERT INTO web_backup(server_id,parent_domain_id,backup_type,backup_mode,backup_format,tstamp,filename,filesize,backup_password) "
-                    f"VALUES(1,{domain},'web','rootgz','tar_gzip',{now},'{name}','{path.stat().st_size}','');")
             previous = ledger['items'].get(ident, {}).get('archives', [])
             previous.append({'name': name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
             # Conservar dos verificadas. Nunca barrer archivos ajenos o originales.
@@ -217,8 +220,6 @@ def run():
                 old_path = dest / old['name']
                 if old_path.is_symlink() or hashlib.sha256(old_path.read_bytes()).hexdigest() != old['sha256']:
                     raise ValueError('Una copia anterior cambio')
-                if ident.startswith('web'):
-                    sql(f"DELETE FROM web_backup WHERE parent_domain_id={int(ident[3:])} AND filename='{old['name']}';")
                 old_path.unlink()
                 previous.pop(0)
             ledger['items'][ident] = {'last_at': now, 'next_at': next_sunday(now), 'archives': previous}

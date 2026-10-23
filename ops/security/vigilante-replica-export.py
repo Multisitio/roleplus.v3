@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 """Exportacion restringida de copias existentes, sin crear volcados ni restaurar."""
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import codecs
 import gzip
 import hashlib
@@ -18,6 +20,7 @@ LIB = Path('/usr/local/lib/vigilante')
 STATE = Path('/var/lib/vigilante-replica-export')
 BACKUPS = Path('/var/backup')
 TEXT_STATE = Path('/var/lib/vigilante-text-backups')
+TEXT_BACKUPS = BACKUPS / 'vigilante-text'
 INDEPENDENT_STATE = Path('/var/lib/vigilante-independent-sql')
 MAX_COMPRESSED = 512 * 1024**2
 MAX_SQL = 1024**3
@@ -100,8 +103,8 @@ def sources():
         for archive in item['archives']:
             name=archive['name']
             if not re.fullmatch('text-'+re.escape(ident)+r'_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.tar\.gz',name):raise ValueError('Nombre no valido')
-            yield {'dataset':'text:'+ident,'kind':'text','path':str(BACKUPS/ident/name),
-                   'created_at':int((BACKUPS/ident/name).stat().st_mtime),'expected_sha256':archive['sha256'],
+            yield {'dataset':'text:'+ident,'kind':'text','path':str(TEXT_BACKUPS/ident/name),
+                   'created_at':int(datetime.strptime(name[len('text-'+ident+'_'):-len('.tar.gz')],'%Y-%m-%d_%H-%M-%S').replace(tzinfo=ZoneInfo('Europe/Madrid')).timestamp()),'expected_sha256':archive['sha256'],
                    'text_manifest':str(TEXT_STATE/(name+'.json'))}
     yield from mapped_sources()
     ledger=json.loads((INDEPENDENT_STATE/'ledger.json').read_text())
@@ -109,7 +112,7 @@ def sources():
         name=item['name'];filename=item['filename']
         if name not in INDEPENDENT or not re.fullmatch('db_'+re.escape(name)+r'_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.sql\.gz',filename):raise ValueError('Base no prevista')
         yield {'dataset':'sql:'+name,'kind':'sql','path':str(BACKUPS/'vigilante-independent-sql'/filename),
-               'created_at':int((BACKUPS/'vigilante-independent-sql'/filename).stat().st_mtime),
+               'created_at':int(datetime.strptime(filename[len('db_'+name+'_'):-len('.sql.gz')],'%Y-%m-%d_%H-%M-%S').replace(tzinfo=ZoneInfo('Europe/Madrid')).timestamp()),
                'expected_sha256':item['gzip_sha256']}
 
 
